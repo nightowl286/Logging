@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>11</LangVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>TNO.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>TNO.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Logging - Common - Abstractions</Title>
+    <Authors>Nightowl</Authors>
+    <Company>TNO</Company>
+    <Description>A library that provides the common abstractions necessary for reading and writing logs.</Description>
+    <PackageTags>logging, common, abstractions</PackageTags>
+  </PropertyGroup>
+
+</Project>
