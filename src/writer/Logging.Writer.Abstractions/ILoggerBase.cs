@@ -19,7 +19,7 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger Log(Severity severity, string message, out ulong entryId,
+   ILoggerBase Log(Severity severity, string message, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Logs an entry with the given <paramref name="severity"/> and the given <paramref name="stackFrame"/>.</summary>
@@ -29,7 +29,7 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger Log(Severity severity, StackFrame stackFrame, out ulong entryId,
+   ILoggerBase Log(Severity severity, StackFrame stackFrame, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Logs an entry with the given <paramref name="severity"/> and the given <paramref name="stackTrace"/>.</summary>
@@ -39,7 +39,7 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger Log(Severity severity, StackTrace stackTrace, out ulong entryId,
+   ILoggerBase Log(Severity severity, StackTrace stackTrace, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Logs an entry with the given <paramref name="severity"/> and the given <paramref name="exception"/>.</summary>
@@ -49,7 +49,7 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger Log(Severity severity, Exception exception, out ulong entryId,
+   ILoggerBase Log(Severity severity, Exception exception, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Logs an entry with the given <paramref name="severity"/> and the given <paramref name="thread"/>.</summary>
@@ -59,7 +59,7 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger Log(Severity severity, Thread thread, out ulong entryId,
+   ILoggerBase Log(Severity severity, Thread thread, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Logs an entry with the given <paramref name="severity"/> and the given <paramref name="assembly"/>.</summary>
@@ -69,7 +69,17 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger Log(Severity severity, Assembly assembly, out ulong entryId,
+   ILoggerBase Log(Severity severity, Assembly assembly, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
+
+   /// <summary>Logs an entry with the given <paramref name="severity"/> and the given additional <paramref name="filePath"/>.</summary>
+   /// <param name="severity">The severity of the given <paramref name="filePath"/>.</param>
+   /// <param name="filePath">The path of the file that should be included.</param>
+   /// <param name="entryId">The id of the logged entry.</param>
+   /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
+   /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
+   /// <returns>The logger instance.</returns>
+   ILoggerBase LogAdditionalPath(Severity severity, string filePath, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Links the given <paramref name="entryIds"/> together.</summary>
@@ -77,7 +87,7 @@ public interface ILoggerBase
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
-   ILogger CreateLinks(ulong[] entryIds,
+   ILoggerBase CreateLinks(ulong[] entryIds,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 
    /// <summary>Starts building an entry, provides an <see cref="ILogEntryBuilder"/> that can be used to customise the entry.</summary>

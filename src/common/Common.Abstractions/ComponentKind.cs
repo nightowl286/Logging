@@ -32,6 +32,9 @@ public enum ComponentKind : ushort
    /// <summary>A tag reference component.</summary>
    Tag = 128,
 
+   /// <summary>An additional file path component.</summary>
+   AdditionalFile = 256,
+
    /// <summary>
    /// A value that will be used to indicate that the size 
    /// of the <see cref="ComponentKind"/> enum has grown.

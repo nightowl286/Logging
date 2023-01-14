@@ -59,8 +59,14 @@ public interface ILogEntryBuilder
    /// <remarks><see cref="FinishEntry"/> must be called to actually log the entry.</remarks>
    ILogEntryBuilder WithTag(string tag);
 
+   /// <summary>Adds a <paramref name="path"/> to an additional file that contains extra information.</summary>
+   /// <param name="path">The path to include.</param>
+   /// <returns>The builder instance.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called to actually log the entry.</remarks>
+   ILogEntryBuilder WithAdditionalFile(string path);
+
    /// <summary>Logs the customised entry.</summary>
    /// <returns>The logger instance that created this builder.</returns>
-   ILogger FinishEntry();
+   ILoggerBase FinishEntry();
    #endregion
 }
