@@ -67,6 +67,6 @@ public interface ILogEntryBuilder
 
    /// <summary>Logs the customised entry.</summary>
    /// <returns>The logger instance that created this builder.</returns>
-   ILoggerBase FinishEntry();
+   ILogger FinishEntry();
    #endregion
 }

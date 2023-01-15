@@ -15,4 +15,9 @@
     <PackageTags>logging</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\Common.Abstractions\Common.Abstractions.csproj" />
+    <ProjectReference Include="..\Logging.Writer.Abstractions\Logging.Writer.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
