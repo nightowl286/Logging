@@ -32,7 +32,13 @@ public interface ILogEntryBuilder
    /// <summary>Adds an <see cref="Exception"/> component to the entry.</summary>
    /// <param name="exception">The exception to include.</param>
    /// <returns>The builder instance.</returns>
-   /// <remarks><see cref="FinishEntry"/> must be called to actually log the entry.</remarks>
+   /// <remarks>
+   /// <list type="bullet">
+   ///   <item><see cref="FinishEntry"/> must be called to actually log the entry.</item>
+   ///   <item>A <see cref="StackTrace"/> component will be included, it can be manually overwritten.</item>
+   ///   <item>A <see cref="Thread"/> component (<see cref="Thread.CurrentThread"/>) will be included, it can be manually overwritten.</item>
+   /// </list>
+   /// </remarks>
    ILogEntryBuilder With(Exception exception);
 
    /// <summary>Adds a <see cref="Thread"/> component to the entry.</summary>

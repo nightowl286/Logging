@@ -49,6 +49,10 @@ public interface ILogger : ILoggerContextFactory
    /// <param name="file">The file from which this method was called. This should be provided by the compiler.</param>
    /// <param name="line">The line in the file from which this method was called. This should be provided by the compiler.</param>
    /// <returns>The logger instance.</returns>
+   /// <remarks>
+   /// This will also include a <see cref="StackTrace"/> generated from the 
+   /// <paramref name="exception"/>, and also the <see cref="Thread.CurrentThread"/>.
+   /// </remarks>
    ILogger Log(Severity severity, Exception exception, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] int line = 0);
 

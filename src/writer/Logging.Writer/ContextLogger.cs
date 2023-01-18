@@ -46,9 +46,12 @@ internal class ContextLogger : ILogger
    public ILogger Log(Severity severity, Exception exception, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.Exception(exception);
+      ComponentBase exceptionComponent = ComponentFactory.Exception(exception);
 
-      AddEntry(severity, entryId, file, line, component);
+      StackTrace trace = new StackTrace(exception);
+      ComponentBase stackTraceException = ComponentFactory.StackTrace(trace);
+
+      AddEntry(severity, entryId, file, line, exceptionComponent, stackTraceException);
       return this;
    }
    public ILogger Log(Severity severity, Thread thread, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
@@ -94,10 +97,9 @@ internal class ContextLogger : ILogger
    #endregion
 
    #region Helpers
-   private void AddEntry(Severity severity, ulong entryId, string file, int line, ComponentBase component)
+   private void AddEntry(Severity severity, ulong entryId, string file, int line, params ComponentBase[] components)
    {
       ulong fileRef = _mainLogger.GetFileRef(file);
-      ComponentBase[] components = new[] { component };
 
       LogEntry entry = new LogEntry(_contextId, fileRef, line, entryId, severity, components);
 

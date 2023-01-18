@@ -16,6 +16,8 @@ internal class EntryBuilder : ILogEntryBuilder
    private readonly ulong _fileRef;
    private readonly int _line;
    private readonly Dictionary<ComponentKind, ComponentBase> _components = new Dictionary<ComponentKind, ComponentBase>();
+   private bool _stackTraceFromException = false;
+   private bool _threadFromException = false;
    #endregion
    public EntryBuilder(MainLogger mainLogger, ILogger parentLogger, ulong contextId, ulong entryId, ulong fileRef, int line, Severity severity)
    {
@@ -37,17 +39,41 @@ internal class EntryBuilder : ILogEntryBuilder
    public ILogEntryBuilder With(StackFrame stackFrame)
    {
       ComponentBase component = ComponentFactory.StackFrame(stackFrame);
-      return AddComponent(component);
+      AddComponent(component, _stackTraceFromException);
+
+      _stackTraceFromException = false;
+      return this;
    }
    public ILogEntryBuilder With(StackTrace stackTrace)
    {
       ComponentBase component = ComponentFactory.StackTrace(stackTrace);
-      return AddComponent(component);
+      AddComponent(component, _threadFromException);
+
+      _threadFromException = false;
+      return this;
    }
    public ILogEntryBuilder With(Exception exception)
    {
       ComponentBase component = ComponentFactory.Exception(exception);
-      return AddComponent(component);
+      AddComponent(component);
+
+      if (_components.ContainsKey(ComponentKind.StackTrace) == false)
+      {
+         StackTrace stackTrace = new StackTrace(exception);
+         ComponentBase stackTraceComponent = ComponentFactory.StackTrace(stackTrace);
+         AddComponent(stackTraceComponent);
+         _stackTraceFromException = true;
+      }
+
+      if (_components.ContainsKey(ComponentKind.Thread) == false)
+      {
+         Thread thread = Thread.CurrentThread;
+         ComponentBase threadComponent = ComponentFactory.Thread(thread);
+         AddComponent(threadComponent);
+         _threadFromException = true;
+      }
+
+      return this;
    }
    public ILogEntryBuilder With(Thread thread)
    {
@@ -85,8 +111,14 @@ internal class EntryBuilder : ILogEntryBuilder
    #endregion
 
    #region Helpers
-   private ILogEntryBuilder AddComponent(ComponentBase component)
+   private ILogEntryBuilder AddComponent(ComponentBase component, bool allowReplace = true)
    {
+      if (allowReplace)
+      {
+         _components[component.Kind] = component;
+         return this;
+      }
+
       if (_components.TryAdd(component.Kind, component))
          return this;
 
