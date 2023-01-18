@@ -5,7 +5,7 @@ using TNO.Logging.Writer.Abstractions;
 using TNO.Logging.Writer.Entries;
 using TNO.Logging.Writer.Entries.Components;
 
-namespace TNO.Logging.Writer;
+namespace TNO.Logging.Writer.Loggers;
 internal class ContextLogger : ILogger
 {
    #region Fields

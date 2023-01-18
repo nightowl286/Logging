@@ -3,6 +3,7 @@ using System.Reflection;
 using TNO.Common.Abstractions;
 using TNO.Logging.Writer.Abstractions;
 using TNO.Logging.Writer.Entries.Components;
+using TNO.Logging.Writer.Loggers;
 
 namespace TNO.Logging.Writer.Entries;
 internal class EntryBuilder : ILogEntryBuilder

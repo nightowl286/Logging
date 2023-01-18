@@ -15,4 +15,8 @@
     <PackageTags>logging, abstractions</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\Common.Abstractions\Common.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
