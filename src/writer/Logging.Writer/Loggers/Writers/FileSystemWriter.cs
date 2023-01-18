@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Text;
 using TNO.Logging.Writer.Abstractions;
@@ -6,9 +7,20 @@ using TNO.Logging.Writer.Abstractions;
 namespace TNO.Logging.Writer.Loggers.Writers;
 internal class FileSystemWriter : ILogWriter
 {
+   #region Records
+   private record struct Tag(string Name, ulong Id);
+   private record struct Links(ulong ContextId, ulong FileRef, int Line, ulong[] Ids);
+   private record struct FileReference(string FilePath, ulong Id);
+   private record struct Context(string Name, ulong Parent);
+   #endregion
+
    #region Fields
+   private const int Thread_Wait_Sleep_Milliseconds = 25;
    private static readonly Encoding Encoding = Encoding.UTF8;
    private readonly string _directoryPath;
+   private readonly SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1);
+   private readonly Queue _writeRequests = new Queue();
+   private bool _writeThreadActive = false;
 
    private BinaryWriter _fileRefTable;
    private BinaryWriter _assemblyRefTable;
@@ -30,13 +42,88 @@ internal class FileSystemWriter : ILogWriter
    }
 
    #region Methods
-   public void WriteContext(string name, ulong parent) => throw new NotImplementedException();
-   public void WriteEntry(ILogEntry entry) => throw new NotImplementedException();
-   public void WriteFileReference(string file, ulong id) => throw new NotImplementedException();
-   public void WriteLinks(ulong contextId, string file, int line, ulong[] idsToLink) => throw new NotImplementedException();
-   public void WriteTag(string tag, ulong id) => throw new NotImplementedException();
+   public void WriteContext(string name, ulong parent)
+   {
+      Context context = new Context(name, parent);
+
+      CheckWriteThread(context);
+   }
+   public void WriteEntry(ILogEntry entry) => CheckWriteThread(entry);
+   public void WriteFileReference(string file, ulong id)
+   {
+      FileReference fileRef = new FileReference(file, id);
+
+      CheckWriteThread(fileRef);
+   }
+   public void WriteLinks(ulong contextId, ulong fileRef, int line, ulong[] idsToLink)
+   {
+      Links links = new Links(contextId, fileRef, line, idsToLink);
+
+      CheckWriteThread(links);
+   }
+   public void WriteTag(string name, ulong id)
+   {
+      Tag tag = new Tag(name, id);
+
+      CheckWriteThread(tag);
+   }
+   private void CheckWriteThread(object request)
+   {
+      _requestSemaphore.Wait();
+      try
+      {
+         _writeRequests.Enqueue(request);
+
+         if (_writeThreadActive)
+            return;
+
+         _writeThreadActive = true;
+         Thread thread = new Thread(WriteThreadOperation);
+         thread.Start();
+      }
+      finally
+      {
+         _requestSemaphore.Release();
+      }
+   }
+   private void WriteThreadOperation()
+   {
+      try
+      {
+         while (true)
+         {
+            _requestSemaphore.Wait();
+            object? request = null;
+            try
+            {
+               if (_writeRequests.Count > 0)
+                  request = _writeRequests.Dequeue();
+
+               if (request is null)
+                  return; // outer finally will set the thread state
+            }
+            finally
+            {
+               _requestSemaphore.Release();
+            }
+
+            if (request is Context context) CoreWriteContext(context);
+            else if (request is Tag tag) CoreWriteTag(tag);
+            else if (request is Links links) CoreWriteLinks(links);
+            else if (request is FileReference fileReference) CoreWriteFileReference(fileReference);
+            else if (request is ILogEntry logEntry) CoreWriteEntry(logEntry);
+         }
+      }
+      finally
+      {
+         _writeThreadActive = false;
+      }
+   }
+
    public void Close()
    {
+      WaitUntilThreadIsDone();
+
       _fileRefTable.Dispose();
       _assemblyRefTable.Dispose();
       _typeRefTable.Dispose();
@@ -47,6 +134,47 @@ internal class FileSystemWriter : ILogWriter
 
       ZipLogDirectory();
       Directory.Delete(_directoryPath, true);
+   }
+   private void WaitUntilThreadIsDone()
+   {
+      while (true)
+      {
+         _requestSemaphore.Wait();
+         try
+         {
+            if (_writeThreadActive == false)
+               return;
+
+            Thread.Sleep(Thread_Wait_Sleep_Milliseconds);
+         }
+         finally
+         {
+            _requestSemaphore.Release();
+         }
+      }
+   }
+   #endregion
+
+   #region Core Write Methods
+   private void CoreWriteContext(Context context)
+   {
+
+   }
+   private void CoreWriteTag(Tag tag)
+   {
+
+   }
+   private void CoreWriteLinks(Links links)
+   {
+
+   }
+   private void CoreWriteFileReference(FileReference fileReference)
+   {
+
+   }
+   private void CoreWriteEntry(ILogEntry entry)
+   {
+
    }
    #endregion
 

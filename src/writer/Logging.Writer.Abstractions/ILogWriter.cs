@@ -2,8 +2,8 @@
 public interface ILogWriter
 {
    #region Methods
-   void WriteTag(string tag, ulong id);
-   void WriteLinks(ulong contextId, string file, int line, ulong[] idsToLink);
+   void WriteTag(string name, ulong id);
+   void WriteLinks(ulong contextId, ulong fileRef, int line, ulong[] idsToLink);
    void WriteContext(string name, ulong parent);
    void WriteFileReference(string file, ulong id);
    void WriteEntry(ILogEntry entry);
