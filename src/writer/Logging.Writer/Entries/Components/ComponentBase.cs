@@ -1,5 +1,4 @@
-﻿using TNO.Common.Abstractions;
-using TNO.Logging.Writer.Abstractions;
+﻿using TNO.Common.Abstractions.Components;
 
 namespace TNO.Logging.Writer.Entries.Components;
 internal abstract class ComponentBase : IEntryComponent

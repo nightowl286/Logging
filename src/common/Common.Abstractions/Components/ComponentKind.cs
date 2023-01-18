@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TNO.Common.Abstractions;
+namespace TNO.Common.Abstractions.Components;
 
 /// <summary>
 /// A flags enum that represents the allowed components an entry can have.

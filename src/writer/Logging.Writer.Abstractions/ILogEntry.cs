@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using TNO.Common.Abstractions;
+using TNO.Common.Abstractions.Components;
 
 namespace TNO.Logging.Writer.Abstractions;
 public interface ILogEntry

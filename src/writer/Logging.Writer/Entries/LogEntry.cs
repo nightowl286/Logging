@@ -1,4 +1,6 @@
-﻿using TNO.Logging.Writer.Abstractions;
+﻿using TNO.Common.Abstractions;
+using TNO.Common.Abstractions.Components;
+using TNO.Logging.Writer.Abstractions;
 
 namespace TNO.Logging.Writer.Entries;
 

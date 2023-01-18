@@ -1,4 +1,4 @@
-﻿namespace TNO.Logging.Writer.Abstractions;
+﻿namespace TNO.Common.Abstractions;
 
 /// <summary>
 /// The severity of a log entry.

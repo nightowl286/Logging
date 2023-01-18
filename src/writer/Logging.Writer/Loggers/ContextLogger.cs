@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using TNO.Common.Abstractions;
 using TNO.Logging.Writer.Abstractions;
 using TNO.Logging.Writer.Entries;
 using TNO.Logging.Writer.Entries.Components;

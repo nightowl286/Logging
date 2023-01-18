@@ -1,6 +1,4 @@
-﻿using TNO.Common.Abstractions;
-
-namespace TNO.Logging.Writer.Abstractions;
+﻿namespace TNO.Common.Abstractions.Components;
 public interface IEntryComponent
 {
    #region Properties
