@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using TNO.Common.Abstractions;
+using TNO.Common.Abstractions.Components;
 using TNO.Logging.Writer.Abstractions;
 using TNO.Logging.Writer.Entries;
 using TNO.Logging.Writer.Entries.Components;
@@ -23,7 +24,7 @@ internal class ContextLogger : ILogger
    public ILogger Log(Severity severity, string message, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.Message(message);
+      IEntryComponent component = ComponentFactory.Message(message);
 
       AddEntry(severity, entryId, file, line, component);
       return this;
@@ -31,7 +32,7 @@ internal class ContextLogger : ILogger
    public ILogger Log(Severity severity, StackFrame stackFrame, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.StackFrame(stackFrame);
+      IEntryComponent component = ComponentFactory.StackFrame(stackFrame);
 
       AddEntry(severity, entryId, file, line, component);
       return this;
@@ -39,7 +40,7 @@ internal class ContextLogger : ILogger
    public ILogger Log(Severity severity, StackTrace stackTrace, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.StackTrace(stackTrace);
+      IEntryComponent component = ComponentFactory.StackTrace(stackTrace);
 
       AddEntry(severity, entryId, file, line, component);
       return this;
@@ -47,18 +48,21 @@ internal class ContextLogger : ILogger
    public ILogger Log(Severity severity, Exception exception, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase exceptionComponent = ComponentFactory.Exception(exception);
+      IEntryComponent exceptionComponent = ComponentFactory.Exception(exception);
 
       StackTrace trace = new StackTrace(exception);
-      ComponentBase stackTraceException = ComponentFactory.StackTrace(trace);
+      IEntryComponent stackTraceComponent = ComponentFactory.StackTrace(trace);
 
-      AddEntry(severity, entryId, file, line, exceptionComponent, stackTraceException);
+      Thread thread = Thread.CurrentThread;
+      IEntryComponent threadComponent = ComponentFactory.Thread(thread);
+
+      AddEntry(severity, entryId, file, line, exceptionComponent, stackTraceComponent, threadComponent);
       return this;
    }
    public ILogger Log(Severity severity, Thread thread, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.Thread(thread);
+      IEntryComponent component = ComponentFactory.Thread(thread);
 
       AddEntry(severity, entryId, file, line, component);
       return this;
@@ -66,7 +70,7 @@ internal class ContextLogger : ILogger
    public ILogger Log(Severity severity, Assembly assembly, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.Assembly(assembly);
+      IEntryComponent component = ComponentFactory.Assembly(assembly);
 
       AddEntry(severity, entryId, file, line, component);
       return this;
@@ -74,7 +78,7 @@ internal class ContextLogger : ILogger
    public ILogger LogAdditionalPath(Severity severity, string filePath, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
-      ComponentBase component = ComponentFactory.AdditionalFile(filePath);
+      IEntryComponent component = ComponentFactory.AdditionalFile(filePath);
 
       AddEntry(severity, entryId, file, line, component);
       return this;
@@ -98,7 +102,7 @@ internal class ContextLogger : ILogger
    #endregion
 
    #region Helpers
-   private void AddEntry(Severity severity, ulong entryId, string file, int line, params ComponentBase[] components)
+   private void AddEntry(Severity severity, ulong entryId, string file, int line, params IEntryComponent[] components)
    {
       ulong fileRef = _mainLogger.GetFileRef(file);
 

@@ -17,7 +17,7 @@ internal class EntryBuilder : ILogEntryBuilder
    private readonly Severity _severity;
    private readonly ulong _fileRef;
    private readonly int _line;
-   private readonly Dictionary<ComponentKind, ComponentBase> _components = new Dictionary<ComponentKind, ComponentBase>();
+   private readonly Dictionary<ComponentKind, IEntryComponent> _components = new Dictionary<ComponentKind, IEntryComponent>();
    private bool _stackTraceFromException = false;
    private bool _threadFromException = false;
    #endregion
@@ -35,12 +35,12 @@ internal class EntryBuilder : ILogEntryBuilder
    #region Methods
    public ILogEntryBuilder With(string message)
    {
-      ComponentBase component = ComponentFactory.Message(message);
+      IEntryComponent component = ComponentFactory.Message(message);
       return AddComponent(component);
    }
    public ILogEntryBuilder With(StackFrame stackFrame)
    {
-      ComponentBase component = ComponentFactory.StackFrame(stackFrame);
+      IEntryComponent component = ComponentFactory.StackFrame(stackFrame);
       AddComponent(component, _stackTraceFromException);
 
       _stackTraceFromException = false;
@@ -48,7 +48,7 @@ internal class EntryBuilder : ILogEntryBuilder
    }
    public ILogEntryBuilder With(StackTrace stackTrace)
    {
-      ComponentBase component = ComponentFactory.StackTrace(stackTrace);
+      IEntryComponent component = ComponentFactory.StackTrace(stackTrace);
       AddComponent(component, _threadFromException);
 
       _threadFromException = false;
@@ -56,13 +56,13 @@ internal class EntryBuilder : ILogEntryBuilder
    }
    public ILogEntryBuilder With(Exception exception)
    {
-      ComponentBase component = ComponentFactory.Exception(exception);
+      IEntryComponent component = ComponentFactory.Exception(exception);
       AddComponent(component);
 
       if (_components.ContainsKey(ComponentKind.StackTrace) == false)
       {
          StackTrace stackTrace = new StackTrace(exception);
-         ComponentBase stackTraceComponent = ComponentFactory.StackTrace(stackTrace);
+         IEntryComponent stackTraceComponent = ComponentFactory.StackTrace(stackTrace);
          AddComponent(stackTraceComponent);
          _stackTraceFromException = true;
       }
@@ -70,7 +70,7 @@ internal class EntryBuilder : ILogEntryBuilder
       if (_components.ContainsKey(ComponentKind.Thread) == false)
       {
          Thread thread = Thread.CurrentThread;
-         ComponentBase threadComponent = ComponentFactory.Thread(thread);
+         IEntryComponent threadComponent = ComponentFactory.Thread(thread);
          AddComponent(threadComponent);
          _threadFromException = true;
       }
@@ -79,28 +79,28 @@ internal class EntryBuilder : ILogEntryBuilder
    }
    public ILogEntryBuilder With(Thread thread)
    {
-      ComponentBase component = ComponentFactory.Thread(thread);
+      IEntryComponent component = ComponentFactory.Thread(thread);
       return AddComponent(component);
    }
    public ILogEntryBuilder With(Assembly assembly)
    {
-      ComponentBase component = ComponentFactory.Assembly(assembly);
+      IEntryComponent component = ComponentFactory.Assembly(assembly);
       return AddComponent(component);
    }
    public ILogEntryBuilder With(ulong entryIdToLink)
    {
-      ComponentBase component = ComponentFactory.EntryLink(entryIdToLink);
+      IEntryComponent component = ComponentFactory.EntryLink(entryIdToLink);
       return AddComponent(component);
    }
    public ILogEntryBuilder WithAdditionalFile(string path)
    {
-      ComponentBase component = ComponentFactory.AdditionalFile(path);
+      IEntryComponent component = ComponentFactory.AdditionalFile(path);
       return AddComponent(component);
    }
    public ILogEntryBuilder WithTag(string tag)
    {
       ulong tagId = _mainLogger.GetTagId(tag);
-      ComponentBase component = ComponentFactory.Tag(tagId);
+      IEntryComponent component = ComponentFactory.Tag(tagId);
       return AddComponent(component);
    }
    public ILogger FinishEntry()
@@ -113,7 +113,7 @@ internal class EntryBuilder : ILogEntryBuilder
    #endregion
 
    #region Helpers
-   private ILogEntryBuilder AddComponent(ComponentBase component, bool allowReplace = true)
+   private ILogEntryBuilder AddComponent(IEntryComponent component, bool allowReplace = true)
    {
       if (allowReplace)
       {

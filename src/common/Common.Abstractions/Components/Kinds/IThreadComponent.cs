@@ -7,7 +7,7 @@ public interface IThreadComponent : IEntryComponent
    string? Name { get; }
    int Id { get; }
    ApartmentState ApartmentState { get; }
-   int Priority { get; }
+   ThreadPriority Priority { get; }
    bool IsBackgroundThread { get; }
    bool IsThreadPoolThread { get; }
    bool IsAlive { get; }
