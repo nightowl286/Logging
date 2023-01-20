@@ -11,6 +11,6 @@ public interface ILogEntry
    ulong FileId { get; }
    int Line { get; }
    Severity Severity { get; }
-   IReadOnlyCollection<IEntryComponent> Components { get; }
+   IReadOnlyDictionary<ComponentKind, IEntryComponent> Components { get; }
    #endregion
 }

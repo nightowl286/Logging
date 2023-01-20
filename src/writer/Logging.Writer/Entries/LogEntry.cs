@@ -10,4 +10,4 @@ internal record class LogEntry(
    int Line,
    ulong Id,
    Severity Severity,
-   IReadOnlyCollection<IEntryComponent> Components) : ILogEntry;
+   IReadOnlyDictionary<ComponentKind, IEntryComponent> Components) : ILogEntry;

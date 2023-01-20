@@ -3,17 +3,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Text;
 using TNO.Logging.Writer.Abstractions;
+using TNO.Logging.Writer.Loggers.Serialisers;
 
 namespace TNO.Logging.Writer.Loggers.Writers;
 internal class FileSystemWriter : ILogWriter
 {
-   #region Records
-   private record struct Tag(string Name, ulong Id);
-   private record struct Links(ulong ContextId, ulong FileRef, int Line, ulong[] Ids);
-   private record struct FileReference(string FilePath, ulong Id);
-   private record struct Context(string Name, ulong Parent);
-   #endregion
-
    #region Fields
    private const int Thread_Wait_Sleep_Milliseconds = 25;
    private static readonly Encoding Encoding = Encoding.UTF8;
@@ -26,6 +20,7 @@ internal class FileSystemWriter : ILogWriter
    private BinaryWriter _assemblyRefTable;
    private BinaryWriter _typeRefTable;
    private BinaryWriter _tagRefTable;
+   private BinaryWriter _entryLinksTable;
 
    private BinaryWriter _entryOffetsTable;
    private BinaryWriter _contextHierarchyTable;
@@ -42,9 +37,9 @@ internal class FileSystemWriter : ILogWriter
    }
 
    #region Methods
-   public void WriteContext(string name, ulong parent)
+   public void WriteContext(string name, ulong id, ulong parent)
    {
-      Context context = new Context(name, parent);
+      Context context = new Context(name, id, parent);
 
       CheckWriteThread(context);
    }
@@ -131,6 +126,7 @@ internal class FileSystemWriter : ILogWriter
 
       _entryOffetsTable.Dispose();
       _contextHierarchyTable.Dispose();
+      _entryLinksTable.Dispose();
 
       ZipLogDirectory();
       Directory.Delete(_directoryPath, true);
@@ -156,22 +152,10 @@ internal class FileSystemWriter : ILogWriter
    #endregion
 
    #region Core Write Methods
-   private void CoreWriteContext(Context context)
-   {
-
-   }
-   private void CoreWriteTag(Tag tag)
-   {
-
-   }
-   private void CoreWriteLinks(Links links)
-   {
-
-   }
-   private void CoreWriteFileReference(FileReference fileReference)
-   {
-
-   }
+   private void CoreWriteContext(Context context) => ContextSerialiser.Serialise(_contextHierarchyTable, context);
+   private void CoreWriteTag(Tag tag) => TagSerialiser.Serialise(_tagRefTable, tag);
+   private void CoreWriteLinks(Links links) => LinksSerialiser.Serialise(_entryLinksTable, links);
+   private void CoreWriteFileReference(FileReference fileReference) => FileReferenceSerialiser.Serialise(_fileRefTable, fileReference);
    private void CoreWriteEntry(ILogEntry entry)
    {
 
@@ -204,6 +188,7 @@ internal class FileSystemWriter : ILogWriter
    [MemberNotNull(nameof(_tagRefTable))]
    [MemberNotNull(nameof(_entryOffetsTable))]
    [MemberNotNull(nameof(_contextHierarchyTable))]
+   [MemberNotNull(nameof(_entryLinksTable))]
    private void SetupTables()
    {
       string tablesPath = Path.Combine(_directoryPath, "tables");
@@ -213,6 +198,7 @@ internal class FileSystemWriter : ILogWriter
       _typeRefTable = OpenForWrite(Path.Combine(tablesPath, "type_refs"));
       _tagRefTable = OpenForWrite(Path.Combine(tablesPath, "tag_refs"));
 
+      _entryLinksTable = OpenForWrite(Path.Combine(tablesPath, "entry_links"));
       _entryOffetsTable = OpenForWrite(Path.Combine(tablesPath, "entry_offsets"));
       _contextHierarchyTable = OpenForWrite(Path.Combine(tablesPath, "context_hierarchy"));
    }
