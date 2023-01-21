@@ -25,6 +25,7 @@ internal class FileSystemWriter : ILogWriter
    private BinaryWriter _entryOffetsTable;
    private BinaryWriter _contextHierarchyTable;
 
+   private BinaryWriter _entriesFile;
    #endregion
    public FileSystemWriter(string directoryPath)
    {
@@ -34,6 +35,7 @@ internal class FileSystemWriter : ILogWriter
       ThrowIfDirectoryIsInvalid(directoryPath);
 
       SetupTables();
+      SetupEntriesFile();
    }
 
    #region Methods
@@ -128,6 +130,8 @@ internal class FileSystemWriter : ILogWriter
       _contextHierarchyTable.Dispose();
       _entryLinksTable.Dispose();
 
+      _entriesFile.Dispose();
+
       ZipLogDirectory();
       Directory.Delete(_directoryPath, true);
    }
@@ -158,7 +162,8 @@ internal class FileSystemWriter : ILogWriter
    private void CoreWriteFileReference(FileReference fileReference) => FileReferenceSerialiser.Serialise(_fileRefTable, fileReference);
    private void CoreWriteEntry(ILogEntry entry)
    {
-
+      _entryOffetsTable.Write(_entriesFile.BaseStream.Position);
+      EntrySerialiser.Serialise(_entriesFile, entry);
    }
    #endregion
 
@@ -201,6 +206,12 @@ internal class FileSystemWriter : ILogWriter
       _entryLinksTable = OpenForWrite(Path.Combine(tablesPath, "entry_links"));
       _entryOffetsTable = OpenForWrite(Path.Combine(tablesPath, "entry_offsets"));
       _contextHierarchyTable = OpenForWrite(Path.Combine(tablesPath, "context_hierarchy"));
+   }
+
+   [MemberNotNull(nameof(_entriesFile))]
+   private void SetupEntriesFile()
+   {
+      _entriesFile = OpenForWrite("entries");
    }
    private static BinaryWriter OpenForWriteCompressed(string path)
    {

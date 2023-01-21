@@ -106,7 +106,11 @@ internal class ContextLogger : ILogger
    {
       ulong fileRef = _mainLogger.GetFileRef(file);
 
-      LogEntry entry = new LogEntry(_contextId, fileRef, line, entryId, severity, components);
+      Dictionary<ComponentKind, IEntryComponent> componentsByKind = new Dictionary<ComponentKind, IEntryComponent>(components.Length);
+      foreach (IEntryComponent component in components)
+         componentsByKind.Add(component.Kind, component);
+
+      LogEntry entry = new LogEntry(_contextId, fileRef, line, entryId, severity, componentsByKind);
 
       _mainLogger.AddEntry(entry);
    }

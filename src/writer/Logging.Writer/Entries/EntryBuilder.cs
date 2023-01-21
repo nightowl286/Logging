@@ -105,7 +105,7 @@ internal class EntryBuilder : ILogEntryBuilder
    }
    public ILogger FinishEntry()
    {
-      LogEntry entry = new LogEntry(_contextId, _fileRef, _line, _entryId, _severity, _components.Values);
+      LogEntry entry = new LogEntry(_contextId, _fileRef, _line, _entryId, _severity, _components);
       _mainLogger.AddEntry(entry);
 
       return _parentLogger;
