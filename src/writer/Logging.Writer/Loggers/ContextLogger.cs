@@ -21,31 +21,31 @@ internal class ContextLogger : ILogger
    }
 
    #region Methods
-   public ILogger Log(Severity severity, string message, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, string message, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent component = ComponentFactory.Message(message);
 
-      AddEntry(severity, entryId, file, line, component);
+      AddEntry(severityAndPurpose, entryId, file, line, component);
       return this;
    }
-   public ILogger Log(Severity severity, StackFrame stackFrame, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, StackFrame stackFrame, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent component = ComponentFactory.StackFrame(stackFrame);
 
-      AddEntry(severity, entryId, file, line, component);
+      AddEntry(severityAndPurpose, entryId, file, line, component);
       return this;
    }
-   public ILogger Log(Severity severity, StackTrace stackTrace, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, StackTrace stackTrace, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent component = ComponentFactory.StackTrace(stackTrace);
 
-      AddEntry(severity, entryId, file, line, component);
+      AddEntry(severityAndPurpose, entryId, file, line, component);
       return this;
    }
-   public ILogger Log(Severity severity, Exception exception, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, Exception exception, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent exceptionComponent = ComponentFactory.Exception(exception);
@@ -56,39 +56,39 @@ internal class ContextLogger : ILogger
       Thread thread = Thread.CurrentThread;
       IEntryComponent threadComponent = ComponentFactory.Thread(thread);
 
-      AddEntry(severity, entryId, file, line, exceptionComponent, stackTraceComponent, threadComponent);
+      AddEntry(severityAndPurpose, entryId, file, line, exceptionComponent, stackTraceComponent, threadComponent);
       return this;
    }
-   public ILogger Log(Severity severity, Thread thread, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, Thread thread, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent component = ComponentFactory.Thread(thread);
 
-      AddEntry(severity, entryId, file, line, component);
+      AddEntry(severityAndPurpose, entryId, file, line, component);
       return this;
    }
-   public ILogger Log(Severity severity, Assembly assembly, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, Assembly assembly, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent component = ComponentFactory.Assembly(assembly);
 
-      AddEntry(severity, entryId, file, line, component);
+      AddEntry(severityAndPurpose, entryId, file, line, component);
       return this;
    }
-   public ILogger LogAdditionalPath(Severity severity, string filePath, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogger LogAdditionalPath(SeverityAndPurpose severityAndPurpose, string filePath, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       IEntryComponent component = ComponentFactory.AdditionalFile(filePath);
 
-      AddEntry(severity, entryId, file, line, component);
+      AddEntry(severityAndPurpose, entryId, file, line, component);
       return this;
    }
-   public ILogEntryBuilder StartEntry(Severity severity, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+   public ILogEntryBuilder StartEntry(SeverityAndPurpose severityAndPurpose, out ulong entryId, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
    {
       entryId = _mainLogger.RequestEntryId();
       ulong fileRef = _mainLogger.GetFileRef(file);
 
-      EntryBuilder builder = new EntryBuilder(_mainLogger, this, _contextId, entryId, fileRef, line, severity);
+      EntryBuilder builder = new EntryBuilder(_mainLogger, this, _contextId, entryId, fileRef, line, severityAndPurpose);
 
       return builder;
    }
@@ -102,7 +102,7 @@ internal class ContextLogger : ILogger
    #endregion
 
    #region Helpers
-   private void AddEntry(Severity severity, ulong entryId, string file, int line, params IEntryComponent[] components)
+   private void AddEntry(SeverityAndPurpose severityAndPurpose, ulong entryId, string file, int line, params IEntryComponent[] components)
    {
       ulong fileRef = _mainLogger.GetFileRef(file);
 
@@ -110,7 +110,7 @@ internal class ContextLogger : ILogger
       foreach (IEntryComponent component in components)
          componentsByKind.Add(component.Kind, component);
 
-      LogEntry entry = new LogEntry(_contextId, fileRef, line, entryId, severity, componentsByKind);
+      LogEntry entry = new LogEntry(_contextId, fileRef, line, entryId, severityAndPurpose, componentsByKind);
 
       _mainLogger.AddEntry(entry);
    }

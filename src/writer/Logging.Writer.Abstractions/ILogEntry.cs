@@ -10,7 +10,7 @@ public interface ILogEntry
    ulong ContextId { get; }
    ulong FileId { get; }
    int Line { get; }
-   Severity Severity { get; }
+   SeverityAndPurpose SeverityAndPurpose { get; }
    IReadOnlyDictionary<ComponentKind, IEntryComponent> Components { get; }
    #endregion
 }

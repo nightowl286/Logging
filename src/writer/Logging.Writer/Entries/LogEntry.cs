@@ -9,5 +9,5 @@ internal record class LogEntry(
    ulong FileId,
    int Line,
    ulong Id,
-   Severity Severity,
+   SeverityAndPurpose SeverityAndPurpose,
    IReadOnlyDictionary<ComponentKind, IEntryComponent> Components) : ILogEntry;

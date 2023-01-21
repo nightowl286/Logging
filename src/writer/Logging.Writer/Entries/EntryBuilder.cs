@@ -14,14 +14,14 @@ internal class EntryBuilder : ILogEntryBuilder
    private readonly ILogger _parentLogger;
    private readonly ulong _entryId;
    private readonly ulong _contextId;
-   private readonly Severity _severity;
+   private readonly SeverityAndPurpose _severityAndPurpose;
    private readonly ulong _fileRef;
    private readonly int _line;
    private readonly Dictionary<ComponentKind, IEntryComponent> _components = new Dictionary<ComponentKind, IEntryComponent>();
    private bool _stackTraceFromException = false;
    private bool _threadFromException = false;
    #endregion
-   public EntryBuilder(MainLogger mainLogger, ILogger parentLogger, ulong contextId, ulong entryId, ulong fileRef, int line, Severity severity)
+   public EntryBuilder(MainLogger mainLogger, ILogger parentLogger, ulong contextId, ulong entryId, ulong fileRef, int line, SeverityAndPurpose severityAndPurpose)
    {
       _mainLogger = mainLogger;
       _parentLogger = parentLogger;
@@ -29,7 +29,7 @@ internal class EntryBuilder : ILogEntryBuilder
       _entryId = entryId;
       _fileRef = fileRef;
       _line = line;
-      _severity = severity;
+      _severityAndPurpose = severityAndPurpose;
    }
 
    #region Methods
@@ -105,7 +105,7 @@ internal class EntryBuilder : ILogEntryBuilder
    }
    public ILogger FinishEntry()
    {
-      LogEntry entry = new LogEntry(_contextId, _fileRef, _line, _entryId, _severity, _components);
+      LogEntry entry = new LogEntry(_contextId, _fileRef, _line, _entryId, _severityAndPurpose, _components);
       _mainLogger.AddEntry(entry);
 
       return _parentLogger;
