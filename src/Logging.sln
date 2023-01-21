@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Writer", "writer\Lo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{B4C8CD72-38AC-4081-9679-E14EB2222E26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Abstractions", "common\Common.Abstractions\Common.Abstractions.csproj", "{572C7381-6F32-49C9-9208-9B52C4FBCBE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Abstractions", "common\Common.Abstractions\Common.Abstractions.csproj", "{572C7381-6F32-49C9-9208-9B52C4FBCBE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Abstractions.CodeTests", "common\Common.Abstractions.CodeTests\Common.Abstractions.CodeTests.csproj", "{1D36E00F-D71B-4DC1-B59F-16938747612B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{572C7381-6F32-49C9-9208-9B52C4FBCBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{572C7381-6F32-49C9-9208-9B52C4FBCBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{572C7381-6F32-49C9-9208-9B52C4FBCBE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D36E00F-D71B-4DC1-B59F-16938747612B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D36E00F-D71B-4DC1-B59F-16938747612B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D36E00F-D71B-4DC1-B59F-16938747612B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D36E00F-D71B-4DC1-B59F-16938747612B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{2854C00E-D355-472B-918D-AA4B8F3FA4AE} = {BFA23560-107A-47A8-A18C-41F4C093FEF7}
 		{08650478-A85E-44E5-8266-BCC685146FB3} = {BFA23560-107A-47A8-A18C-41F4C093FEF7}
 		{572C7381-6F32-49C9-9208-9B52C4FBCBE8} = {B4C8CD72-38AC-4081-9679-E14EB2222E26}
+		{1D36E00F-D71B-4DC1-B59F-16938747612B} = {B4C8CD72-38AC-4081-9679-E14EB2222E26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4048B649-33D9-487E-807F-681CAD1D9F37}
