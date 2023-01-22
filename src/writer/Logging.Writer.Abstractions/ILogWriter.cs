@@ -1,12 +1,13 @@
 ﻿namespace TNO.Logging.Writer.Abstractions;
+
 public interface ILogWriter
 {
    #region Methods
-   void WriteTag(string name, ulong id);
-   void WriteLinks(ulong contextId, ulong fileRef, int line, ulong[] idsToLink);
-   void WriteContext(string name, ulong id, ulong parent);
-   void WriteFileReference(string file, ulong id);
-   void WriteEntry(ILogEntry entry);
+   void RequestWriteTag(string name, ulong id);
+   void RequestWriteLinks(ulong contextId, ulong fileRef, int line, ulong[] idsToLink);
+   void RequestWriteContext(string name, ulong id, ulong parent);
+   void RequestWriteFileReference(string file, ulong id);
+   void RequestWriteEntry(ILogEntry entry);
    void Close();
    #endregion
 }

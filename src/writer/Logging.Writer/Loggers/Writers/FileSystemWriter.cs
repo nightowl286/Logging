@@ -1,20 +1,15 @@
-﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Text;
 using TNO.Logging.Writer.Abstractions;
-using TNO.Logging.Writer.Loggers.Serialisers;
 
 namespace TNO.Logging.Writer.Loggers.Writers;
-internal class FileSystemWriter : ILogWriter
+
+internal class FileSystemWriter : BaseWriter
 {
    #region Fields
-   private const int Thread_Wait_Sleep_Milliseconds = 25;
    private static readonly Encoding Encoding = Encoding.UTF8;
    private readonly string _directoryPath;
-   private readonly SemaphoreSlim _requestSemaphore = new SemaphoreSlim(1);
-   private readonly Queue _writeRequests = new Queue();
-   private bool _writeThreadActive = false;
 
    private BinaryWriter _fileRefTable;
    private BinaryWriter _assemblyRefTable;
@@ -39,87 +34,9 @@ internal class FileSystemWriter : ILogWriter
    }
 
    #region Methods
-   public void WriteContext(string name, ulong id, ulong parent)
+   public override void Close()
    {
-      Context context = new Context(name, id, parent);
-
-      CheckWriteThread(context);
-   }
-   public void WriteEntry(ILogEntry entry) => CheckWriteThread(entry);
-   public void WriteFileReference(string file, ulong id)
-   {
-      FileReference fileRef = new FileReference(file, id);
-
-      CheckWriteThread(fileRef);
-   }
-   public void WriteLinks(ulong contextId, ulong fileRef, int line, ulong[] idsToLink)
-   {
-      Links links = new Links(contextId, fileRef, line, idsToLink);
-
-      CheckWriteThread(links);
-   }
-   public void WriteTag(string name, ulong id)
-   {
-      Tag tag = new Tag(name, id);
-
-      CheckWriteThread(tag);
-   }
-   private void CheckWriteThread(object request)
-   {
-      _requestSemaphore.Wait();
-      try
-      {
-         _writeRequests.Enqueue(request);
-
-         if (_writeThreadActive)
-            return;
-
-         _writeThreadActive = true;
-         Thread thread = new Thread(WriteThreadOperation);
-         thread.Start();
-      }
-      finally
-      {
-         _requestSemaphore.Release();
-      }
-   }
-   private void WriteThreadOperation()
-   {
-      try
-      {
-         while (true)
-         {
-            _requestSemaphore.Wait();
-            object? request = null;
-            try
-            {
-               if (_writeRequests.Count > 0)
-                  request = _writeRequests.Dequeue();
-
-               if (request is null)
-                  return; // outer finally will set the thread state
-            }
-            finally
-            {
-               _requestSemaphore.Release();
-            }
-
-            if (request is Context context) CoreWriteContext(context);
-            else if (request is Tag tag) CoreWriteTag(tag);
-            else if (request is Links links) CoreWriteLinks(links);
-            else if (request is FileReference fileReference) CoreWriteFileReference(fileReference);
-            else if (request is ILogEntry logEntry) CoreWriteEntry(logEntry);
-         }
-      }
-      finally
-      {
-         _writeThreadActive = false;
-      }
-   }
-
-   public void Close()
-   {
-      WaitUntilThreadIsDone();
+      base.Close();
 
       _fileRefTable.Dispose();
       _assemblyRefTable.Dispose();
@@ -135,35 +52,17 @@ internal class FileSystemWriter : ILogWriter
       ZipLogDirectory();
       Directory.Delete(_directoryPath, true);
    }
-   private void WaitUntilThreadIsDone()
-   {
-      while (true)
-      {
-         _requestSemaphore.Wait();
-         try
-         {
-            if (_writeThreadActive == false)
-               return;
-
-            Thread.Sleep(Thread_Wait_Sleep_Milliseconds);
-         }
-         finally
-         {
-            _requestSemaphore.Release();
-         }
-      }
-   }
    #endregion
 
-   #region Core Write Methods
-   private void CoreWriteContext(Context context) => ContextSerialiser.Serialise(_contextHierarchyTable, context);
-   private void CoreWriteTag(Tag tag) => TagSerialiser.Serialise(_tagRefTable, tag);
-   private void CoreWriteLinks(Links links) => LinksSerialiser.Serialise(_entryLinksTable, links);
-   private void CoreWriteFileReference(FileReference fileReference) => FileReferenceSerialiser.Serialise(_fileRefTable, fileReference);
-   private void CoreWriteEntry(ILogEntry entry)
+   #region Write Methods
+   protected override void Write(Context context) => Serialise(_contextHierarchyTable, context);
+   protected override void Write(Tag tag) => Serialise(_tagRefTable, tag);
+   protected override void Write(Links links) => Serialise(_entryLinksTable, links);
+   protected override void Write(FileReference fileReference) => Serialise(_fileRefTable, fileReference);
+   protected override void Write(ILogEntry entry)
    {
       _entryOffetsTable.Write(_entriesFile.BaseStream.Position);
-      EntrySerialiser.Serialise(_entriesFile, entry);
+      Serialise(_entriesFile, entry);
    }
    #endregion
 
