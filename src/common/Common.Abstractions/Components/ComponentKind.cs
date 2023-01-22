@@ -35,6 +35,12 @@ public enum ComponentKind : ushort
    /// <summary>An additional file path component.</summary>
    AdditionalFile = 256,
 
+   /// <summary>The result of <see cref="System.Diagnostics.StackFrame.ToString"/>.</summary>
+   SimpleStackFrame = 512,
+
+   /// <summary>The result of <see cref="System.Diagnostics.StackTrace.ToString"/>.</summary>
+   SimpleStackTrace = 1024,
+
    /// <summary>
    /// A value that will be used to indicate that the size 
    /// of the <see cref="ComponentKind"/> enum has grown.

@@ -32,6 +32,8 @@ internal class EntrySerialiser : ISerialiser<ILogEntry>
       else if (component is IThreadComponent thread) ThreadComponentSerialiser.Serialise(writer, thread);
       else if (component is ILinkComponent link) TagAndLinkComponentSerialiser.Serialise(writer, link);
       else if (component is ITagComponent tag) TagAndLinkComponentSerialiser.Serialise(writer, tag);
+      else if (component is ISimpleStackFrameComponent simpleStackFrame) SimpleStackFrameAndTraceSerialiser.Serialise(writer, simpleStackFrame);
+      else if (component is ISimpleStackTraceComponent simpleStackTrace) SimpleStackFrameAndTraceSerialiser.Serialise(writer, simpleStackTrace);
       else
          throw new ArgumentException($"Unknown component kind ({component.Kind}) ({component.GetType()}).", nameof(component));
    }
