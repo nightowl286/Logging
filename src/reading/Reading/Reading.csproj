@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>TNO.Logging.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>TNO.Logging.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Logging - Reading</Title>
+    <Company>TNO</Company>
+    <Authors>Nightowl</Authors>
+    <PackageTags>logging, reading</PackageTags>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>Contains the functionality required for reading logs.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\Common\Common.csproj" />
+    <ProjectReference Include="..\Reading.Abstractions\Reading.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
