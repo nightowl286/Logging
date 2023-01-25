@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.DependencyInjection.Abstractions.Components;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Deserialisers;
@@ -10,11 +11,8 @@ namespace TNO.Logging.Reading.Entries.Components.Message;
 /// </summary>
 internal class MessageComponentDeserialiserSelector : DeserialiserSelectorBase<IMessageComponentDeserialiser, IMessageComponent>
 {
-   #region Properties
-   /// <inheritdoc/>
-   protected override Dictionary<uint, Type> DeserialiserTypes { get; } = new Dictionary<uint, Type>
+   public MessageComponentDeserialiserSelector(IServiceBuilder serviceBuilder) : base(serviceBuilder)
    {
-      { 0, typeof(MessageComponentDeserialiser0) }
-   };
-   #endregion
+      With<MessageComponentDeserialiser0>(0);
+   }
 }

@@ -18,6 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TNO.DependencyInjection.Abstractions" Version="1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\common\Common\Common.csproj" />
     <ProjectReference Include="..\Reading.Abstractions\Reading.Abstractions.csproj" />
   </ItemGroup>
