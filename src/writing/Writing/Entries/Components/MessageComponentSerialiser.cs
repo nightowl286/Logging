@@ -3,9 +3,13 @@ using TNO.Logging.Writing.Abstractions.Entries.Components;
 
 namespace TNO.Logging.Writing.Entries.Components;
 
-internal sealed class MessageComponentSerialiser : IMessageComponentSerialiser
+/// <summary>
+/// A serialiser for <see cref="IMessageComponent"/>.
+/// </summary>
+public sealed class MessageComponentSerialiser : IMessageComponentSerialiser
 {
    #region Methods
+   /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IMessageComponent data)
    {
       string message = data.Message;
