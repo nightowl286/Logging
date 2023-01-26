@@ -1,5 +1,9 @@
 ﻿global using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+global using MessageComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Message.Versions.MessageComponentDeserialiser0;
+global using EntryDeserialiserLatest = TNO.Logging.Reading.Entries.Versions.EntryDeserialiser0;
+
+
 #if DEBUG
 [assembly: Parallelize(Scope = ExecutionScope.ClassLevel, Workers = 1)]
 #else

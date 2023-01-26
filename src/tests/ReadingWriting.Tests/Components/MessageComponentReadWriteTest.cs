@@ -1,12 +1,11 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Reading.Entries.Components.Message.Versions;
 using TNO.Logging.Writing.Entries.Components;
 
 namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
-public class MessageComponentReadWriteTest : ReadWriteTestBase<MessageComponentSerialiser, MessageComponentDeserialiser0, IMessageComponent>
+public class MessageComponentReadWriteTest : ReadWriteTestBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
 {
    #region Methods
    protected override IMessageComponent CreateData()
