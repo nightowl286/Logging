@@ -8,6 +8,11 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// </summary>
 public sealed class MessageComponentSerialiser : IMessageComponentSerialiser
 {
+   #region Properties
+   /// <inheritdoc/>
+   public uint Version => 0;
+   #endregion
+
    #region Methods
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IMessageComponent data)

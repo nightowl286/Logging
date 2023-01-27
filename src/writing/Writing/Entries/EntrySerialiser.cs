@@ -15,6 +15,11 @@ public class EntrySerialiser : IEntrySerialiser
    private readonly IComponentSerialiserDispatcher _componentSerialiser;
    #endregion
 
+   #region Properties
+   /// <inheritdoc/>
+   public uint Version => 0;
+   #endregion
+
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="EntrySerialiser"/>.</summary>
    /// <param name="componentSerialiser">The component serialiser to use.</param>

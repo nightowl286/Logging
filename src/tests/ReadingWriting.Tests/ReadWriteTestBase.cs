@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Tests.Common;
 
 namespace TNO.ReadingWriting.Tests;
 
@@ -20,6 +21,9 @@ public abstract class ReadWriteTestBase<TWriter, TReader, TData>
       TData expected = CreateData();
       Setup(out TWriter writer, out TReader reader);
       using MemoryStream memoryStream = new MemoryStream();
+
+      // Arrange Assert
+      Assert.That.IsInconclusiveIf(writer.Version != reader.Version, $"There is a mismatch between the reader ({reader.Version}) / writer ({writer.Version}) versions.");
 
       // Act
       using (BinaryWriter bw = new BinaryWriter(memoryStream, Encoding, true))

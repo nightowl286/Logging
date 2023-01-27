@@ -8,6 +8,11 @@ namespace TNO.Logging.Reading.Entries.Components.Message.Versions;
 /// </summary>
 public sealed class MessageComponentDeserialiser0 : IMessageComponentDeserialiser
 {
+   #region Properties
+   /// <inheritdoc/>
+   public uint Version => 0;
+   #endregion
+
    #region Methods
    /// <inheritdoc/>
    public IMessageComponent Deserialise(BinaryReader reader)

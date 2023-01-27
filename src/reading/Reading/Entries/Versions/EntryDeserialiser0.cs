@@ -15,6 +15,11 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
    private IComponentDeserialiserDispatcher _componentDeserialiser;
    #endregion
 
+   #region Properties
+   /// <inheritdoc/>
+   public uint Version => 0;
+   #endregion
+
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="EntryDeserialiser0"/>.</summary>
    /// <param name="componentDeserialiser">The component deserialiser to use.</param>

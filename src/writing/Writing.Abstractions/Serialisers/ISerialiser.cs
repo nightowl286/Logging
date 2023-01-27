@@ -8,6 +8,11 @@ namespace TNO.Logging.Writing.Abstractions.Serialisers;
 /// <typeparam name="T">The type of the data that can be serialised.</typeparam>
 public interface ISerialiser<in T>
 {
+   #region Properties
+   /// <summary>The version of this serialiser.</summary>
+   uint Version { get; }
+   #endregion
+
    #region Methods
    /// <summary>Serialises the given <paramref name="data"/> using the given <paramref name="writer"/>.</summary>
    /// <param name="writer">The writer to use.</param>

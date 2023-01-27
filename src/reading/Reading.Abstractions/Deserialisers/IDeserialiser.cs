@@ -8,6 +8,11 @@ namespace TNO.Logging.Reading.Abstractions.Deserialisers;
 /// <typeparam name="T">The type of the data that can be deserialised.</typeparam>
 public interface IDeserialiser<out T>
 {
+   #region Properties
+   /// <summary>The version of this deserialiser.</summary>
+   uint Version { get; }
+   #endregion
+
    #region Methods
    /// <summary>Deserialises an instance of the type <typeparamref name="T"/> using the given <paramref name="reader"/>.</summary>
    /// <param name="reader">The reader to use.</param>
