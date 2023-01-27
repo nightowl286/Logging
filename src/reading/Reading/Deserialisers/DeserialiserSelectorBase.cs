@@ -8,9 +8,8 @@ namespace TNO.Logging.Reading.Deserialisers;
 /// A base class for deserialiser selectors.
 /// </summary>
 /// <typeparam name="T">The type of the <see cref="IDeserialiser{T}"/>.</typeparam>
-/// <typeparam name="U">The type of the data that the deserialiser handles.</typeparam>
-public abstract class DeserialiserSelectorBase<T, U> : IDeserialiserSelector<T, U>
-   where T : IDeserialiser<U>
+public abstract class DeserialiserSelectorBase<T> : IDeserialiserSelector<T>
+   where T : IDeserialiser
 {
    #region Fields
    private readonly Dictionary<uint, T> _createdDeserialisers = new Dictionary<uint, T>();
@@ -19,7 +18,7 @@ public abstract class DeserialiserSelectorBase<T, U> : IDeserialiserSelector<T, 
    #endregion
 
    #region Constructors
-   /// <summary>Creates the base instance for the <see cref="DeserialiserSelectorBase{T, U}"/> class.</summary>
+   /// <summary>Creates the base instance for the <see cref="DeserialiserSelectorBase{T}"/> class.</summary>
    /// <param name="serviceBuilder">The service builder to use when creating the deserialisers.</param>
    public DeserialiserSelectorBase(IServiceBuilder serviceBuilder) => _serviceBuilder = serviceBuilder;
    #endregion
@@ -50,9 +49,9 @@ public abstract class DeserialiserSelectorBase<T, U> : IDeserialiserSelector<T, 
       return false;
    }
 
-   /// <summary>Registers the deserialiser of the type <typeparamref name="V"/>, with the given <paramref name="version"/>.</summary>
-   /// <typeparam name="V">The type of the deserialiser.</typeparam>
-   /// <param name="version">The version to associate with the deserialiser of the given type <typeparamref name="V"/>.</param>
-   protected void With<V>(uint version) where V : T => _deserialiserTypes.Add(version, typeof(U));
+   /// <summary>Registers the deserialiser of the type <typeparamref name="U"/>, with the given <paramref name="version"/>.</summary>
+   /// <typeparam name="U">The type of the deserialiser.</typeparam>
+   /// <param name="version">The version to associate with the deserialiser of the given type <typeparamref name="U"/>.</param>
+   protected void With<U>(uint version) where U : T => _deserialiserTypes.Add(version, typeof(U));
    #endregion
 }

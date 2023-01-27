@@ -1,22 +1,8 @@
-﻿using System.IO;
-
-namespace TNO.Logging.Reading.Abstractions.Deserialisers;
+﻿namespace TNO.Logging.Reading.Abstractions.Deserialisers;
 
 /// <summary>
-/// Denotes a deserialiser for data of the type <typeparamref name="T"/>.
+/// Denotes a base deserialiser
 /// </summary>
-/// <typeparam name="T">The type of the data that can be deserialised.</typeparam>
-public interface IDeserialiser<out T>
+public interface IDeserialiser
 {
-   #region Properties
-   /// <summary>The version of this deserialiser.</summary>
-   uint Version { get; }
-   #endregion
-
-   #region Methods
-   /// <summary>Deserialises an instance of the type <typeparamref name="T"/> using the given <paramref name="reader"/>.</summary>
-   /// <param name="reader">The reader to use.</param>
-   /// <returns>The deserialised data of the type <typeparamref name="T"/>.</returns>
-   T Deserialise(BinaryReader reader);
-   #endregion
 }

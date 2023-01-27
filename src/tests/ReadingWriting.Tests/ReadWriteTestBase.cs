@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Tests.Common;
@@ -6,8 +7,8 @@ using TNO.Tests.Common;
 namespace TNO.ReadingWriting.Tests;
 
 public abstract class ReadWriteTestBase<TWriter, TReader, TData>
-   where TWriter : ISerialiser<TData>
-   where TReader : IDeserialiser<TData>
+   where TWriter : IBinarySerialiser<TData>
+   where TReader : IBinaryDeserialiser<TData>
 {
    #region Properties
    public static Encoding Encoding { get; } = Encoding.UTF8;
@@ -23,7 +24,7 @@ public abstract class ReadWriteTestBase<TWriter, TReader, TData>
       using MemoryStream memoryStream = new MemoryStream();
 
       // Arrange Assert
-      Assert.That.IsInconclusiveIf(writer.Version != reader.Version, $"There is a mismatch between the reader ({reader.Version}) / writer ({writer.Version}) versions.");
+      TryCheckVersions(writer, reader);
 
       // Act
       using (BinaryWriter bw = new BinaryWriter(memoryStream, Encoding, true))
@@ -42,6 +43,20 @@ public abstract class ReadWriteTestBase<TWriter, TReader, TData>
    #endregion
 
    #region Methods
+   private static void TryCheckVersions(TWriter writer, TReader reader)
+   {
+      IVersioned? versionedWriter = writer as IVersioned;
+      IVersioned? versionedReader = reader as IVersioned;
+
+      Assert.That.IsInconclusiveIf(versionedWriter is null ^ versionedReader is null, "Mixing versioned and non-versioned readers and writers is not allowed.");
+
+      if (versionedWriter is not null && versionedReader is not null)
+      {
+         Assert.That.IsInconclusiveIf(versionedWriter.Version != versionedReader.Version,
+            $"There is a mismatch between the reader ({versionedReader.Version}) / writer ({versionedWriter.Version}) versions.");
+      }
+   }
+
    [TestInitialize]
    protected virtual void Setup(out TWriter writer, out TReader reader)
    {

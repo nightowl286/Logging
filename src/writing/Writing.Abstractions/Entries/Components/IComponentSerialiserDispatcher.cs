@@ -1,5 +1,4 @@
-﻿using System.IO;
-using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Abstractions.Entries.Components;
@@ -9,12 +8,6 @@ namespace TNO.Logging.Writing.Abstractions.Entries.Components;
 /// will serialise a given <see cref="IComponent"/> based
 /// on its <see cref="IComponent.Kind"/>.
 /// </summary>
-public interface IComponentSerialiserDispatcher
+public interface IComponentSerialiserDispatcher : IBinarySerialiser<IComponent>
 {
-   #region Methods
-   /// <summary>Serialises the given <paramref name="data"/> using the given <paramref name="writer"/>.</summary>
-   /// <param name="writer">The writer to use.</param>
-   /// <param name="data">The data to serialise.</param>
-   void Serialise(BinaryWriter writer, IComponent data);
-   #endregion
 }
