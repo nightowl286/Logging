@@ -92,7 +92,7 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
    #region Helpers
    private static BinaryWriter OpenWriter(string path)
    {
-      FileStream fs = new FileStream(path, FileMode.CreateNew);
+      FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
       BinaryWriter writer = new BinaryWriter(fs);
 
       return writer;
