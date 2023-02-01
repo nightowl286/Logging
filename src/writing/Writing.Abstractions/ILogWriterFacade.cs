@@ -10,7 +10,7 @@ public interface ILogWriterFacade
    #region Methods
    /// <summary>Gets a serialiser of the type <typeparamref name="T"/>.</summary>
    /// <typeparam name="T">The type of the serialiser.</typeparam>
-   /// <returns></returns>
+   /// <returns>A serialiser of the type <typeparamref name="T"/>.</returns>
    T GetSerialiser<T>() where T : notnull, ISerialiser;
    #endregion
 }
