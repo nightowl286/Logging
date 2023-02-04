@@ -61,7 +61,7 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
 
    private void WriteVersions()
    {
-      DataVersionMapSerialiser serialiser = new DataVersionMapSerialiser();
+      IDataVersionMapSerialiser serialiser = _facade.GetSerialiser<IDataVersionMapSerialiser>();
       DataVersionMap map = _facade.GetVersionMap();
 
       string path = Path.Combine(_directory, "versions");

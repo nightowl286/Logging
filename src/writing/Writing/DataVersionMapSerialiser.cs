@@ -1,12 +1,12 @@
 ﻿using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Abstractions;
 
 namespace TNO.Logging.Writing;
 
 /// <summary>
 /// A serialiser for <see cref="DataVersionMap"/>.
 /// </summary>
-public class DataVersionMapSerialiser : IBinarySerialiser<DataVersionMap>
+public class DataVersionMapSerialiser : IDataVersionMapSerialiser
 {
    #region Methods
    /// <inheritdoc/>

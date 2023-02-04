@@ -68,6 +68,8 @@ public class LogWriterFacade : ILogWriterFacade
       RegisterComponentSerialisers(facade);
 
       VersionedSingleton<IEntrySerialiser, EntrySerialiser>(facade);
+
+      facade.Singleton<IDataVersionMapSerialiser, DataVersionMapSerialiser>();
    }
    private static void RegisterComponentSerialisers(IServiceFacade facade)
    {
