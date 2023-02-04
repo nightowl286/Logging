@@ -33,19 +33,9 @@ public class LogWriterFacade : ILogWriterFacade
    public T GetSerialiser<T>() where T : notnull, ISerialiser => _serviceFacade.Get<T>();
 
    /// <inheritdoc/>
-   public IReadOnlyCollection<IVersioned> GetAllVersioned()
-   {
-      IReadOnlyCollection<IVersioned> collection = _serviceFacade.GetAll<IVersioned>()
-         .Where(v => v is ISerialiser)
-         .ToArray();
-
-      return collection;
-   }
-
-   /// <inheritdoc/>
    public DataVersionMap GetVersionMap()
    {
-      IReadOnlyCollection<IVersioned> versioned = GetAllVersioned();
+      IEnumerable<IVersioned> versioned = GetAllVersioned();
 
       DataVersionMap map = new DataVersionMap();
       foreach (IVersioned version in versioned)
@@ -63,6 +53,13 @@ public class LogWriterFacade : ILogWriterFacade
    #endregion
 
    #region Helpers
+   private IEnumerable<IVersioned> GetAllVersioned()
+   {
+      IEnumerable<IVersioned> collection = _serviceFacade.GetAll<IVersioned>()
+         .Where(v => v is ISerialiser);
+
+      return collection;
+   }
    private static void RegisterSerialisers(IServiceFacade facade)
    {
       RegisterComponentSerialisers(facade);
@@ -77,7 +74,6 @@ public class LogWriterFacade : ILogWriterFacade
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }
-
    private static void VersionedSingleton<TService, TType>(IServiceFacade facade)
       where TService : notnull
       where TType : notnull, TService, IVersioned
