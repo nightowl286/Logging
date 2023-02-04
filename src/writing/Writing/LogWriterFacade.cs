@@ -24,6 +24,7 @@ public class LogWriterFacade : ILogWriterFacade
    /// <summary>Creates a new instance of the <see cref="LogWriterFacade"/>.</summary>
    public LogWriterFacade()
    {
+      _serviceFacade.RegisterSelf();
       RegisterSerialisers(_serviceFacade);
    }
    #endregion

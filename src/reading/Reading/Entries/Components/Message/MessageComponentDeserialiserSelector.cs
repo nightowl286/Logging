@@ -9,7 +9,7 @@ namespace TNO.Logging.Reading.Entries.Components.Message;
 /// <summary>
 /// An <see cref="IDeserialiserSelector{T}"/> for versions of the <see cref="IMessageComponentDeserialiser"/>.
 /// </summary>
-internal class MessageComponentDeserialiserSelector : DeserialiserSelectorBase<IMessageComponentDeserialiser>
+internal class MessageComponentDeserialiserSelector : DeserialiserSelectorBase<IMessageComponentDeserialiser>, IMessageComponentDeserialiserSelector
 {
    public MessageComponentDeserialiserSelector(IServiceBuilder serviceBuilder) : base(serviceBuilder)
    {

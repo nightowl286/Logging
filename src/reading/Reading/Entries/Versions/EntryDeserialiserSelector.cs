@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.Entries.Versions;
 /// <summary>
 /// An <see cref="IDeserialiserSelector{T}"/> for versions of the <see cref="IEntryDeserialiser"/>.
 /// </summary>
-internal class EntryDeserialiserSelector : DeserialiserSelectorBase<IEntryDeserialiser>
+internal class EntryDeserialiserSelector : DeserialiserSelectorBase<IEntryDeserialiser>, IEntryDeserialiserSelector
 {
    public EntryDeserialiserSelector(IServiceBuilder serviceBuilder) : base(serviceBuilder)
    {

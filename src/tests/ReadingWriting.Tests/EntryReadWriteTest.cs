@@ -20,7 +20,6 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       writer = new EntrySerialiser(componentSerialiser);
 
-
       ComponentDeserialiserDispatcher componentDeserialiser =
          new ComponentDeserialiserDispatcher(
             new MessageComponentDeserialiserLatest());

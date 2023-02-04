@@ -6,6 +6,7 @@ using TNO.Tests.Common;
 
 namespace TNO.ReadingWriting.Tests;
 
+[TestCategory(Category.Serialisation)]
 public abstract class ReadWriteTestBase<TWriter, TReader, TData>
    where TWriter : IBinarySerialiser<TData>
    where TReader : IBinaryDeserialiser<TData>

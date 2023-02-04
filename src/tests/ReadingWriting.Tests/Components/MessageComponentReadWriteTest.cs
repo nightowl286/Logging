@@ -5,6 +5,7 @@ using TNO.Logging.Writing.Entries.Components;
 namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
+[TestCategory(Category.Components)]
 public class MessageComponentReadWriteTest : ReadWriteTestBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
 {
    #region Methods
