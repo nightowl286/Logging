@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
@@ -12,6 +13,7 @@ namespace TNO.Logging.Writing.Loggers.Writers;
 public sealed class FileSystemLogWriter : ILogWriter, IDisposable
 {
    #region Fields
+   private readonly ILogWriterFacade _facade;
    private readonly ThreadedQueue<IEntry> _entryQueue;
    private readonly LogWriterContext _context;
    private readonly string _directory;
@@ -21,6 +23,7 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
    #endregion
    private FileSystemLogWriter(ILogWriterFacade facade, string directory)
    {
+      _facade = facade;
       _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue));
       _entryQueue.WriteRequested += entryQueue_WriteRequested;
 
@@ -32,6 +35,8 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
 
       // serialisers
       _entrySerialiser = facade.GetSerialiser<IEntrySerialiser>();
+
+      WriteVersions();
    }
 
    #region Methods
@@ -52,6 +57,16 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
       _entrySerialiser.Serialise(_entryWriter, data);
 
       _entryWriter.Flush();
+   }
+
+   private void WriteVersions()
+   {
+      DataVersionMapSerialiser serialiser = new DataVersionMapSerialiser();
+      DataVersionMap map = _facade.GetVersionMap();
+
+      string path = Path.Combine(_directory, "versions");
+      using (BinaryWriter writer = OpenWriter(path))
+         serialiser.Serialise(writer, map);
    }
    #endregion
 

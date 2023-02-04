@@ -1,5 +1,7 @@
 ﻿using TNO.DependencyInjection;
+using TNO.DependencyInjection.Abstractions;
 using TNO.DependencyInjection.Abstractions.Components;
+using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
@@ -29,20 +31,58 @@ public class LogWriterFacade : ILogWriterFacade
    #region Methods
    /// <inheritdoc/>
    public T GetSerialiser<T>() where T : notnull, ISerialiser => _serviceFacade.Get<T>();
+
+   /// <inheritdoc/>
+   public IReadOnlyCollection<IVersioned> GetAllVersioned()
+   {
+      IReadOnlyCollection<IVersioned> collection = _serviceFacade.GetAll<IVersioned>()
+         .Where(v => v is ISerialiser)
+         .ToArray();
+
+      return collection;
+   }
+
+   /// <inheritdoc/>
+   public DataVersionMap GetVersionMap()
+   {
+      IReadOnlyCollection<IVersioned> versioned = GetAllVersioned();
+
+      DataVersionMap map = new DataVersionMap();
+      foreach (IVersioned version in versioned)
+      {
+         IEnumerable<VersionedDataKind> kinds = version
+            .GetType()
+            .GetDataKinds();
+
+         foreach (VersionedDataKind kind in kinds)
+            map.Add(kind, version.Version);
+      }
+
+      return map;
+   }
    #endregion
 
    #region Helpers
-   private static void RegisterSerialisers(IServiceRegistrar registrar)
+   private static void RegisterSerialisers(IServiceFacade facade)
    {
-      RegisterComponentSerialisers(registrar);
+      RegisterComponentSerialisers(facade);
 
-      registrar.Singleton<IEntrySerialiser, EntrySerialiser>();
+      VersionedSingleton<IEntrySerialiser, EntrySerialiser>(facade);
    }
-   private static void RegisterComponentSerialisers(IServiceRegistrar registrar)
+   private static void RegisterComponentSerialisers(IServiceFacade facade)
    {
-      registrar.Singleton<IMessageComponentSerialiser, MessageComponentSerialiser>();
+      VersionedSingleton<IMessageComponentSerialiser, MessageComponentSerialiser>(facade);
 
-      registrar.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
+      facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
+   }
+
+   private static void VersionedSingleton<TService, TType>(IServiceFacade facade)
+      where TService : notnull
+      where TType : notnull, TService, IVersioned
+   {
+      TType instance = facade.Build<TType>();
+      facade.Instance<IVersioned>(instance, AppendValueMode.Append);
+      facade.Instance<TService>(instance);
    }
    #endregion
 }
