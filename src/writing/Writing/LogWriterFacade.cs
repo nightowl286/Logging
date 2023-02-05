@@ -18,6 +18,7 @@ public class LogWriterFacade : ILogWriterFacade
 {
    #region Fields
    private readonly ServiceFacade _serviceFacade = new ServiceFacade();
+   private readonly DataVersionMap _map;
    #endregion
 
    #region Constructors
@@ -26,6 +27,8 @@ public class LogWriterFacade : ILogWriterFacade
    {
       _serviceFacade.RegisterSelf();
       RegisterSerialisers(_serviceFacade);
+
+      _map = GenerateVersionMap();
    }
    #endregion
 
@@ -34,7 +37,11 @@ public class LogWriterFacade : ILogWriterFacade
    public T GetSerialiser<T>() where T : notnull, ISerialiser => _serviceFacade.Get<T>();
 
    /// <inheritdoc/>
-   public DataVersionMap GetVersionMap()
+   public DataVersionMap GetVersionMap() => _map;
+   #endregion
+
+   #region Helpers
+   private DataVersionMap GenerateVersionMap()
    {
       IEnumerable<IVersioned> versioned = GetAllVersioned();
 
@@ -51,9 +58,6 @@ public class LogWriterFacade : ILogWriterFacade
 
       return map;
    }
-   #endregion
-
-   #region Helpers
    private IEnumerable<IVersioned> GetAllVersioned()
    {
       IEnumerable<IVersioned> collection = _serviceFacade.GetAll<IVersioned>()

@@ -27,7 +27,8 @@ public class LogReaderFacade : ILogReaderFacade
    public LogReaderFacade()
    {
       _serviceFacade.RegisterSelf();
-      RegisterSelectors(_serviceFacade);
+
+      RegisterNonVersioned(_serviceFacade);
    }
    #endregion
 
@@ -36,6 +37,8 @@ public class LogReaderFacade : ILogReaderFacade
    public IDeserialiserProvider GenerateProvider(DataVersionMap map)
    {
       ServiceFacade providerFacade = new ServiceFacade();
+      providerFacade.RegisterSelf();
+      RegisterSelectors(providerFacade);
 
       RegisterFromKinds(providerFacade, map, GetComponentDataKinds());
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
@@ -44,31 +47,34 @@ public class LogReaderFacade : ILogReaderFacade
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
    }
-   private void RegisterFromKinds(IServiceRegistrar registrar, DataVersionMap map, IEnumerable<VersionedDataKind> kinds)
+   private static void RegisterFromKinds(IServiceFacade facade, DataVersionMap map, IEnumerable<VersionedDataKind> kinds)
    {
-      foreach (VersionedDataKind kind in GetComponentDataKinds())
+      foreach (VersionedDataKind kind in kinds)
       {
          if (map.TryGetValue(kind, out uint version))
-            RegisterFromKind(registrar, kind, version);
+            RegisterFromKind(facade, kind, version);
       }
    }
-   private void RegisterFromKind(IServiceRegistrar registrar, VersionedDataKind kind, uint version)
+   private static void RegisterFromKind(IServiceFacade facade, VersionedDataKind kind, uint version)
    {
       if (kind is VersionedDataKind.Entry)
-         RegisterWithProvider<IEntryDeserialiserSelector, IEntryDeserialiser>(registrar, version);
+         RegisterWithProvider<IEntryDeserialiserSelector, IEntryDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.Message)
-         RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(registrar, version);
+         RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(facade, version);
    }
-   private void RegisterWithProvider<TSelector, TDeserialiser>(IServiceRegistrar registrar, uint version)
+   private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>
       where TDeserialiser : notnull, IDeserialiser
    {
-      TSelector selector = _serviceFacade.Get<TSelector>();
+      TSelector selector = facade.Get<TSelector>();
       if (selector.TrySelect(version, out TDeserialiser? deserialiser))
-         registrar.Instance(deserialiser);
+         facade.Instance(deserialiser);
       else
          throw new ArgumentException($"No deserialiser of the required type ({typeof(TDeserialiser)}) could be selected for the version #{version:n0}.", nameof(version));
    }
+
+   /// <inheritdoc/>
+   public T GetDeserialiser<T>() where T : notnull, IDeserialiser => _serviceFacade.Get<T>();
    #endregion
 
    #region Helpers
@@ -87,11 +93,15 @@ public class LogReaderFacade : ILogReaderFacade
       facade
          .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>();
    }
-
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
       facade
          .Singleton<IMessageComponentDeserialiserSelector, MessageComponentDeserialiserSelector>();
+   }
+   private static void RegisterNonVersioned(IServiceFacade facade)
+   {
+      facade
+         .Singleton<IDataVersionMapDeserialiser, DataVersionMapDeserialiser>();
    }
    #endregion
 }
