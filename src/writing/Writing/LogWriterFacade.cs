@@ -5,9 +5,12 @@ using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
+using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
+using TNO.Logging.Writing.Loggers;
+using TNO.Logging.Writing.Loggers.Writers;
 
 namespace TNO.Logging.Writing;
 
@@ -86,6 +89,26 @@ public class LogWriterFacade : ILogWriterFacade
       TType instance = facade.Build<TType>();
       facade.Instance<IVersioned>(instance, AppendValueMode.Append);
       facade.Instance<TService>(instance);
+   }
+   #endregion
+
+   #region File System Writer
+   /// <inheritdoc/>
+   public IDisposableLogger CreateOnFileSystem(string directory)
+   {
+      ILogger logger = FileSystemLogWriter.Create(this, directory, out FileSystemLogWriter writer);
+      DisposableLogger disposable = new DisposableLogger(logger, writer);
+
+      return disposable;
+   }
+
+   /// <inheritdoc/>
+   public IDisposableLogger CreateDatedOnFileSystem(string directory)
+   {
+      ILogger logger = FileSystemLogWriter.CreateDated(this, directory, out FileSystemLogWriter writer);
+      DisposableLogger disposable = new DisposableLogger(logger, writer);
+
+      return disposable;
    }
    #endregion
 }

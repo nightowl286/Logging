@@ -74,14 +74,14 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
    /// <summary>Creates a new logger that will save to the file system.</summary>
    /// <param name="facade">The facade for the log writing system.</param>
    /// <param name="directory">
-   /// The directory to which the log should be saved. A new child
-   /// directory (formatted based on the current time) will be created.
+   /// The directory to which the log should be saved. A new child directory
+   /// (formatted based on <see cref="DateTime.Now"/>) will be created.
    /// </param>
    /// <param name="logWriter">The created log writer.</param>
    /// <returns>An instance of the created logger.</returns>
    public static ILogger CreateDated(ILogWriterFacade facade, string directory, out FileSystemLogWriter logWriter)
    {
-      DateTime date = DateTime.UtcNow;
+      DateTime date = DateTime.Now;
       string dateStr = date.ToString("yyyy-MM-dd_HH-mm-ss");
       directory = Path.Combine(directory, dateStr);
 
