@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Writing.Abstractions.Loggers;
+﻿using System.Diagnostics;
+using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Loggers.IdFactories;
 
 namespace TNO.Logging.Writing.Loggers;
@@ -10,10 +11,14 @@ public class LogWriterContext : ILogWriteContext
 {
    #region Fields
    private readonly SafeIdFactory _entryIdFactory = new SafeIdFactory(1);
+   private readonly Stopwatch _timestampWatch = Stopwatch.StartNew();
    #endregion
 
    #region Methods
    /// <inheritdoc/>
    public ulong NewEntryId() => _entryIdFactory.GetNext();
+
+   /// <inheritdoc/>
+   public TimeSpan GetTimestamp() => _timestampWatch.Elapsed;
    #endregion
 }

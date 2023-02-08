@@ -12,7 +12,7 @@ namespace TNO.Logging.Reading.Readers;
 /// <summary>
 /// Represents a reader for a log that was saved to the file system.
 /// </summary>
-public sealed class FileSystemLogReader : IFileSystemLogReader, IDisposable
+public sealed class FileSystemLogReader : IFileSystemLogReader
 {
    #region Fields
    private readonly string? _tempPath;

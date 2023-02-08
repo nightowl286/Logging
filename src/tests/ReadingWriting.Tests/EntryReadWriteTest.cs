@@ -32,18 +32,20 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
       MessageComponent messageComponent = new MessageComponent("some message");
 
       ulong id = 5;
+      TimeSpan timestamp = new TimeSpan(5);
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
          { ComponentKind.Message, messageComponent }
       };
 
-      Entry entry = new Entry(id, components);
+      Entry entry = new Entry(id, timestamp, components);
 
       return entry;
    }
    protected override void Verify(IEntry expected, IEntry result)
    {
       Assert.AreEqual(expected.Id, result.Id);
+      Assert.AreEqual(expected.Timestamp, result.Timestamp);
       Assert.AreEqual(expected.Components.Count, result.Components.Count);
 
       // Message component

@@ -34,8 +34,10 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
    public IEntry Deserialise(BinaryReader reader)
    {
       ulong id = reader.ReadUInt64();
+      long rawTimestamp = reader.ReadInt64();
       ushort rawKinds = reader.ReadUInt16();
 
+      TimeSpan timestamp = new TimeSpan(rawTimestamp);
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>();
 
       ComponentKind kinds = (ComponentKind)rawKinds;
@@ -45,7 +47,7 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
          components.Add(kind, component);
       }
 
-      return EntryFactory.Version0(id, components);
+      return EntryFactory.Version0(id, timestamp, components);
    }
    #endregion
 }

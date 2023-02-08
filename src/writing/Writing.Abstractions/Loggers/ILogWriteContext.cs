@@ -1,4 +1,6 @@
-﻿namespace TNO.Logging.Writing.Abstractions.Loggers;
+﻿using System;
+
+namespace TNO.Logging.Writing.Abstractions.Loggers;
 
 /// <summary>
 /// Denotes a context that belongs to a <see cref="ILogWriter"/>.
@@ -10,5 +12,9 @@ public interface ILogWriteContext
    /// <returns>The id that should be assigned to an entry.</returns>
    /// <remarks>The generated id is only unique within the current log.</remarks>
    ulong NewEntryId();
+
+   /// <summary>Gets the current timestamp since the log was created.</summary>
+   /// <returns>A <see cref="TimeSpan"/> that represents the time since this log was created.</returns>
+   TimeSpan GetTimestamp();
    #endregion
 }

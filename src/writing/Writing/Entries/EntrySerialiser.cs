@@ -36,8 +36,10 @@ public class EntrySerialiser : IEntrySerialiser
       ulong id = data.Id;
       ComponentKind kinds = data.Components.Keys.CombineFlags();
       ushort rawKinds = (ushort)kinds;
+      long rawTimestamp = data.Timestamp.Ticks;
 
       writer.Write(id);
+      writer.Write(rawTimestamp);
       writer.Write(rawKinds);
       foreach (ComponentKind possibleKind in EnumExtensions.GetValuesAscending<ComponentKind>())
       {

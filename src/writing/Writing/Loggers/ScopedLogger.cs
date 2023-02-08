@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using System.ComponentModel.DataAnnotations;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
@@ -32,22 +33,23 @@ public class ScopedLogger : ILogger
    public ILogger Log(string message)
    {
       ulong id = _context.NewEntryId();
+      TimeSpan timestamp = _context.GetTimestamp();
       MessageComponent component = new MessageComponent(message);
 
-      Save(id, component);
+      Save(id, timestamp, component);
       return this;
    }
    #endregion
 
    #region Helpers
-   private void Save(ulong entryId, IComponent component)
+   private void Save(ulong entryId, TimeSpan timestamp, IComponent component)
    {
       Dictionary<ComponentKind, IComponent> componentsByKind = new Dictionary<ComponentKind, IComponent>
       {
          { component.Kind, component }
       };
 
-      Entry entry = new Entry(entryId, componentsByKind);
+      Entry entry = new Entry(entryId, timestamp, componentsByKind);
       _writer.RequestWrite(entry);
    }
    #endregion

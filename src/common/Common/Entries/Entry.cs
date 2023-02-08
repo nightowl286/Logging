@@ -7,7 +7,9 @@ namespace TNO.Logging.Common.Entries;
 /// Represents a log entry.
 /// </summary>
 /// <param name="Id">The id of this entry.</param>
+/// <param name="Timestamp">The timestamp of when this entry was created (since the log was created).</param>
 /// <param name="Components">The components that this entry contains.</param>
 public record class Entry(
    ulong Id,
+   TimeSpan Timestamp,
    IReadOnlyDictionary<ComponentKind, IComponent> Components) : IEntry;

@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
+using TNO.Logging.Reading.Abstractions.Readers;
 
 namespace TNO.Logging.Reading.Abstractions;
 
@@ -19,5 +20,12 @@ public interface ILogReaderFacade
    /// <returns>A deserialiser of the type <typeparamref name="T"/>.</returns>
    /// <remarks>This will only work for non-versioned deserialisers.</remarks>
    T GetDeserialiser<T>() where T : notnull, IDeserialiser;
+   #endregion
+
+   #region File System Reader
+   /// <summary>Creates a log reader that can read a log that was saved to the file system.</summary>
+   /// <param name="path">The path of the log.</param>
+   /// <returns>A newly created file system log reader.</returns>
+   IFileSystemLogReader ReadFromFileSystem(string path);
    #endregion
 }
