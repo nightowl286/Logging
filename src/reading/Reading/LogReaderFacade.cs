@@ -2,6 +2,7 @@
 using TNO.DependencyInjection.Abstractions;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries;

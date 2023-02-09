@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TNO.Logging.Common.Abstractions;
+namespace TNO.Logging.Common.Abstractions.DataKinds;
 
 /// <summary>
 /// Represents an attribute that allows for specifying the <see cref="VersionedDataKind"/> that a class/interface handles.

@@ -2,6 +2,7 @@
 using System.Text;
 using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.ReadingWriting.CodeTests;

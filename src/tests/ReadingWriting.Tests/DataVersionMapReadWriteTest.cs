@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Reading;
 using TNO.Logging.Writing;
 

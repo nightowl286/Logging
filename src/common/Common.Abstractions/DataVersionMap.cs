@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TNO.Logging.Common.Abstractions.DataKinds;
 
 namespace TNO.Logging.Common.Abstractions;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace TNO.Logging.Common.Abstractions;
+namespace TNO.Logging.Common.Abstractions.DataKinds;
 
 /// <summary>
 /// Contains useful extensions related to the <see cref="VersionedDataKind"/> enum.
