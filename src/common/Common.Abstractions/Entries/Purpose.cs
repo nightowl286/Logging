@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using TNO.Logging.Common.Abstractions.Entries;
 
 namespace TNO.Common.Abstractions;
@@ -34,7 +33,7 @@ public static class Purpose
    /// <param name="value">The purpose value to check.</param>
    /// <returns><see langword="true"/> if a purpose flag is set, <see langword="false"/> otherwise.</returns>
    public static bool IsPurposeSet(this SeverityAndPurpose value)
-      => GetSetPurpose(value) != SeverityAndPurpose.None;
+      => GetSetPurpose(value) != SeverityAndPurpose.Empty;
 
    /// <summary>Gets the purpose flag of the given <paramref name="value"/>.</summary>
    /// <param name="value">The value to get the purpose flag of.</param>
@@ -72,7 +71,12 @@ public static class Purpose
    /// that is not <see cref="SeverityAndPurpose.NoPurpose"/>, <see langword="false"/> otherwise.
    /// </returns>
    public static bool HasPurpose(this SeverityAndPurpose value)
-      => IsPurposeSet(value) && !value.HasFlag(SeverityAndPurpose.NoPurpose);
+   {
+      return
+         IsPurposeSet(value) &&
+         value != SeverityAndPurpose.NoPurpose &&
+         value != SeverityAndPurpose.None;
+   }
    #endregion
 
    #region Functions
@@ -85,7 +89,8 @@ public static class Purpose
          bool hasPurpose = value.HasPurpose();
          bool noSeverity = value.HasSeverity() == false;
          bool notInherited = value != SeverityAndPurpose.InheritPurpose;
-            if (hasPurpose && noSeverity && notInherited)
+
+         if (hasPurpose && noSeverity && notInherited)
             yield return value;
       }
    }

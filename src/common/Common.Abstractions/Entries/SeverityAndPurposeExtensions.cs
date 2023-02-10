@@ -16,6 +16,18 @@ public static class SeverityAndPurposeExtensions
    /// equivalent to <see cref="SeverityAndPurpose.None"/>, <see langword="false"/> otherwise.
    /// </returns>
    public static bool IsNone(this SeverityAndPurpose value)
-      => value == SeverityAndPurpose.None || value == SeverityAndPurpose.Empty;
+   {
+      switch (value)
+      {
+         case SeverityAndPurpose.Empty:
+         case SeverityAndPurpose.None:
+         case SeverityAndPurpose.NoPurpose:
+         case SeverityAndPurpose.NoSeverity:
+            return true;
+
+         default:
+            return false;
+      }
+   }
    #endregion
 }

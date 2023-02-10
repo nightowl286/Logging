@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using TNO.Logging.Common.Abstractions.Entries;
 
 namespace TNO.Common.Abstractions;
@@ -33,7 +33,7 @@ public static class Severity
    /// <param name="value">The severity value to check.</param>
    /// <returns><see langword="true"/> if a severity flag is set, <see langword="false"/> otherwise.</returns>
    public static bool IsSeveritySet(this SeverityAndPurpose value)
-      => (((byte)value) & BitMask) != 0;
+      => GetSetSeverity(value) != SeverityAndPurpose.Empty;
 
    /// <summary>Gets the severity flag of the given <paramref name="value"/>.</summary>
    /// <param name="value">The value to get the severity flag of.</param>
@@ -71,7 +71,12 @@ public static class Severity
    /// that is not <see cref="SeverityAndPurpose.NoSeverity"/>, <see langword="false"/> otherwise.
    /// </returns>
    public static bool HasSeverity(this SeverityAndPurpose value)
-      => IsSeveritySet(value) && !value.HasFlag(SeverityAndPurpose.NoSeverity);
+   { 
+      return 
+         IsSeveritySet(value) && 
+         value != SeverityAndPurpose.NoSeverity &&
+         value != SeverityAndPurpose.None;
+   }
    #endregion
 
    #region Functions
@@ -84,6 +89,7 @@ public static class Severity
          bool hasSeverity = value.HasSeverity();
          bool noPurpose = value.HasPurpose() == false;
          bool notInherited = value != SeverityAndPurpose.InheritSeverity;
+
          if (hasSeverity && noPurpose && notInherited)
             yield return value;
       }
