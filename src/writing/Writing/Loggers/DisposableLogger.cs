@@ -1,4 +1,5 @@
 ﻿using TNO.Common.Extensions;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
 namespace TNO.Logging.Writing.Loggers;
@@ -26,7 +27,8 @@ public sealed class DisposableLogger : IDisposableLogger
 
    #region Methods
    /// <inheritdoc/>
-   public ILogger Log(string message) => _logger.Log(message);
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, string message)
+      => _logger.Log(severityAndPurpose, message);
 
    /// <inheritdoc/>
    /// <remarks>

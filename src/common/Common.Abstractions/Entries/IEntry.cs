@@ -13,6 +13,9 @@ public interface IEntry
    /// <summary>The id of this entry.</summary>
    ulong Id { get; }
 
+   /// <summary>The severity, and purpose, of this entry.</summary>
+   SeverityAndPurpose SeverityAndPurpose { get; }
+
    /// <summary>The timestamp of when this entry was created (since the log was created).</summary>
    TimeSpan Timestamp { get; }
 

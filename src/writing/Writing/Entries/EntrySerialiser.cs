@@ -34,11 +34,13 @@ public class EntrySerialiser : IEntrySerialiser
    public void Serialise(BinaryWriter writer, IEntry data)
    {
       ulong id = data.Id;
+      byte rawSeverityAndPurpose = (byte)data.SeverityAndPurpose;
       ComponentKind kinds = data.Components.Keys.CombineFlags();
       ushort rawKinds = (ushort)kinds;
       long rawTimestamp = data.Timestamp.Ticks;
 
       writer.Write(id);
+      writer.Write(rawSeverityAndPurpose);
       writer.Write(rawTimestamp);
       writer.Write(rawKinds);
       foreach (ComponentKind possibleKind in EnumExtensions.GetValuesAscending<ComponentKind>())

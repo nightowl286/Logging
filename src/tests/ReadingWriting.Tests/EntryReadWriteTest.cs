@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
@@ -33,18 +34,20 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       ulong id = 5;
       TimeSpan timestamp = new TimeSpan(5);
+      SeverityAndPurpose severityAndPurpose = Severity.Negligible | SeverityAndPurpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
          { ComponentKind.Message, messageComponent }
       };
 
-      Entry entry = new Entry(id, timestamp, components);
+      Entry entry = new Entry(id, severityAndPurpose, timestamp, components);
 
       return entry;
    }
    protected override void Verify(IEntry expected, IEntry result)
    {
       Assert.AreEqual(expected.Id, result.Id);
+      Assert.AreEqual(expected.SeverityAndPurpose, result.SeverityAndPurpose);
       Assert.AreEqual(expected.Timestamp, result.Timestamp);
       Assert.AreEqual(expected.Components.Count, result.Components.Count);
 
