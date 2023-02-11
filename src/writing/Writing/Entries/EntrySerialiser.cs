@@ -35,13 +35,18 @@ public class EntrySerialiser : IEntrySerialiser
    {
       ulong id = data.Id;
       byte rawSeverityAndPurpose = (byte)data.SeverityAndPurpose;
+      long rawTimestamp = data.Timestamp.Ticks;
+      ulong fileId = data.FileId;
+      uint line = data.LineInFile;
+
       ComponentKind kinds = data.Components.Keys.CombineFlags();
       ushort rawKinds = (ushort)kinds;
-      long rawTimestamp = data.Timestamp.Ticks;
 
       writer.Write(id);
       writer.Write(rawSeverityAndPurpose);
       writer.Write(rawTimestamp);
+      writer.Write(fileId);
+      writer.Write(line);
       writer.Write(rawKinds);
       foreach (ComponentKind possibleKind in EnumExtensions.GetValuesAscending<ComponentKind>())
       {

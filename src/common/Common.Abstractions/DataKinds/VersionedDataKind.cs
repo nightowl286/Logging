@@ -13,4 +13,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,
+
+   /// <summary>Represents the <see cref="Abstractions.FileReference"/>.</summary>
+   FileReference,
 }

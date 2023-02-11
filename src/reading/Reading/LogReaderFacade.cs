@@ -8,10 +8,12 @@ using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
+using TNO.Logging.Reading.Abstractions.FileReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
+using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.Message;
-using TNO.Logging.Reading.Entries.Versions;
+using TNO.Logging.Reading.FileReferences;
 using TNO.Logging.Reading.Readers;
 
 namespace TNO.Logging.Reading;
@@ -43,14 +45,18 @@ public class LogReaderFacade : ILogReaderFacade
       providerFacade.RegisterSelf();
       RegisterSelectors(providerFacade);
 
-      RegisterFromKinds(providerFacade, map, GetComponentDataKinds());
+      // components
+      RegisterFromKinds(providerFacade, map, VersionedDataKind.Message);
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
-      RegisterFromKinds(providerFacade, map, GetNonComponentDataKinds());
+
+      RegisterFromKinds(providerFacade, map,
+         VersionedDataKind.Entry,
+         VersionedDataKind.FileReference);
 
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
    }
-   private static void RegisterFromKinds(IServiceFacade facade, DataVersionMap map, IEnumerable<VersionedDataKind> kinds)
+   private static void RegisterFromKinds(IServiceFacade facade, DataVersionMap map, params VersionedDataKind[] kinds)
    {
       foreach (VersionedDataKind kind in kinds)
       {
@@ -72,20 +78,13 @@ public class LogReaderFacade : ILogReaderFacade
    #endregion
 
    #region Helpers
-   private static IEnumerable<VersionedDataKind> GetComponentDataKinds()
-   {
-      yield return VersionedDataKind.Message;
-   }
-   private static IEnumerable<VersionedDataKind> GetNonComponentDataKinds()
-   {
-      yield return VersionedDataKind.Entry;
-   }
    private static void RegisterSelectors(IServiceFacade facade)
    {
       RegisterComponentSelectors(facade);
 
       facade
-         .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>();
+         .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>()
+         .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
@@ -98,6 +97,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IEntryDeserialiserSelector, IEntryDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.Message)
          RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.FileReference)
+         RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
    }
    private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>

@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using System.Runtime.CompilerServices;
+using TNO.Logging.Common.Abstractions.Entries;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -14,7 +15,16 @@ public interface ILogger
    /// This value should be normalised.
    /// </param>
    /// <param name="message">The message to write.</param>
+   /// <param name="file">
+   /// The file from which this method was called. 
+   /// This should be provided by the compiler.
+   /// </param>
+   /// <param name="line">
+   /// The line number in the <paramref name="file"/> where this method was called from.
+   /// This should be provided by the compiler.
+   /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(SeverityAndPurpose severityAndPurpose, string message);
+   ILogger Log(SeverityAndPurpose severityAndPurpose, string message,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
    #endregion
 }

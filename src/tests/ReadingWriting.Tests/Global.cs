@@ -2,7 +2,7 @@
 
 global using MessageComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Message.Versions.MessageComponentDeserialiser0;
 global using EntryDeserialiserLatest = TNO.Logging.Reading.Entries.Versions.EntryDeserialiser0;
-
+global using FileReferenceDeserialiserLatest = TNO.Logging.Reading.FileReferences.Versions.FileReferenceDeserialiser0;
 
 #if DEBUG
 [assembly: Parallelize(Scope = ExecutionScope.ClassLevel, Workers = 1)]

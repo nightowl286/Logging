@@ -34,21 +34,27 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       ulong id = 5;
       TimeSpan timestamp = new TimeSpan(5);
+      ulong fileId = 5;
+      uint line = 5;
+
       SeverityAndPurpose severityAndPurpose = Severity.Negligible | SeverityAndPurpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
          { ComponentKind.Message, messageComponent }
       };
 
-      Entry entry = new Entry(id, severityAndPurpose, timestamp, components);
+      Entry entry = new Entry(id, severityAndPurpose, timestamp, fileId, line, components);
 
       return entry;
    }
    protected override void Verify(IEntry expected, IEntry result)
    {
+      // Todo(Nightowl): These should include an appropriate message;
       Assert.AreEqual(expected.Id, result.Id);
       Assert.AreEqual(expected.SeverityAndPurpose, result.SeverityAndPurpose);
       Assert.AreEqual(expected.Timestamp, result.Timestamp);
+      Assert.AreEqual(expected.FileId, result.FileId);
+      Assert.AreEqual(expected.LineInFile, result.LineInFile);
       Assert.AreEqual(expected.Components.Count, result.Components.Count);
 
       // Message component

@@ -1,4 +1,5 @@
 ﻿using System;
+using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 
 namespace TNO.Logging.Reading.Abstractions.Readers;
@@ -9,7 +10,10 @@ namespace TNO.Logging.Reading.Abstractions.Readers;
 public interface IFileSystemLogReader : IDisposable
 {
    #region Properties
-   /// <summary>A <see cref="IReader{T}"/> that can be used to read entries.</summary>
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read entries.</summary>
    IReader<IEntry> Entries { get; }
+
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read file references.</summary>
+   IReader<FileReference> FileReferences { get; }
    #endregion
 }

@@ -5,6 +5,7 @@ using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Entries;
+using TNO.Logging.Reading.Abstractions.FileReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
 
 namespace TNO.Logging.Reading.Readers;
@@ -22,6 +23,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    #region Properties
    /// <inheritdoc/>
    public IReader<IEntry> Entries { get; private set; }
+
+   /// <inheritdoc/>
+   public IReader<FileReference> FileReferences { get; private set; }
    #endregion
 
    #region Methods
@@ -41,6 +45,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
    #region Methods
    [MemberNotNull(nameof(Entries))]
+   [MemberNotNull(nameof(FileReferences))]
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
@@ -48,6 +53,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
       BinaryReader entryReader = OpenReader(Path.Combine(directory, "entries"));
       CreateEntryReader(deserialiserProvider, entryReader);
+
+      BinaryReader fileReferenceReader = OpenReader(Path.Combine(directory, "files"));
+      CreateFileReferenceReader(deserialiserProvider, fileReferenceReader);
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
@@ -77,6 +85,16 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       BinaryDeserialiserReader<IEntryDeserialiser, IEntry> entryReader = new BinaryDeserialiserReader<IEntryDeserialiser, IEntry>(reader, deserialiser);
 
       Entries = entryReader;
+   }
+
+   [MemberNotNull(nameof(FileReferences))]
+   private void CreateFileReferenceReader(IDeserialiserProvider provider, BinaryReader reader)
+   {
+      IFileReferenceDeserialiser deserialiser = provider.GetDeserialiser<IFileReferenceDeserialiser>();
+      BinaryDeserialiserReader<IFileReferenceDeserialiser, FileReference> fileReferenceReader = 
+         new BinaryDeserialiserReader<IFileReferenceDeserialiser, FileReference>(reader, deserialiser);
+
+      FileReferences = fileReferenceReader;
    }
    #endregion
 

@@ -36,6 +36,9 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
       ulong id = reader.ReadUInt64();
       byte rawSeverityAndPurpose = reader.ReadByte();
       long rawTimestamp = reader.ReadInt64();
+      ulong fileId = reader.ReadUInt64();
+      uint line = reader.ReadUInt32();
+
       ushort rawKinds = reader.ReadUInt16();
 
       SeverityAndPurpose severityAndPurpose = (SeverityAndPurpose)rawSeverityAndPurpose;
@@ -49,7 +52,7 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
          components.Add(kind, component);
       }
 
-      return EntryFactory.Version0(id, severityAndPurpose, timestamp, components);
+      return EntryFactory.Version0(id, severityAndPurpose, timestamp, fileId, line, components);
    }
    #endregion
 }

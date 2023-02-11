@@ -14,40 +14,55 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
 {
    #region Fields
    private readonly ILogWriterFacade _facade;
-   private readonly ThreadedQueue<IEntry> _entryQueue;
    private readonly LogWriterContext _context;
    private readonly string _directory;
-   private readonly BinaryWriter _entryWriter;
 
    private readonly IEntrySerialiser _entrySerialiser;
+   private readonly ThreadedQueue<IEntry> _entryQueue;
+   private readonly BinaryWriter _entryWriter;
+
+   private readonly IFileReferenceSerialiser _fileReferenceSerialiser;
+   private readonly ThreadedQueue<FileReference> _fileReferenceQueue;
+   private readonly BinaryWriter _fileReferenceWriter;
+
    #endregion
    private FileSystemLogWriter(ILogWriterFacade facade, string directory)
    {
       _facade = facade;
-      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue));
-      _entryQueue.WriteRequested += entryQueue_WriteRequested;
-
       _context = new LogWriterContext();
       _directory = directory;
 
-      // writers
-      _entryWriter = OpenWriter(Path.Combine(_directory, "entries"));
-
-      // serialisers
+      // entries
+      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue));
+      _entryQueue.WriteRequested += entryQueue_WriteRequested;
+      _entryWriter = OpenDirectoryWriter("entries");
       _entrySerialiser = facade.GetSerialiser<IEntrySerialiser>();
+
+      // file references
+      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue));
+      _fileReferenceQueue.WriteRequested += fileReferenceQueue_WriteRequested;
+      _fileReferenceWriter = OpenDirectoryWriter("files");
+      _fileReferenceSerialiser = facade.GetSerialiser<IFileReferenceSerialiser>();
 
       WriteVersions();
    }
+
 
    #region Methods
    /// <inheritdoc/>
    public void RequestWrite(IEntry entry) => _entryQueue.Enqueue(entry);
 
    /// <inheritdoc/>
+   public void RequestWrite(FileReference fileReference) => _fileReferenceQueue.Enqueue(fileReference);
+
+   /// <inheritdoc/>
    public void Dispose()
    {
       _entryQueue.Dispose();
       _entryWriter.Dispose();
+
+      _fileReferenceQueue.Dispose();
+      _fileReferenceWriter.Dispose();
 
       CreateArchive(_directory);
    }
@@ -58,7 +73,12 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
 
       _entryWriter.Flush();
    }
+   private void fileReferenceQueue_WriteRequested(FileReference data)
+   {
+      _fileReferenceSerialiser.Serialise(_fileReferenceWriter, data);
 
+      _fileReferenceWriter.Flush();
+   }
    private void WriteVersions()
    {
       IDataVersionMapSerialiser serialiser = _facade.GetSerialiser<IDataVersionMapSerialiser>();
@@ -105,6 +125,8 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
    #endregion
 
    #region Helpers
+   private BinaryWriter OpenDirectoryWriter(string path)
+      => OpenWriter(Path.Combine(_directory, path));
    private static BinaryWriter OpenWriter(string path)
    {
       FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);

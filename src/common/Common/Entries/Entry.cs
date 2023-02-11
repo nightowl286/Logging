@@ -9,9 +9,16 @@ namespace TNO.Logging.Common.Entries;
 /// <param name="Id">The id of this entry.</param>
 /// <param name="SeverityAndPurpose">The severity, and purpose, of this entry.</param>
 /// <param name="Timestamp">The timestamp of when this entry was created (since the log was created).</param>
+/// <param name="FileId">The id of the file where this entry has been logged.</param>
+/// <param name="LineInFile">
+/// The line number in the file (specified by the <see cref="FileId"/>)
+/// where this entry has been logged.
+/// </param>
 /// <param name="Components">The components that this entry contains.</param>
 public record class Entry(
    ulong Id,
    SeverityAndPurpose SeverityAndPurpose,
    TimeSpan Timestamp,
+   ulong FileId,
+   uint LineInFile,
    IReadOnlyDictionary<ComponentKind, IComponent> Components) : IEntry;

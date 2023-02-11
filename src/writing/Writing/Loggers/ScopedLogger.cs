@@ -1,4 +1,6 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using System.Runtime.CompilerServices;
+using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
@@ -29,26 +31,39 @@ public class ScopedLogger : ILogger
 
    #region Methods
    /// <inheritdoc/>
-   public ILogger Log(SeverityAndPurpose severityAndPurpose, string message)
+   public ILogger Log(SeverityAndPurpose severityAndPurpose, string message,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       ulong id = _context.NewEntryId();
       TimeSpan timestamp = _context.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
       MessageComponent component = new MessageComponent(message);
 
-      Save(id, severityAndPurpose.Normalised(), timestamp, component);
+      Save(id, severityAndPurpose.Normalised(), timestamp, fileId, line, component);
       return this;
    }
    #endregion
 
    #region Helpers
-   private void Save(ulong entryId, SeverityAndPurpose severityAndPurpose, TimeSpan timestamp, IComponent component)
+   private ulong GetFileId(string file)
+   {
+      if (_context.GetOrCreateFileId(file, out ulong fileId))
+      {
+         FileReference reference = new FileReference(file, fileId);
+         _writer.RequestWrite(reference);
+      }
+
+      return fileId;
+   }
+   private void Save(ulong entryId, SeverityAndPurpose severityAndPurpose, TimeSpan timestamp, ulong fileId, uint line, IComponent component)
    {
       Dictionary<ComponentKind, IComponent> componentsByKind = new Dictionary<ComponentKind, IComponent>
       {
          { component.Kind, component }
       };
 
-      Entry entry = new Entry(entryId, severityAndPurpose, timestamp, componentsByKind);
+      Entry entry = new Entry(entryId, severityAndPurpose, timestamp, fileId, line, componentsByKind);
       _writer.RequestWrite(entry);
    }
    #endregion

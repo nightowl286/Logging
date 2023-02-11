@@ -2,8 +2,9 @@
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Deserialisers;
+using TNO.Logging.Reading.Entries.Versions;
 
-namespace TNO.Logging.Reading.Entries.Versions;
+namespace TNO.Logging.Reading.Entries;
 
 /// <summary>
 /// An <see cref="IDeserialiserSelector{T}"/> for versions of the <see cref="IEntryDeserialiser"/>.
