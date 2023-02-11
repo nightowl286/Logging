@@ -35,7 +35,7 @@ public class ScopedLogger : ILogger
       TimeSpan timestamp = _context.GetTimestamp();
       MessageComponent component = new MessageComponent(message);
 
-      Save(id, severityAndPurpose, timestamp, component);
+      Save(id, severityAndPurpose.Normalised(), timestamp, component);
       return this;
    }
    #endregion
