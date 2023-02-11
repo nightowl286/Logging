@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Abstractions.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Abstractions.CodeTests", "common\tests\Common.Abstractions.CodeTests\Common.Abstractions.CodeTests.csproj", "{3F3F06B1-96D6-404A-A14E-660D14A22F34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingWriting.IntegrationTests", "tests\ReadingWriting.IntegrationTests\ReadingWriting.IntegrationTests.csproj", "{AEA78F42-34C1-435B-9F8C-FA660027927A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{3F3F06B1-96D6-404A-A14E-660D14A22F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F3F06B1-96D6-404A-A14E-660D14A22F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F3F06B1-96D6-404A-A14E-660D14A22F34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA78F42-34C1-435B-9F8C-FA660027927A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA78F42-34C1-435B-9F8C-FA660027927A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA78F42-34C1-435B-9F8C-FA660027927A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA78F42-34C1-435B-9F8C-FA660027927A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{1A1C7A66-8493-490D-AA80-73C9EA34CA1A} = {184EA3C5-3404-483C-BDF8-0FBE5A21A2A2}
 		{9B9E78D3-3546-4DC3-A23B-74B00A244839} = {1A1C7A66-8493-490D-AA80-73C9EA34CA1A}
 		{3F3F06B1-96D6-404A-A14E-660D14A22F34} = {1A1C7A66-8493-490D-AA80-73C9EA34CA1A}
+		{AEA78F42-34C1-435B-9F8C-FA660027927A} = {6A94BB75-D80D-4B4E-A659-EC582F5FAC3F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4048B649-33D9-487E-807F-681CAD1D9F37}
