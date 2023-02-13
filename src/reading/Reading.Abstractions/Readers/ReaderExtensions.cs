@@ -5,7 +5,7 @@ namespace TNO.Logging.Reading.Abstractions.Readers;
 /// <summary>
 /// Contains useful extension methods related to the <see cref="IReader{T}"/>.
 /// </summary>
-public static class IReaderExtensions
+public static class ReaderExtensions
 {
    #region Methods
    /// <summary>
@@ -13,7 +13,7 @@ public static class IReaderExtensions
    /// until <see cref="IReader{T}.CanRead"/> returns <see langword="false"/>.
    /// </summary>
    /// <typeparam name="T">The type of the data that the given <paramref name="reader"/> handles.</typeparam>
-   /// <param name="reader">The reader to enumrate over.</param>
+   /// <param name="reader">The reader to enumerate over.</param>
    /// <returns>An enumerable of the data that the reader provides.</returns>
    public static IEnumerable<T> Enumerate<T>(this IReader<T> reader)
    {
