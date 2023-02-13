@@ -4,7 +4,7 @@ namespace TNO.Common.Abstractions.CodeTests.entries;
 
 [TestClass]
 [TestCategory(Category.Purpose)]
-public sealed class PurposeTests : SeverityAndPurposeTestsBase
+public sealed class PurposeTests : ImportanceTestsBase
 {
    #region Tests
    [TestMethod]
@@ -12,7 +12,7 @@ public sealed class PurposeTests : SeverityAndPurposeTestsBase
    {
       // Arrange
       Type helperType = typeof(Purpose);
-      IEnumerable<SeverityAndPurpose> values = Purpose.GetAll();
+      IEnumerable<Importance> values = Purpose.GetAll();
 
       // Act
       PropertiesWithReturnType_NoUnexpectedNames(helperType, values);
@@ -23,7 +23,7 @@ public sealed class PurposeTests : SeverityAndPurposeTestsBase
    {
       // Arrange
       Type helperType = typeof(Purpose);
-      IEnumerable<SeverityAndPurpose> values = Purpose.GetAll();
+      IEnumerable<Importance> values = Purpose.GetAll();
 
       // Act
       PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(helperType, values);

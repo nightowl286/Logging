@@ -11,48 +11,48 @@ namespace TNO.Logging.Reading.Entries.Versions;
 /// </summary>
 public sealed class EntryDeserialiser0 : IEntryDeserialiser
 {
-   #region Fields
-   private IComponentDeserialiserDispatcher _componentDeserialiser;
-   #endregion
+    #region Fields
+    private IComponentDeserialiserDispatcher _componentDeserialiser;
+    #endregion
 
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
+    #region Properties
+    /// <inheritdoc/>
+    public uint Version => 0;
+    #endregion
 
-   #region Constructors
-   /// <summary>Creates a new instance of the <see cref="EntryDeserialiser0"/>.</summary>
-   /// <param name="componentDeserialiser">The component deserialiser to use.</param>
-   public EntryDeserialiser0(IComponentDeserialiserDispatcher componentDeserialiser)
-   {
-      _componentDeserialiser = componentDeserialiser;
-   }
-   #endregion
+    #region Constructors
+    /// <summary>Creates a new instance of the <see cref="EntryDeserialiser0"/>.</summary>
+    /// <param name="componentDeserialiser">The component deserialiser to use.</param>
+    public EntryDeserialiser0(IComponentDeserialiserDispatcher componentDeserialiser)
+    {
+        _componentDeserialiser = componentDeserialiser;
+    }
+    #endregion
 
-   #region Methods
-   /// <inheritdoc/>
-   public IEntry Deserialise(BinaryReader reader)
-   {
-      ulong id = reader.ReadUInt64();
-      byte rawSeverityAndPurpose = reader.ReadByte();
-      long rawTimestamp = reader.ReadInt64();
-      ulong fileId = reader.ReadUInt64();
-      uint line = reader.ReadUInt32();
+    #region Methods
+    /// <inheritdoc/>
+    public IEntry Deserialise(BinaryReader reader)
+    {
+        ulong id = reader.ReadUInt64();
+        byte rawImportance = reader.ReadByte();
+        long rawTimestamp = reader.ReadInt64();
+        ulong fileId = reader.ReadUInt64();
+        uint line = reader.ReadUInt32();
 
-      ushort rawKinds = reader.ReadUInt16();
+        ushort rawKinds = reader.ReadUInt16();
 
-      SeverityAndPurpose severityAndPurpose = (SeverityAndPurpose)rawSeverityAndPurpose;
-      TimeSpan timestamp = new TimeSpan(rawTimestamp);
-      Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>();
+        Importance Importance = (Importance)rawImportance;
+        TimeSpan timestamp = new TimeSpan(rawTimestamp);
+        Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>();
 
-      ComponentKind kinds = (ComponentKind)rawKinds;
-      foreach (ComponentKind kind in kinds.SplitValuesAscending())
-      {
-         IComponent component = _componentDeserialiser.Deserialise(reader, kind);
-         components.Add(kind, component);
-      }
+        ComponentKind kinds = (ComponentKind)rawKinds;
+        foreach (ComponentKind kind in kinds.SplitValuesAscending())
+        {
+            IComponent component = _componentDeserialiser.Deserialise(reader, kind);
+            components.Add(kind, component);
+        }
 
-      return EntryFactory.Version0(id, severityAndPurpose, timestamp, fileId, line, components);
-   }
-   #endregion
+        return EntryFactory.Version0(id, Importance, timestamp, fileId, line, components);
+    }
+    #endregion
 }

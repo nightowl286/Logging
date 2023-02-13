@@ -28,9 +28,9 @@ public sealed class DisposableLogger : IDisposableLogger
 
    #region Methods
    /// <inheritdoc/>
-   public ILogger Log(SeverityAndPurpose severityAndPurpose, string message,
+   public ILogger Log(Importance Importance, string message,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
-      => _logger.Log(severityAndPurpose, message, file, line);
+      => _logger.Log(Importance, message, file, line);
 
    /// <inheritdoc/>
    /// <remarks>

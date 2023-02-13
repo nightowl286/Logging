@@ -10,7 +10,7 @@ public interface ILogger
 {
    #region Methods
    /// <summary>Writes the given <paramref name="message"/> to the log.</summary>
-   /// <param name="severityAndPurpose">
+   /// <param name="Importance">
    /// The severity and purpose of the entry that will be created.
    /// This value should be normalised.
    /// </param>
@@ -24,7 +24,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(SeverityAndPurpose severityAndPurpose, string message,
+   ILogger Log(Importance Importance, string message,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
    #endregion
 }

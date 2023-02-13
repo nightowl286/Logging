@@ -1,5 +1,4 @@
-﻿using TNO.Common.Abstractions;
-using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Tests.Common;
 
 namespace Common.Abstractions.Tests.entries;
@@ -7,33 +6,33 @@ namespace Common.Abstractions.Tests.entries;
 [TestClass]
 [TestCategory(Category.Severity)]
 [TestCategory(Category.Purpose)]
-public class SeverityAndPurposeExtensionsTests
+public class ImportanceExtensionsTests
 {
    #region Tests
    #region Is None
-   [DataRow(SeverityAndPurpose.Empty)]
-   [DataRow(SeverityAndPurpose.None)]
-   [DataRow(SeverityAndPurpose.NoPurpose)]
-   [DataRow(SeverityAndPurpose.NoSeverity)]
+   [DataRow(Importance.Empty)]
+   [DataRow(Importance.None)]
+   [DataRow(Importance.NoPurpose)]
+   [DataRow(Importance.NoSeverity)]
    [TestMethod]
-   public void IsNone_WithValueEquivalentToNone_ReturnsTrue(SeverityAndPurpose value)
+   public void IsNone_WithValueEquivalentToNone_ReturnsTrue(Importance value)
    {
       // Act
-      bool result = SeverityAndPurposeExtensions.IsNone(value);
+      bool result = ImportanceExtensions.IsNone(value);
 
       // Assert
       Assert.IsTrue(result);
    }
 
-   [DataRow(SeverityAndPurpose.Negligible)]
-   [DataRow(SeverityAndPurpose.InheritSeverity)]
-   [DataRow(SeverityAndPurpose.Telemetry)]
-   [DataRow(SeverityAndPurpose.InheritPurpose)]
+   [DataRow(Importance.Negligible)]
+   [DataRow(Importance.InheritSeverity)]
+   [DataRow(Importance.Telemetry)]
+   [DataRow(Importance.InheritPurpose)]
    [TestMethod]
-   public void IsNone_WithNotNoneValue_ReturnsFalse(SeverityAndPurpose value)
+   public void IsNone_WithNotNoneValue_ReturnsFalse(Importance value)
    {
       // Act
-      bool result = SeverityAndPurposeExtensions.IsNone(value);
+      bool result = ImportanceExtensions.IsNone(value);
 
       // Assert
       Assert.IsFalse(result);
@@ -41,59 +40,59 @@ public class SeverityAndPurposeExtensionsTests
    #endregion
 
    #region Normalised
-   [DataRow(SeverityAndPurpose.NoPurpose)]
-   [DataRow(SeverityAndPurpose.Telemetry)]
-   [DataRow(SeverityAndPurpose.InheritPurpose)]
+   [DataRow(Importance.NoPurpose)]
+   [DataRow(Importance.Telemetry)]
+   [DataRow(Importance.InheritPurpose)]
    [TestMethod]
-   public void Normalised_WithNoSeverity_AddsSeverity(SeverityAndPurpose value)
+   public void Normalised_WithNoSeverity_AddsSeverity(Importance value)
    {
       // Arrange Assert
       Assert.That.IsInconclusiveIf(value.IsSeveritySet(), $"The severity is already set on the given value ({value}).");
       Assert.That.IsInconclusiveIfNot(value.IsPurposeSet(), $"The purpose was never set on the given value ({value}).");
 
       // Act
-      SeverityAndPurpose result = SeverityAndPurposeExtensions.Normalised(value);
+      Importance result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.IsTrue(result.IsSeveritySet(), $"No severity has been added.");
-      Assert.AreEqual(result.GetSetSeverity(), SeverityAndPurpose.NoSeverity, $"The wrong severity has been set.");
+      Assert.AreEqual(result.GetSetSeverity(), Importance.NoSeverity, $"The wrong severity has been set.");
       Assert.AreEqual(value.GetSetPurpose(), result.GetSetPurpose(), $"The purpose has changed when it shouldn't have.");
    }
 
-   [DataRow(SeverityAndPurpose.NoSeverity)]
-   [DataRow(SeverityAndPurpose.Negligible)]
-   [DataRow(SeverityAndPurpose.InheritSeverity)]
+   [DataRow(Importance.NoSeverity)]
+   [DataRow(Importance.Negligible)]
+   [DataRow(Importance.InheritSeverity)]
    [TestMethod]
-   public void Normalised_WithNoPurpose_AddsPurpose(SeverityAndPurpose value)
+   public void Normalised_WithNoPurpose_AddsPurpose(Importance value)
    {
       // Arrange Assert
       Assert.That.IsInconclusiveIf(value.IsPurposeSet(), $"The purpose is already set on the given value ({value}).");
       Assert.That.IsInconclusiveIfNot(value.IsSeveritySet(), $"The severity was never set on the given value ({value}).");
 
       // Act
-      SeverityAndPurpose result = SeverityAndPurposeExtensions.Normalised(value);
+      Importance result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.IsTrue(result.IsPurposeSet(), $"No purpose has been added.");
-      Assert.AreEqual(result.GetSetPurpose(), SeverityAndPurpose.NoPurpose, $"The wrong purpose has been set.");
+      Assert.AreEqual(result.GetSetPurpose(), Importance.NoPurpose, $"The wrong purpose has been set.");
       Assert.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
    }
 
-   [DataRow(SeverityAndPurpose.None,
+   [DataRow(Importance.None,
       DisplayName = "Normalised_AlreadyNormalisedValue_NoChanges (None)")]
-   [DataRow(SeverityAndPurpose.Negligible | SeverityAndPurpose.Telemetry,
+   [DataRow(Importance.Negligible | Importance.Telemetry,
       DisplayName = "Normalised_AlreadyNormalisedValue_NoChanges (Combined)")]
-   [DataRow(SeverityAndPurpose.Inherit, 
+   [DataRow(Importance.Inherit,
       DisplayName = "Normalised_AlreadyNormalisedValue_NoChanges (Inherit)")]
    [TestMethod]
-   public void Normalised_AlreadyNormalisedValue_NoChanges(SeverityAndPurpose value)
+   public void Normalised_AlreadyNormalisedValue_NoChanges(Importance value)
    {
       // Arrange Assert
       Assert.That.IsInconclusiveIfNot(value.IsSeveritySet(), $"No severity is set on the value ({value}).");
       Assert.That.IsInconclusiveIfNot(value.IsPurposeSet(), $"No purpose is set on the value ({value}).");
 
       // Act
-      SeverityAndPurpose result = SeverityAndPurposeExtensions.Normalised(value);
+      Importance result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
@@ -101,14 +100,14 @@ public class SeverityAndPurposeExtensionsTests
    }
 
    [TestMethod]
-   public void Normalised_WithoutSeverityOrPurpose_AddsSeverityAndPurpose()
+   public void Normalised_WithoutSeverityOrPurpose_AddsImportance()
    {
       // Arrange
-      SeverityAndPurpose value = SeverityAndPurpose.Empty;
-      SeverityAndPurpose expected = SeverityAndPurpose.None;
+      Importance value = Importance.Empty;
+      Importance expected = Importance.None;
 
       // Act
-      SeverityAndPurpose result = SeverityAndPurposeExtensions.Normalised(value);
+      Importance result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.AreEqual(expected, result);
@@ -116,21 +115,21 @@ public class SeverityAndPurposeExtensionsTests
    #endregion
 
    #region Normalise
-   [DataRow(SeverityAndPurpose.Empty)]
-   [DataRow(SeverityAndPurpose.None)]
-   [DataRow(SeverityAndPurpose.Negligible | SeverityAndPurpose.Telemetry, DisplayName = "Combined")]
-   [DataRow(SeverityAndPurpose.Inherit)]
-   [DataRow(SeverityAndPurpose.NoSeverity)]
-   [DataRow(SeverityAndPurpose.Negligible)]
-   [DataRow(SeverityAndPurpose.InheritSeverity)]
-   [DataRow(SeverityAndPurpose.NoPurpose)]
-   [DataRow(SeverityAndPurpose.Telemetry)]
-   [DataRow(SeverityAndPurpose.InheritPurpose)]
+   [DataRow(Importance.Empty)]
+   [DataRow(Importance.None)]
+   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
+   [DataRow(Importance.Inherit)]
+   [DataRow(Importance.NoSeverity)]
+   [DataRow(Importance.Negligible)]
+   [DataRow(Importance.InheritSeverity)]
+   [DataRow(Importance.NoPurpose)]
+   [DataRow(Importance.Telemetry)]
+   [DataRow(Importance.InheritPurpose)]
    [TestMethod]
-   public void Normalise_SetsCorrectValue(SeverityAndPurpose value)
+   public void Normalise_SetsCorrectValue(Importance value)
    {
       // Arrange
-      SeverityAndPurpose expected = SeverityAndPurposeExtensions.Normalised(value);
+      Importance expected = ImportanceExtensions.Normalised(value);
 
       // Act
       value.Normalise();

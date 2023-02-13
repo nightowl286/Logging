@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using System.Reflection;
-using TNO.Common.Abstractions;
+﻿using System.Reflection;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Tests.Common;
-using Enum = TNO.Logging.Common.Abstractions.Entries.SeverityAndPurpose;
 
 namespace Common.Abstractions.Tests.entries;
 
@@ -13,14 +10,14 @@ public sealed class PurposeTests
 {
    #region Tests
    #region Is Purpose Set
-   [DataRow(Enum.NoPurpose, DisplayName = "No Purpose")]
-   [DataRow(Enum.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Enum.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, DisplayName = "Combined")]
-   [DataRow(Enum.Inherit, DisplayName = "Inherit")]
-   [DataRow(Enum.None, DisplayName = "None")]
+   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
+   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
+   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
+   [DataRow(Importance.None, DisplayName = "None")]
    [TestMethod("Is Purpose Set | With Purpose")]
-   public void IsPurposeSet_WithPurpose_ReturnsTrue(Enum value)
+   public void IsPurposeSet_WithPurpose_ReturnsTrue(Importance value)
    {
       // Act
       bool result = Purpose.IsPurposeSet(value);
@@ -29,12 +26,12 @@ public sealed class PurposeTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.Negligible, DisplayName = "Severity Only")]
-   [DataRow(Enum.NoSeverity, DisplayName = "No Severity Only")]
-   [DataRow(Enum.InheritSeverity, DisplayName = "Inherit Severity Only")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.Negligible, DisplayName = "Severity Only")]
+   [DataRow(Importance.NoSeverity, DisplayName = "No Severity Only")]
+   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity Only")]
    [TestMethod("Is Purpose Set | Without Purpose")]
-   public void IsPurposeSet_WithoutPurpose_ReturnsFalse(Enum value)
+   public void IsPurposeSet_WithoutPurpose_ReturnsFalse(Importance value)
    {
       // Act
       bool result = Purpose.IsPurposeSet(value);
@@ -45,68 +42,68 @@ public sealed class PurposeTests
    #endregion
 
    #region Get Set Purpose
-   [DataRow(Enum.Telemetry, Enum.Telemetry, DisplayName = "Purpose -> Purpose")]
-   [DataRow(Enum.InheritPurpose, Enum.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
-   [DataRow(Enum.NoPurpose, Enum.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, Enum.Telemetry, DisplayName = "Combined -> Purpose")]
-   [DataRow(Enum.Inherit, Enum.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
-   [DataRow(Enum.None, Enum.NoPurpose, DisplayName = "None -> No Purpose")]
+   [DataRow(Importance.Telemetry, Importance.Telemetry, DisplayName = "Purpose -> Purpose")]
+   [DataRow(Importance.InheritPurpose, Importance.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
+   [DataRow(Importance.NoPurpose, Importance.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Telemetry, DisplayName = "Combined -> Purpose")]
+   [DataRow(Importance.Inherit, Importance.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
+   [DataRow(Importance.None, Importance.NoPurpose, DisplayName = "None -> No Purpose")]
    [TestMethod("Get Set Purpose | With Purpose")]
-   public void GetSetPurpose_WithPurpose_ReturnsExpectedPurpose(Enum value, Enum expected)
+   public void GetSetPurpose_WithPurpose_ReturnsExpectedPurpose(Importance value, Importance expected)
    {
       // Act
-      Enum result = Purpose.GetSetPurpose(value);
+      Importance result = Purpose.GetSetPurpose(value);
 
       // Assert
       Assert.AreEqual(expected, result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.Negligible, DisplayName = "Severity")]
-   [DataRow(Enum.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Enum.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.Negligible, DisplayName = "Severity")]
+   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
    [TestMethod("Get Set Purpose | Without Purpose")]
-   public void GetSetPurpose_WithoutPurpose_ReturnsEmpty(Enum value)
+   public void GetSetPurpose_WithoutPurpose_ReturnsEmpty(Importance value)
    {
       // Arrange
-      Enum expected = Enum.Empty;
+      Importance expected = Importance.Empty;
 
       // Act
-      Enum result = Purpose.GetSetPurpose(value);
+      Importance result = Purpose.GetSetPurpose(value);
 
       // Assert
       Assert.AreEqual(expected, result);
    }
    #endregion
    #region Get Purpose
-   [DataRow(Enum.Telemetry, Enum.Telemetry, DisplayName = "Purpose -> Purpose")]
-   [DataRow(Enum.InheritPurpose, Enum.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
-   [DataRow(Enum.NoPurpose, Enum.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, Enum.Telemetry, DisplayName = "Combined -> Purpose")]
-   [DataRow(Enum.Inherit, Enum.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
-   [DataRow(Enum.None, Enum.NoPurpose, DisplayName = "None -> No Purpose")]
+   [DataRow(Importance.Telemetry, Importance.Telemetry, DisplayName = "Purpose -> Purpose")]
+   [DataRow(Importance.InheritPurpose, Importance.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
+   [DataRow(Importance.NoPurpose, Importance.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Telemetry, DisplayName = "Combined -> Purpose")]
+   [DataRow(Importance.Inherit, Importance.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
+   [DataRow(Importance.None, Importance.NoPurpose, DisplayName = "None -> No Purpose")]
    [TestMethod("Get Purpose | With Purpose")]
-   public void GetPurpose_WithPurpose_ReturnsExpectedPurpose(Enum value, Enum expected)
+   public void GetPurpose_WithPurpose_ReturnsExpectedPurpose(Importance value, Importance expected)
    {
       // Act
-      Enum result = Purpose.GetPurpose(value);
+      Importance result = Purpose.GetPurpose(value);
 
       // Assert
       Assert.AreEqual(expected, result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.Negligible, DisplayName = "Severity")]
-   [DataRow(Enum.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Enum.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.Negligible, DisplayName = "Severity")]
+   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
    [TestMethod("Get Purpose | Without Purpose")]
-   public void GetPurpose_WithoutPurpose_ReturnsNoPurpose(Enum value)
+   public void GetPurpose_WithoutPurpose_ReturnsNoPurpose(Importance value)
    {
       // Arrange
-      Enum expected = Enum.NoPurpose;
+      Importance expected = Importance.NoPurpose;
 
       // Act
-      Enum result = Purpose.GetPurpose(value);
+      Importance result = Purpose.GetPurpose(value);
 
       // Assert
       Assert.AreEqual(expected, result);
@@ -114,12 +111,12 @@ public sealed class PurposeTests
    #endregion
 
    #region Has Purpose
-   [DataRow(Enum.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Enum.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, DisplayName = "Combined")]
-   [DataRow(Enum.Inherit, DisplayName = "Inherit")]
+   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
+   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
+   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
    [TestMethod("Has Purpose | With Purpose")]
-   public void HasPurpose_WithPurpose_ReturnsTrue(Enum value)
+   public void HasPurpose_WithPurpose_ReturnsTrue(Importance value)
    {
       // Act
       bool result = Purpose.HasPurpose(value);
@@ -128,14 +125,14 @@ public sealed class PurposeTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.NoPurpose, DisplayName = "No Purpose")]
-   [DataRow(Enum.Negligible, DisplayName = "Severity")]
-   [DataRow(Enum.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Enum.NoSeverity, DisplayName = "No Severity")]
-   [DataRow(Enum.None, DisplayName = "None")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(Importance.Negligible, DisplayName = "Severity")]
+   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(Importance.None, DisplayName = "None")]
    [TestMethod("Has Purpose | Without Purpose")]
-   public void HasPurpose_WithoutPurpose_ReturnsFalse(Enum value)
+   public void HasPurpose_WithoutPurpose_ReturnsFalse(Importance value)
    {
       // Act
       bool result = Purpose.HasPurpose(value);
@@ -154,7 +151,7 @@ public sealed class PurposeTests
          .Length;
 
       // Act
-      Enum[] values = Purpose.GetAll().ToArray();
+      Importance[] values = Purpose.GetAll().ToArray();
 
       // Assert
       Assert.That.IsInconclusiveIf(values.Length != expected,

@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using TNO.Logging.Common.Abstractions.Entries;
 
 namespace TNO.Common.Abstractions.CodeTests.entries;
 
 [TestClass]
-public abstract class SeverityAndPurposeTestsBase
+public abstract class ImportanceTestsBase
 {
    #region Tests
-   protected static void PropertiesWithReturnType_NoUnexpectedNames(Type helperType, IEnumerable<SeverityAndPurpose> values)
+   protected static void PropertiesWithReturnType_NoUnexpectedNames(Type helperType, IEnumerable<Importance> values)
    {
       // Arrange
       HashSet<string> validNames = values
@@ -22,7 +21,7 @@ public abstract class SeverityAndPurposeTestsBase
       StringBuilder output = new StringBuilder();
       output
          .AppendLine()
-         .AppendLine($"Properties with the type {nameof(SeverityAndPurpose)} with unexpected names:");
+         .AppendLine($"Properties with the type {nameof(Importance)} with unexpected names:");
 
       bool hadInvalid = false;
       foreach (PropertyInfo property in properties)
@@ -42,15 +41,15 @@ public abstract class SeverityAndPurposeTestsBase
          Assert.Fail(output.ToString());
    }
 
-   protected static void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(Type helperType, IEnumerable<SeverityAndPurpose> values)
+   protected static void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(Type helperType, IEnumerable<Importance> values)
    {
       // Arrange
-      HashSet<SeverityAndPurpose> missing = new();
-      HashSet<SeverityAndPurpose> wrongType = new();
-      HashSet<SeverityAndPurpose> wrongValue = new();
+      HashSet<Importance> missing = new();
+      HashSet<Importance> wrongType = new();
+      HashSet<Importance> wrongValue = new();
 
       // Check
-      foreach (SeverityAndPurpose value in values)
+      foreach (Importance value in values)
       {
          string name = value.ToString();
          PropertyInfo? property = GetPropertyWithName(helperType, name);
@@ -61,14 +60,14 @@ public abstract class SeverityAndPurposeTestsBase
             continue;
          }
 
-         if (property.PropertyType != typeof(SeverityAndPurpose))
+         if (property.PropertyType != typeof(Importance))
          {
             wrongType.Add(value);
             continue;
          }
 
          object? rawValue = property.GetValue(null);
-         SeverityAndPurpose propertyValue = (SeverityAndPurpose)rawValue!;
+         Importance propertyValue = (Importance)rawValue!;
 
          if (propertyValue != value)
             wrongValue.Add(value);
@@ -99,10 +98,10 @@ public abstract class SeverityAndPurposeTestsBase
    #endregion
 
    #region Helpers
-   private static void AddToOutput(string header, StringBuilder output, IEnumerable<SeverityAndPurpose> values)
+   private static void AddToOutput(string header, StringBuilder output, IEnumerable<Importance> values)
    {
       output.AppendLine(header);
-      foreach (SeverityAndPurpose value in values)
+      foreach (Importance value in values)
          output.AppendLine($" - {value}");
 
       output.AppendLine();
@@ -116,7 +115,7 @@ public abstract class SeverityAndPurposeTestsBase
    {
       return helperType
          .GetProperties(BindingFlags.Public | BindingFlags.Static)
-         .Where(p => p.PropertyType == typeof(SeverityAndPurpose));
+         .Where(p => p.PropertyType == typeof(Importance));
    }
    #endregion
 }

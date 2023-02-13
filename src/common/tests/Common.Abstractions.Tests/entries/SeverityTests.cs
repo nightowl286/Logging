@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
-using TNO.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Tests.Common;
-using Enum = TNO.Logging.Common.Abstractions.Entries.SeverityAndPurpose;
 
 namespace Common.Abstractions.Tests.entries;
 
@@ -11,14 +10,14 @@ public sealed class SeverityTests
 {
    #region Tests
    #region Is Severity Set
-   [DataRow(Enum.NoSeverity, DisplayName = "No Severity")]
-   [DataRow(Enum.Negligible, DisplayName = "Severity")]
-   [DataRow(Enum.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, DisplayName = "Combined")]
-   [DataRow(Enum.Inherit, DisplayName = "Inherit")]
-   [DataRow(Enum.None, DisplayName = "None")]
+   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(Importance.Negligible, DisplayName = "Severity")]
+   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
+   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
+   [DataRow(Importance.None, DisplayName = "None")]
    [TestMethod("Is Severity Set | With Severity")]
-   public void IsSeveritySet_WithSeverity_ReturnsTrue(Enum value)
+   public void IsSeveritySet_WithSeverity_ReturnsTrue(Importance value)
    {
       // Act
       bool result = Severity.IsSeveritySet(value);
@@ -27,12 +26,12 @@ public sealed class SeverityTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.Telemetry, DisplayName = "Purpose Only")]
-   [DataRow(Enum.NoPurpose, DisplayName = "No Purpose Only")]
-   [DataRow(Enum.InheritPurpose, DisplayName = "Inherit Purpose Only")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.Telemetry, DisplayName = "Purpose Only")]
+   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose Only")]
+   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose Only")]
    [TestMethod("Is Severity Set | Without Severity")]
-   public void IsSeveritySet_WithoutSeverity_ReturnsFalse(Enum value)
+   public void IsSeveritySet_WithoutSeverity_ReturnsFalse(Importance value)
    {
       // Act
       bool result = Severity.IsSeveritySet(value);
@@ -43,68 +42,68 @@ public sealed class SeverityTests
    #endregion
 
    #region Get Set Severity
-   [DataRow(Enum.Negligible, Enum.Negligible, DisplayName = "Severity -> Severity")]
-   [DataRow(Enum.InheritSeverity, Enum.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
-   [DataRow(Enum.NoSeverity, Enum.NoSeverity, DisplayName = "No Severity -> No Severity")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, Enum.Negligible, DisplayName = "Combined -> Severity")]
-   [DataRow(Enum.Inherit, Enum.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
-   [DataRow(Enum.None, Enum.NoSeverity, DisplayName = "None -> No Severity")]
+   [DataRow(Importance.Negligible, Importance.Negligible, DisplayName = "Severity -> Severity")]
+   [DataRow(Importance.InheritSeverity, Importance.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
+   [DataRow(Importance.NoSeverity, Importance.NoSeverity, DisplayName = "No Severity -> No Severity")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Negligible, DisplayName = "Combined -> Severity")]
+   [DataRow(Importance.Inherit, Importance.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
+   [DataRow(Importance.None, Importance.NoSeverity, DisplayName = "None -> No Severity")]
    [TestMethod("Get Set Severity | With Severity")]
-   public void GetSetSeverity_WithSeverity_ReturnsExpectedSeverity(Enum value, Enum expected)
+   public void GetSetSeverity_WithSeverity_ReturnsExpectedSeverity(Importance value, Importance expected)
    {
       // Act
-      Enum result = Severity.GetSetSeverity(value);
+      Importance result = Severity.GetSetSeverity(value);
 
       // Assert
       Assert.AreEqual(expected, result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Enum.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Enum.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
+   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
    [TestMethod("Get Set Severity | Without Severity")]
-   public void GetSetSeverity_WithoutSeverity_ReturnsEmpty(Enum value)
+   public void GetSetSeverity_WithoutSeverity_ReturnsEmpty(Importance value)
    {
       // Arrange
-      Enum expected = Enum.Empty;
+      Importance expected = Importance.Empty;
 
       // Act
-      Enum result = Severity.GetSetSeverity(value);
+      Importance result = Severity.GetSetSeverity(value);
 
       // Assert
       Assert.AreEqual(expected, result);
    }
    #endregion
    #region Get Severity
-   [DataRow(Enum.Negligible, Enum.Negligible, DisplayName = "Severity -> Severity")]
-   [DataRow(Enum.InheritSeverity, Enum.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
-   [DataRow(Enum.NoSeverity, Enum.NoSeverity, DisplayName = "No Severity -> No Severity")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, Enum.Negligible, DisplayName = "Combined -> Severity")]
-   [DataRow(Enum.Inherit, Enum.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
-   [DataRow(Enum.None, Enum.NoSeverity, DisplayName = "None -> No Severity")]
+   [DataRow(Importance.Negligible, Importance.Negligible, DisplayName = "Severity -> Severity")]
+   [DataRow(Importance.InheritSeverity, Importance.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
+   [DataRow(Importance.NoSeverity, Importance.NoSeverity, DisplayName = "No Severity -> No Severity")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Negligible, DisplayName = "Combined -> Severity")]
+   [DataRow(Importance.Inherit, Importance.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
+   [DataRow(Importance.None, Importance.NoSeverity, DisplayName = "None -> No Severity")]
    [TestMethod("Get Severity | With Severity")]
-   public void GetSeverity_WithSeverity_ReturnsExpectedSeverity(Enum value, Enum expected)
+   public void GetSeverity_WithSeverity_ReturnsExpectedSeverity(Importance value, Importance expected)
    {
       // Act
-      Enum result = Severity.GetSeverity(value);
+      Importance result = Severity.GetSeverity(value);
 
       // Assert
       Assert.AreEqual(expected, result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Enum.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Enum.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
+   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
    [TestMethod("Get Severity | Without Severity")]
-   public void GetSeverity_WithoutSeverity_ReturnsNoSeverity(Enum value)
+   public void GetSeverity_WithoutSeverity_ReturnsNoSeverity(Importance value)
    {
       // Arrange
-      Enum expected = Enum.NoSeverity;
+      Importance expected = Importance.NoSeverity;
 
       // Act
-      Enum result = Severity.GetSeverity(value);
+      Importance result = Severity.GetSeverity(value);
 
       // Assert
       Assert.AreEqual(expected, result);
@@ -112,12 +111,12 @@ public sealed class SeverityTests
    #endregion
 
    #region Has Severity
-   [DataRow(Enum.Negligible, DisplayName = "Severity")]
-   [DataRow(Enum.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Enum.Negligible | Enum.Telemetry, DisplayName = "Combined")]
-   [DataRow(Enum.Inherit, DisplayName = "Inherit")]
+   [DataRow(Importance.Negligible, DisplayName = "Severity")]
+   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
+   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
    [TestMethod("Has Severity | With Severity")]
-   public void HasSeverity_WithSeverity_ReturnsTrue(Enum value)
+   public void HasSeverity_WithSeverity_ReturnsTrue(Importance value)
    {
       // Act
       bool result = Severity.HasSeverity(value);
@@ -126,14 +125,14 @@ public sealed class SeverityTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Enum.Empty, DisplayName = "Empty")]
-   [DataRow(Enum.NoSeverity, DisplayName = "No Severity")]
-   [DataRow(Enum.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Enum.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Enum.NoPurpose, DisplayName = "No Purpose")]
-   [DataRow(Enum.None, DisplayName = "None")]
+   [DataRow(Importance.Empty, DisplayName = "Empty")]
+   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
+   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(Importance.None, DisplayName = "None")]
    [TestMethod("Has Severity | Without Severity")]
-   public void HasSeverity_WithoutSeverity_ReturnsFalse(Enum value)
+   public void HasSeverity_WithoutSeverity_ReturnsFalse(Importance value)
    {
       // Act
       bool result = Severity.HasSeverity(value);
@@ -152,7 +151,7 @@ public sealed class SeverityTests
          .Length;
 
       // Act
-      Enum[] values = Severity.GetAll().ToArray();
+      Importance[] values = Severity.GetAll().ToArray();
 
       // Assert
       Assert.That.IsInconclusiveIf(values.Length != expected,

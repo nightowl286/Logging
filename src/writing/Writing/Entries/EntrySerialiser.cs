@@ -34,7 +34,7 @@ public class EntrySerialiser : IEntrySerialiser
    public void Serialise(BinaryWriter writer, IEntry data)
    {
       ulong id = data.Id;
-      byte rawSeverityAndPurpose = (byte)data.SeverityAndPurpose;
+      byte rawImportance = (byte)data.Importance;
       long rawTimestamp = data.Timestamp.Ticks;
       ulong fileId = data.FileId;
       uint line = data.LineInFile;
@@ -43,7 +43,7 @@ public class EntrySerialiser : IEntrySerialiser
       ushort rawKinds = (ushort)kinds;
 
       writer.Write(id);
-      writer.Write(rawSeverityAndPurpose);
+      writer.Write(rawImportance);
       writer.Write(rawTimestamp);
       writer.Write(fileId);
       writer.Write(line);

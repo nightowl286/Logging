@@ -1,9 +1,9 @@
 ﻿namespace TNO.Logging.Common.Abstractions.Entries;
 
 /// <summary>
-/// The severity and purpose of a log entry.
+/// A combination of the <see cref="Severity"/> and <see cref="Purpose"/> of a log entry.
 /// </summary>
-public enum SeverityAndPurpose : byte
+public enum Importance : byte
 {
    /// <summary>The default value for this enum, logically equivalent to <see cref="None"/>.</summary>
    /// <remarks>Please don't log this, this has only been included to help in comparisons.</remarks>

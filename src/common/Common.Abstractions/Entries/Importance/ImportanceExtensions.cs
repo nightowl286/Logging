@@ -1,30 +1,28 @@
-﻿using TNO.Common.Abstractions;
-
-namespace TNO.Logging.Common.Abstractions.Entries;
+﻿namespace TNO.Logging.Common.Abstractions.Entries;
 
 /// <summary>
-/// Contains useful extension methods related to the <see cref="SeverityAndPurpose"/>.
+/// Contains useful extension methods related to the <see cref="Importance"/>.
 /// </summary>
-public static class SeverityAndPurposeExtensions
+public static class ImportanceExtensions
 {
    #region Methods
    /// <summary>
    /// Checks whether the given <paramref name="value"/> is logically
-   /// equivalent to <see cref="SeverityAndPurpose.None"/>.
+   /// equivalent to <see cref="Importance.None"/>.
    /// </summary>
    /// <param name="value">The value to check.</param>
    /// <returns>
    /// <see langword="true"/> if the given <paramref name="value"/> was logically
-   /// equivalent to <see cref="SeverityAndPurpose.None"/>, <see langword="false"/> otherwise.
+   /// equivalent to <see cref="Importance.None"/>, <see langword="false"/> otherwise.
    /// </returns>
-   public static bool IsNone(this SeverityAndPurpose value)
+   public static bool IsNone(this Importance value)
    {
       switch (value)
       {
-         case SeverityAndPurpose.Empty:
-         case SeverityAndPurpose.None:
-         case SeverityAndPurpose.NoPurpose:
-         case SeverityAndPurpose.NoSeverity:
+         case Importance.Empty:
+         case Importance.None:
+         case Importance.NoPurpose:
+         case Importance.NoSeverity:
             return true;
 
          default:
@@ -35,9 +33,9 @@ public static class SeverityAndPurposeExtensions
    /// <summary>Normalises the given <paramref name="value"/>.</summary>
    /// <param name="value">The value to normalise.</param>
    /// <remarks>Normalised values always have the severity and the purpose set.</remarks>
-   public static void Normalise(ref this SeverityAndPurpose value)
+   public static void Normalise(ref this Importance value)
    {
-      SeverityAndPurpose normalised = Normalised(value);
+      Importance normalised = value.Normalised();
       value = normalised;
    }
 
@@ -45,13 +43,13 @@ public static class SeverityAndPurposeExtensions
    /// <param name="value">The value to normalise.</param>
    /// <returns>The normalised value.</returns>
    /// <remarks>Normalised values always have the severity and the purpose set.</remarks>
-   public static SeverityAndPurpose Normalised(this SeverityAndPurpose value)
+   public static Importance Normalised(this Importance value)
    {
       if (value.IsPurposeSet() == false)
-         value |= SeverityAndPurpose.NoPurpose;
+         value |= Importance.NoPurpose;
 
       if (value.IsSeveritySet() == false)
-         value |= SeverityAndPurpose.NoSeverity;
+         value |= Importance.NoSeverity;
 
       return value;
    }
