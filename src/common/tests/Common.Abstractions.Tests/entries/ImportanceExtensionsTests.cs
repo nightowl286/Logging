@@ -4,8 +4,8 @@ using TNO.Tests.Common;
 namespace Common.Abstractions.Tests.entries;
 
 [TestClass]
-[TestCategory(Category.Severity)]
-[TestCategory(Category.Purpose)]
+[TestCategory(Category.Importance)]
+[TestCategory(Category.Extensions)]
 public class ImportanceExtensionsTests
 {
    #region Tests

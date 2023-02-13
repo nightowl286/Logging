@@ -4,30 +4,32 @@ namespace TNO.Common.Abstractions.CodeTests.entries;
 
 [TestClass]
 [TestCategory(Category.Purpose)]
-public sealed class PurposeTests : ImportanceTestsBase
+public sealed class PurposeTests : ImportanceTestsBase<Purpose>
 {
    #region Tests
    [TestMethod]
    public void PropertiesWithReturnType_NoUnexpectedNames()
    {
       // Arrange
-      Type helperType = typeof(Purpose);
       IEnumerable<Importance> values = Purpose.GetAll();
 
       // Act
-      PropertiesWithReturnType_NoUnexpectedNames(helperType, values);
+      PropertiesWithReturnType_NoUnexpectedNames(values);
    }
 
    [TestMethod]
    public void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue()
    {
       // Arrange
-      Type helperType = typeof(Purpose);
       IEnumerable<Importance> values = Purpose.GetAll();
 
       // Act
-      PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(helperType, values);
+      PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(values);
    }
+   #endregion
+
+   #region Helpers
+   protected override Importance GetImportanceValue(Purpose component) => component.Value;
    #endregion
 }
 

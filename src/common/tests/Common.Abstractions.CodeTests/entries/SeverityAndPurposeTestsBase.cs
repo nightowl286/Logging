@@ -5,17 +5,17 @@ using TNO.Logging.Common.Abstractions.Entries;
 namespace TNO.Common.Abstractions.CodeTests.entries;
 
 [TestClass]
-public abstract class ImportanceTestsBase
+public abstract class ImportanceTestsBase<T>
 {
    #region Tests
-   protected static void PropertiesWithReturnType_NoUnexpectedNames(Type helperType, IEnumerable<Importance> values)
+   protected static void PropertiesWithReturnType_NoUnexpectedNames(IEnumerable<Importance> values)
    {
       // Arrange
       HashSet<string> validNames = values
          .Select(v => v.ToString())
          .ToHashSet();
 
-      IEnumerable<PropertyInfo> properties = WithReturnType(helperType);
+      IEnumerable<PropertyInfo> properties = WithReturnType(typeof(T));
 
       // Check
       StringBuilder output = new StringBuilder();
@@ -41,7 +41,7 @@ public abstract class ImportanceTestsBase
          Assert.Fail(output.ToString());
    }
 
-   protected static void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(Type helperType, IEnumerable<Importance> values)
+   protected void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(IEnumerable<Importance> values)
    {
       // Arrange
       HashSet<Importance> missing = new();
@@ -52,7 +52,7 @@ public abstract class ImportanceTestsBase
       foreach (Importance value in values)
       {
          string name = value.ToString();
-         PropertyInfo? property = GetPropertyWithName(helperType, name);
+         PropertyInfo? property = GetPropertyWithName(typeof(T), name);
 
          if (property is null)
          {
@@ -60,16 +60,17 @@ public abstract class ImportanceTestsBase
             continue;
          }
 
-         if (property.PropertyType != typeof(Importance))
+         if (property.PropertyType != typeof(T))
          {
             wrongType.Add(value);
             continue;
          }
 
          object? rawValue = property.GetValue(null);
-         Importance propertyValue = (Importance)rawValue!;
+         T propertyValue = (T)rawValue!;
+         Importance importanceValue = GetImportanceValue(propertyValue);
 
-         if (propertyValue != value)
+         if (importanceValue != value)
             wrongValue.Add(value);
       }
 
@@ -98,6 +99,7 @@ public abstract class ImportanceTestsBase
    #endregion
 
    #region Helpers
+   protected abstract Importance GetImportanceValue(T component);
    private static void AddToOutput(string header, StringBuilder output, IEnumerable<Importance> values)
    {
       output.AppendLine(header);
@@ -115,7 +117,7 @@ public abstract class ImportanceTestsBase
    {
       return helperType
          .GetProperties(BindingFlags.Public | BindingFlags.Static)
-         .Where(p => p.PropertyType == typeof(Importance));
+         .Where(p => p.PropertyType == helperType);
    }
    #endregion
 }
