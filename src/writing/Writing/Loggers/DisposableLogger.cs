@@ -8,7 +8,7 @@ namespace TNO.Logging.Writing.Loggers;
 /// <summary>
 /// Represents a logger decorator that can be used to modify what will be disposed.
 /// </summary>
-public sealed class DisposableLogger : IDisposableLogger
+public class DisposableLogger : IDisposableLogger
 {
    #region Fields
    private readonly IDisposable _toDispose;

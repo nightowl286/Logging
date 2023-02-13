@@ -10,7 +10,6 @@ using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
-using TNO.Logging.Writing.Loggers;
 using TNO.Logging.Writing.Loggers.Writers;
 
 namespace TNO.Logging.Writing;
@@ -96,21 +95,11 @@ public class LogWriterFacade : ILogWriterFacade
 
    #region File System Writer
    /// <inheritdoc/>
-   public IDisposableLogger CreateOnFileSystem(string directory)
-   {
-      ILogger logger = FileSystemLogWriter.Create(this, directory, out FileSystemLogWriter writer);
-      DisposableLogger disposable = new DisposableLogger(logger, writer);
-
-      return disposable;
-   }
+   public IFileSystemLogger CreateOnFileSystem(string directory)
+      => FileSystemLogWriter.Create(this, directory);
 
    /// <inheritdoc/>
-   public IDisposableLogger CreateDatedOnFileSystem(string directory)
-   {
-      ILogger logger = FileSystemLogWriter.CreateDated(this, directory, out FileSystemLogWriter writer);
-      DisposableLogger disposable = new DisposableLogger(logger, writer);
-
-      return disposable;
-   }
+   public IFileSystemLogger CreateDatedOnFileSystem(string directory)
+      => FileSystemLogWriter.CreateDated(this, directory);
    #endregion
 }

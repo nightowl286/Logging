@@ -47,7 +47,6 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
       WriteVersions();
    }
 
-
    #region Methods
    /// <inheritdoc/>
    public void RequestWrite(IEntry entry) => _entryQueue.Enqueue(entry);
@@ -97,30 +96,29 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
    /// The directory to which the log should be saved. A new child directory
    /// (formatted based on <see cref="DateTime.Now"/>) will be created.
    /// </param>
-   /// <param name="logWriter">The created log writer.</param>
    /// <returns>An instance of the created logger.</returns>
-   public static ILogger CreateDated(ILogWriterFacade facade, string directory, out FileSystemLogWriter logWriter)
+   public static IFileSystemLogger CreateDated(ILogWriterFacade facade, string directory)
    {
       DateTime date = DateTime.Now;
       string dateStr = date.ToString("yyyy-MM-dd_HH-mm-ss");
       directory = Path.Combine(directory, dateStr);
 
-      return Create(facade, directory, out logWriter);
+      return Create(facade, directory);
    }
 
    /// <summary>Creates a new logger that will save to the file system.</summary>
    /// <param name="facade">The facade for the log writing system.</param>
    /// <param name="directory">The directory to save the log in.</param>
-   /// <param name="logWriter">The created log writer.</param>
    /// <returns>An instance of the created logger.</returns>
-   public static ILogger Create(ILogWriterFacade facade, string directory, out FileSystemLogWriter logWriter)
+   public static IFileSystemLogger Create(ILogWriterFacade facade, string directory)
    {
       Directory.CreateDirectory(directory);
 
-      logWriter = new FileSystemLogWriter(facade, directory);
+      FileSystemLogWriter logWriter = new FileSystemLogWriter(facade, directory);
       ScopedLogger logger = new ScopedLogger(logWriter, logWriter._context);
+      FileSystemLogger fsLogger = new FileSystemLogger(logger, logWriter, directory);
 
-      return logger;
+      return fsLogger;
    }
    #endregion
 

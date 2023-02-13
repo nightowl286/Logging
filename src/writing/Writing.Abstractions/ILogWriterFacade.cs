@@ -27,7 +27,7 @@ public interface ILogWriterFacade
    /// <returns>
    /// A logger instance which can be disposed in order to close the log.
    /// </returns>
-   IDisposableLogger CreateOnFileSystem(string directory);
+   IFileSystemLogger CreateOnFileSystem(string directory);
 
    /// <summary>Creates a new logger that will save to the file system.</summary>
    /// <param name="directory">
@@ -36,6 +36,6 @@ public interface ILogWriterFacade
    /// <returns>
    /// A logger instance which can be disposed in order to close the log.
    /// </returns>
-   IDisposableLogger CreateDatedOnFileSystem(string directory);
+   IFileSystemLogger CreateDatedOnFileSystem(string directory);
    #endregion
 }
