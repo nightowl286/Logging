@@ -32,4 +32,3 @@ public sealed class PurposeTests : ImportanceTestsBase<Purpose>
    protected override Importance GetImportanceValue(Purpose component) => component.Value;
    #endregion
 }
-

@@ -40,4 +40,3 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    }
    #endregion
 }
-
