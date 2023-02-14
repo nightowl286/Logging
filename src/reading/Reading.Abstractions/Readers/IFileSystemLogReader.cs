@@ -10,6 +10,12 @@ namespace TNO.Logging.Reading.Abstractions.Readers;
 public interface IFileSystemLogReader : IDisposable
 {
    #region Properties
+   /// <summary>The actual directory that the log is being read from.</summary>
+   string ReadDirectory { get; }
+
+   /// <summary>The path of the log that is being read.</summary>
+   string LogPath { get; }
+
    /// <summary>An <see cref="IReader{T}"/> that can be used to read entries.</summary>
    IReader<IEntry> Entries { get; }
 

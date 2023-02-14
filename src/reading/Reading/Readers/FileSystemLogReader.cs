@@ -22,24 +22,35 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
    #region Properties
    /// <inheritdoc/>
+   public string ReadDirectory { get; }
+
+   /// <inheritdoc/>
+   public string LogPath { get; }
+
+   /// <inheritdoc/>
    public IReader<IEntry> Entries { get; private set; }
 
    /// <inheritdoc/>
    public IReader<FileReference> FileReferences { get; private set; }
    #endregion
 
-   #region Methods
+   #region Constructors
    /// <summary>Creates a new instance of the <see cref="FileSystemLogReader"/>.</summary>
    /// <param name="path">The path to the log file.</param>
    /// <param name="facade">The log reader facade.</param>
    public FileSystemLogReader(string path, ILogReaderFacade facade)
    {
       _facade = facade;
+      LogPath = path;
 
       if (TryGetZipPath(path, out string? zipPath))
+      {
          path = ExtractZip(zipPath);
+         _tempPath = path;
+      }
 
       FromDirectory(path);
+      ReadDirectory = path;
    }
    #endregion
 
