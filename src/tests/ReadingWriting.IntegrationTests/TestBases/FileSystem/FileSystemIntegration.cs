@@ -1,4 +1,6 @@
-﻿namespace TNO.ReadingWriting.IntegrationTests.TestBases.FileSystem;
+﻿using System.Diagnostics;
+
+namespace TNO.ReadingWriting.IntegrationTests.TestBases.FileSystem;
 public abstract class FileSystemIntegration : IntegrationTestBase
 {
    #region Properties
@@ -7,6 +9,7 @@ public abstract class FileSystemIntegration : IntegrationTestBase
    public FileSystemIntegration()
    {
       Path = FileSystemUtility.GetTestFolder();
+      Debug.WriteLine($"Test Folder: {Path}");
    }
 
    #region Methods
