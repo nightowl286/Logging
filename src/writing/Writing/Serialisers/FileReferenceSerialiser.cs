@@ -1,7 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
-namespace TNO.Logging.Writing;
+namespace TNO.Logging.Writing.Serialisers;
 
 /// <summary>
 /// A serialiser for <see cref="FileReference"/>.

@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Writing.Abstractions.Loggers;
+﻿using TNO.Logging.Writing.Abstractions.Collectors;
+using TNO.Logging.Writing.Abstractions.Loggers;
 
 namespace TNO.Logging.Writing.Abstractions;
 

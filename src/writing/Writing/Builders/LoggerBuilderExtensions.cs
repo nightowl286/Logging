@@ -1,9 +1,10 @@
 ﻿using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Loggers;
 using TNO.Logging.Writing.Loggers.Writers;
 
-namespace TNO.Logging.Writing;
+namespace TNO.Logging.Writing.Builders;
 
 /// <summary>
 /// Contains useful extension methods related to the <see cref="ILoggerBuilder"/>.

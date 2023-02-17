@@ -1,5 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Writing;
+using TNO.Logging.Writing.Serialisers;
 
 namespace TNO.ReadingWriting.Tests;
 

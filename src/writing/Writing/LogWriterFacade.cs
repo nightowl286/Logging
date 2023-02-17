@@ -7,8 +7,10 @@ using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
+using TNO.Logging.Writing.Serialisers;
 
 namespace TNO.Logging.Writing;
 

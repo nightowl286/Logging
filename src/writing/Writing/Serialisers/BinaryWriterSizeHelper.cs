@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TNO.Logging.Writing;
+namespace TNO.Logging.Writing.Serialisers;
 
 internal static class BinaryWriterSizeHelper
 {

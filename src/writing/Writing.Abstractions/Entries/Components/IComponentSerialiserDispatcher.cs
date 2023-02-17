@@ -1,5 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
 namespace TNO.Logging.Writing.Abstractions.Entries.Components;
 

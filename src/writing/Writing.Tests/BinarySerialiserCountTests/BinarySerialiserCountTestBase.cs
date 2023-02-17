@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
 namespace TNO.Writing.Tests.BinarySerialiserCountTests;
 

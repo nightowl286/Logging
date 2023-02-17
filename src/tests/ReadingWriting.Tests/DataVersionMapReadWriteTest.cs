@@ -1,7 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Reading;
-using TNO.Logging.Writing;
+using TNO.Logging.Writing.Serialisers;
 
 namespace TNO.ReadingWriting.Tests;
 

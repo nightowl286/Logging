@@ -1,7 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 
-namespace TNO.Logging.Writing.Abstractions;
+namespace TNO.Logging.Writing.Abstractions.Collectors;
 
 /// <summary>
 /// Denotes a collector of log data.

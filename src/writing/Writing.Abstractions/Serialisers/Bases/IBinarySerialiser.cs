@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace TNO.Logging.Writing.Abstractions.Serialisers;
+namespace TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
 /// <summary>
 /// Denotes a serialiser for data of the type <typeparamref name="T"/>.

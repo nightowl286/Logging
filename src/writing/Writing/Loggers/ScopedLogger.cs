@@ -4,7 +4,7 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
 namespace TNO.Logging.Writing.Loggers;

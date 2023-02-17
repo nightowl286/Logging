@@ -1,8 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
-using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
-namespace TNO.Logging.Writing;
+namespace TNO.Logging.Writing.Serialisers;
 
 /// <summary>
 /// A serialiser for <see cref="DataVersionMap"/>.
@@ -31,8 +31,8 @@ public class DataVersionMapSerialiser : IDataVersionMapSerialiser
       int count = data.Count;
       int size =
          sizeof(int) +
-         (sizeof(ushort) * count) +
-         (sizeof(int) * count);
+         sizeof(ushort) * count +
+         sizeof(int) * count;
 
       return (ulong)size;
    }

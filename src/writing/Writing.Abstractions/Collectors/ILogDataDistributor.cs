@@ -1,4 +1,4 @@
-﻿namespace TNO.Logging.Writing.Abstractions;
+﻿namespace TNO.Logging.Writing.Abstractions.Collectors;
 
 /// <summary>
 /// Denotes a distributor of log data.

@@ -1,8 +1,10 @@
 ﻿using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
+using TNO.Logging.Writing.Collectors;
 using TNO.Logging.Writing.Loggers;
 
-namespace TNO.Logging.Writing;
+namespace TNO.Logging.Writing.Builders;
 
 internal sealed class LoggerBuilder : ILoggerBuilder
 {

@@ -1,8 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
-using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Collectors;
 
-namespace TNO.Logging.Writing;
+namespace TNO.Logging.Writing.Collectors;
 
 /// <summary>
 /// Represents a distributor of log data.
