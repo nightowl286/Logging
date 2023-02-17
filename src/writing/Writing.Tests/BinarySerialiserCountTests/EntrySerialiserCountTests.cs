@@ -17,10 +17,12 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
       // Arrange
       MessageComponent messageComponent = new MessageComponent("some message");
 
-      ulong id = 5;
-      TimeSpan timestamp = new TimeSpan(5);
+      ulong id = 1;
+      ulong contextId = 2;
+      ulong scope = 3;
+      TimeSpan timestamp = new TimeSpan(4);
       ulong fileId = 5;
-      uint line = 5;
+      uint line = 6;
 
       Importance Importance = Severity.Negligible | Purpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
@@ -28,7 +30,7 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
          { ComponentKind.Message, messageComponent }
       };
 
-      Entry entry = new Entry(id, Importance, timestamp, fileId, line, components);
+      Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
 
       // Act + Assert
       CountTestBase(entry);

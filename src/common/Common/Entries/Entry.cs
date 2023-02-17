@@ -7,6 +7,8 @@ namespace TNO.Logging.Common.Entries;
 /// Represents a log entry.
 /// </summary>
 /// <param name="Id">The id of this entry.</param>
+/// <param name="ContextId">The id of the context that this entry belongs to.</param>
+/// <param name="Scope">The scope (in the current context) that this entry belongs to.</param>
 /// <param name="Importance">The severity, and purpose, of this entry.</param>
 /// <param name="Timestamp">The timestamp of when this entry was created (since the log was created).</param>
 /// <param name="FileId">The id of the file where this entry has been logged.</param>
@@ -17,6 +19,8 @@ namespace TNO.Logging.Common.Entries;
 /// <param name="Components">The components that this entry contains.</param>
 public record class Entry(
    ulong Id,
+   ulong ContextId,
+   ulong Scope,
    Importance Importance,
    TimeSpan Timestamp,
    ulong FileId,

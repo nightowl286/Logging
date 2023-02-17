@@ -28,6 +28,12 @@ public interface IEntry
    /// </summary>
    uint LineInFile { get; }
 
+   /// <summary>The id of the context that this entry belongs to.</summary>
+   ulong ContextId { get; }
+
+   /// <summary>The scope (in the current context) that this entry belongs to.</summary>
+   ulong Scope { get; }
+
    /// <summary>The components that this entry contains.</summary>
    IReadOnlyDictionary<ComponentKind, IComponent> Components { get; }
    #endregion

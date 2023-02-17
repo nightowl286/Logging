@@ -11,7 +11,25 @@ namespace TNO.Logging.Reading.Entries;
 internal static class EntryFactory
 {
    #region Functions
-   public static IEntry Version0(ulong id, Importance Importance, TimeSpan timestamp, ulong fileId, uint line, IReadOnlyDictionary<ComponentKind, IComponent> components)
-      => new Entry(id, Importance, timestamp, fileId, line, components);
+   public static IEntry Version0(
+      ulong id,
+      ulong contextId,
+      ulong scope,
+      Importance Importance,
+      TimeSpan timestamp,
+      ulong fileId,
+      uint line,
+      IReadOnlyDictionary<ComponentKind, IComponent> components)
+   {
+      return new Entry(
+         id,
+         contextId,
+         scope,
+         Importance,
+         timestamp,
+         fileId,
+         line,
+         components);
+   }
    #endregion
 }

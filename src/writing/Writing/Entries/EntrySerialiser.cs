@@ -34,6 +34,8 @@ public class EntrySerialiser : IEntrySerialiser
    public void Serialise(BinaryWriter writer, IEntry data)
    {
       ulong id = data.Id;
+      ulong contextId = data.ContextId;
+      ulong scope = data.Scope;
       byte rawImportance = (byte)data.Importance;
       long rawTimestamp = data.Timestamp.Ticks;
       ulong fileId = data.FileId;
@@ -43,6 +45,8 @@ public class EntrySerialiser : IEntrySerialiser
       ushort rawKinds = (ushort)kinds;
 
       writer.Write(id);
+      writer.Write(contextId);
+      writer.Write(scope);
       writer.Write(rawImportance);
       writer.Write(rawTimestamp);
       writer.Write(fileId);
@@ -59,7 +63,7 @@ public class EntrySerialiser : IEntrySerialiser
    public ulong Count(IEntry data)
    {
       int headerSize =
-         (sizeof(ulong) * 2) +
+         (sizeof(ulong) * 4) +
          sizeof(long) +
          sizeof(uint) +
          sizeof(ushort) +

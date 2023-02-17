@@ -19,7 +19,7 @@ internal sealed class LoggerBuilder : ILoggerBuilder
    public LoggerBuilder(ILogWriterFacade facade)
    {
       Facade = facade;
-      Logger = new ScopedLogger(_distributor, _context);
+      Logger = new ScopedLogger(_distributor, _context, 0, 0);
    }
 
    #region Methods

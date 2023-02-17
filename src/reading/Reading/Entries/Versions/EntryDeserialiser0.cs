@@ -34,6 +34,8 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
    public IEntry Deserialise(BinaryReader reader)
    {
       ulong id = reader.ReadUInt64();
+      ulong contextId = reader.ReadUInt64();
+      ulong scope = reader.ReadUInt64();
       byte rawImportance = reader.ReadByte();
       long rawTimestamp = reader.ReadInt64();
       ulong fileId = reader.ReadUInt64();
@@ -52,7 +54,15 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
          components.Add(kind, component);
       }
 
-      return EntryFactory.Version0(id, Importance, timestamp, fileId, line, components);
+      return EntryFactory.Version0(
+         id,
+         contextId,
+         scope,
+         Importance,
+         timestamp,
+         fileId,
+         line,
+         components);
    }
    #endregion
 }
