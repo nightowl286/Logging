@@ -9,12 +9,12 @@ namespace TNO.Logging.Writing;
 public static class LogWriterFacadeExtensions
 {
    #region Methods
-   /// <summary>Creates a new logger builder using the given <paramref name="facade"/>.</summary>
-   /// <param name="facade">The facade to create the builder with.</param>
-   /// <returns>The created logger builder.</returns>
-   public static ILoggerBuilder CreateBuilder(this ILogWriterFacade facade)
+   /// <summary>Creates a new logger configurator using the given <paramref name="facade"/>.</summary>
+   /// <param name="facade">The facade to create the configurator with.</param>
+   /// <returns>The created logger configurator.</returns>
+   public static ILoggerConfigurator CreateConfigurator(this ILogWriterFacade facade)
    {
-      LoggerBuilder builder = new LoggerBuilder(facade);
+      LoggerConfigurator builder = new LoggerConfigurator(facade);
 
       return builder;
    }

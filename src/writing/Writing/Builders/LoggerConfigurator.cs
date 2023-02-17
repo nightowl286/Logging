@@ -6,36 +6,36 @@ using TNO.Logging.Writing.Loggers;
 
 namespace TNO.Logging.Writing.Builders;
 
-internal sealed class LoggerBuilder : ILoggerBuilder
+internal sealed class LoggerConfigurator : ILoggerConfigurator
 {
    #region Fields
-   private readonly LogDataDistributor _distributor = new LogDataDistributor();
    private readonly LogWriterContext _context = new LogWriterContext();
    #endregion
 
    #region Properties
    /// <inheritdoc/>
    public ILogWriterFacade Facade { get; }
+
+   /// <inheritdoc/>
    public IContextLogger Logger { get; }
+
+   /// <inheritdoc/>
+   public ILogDataDistributor Distributor { get; }
    #endregion
-   public LoggerBuilder(ILogWriterFacade facade)
+   public LoggerConfigurator(ILogWriterFacade facade)
    {
       Facade = facade;
-      Logger = new ContextLogger(_distributor, _context, 0);
+      Distributor = new LogDataDistributor();
+
+      Logger = new ContextLogger(Distributor, _context, 0);
    }
 
    #region Methods
-   public ILoggerBuilder With(ILogDataCollector collector)
+   public ILoggerConfigurator With(ILogDataCollector collector)
    {
-      _distributor.Assign(collector);
+      Distributor.Assign(collector);
 
       return this;
-   }
-   public IContextLogger Build(out ILogDataDistributor distributor)
-   {
-      distributor = _distributor;
-
-      return Logger;
    }
    #endregion
 }

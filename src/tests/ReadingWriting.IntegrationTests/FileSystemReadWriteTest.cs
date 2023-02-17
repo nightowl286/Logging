@@ -38,7 +38,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       {
          LogWriterFacade facade = new LogWriterFacade();
 
-         ILogger logger = facade.CreateBuilder()
+         ILogger logger = facade.CreateConfigurator()
             .WithFileSystem(logPath, out IFileSystemLogWriter writer)
             .Logger
             .CreateContext(expectedContext, expectedFile, expectedLine)
