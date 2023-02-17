@@ -54,5 +54,22 @@ public class EntrySerialiser : IEntrySerialiser
             _componentSerialiser.Serialise(writer, component);
       }
    }
+
+   /// <inheritdoc/>
+   public ulong Count(IEntry data)
+   {
+      int headerSize =
+         (sizeof(ulong) * 2) +
+         sizeof(long) +
+         sizeof(uint) +
+         sizeof(ushort) +
+         sizeof(byte);
+
+      ulong componentSizes = 0;
+      foreach (IComponent component in data.Components.Values)
+         componentSizes += _componentSerialiser.Count(component);
+
+      return componentSizes + (ulong)headerSize;
+   }
    #endregion
 }

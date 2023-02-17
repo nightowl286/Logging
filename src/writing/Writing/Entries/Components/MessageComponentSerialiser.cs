@@ -11,6 +11,7 @@ public sealed class MessageComponentSerialiser : IMessageComponentSerialiser
    #region Properties
    /// <inheritdoc/>
    public uint Version => 0;
+
    #endregion
 
    #region Methods
@@ -19,6 +20,13 @@ public sealed class MessageComponentSerialiser : IMessageComponentSerialiser
    {
       string message = data.Message;
       writer.Write(message);
+   }
+
+   /// <inheritdoc/>
+   public ulong Count(IMessageComponent data)
+   {
+      string message = data.Message;
+      return (ulong)BinaryWriterSizeHelper.StringSize(message);
    }
    #endregion
 }

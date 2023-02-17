@@ -24,6 +24,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    {
       _messageSerialiser = messageSerialiser;
    }
+
    #endregion
 
    #region Methods
@@ -37,6 +38,15 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
       }
       else
          throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
+   }
+
+   /// <inheritdoc/>
+   public ulong Count(IComponent data)
+   {
+      if (data is IMessageComponent messageComponent)
+         return _messageSerialiser.Count(messageComponent);
+
+      throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
    }
    #endregion
 }

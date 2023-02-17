@@ -24,5 +24,17 @@ public class DataVersionMapSerialiser : IDataVersionMapSerialiser
          writer.Write(pair.Value);
       }
    }
+
+   /// <inheritdoc/>
+   public ulong Count(DataVersionMap data)
+   {
+      int count = data.Count;
+      int size =
+         sizeof(int) +
+         (sizeof(ushort) * count) +
+         (sizeof(int) * count);
+
+      return (ulong)size;
+   }
    #endregion
 }

@@ -11,6 +11,7 @@ public class FileReferenceSerialiser : IFileReferenceSerialiser
    #region Properties
    /// <inheritdoc/>
    public uint Version => 0;
+
    #endregion
 
    #region Methods
@@ -22,6 +23,17 @@ public class FileReferenceSerialiser : IFileReferenceSerialiser
 
       writer.Write(file);
       writer.Write(id);
+   }
+
+   /// <inheritdoc/>
+   public ulong Count(FileReference data)
+   {
+      string file = data.File;
+      ulong id = data.Id;
+
+      int fileSize = BinaryWriterSizeHelper.StringSize(file);
+
+      return (ulong)(fileSize + sizeof(ulong));
    }
    #endregion
 }
