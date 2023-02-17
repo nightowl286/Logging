@@ -23,10 +23,14 @@ public sealed class ThreadedQueue<T> : IDisposable where T : notnull
    #region Constructors
    /// <summary>Created a new instance of the <see cref="ThreadedQueue{T}"/>.</summary>
    /// <param name="threadName">The name to give to the newly created thread.</param>
-   public ThreadedQueue(string threadName)
+   /// <param name="priority">The thread priority to give to the newly created thread.</param>
+   public ThreadedQueue(string threadName, ThreadPriority priority)
    {
-      _thread = new Thread(ThreadLoop);
-      _thread.Name = threadName;
+      _thread = new Thread(ThreadLoop)
+      {
+         Name = threadName,
+         Priority = priority
+      };
       _thread.Start();
    }
    #endregion

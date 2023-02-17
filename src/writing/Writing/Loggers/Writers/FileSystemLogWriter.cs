@@ -33,13 +33,13 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
       _directory = directory;
 
       // entries
-      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue));
+      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), ThreadPriority.Lowest);
       _entryQueue.WriteRequested += entryQueue_WriteRequested;
       _entryWriter = OpenDirectoryWriter("entries");
       _entrySerialiser = facade.GetSerialiser<IEntrySerialiser>();
 
       // file references
-      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue));
+      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue), ThreadPriority.Lowest);
       _fileReferenceQueue.WriteRequested += fileReferenceQueue_WriteRequested;
       _fileReferenceWriter = OpenDirectoryWriter("files");
       _fileReferenceSerialiser = facade.GetSerialiser<IFileReferenceSerialiser>();
