@@ -24,7 +24,13 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       Importance expectedImportance = Severity.Negligible | Purpose.Telemetry;
       string expectedMessage = "message";
       string expectedFile = "file";
+      ulong expectedFileId = 1;
       uint expectedLine = 5;
+
+      string expectedContext = "context";
+      ulong expectedContextId = 1;
+      ulong expectedScope = 1;
+
 
       string logPath = GetSubFolder("Log");
 
@@ -34,7 +40,9 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
          ILogger logger = facade.CreateBuilder()
             .WithFileSystem(logPath, out IFileSystemLogWriter writer)
-            .Logger;
+            .Logger
+            .CreateContext(expectedContext, expectedFile, expectedLine)
+            .CreateScoped();
 
          using (writer)
          {
@@ -48,6 +56,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
       FileReference fileReference;
       IEntry entry;
+      ContextInfo contextInfo;
       IMessageComponent message;
 
       // Read
@@ -57,15 +66,24 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
          fileReference = AssertReadSingle(reader.FileReferences);
          entry = AssertReadSingle(reader.Entries);
+         contextInfo = AssertReadSingle(reader.ContextInfos);
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
       }
 
       // Assert
       Assert.AreEqual(fileReference.File, expectedFile);
+      Assert.AreEqual(fileReference.Id, expectedFileId);
 
       Assert.AreEqual(fileReference.Id, entry.FileId);
       Assert.AreEqual(expectedLine, entry.LineInFile);
       Assert.AreEqual(expectedImportance, entry.Importance);
+      Assert.AreEqual(expectedContextId, entry.Id);
+      Assert.AreEqual(expectedScope, entry.Scope);
+
+      Assert.AreEqual(contextInfo.Name, expectedContext);
+      Assert.AreEqual(contextInfo.Id, expectedContextId);
+      Assert.AreEqual(contextInfo.FileId, expectedFileId);
+      Assert.AreEqual(contextInfo.LineInFile, expectedLine);
 
       Assert.AreEqual(expectedMessage, message.Message);
    }

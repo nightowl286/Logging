@@ -4,12 +4,14 @@ using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Reading.Abstractions;
+using TNO.Logging.Reading.Abstractions.ContextInfos;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.FileReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
+using TNO.Logging.Reading.ContextInfos;
 using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.Message;
@@ -51,7 +53,8 @@ public class LogReaderFacade : ILogReaderFacade
 
       RegisterFromKinds(providerFacade, map,
          VersionedDataKind.Entry,
-         VersionedDataKind.FileReference);
+         VersionedDataKind.FileReference,
+         VersionedDataKind.ContextInfo);
 
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
@@ -84,7 +87,8 @@ public class LogReaderFacade : ILogReaderFacade
 
       facade
          .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>()
-         .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>();
+         .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>()
+         .Singleton<IContextInfoDeserialiserSelector, ContextInfoDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
@@ -99,6 +103,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.FileReference)
          RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.ContextInfo)
+         RegisterWithProvider<IContextInfoDeserialiserSelector, IContextInfoDeserialiser>(facade, version);
    }
    private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>

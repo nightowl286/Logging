@@ -71,6 +71,13 @@ public sealed class LogDataDistributor : ILogDataDistributor
       foreach (ILogDataCollector collector in EnumerateCollectors())
          collector.Deposit(fileReference);
    }
+
+   /// <inheritdoc/>
+   public void Deposit(ContextInfo contextInfo)
+   {
+      foreach (ILogDataCollector collector in EnumerateCollectors())
+         collector.Deposit(contextInfo);
+   }
    #endregion
 
    #region Helpers

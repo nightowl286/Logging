@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Loggers.Scopes;
@@ -31,6 +32,10 @@ public class ContextLogger : BaseLogger, IContextLogger
    public IContextLogger CreateContext(string name, [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       ulong id = WriteContext.CreateContextId();
+      ulong fileId = GetFileId(file);
+
+      ContextInfo contextInfo = new ContextInfo(name, id, fileId, line);
+      Collector.Deposit(contextInfo);
 
       return new ContextLogger(Collector, WriteContext, id);
    }

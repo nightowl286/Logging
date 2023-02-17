@@ -21,5 +21,8 @@ public interface IFileSystemLogReader : IDisposable
 
    /// <summary>An <see cref="IReader{T}"/> that can be used to read file references.</summary>
    IReader<FileReference> FileReferences { get; }
+
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read context infos.</summary>
+   IReader<ContextInfo> ContextInfos { get; }
    #endregion
 }

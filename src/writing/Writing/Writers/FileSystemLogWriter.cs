@@ -23,6 +23,10 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    private readonly IFileReferenceSerialiser _fileReferenceSerialiser;
    private readonly ThreadedQueue<FileReference> _fileReferenceQueue;
    private readonly BinaryWriter _fileReferenceWriter;
+
+   private readonly IContextInfoSerialiser _contextInfoSerialiser;
+   private readonly ThreadedQueue<ContextInfo> _contextInfoQueue;
+   private readonly BinaryWriter _contextInfoWriter;
    #endregion
 
    #region Properties
@@ -40,14 +44,19 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       LogPath = directory;
 
       // entries
-      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), entryQueue_WriteRequested, ThreadPriority.Lowest);
+      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), WriteEntry, ThreadPriority.Lowest);
       _entryWriter = OpenDirectoryWriter("entries");
       _entrySerialiser = facade.GetSerialiser<IEntrySerialiser>();
 
       // file references
-      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue), fileReferenceQueue_WriteRequested, ThreadPriority.Lowest);
+      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue), WriteFileReference, ThreadPriority.Lowest);
       _fileReferenceWriter = OpenDirectoryWriter("files");
       _fileReferenceSerialiser = facade.GetSerialiser<IFileReferenceSerialiser>();
+
+      // context infos
+      _contextInfoQueue = new ThreadedQueue<ContextInfo>(nameof(_contextInfoQueue), WriteContextInfo, ThreadPriority.Lowest);
+      _contextInfoWriter = OpenDirectoryWriter("contexts");
+      _contextInfoSerialiser = facade.GetSerialiser<IContextInfoSerialiser>();
 
       WriteVersions();
    }
@@ -61,6 +70,9 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    public void Deposit(FileReference fileReference) => _fileReferenceQueue.Enqueue(fileReference);
 
    /// <inheritdoc/>
+   public void Deposit(ContextInfo contextInfo) => _contextInfoQueue.Enqueue(contextInfo);
+
+   /// <inheritdoc/>
    public void Dispose()
    {
       _entryQueue.Dispose();
@@ -69,20 +81,29 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       _fileReferenceQueue.Dispose();
       _fileReferenceWriter.Dispose();
 
+      _contextInfoQueue.Dispose();
+      _contextInfoWriter.Dispose();
+
       CreateArchive(LogPath);
    }
 
-   private void entryQueue_WriteRequested(IEntry data)
+   private void WriteEntry(IEntry data)
    {
       _entrySerialiser.Serialise(_entryWriter, data);
 
       _entryWriter.Flush();
    }
-   private void fileReferenceQueue_WriteRequested(FileReference data)
+   private void WriteFileReference(FileReference data)
    {
       _fileReferenceSerialiser.Serialise(_fileReferenceWriter, data);
 
       _fileReferenceWriter.Flush();
+   }
+   private void WriteContextInfo(ContextInfo data)
+   {
+      _contextInfoSerialiser.Serialise(_contextInfoWriter, data);
+
+      _contextInfoWriter.Flush();
    }
    private void WriteVersions()
    {

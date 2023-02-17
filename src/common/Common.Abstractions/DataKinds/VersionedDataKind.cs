@@ -16,4 +16,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="Abstractions.FileReference"/>.</summary>
    FileReference,
+
+   /// <summary>Represents the <see cref="Abstractions.ContextInfo"/>.</summary>
+   ContextInfo,
 }

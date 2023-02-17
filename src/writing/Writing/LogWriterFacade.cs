@@ -74,6 +74,7 @@ public class LogWriterFacade : ILogWriterFacade
 
       VersionedSingleton<IEntrySerialiser, EntrySerialiser>(facade);
       VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(facade);
+      VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(facade);
 
       facade.Singleton<IDataVersionMapSerialiser, DataVersionMapSerialiser>();
    }

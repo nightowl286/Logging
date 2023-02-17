@@ -16,5 +16,9 @@ public interface ILogDataCollector
    /// <summary>Deposits <paramref name="fileReference"/> data.</summary>
    /// <param name="fileReference">The file reference to deposit.</param>
    void Deposit(FileReference fileReference);
+
+   /// <summary>Deposits <paramref name="contextInfo"/> data.</summary>
+   /// <param name="contextInfo">The context info to deposit.</param>
+   void Deposit(ContextInfo contextInfo);
    #endregion
 }

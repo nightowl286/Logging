@@ -62,7 +62,13 @@ public class BaseLogger : ILogger
    #endregion
 
    #region Helpers
-   private ulong GetFileId(string file)
+   /// <summary>
+   /// Gets the id for the given <paramref name="file"/>, if a new id had to be created
+   /// a <see cref="FileReference"/> will be deposited in the <see cref="Collector"/>.
+   /// </summary>
+   /// <param name="file">The file to get the id of.</param>
+   /// <returns>The id of the given <paramref name="file"/></returns>
+   protected ulong GetFileId(string file)
    {
       if (WriteContext.GetOrCreateFileId(file, out ulong fileId))
       {

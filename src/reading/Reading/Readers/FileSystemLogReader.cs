@@ -4,6 +4,7 @@ using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions;
+using TNO.Logging.Reading.Abstractions.ContextInfos;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.FileReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
@@ -32,6 +33,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
    /// <inheritdoc/>
    public IReader<FileReference> FileReferences { get; private set; }
+
+   /// <inheritdoc/>
+   public IReader<ContextInfo> ContextInfos { get; private set; }
    #endregion
 
    #region Constructors
@@ -57,6 +61,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    #region Methods
    [MemberNotNull(nameof(Entries))]
    [MemberNotNull(nameof(FileReferences))]
+   [MemberNotNull(nameof(ContextInfos))]
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
@@ -67,6 +72,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
       BinaryReader fileReferenceReader = OpenReader(Path.Combine(directory, "files"));
       CreateFileReferenceReader(deserialiserProvider, fileReferenceReader);
+
+      BinaryReader contextInfoReader = OpenReader(Path.Combine(directory, "contexts"));
+      CreateContextInfoReader(deserialiserProvider, contextInfoReader);
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
@@ -82,6 +90,8 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    public void Dispose()
    {
       Entries.TryDispose();
+      FileReferences.TryDispose();
+      ContextInfos.TryDispose();
 
       if (_tempPath is not null)
          Directory.Delete(_tempPath, true);
@@ -106,6 +116,16 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
          new BinaryDeserialiserReader<IFileReferenceDeserialiser, FileReference>(reader, deserialiser);
 
       FileReferences = fileReferenceReader;
+   }
+
+   [MemberNotNull(nameof(ContextInfos))]
+   private void CreateContextInfoReader(IDeserialiserProvider provider, BinaryReader reader)
+   {
+      IContextInfoDeserialiser deserialiser = provider.GetDeserialiser<IContextInfoDeserialiser>();
+      BinaryDeserialiserReader<IContextInfoDeserialiser, ContextInfo> contextInfoReader =
+         new BinaryDeserialiserReader<IContextInfoDeserialiser, ContextInfo>(reader, deserialiser);
+
+      ContextInfos = contextInfoReader;
    }
    #endregion
 

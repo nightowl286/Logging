@@ -29,7 +29,6 @@ public class FileReferenceSerialiser : IFileReferenceSerialiser
    public ulong Count(FileReference data)
    {
       string file = data.File;
-      ulong id = data.Id;
 
       int fileSize = BinaryWriterSizeHelper.StringSize(file);
 
