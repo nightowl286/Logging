@@ -9,13 +9,14 @@ public class ContextInfoReadWriteTest : ReadWriteTestBase<ContextInfoSerialiser,
    #region Methods
    protected override ContextInfo CreateData()
    {
-      return new ContextInfo("context", 1, 2, 3);
+      return new ContextInfo("context", 1, 2, 3, 4);
    }
 
    protected override void Verify(ContextInfo expected, ContextInfo result)
    {
       Assert.AreEqual(expected.Name, result.Name);
       Assert.AreEqual(expected.Id, result.Id);
+      Assert.AreEqual(expected.ParentId, result.ParentId);
       Assert.AreEqual(expected.FileId, result.FileId);
       Assert.AreEqual(expected.LineInFile, result.LineInFile);
    }

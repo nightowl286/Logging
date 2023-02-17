@@ -18,11 +18,13 @@ public class ContextInfoSerialiser : IContextInfoSerialiser
    public void Serialise(BinaryWriter writer, ContextInfo data)
    {
       ulong id = data.Id;
+      ulong parentId = data.ParentId;
       string name = data.Name;
       ulong fileId = data.FileId;
       uint line = data.LineInFile;
 
       writer.Write(id);
+      writer.Write(parentId);
       writer.Write(name);
       writer.Write(fileId);
       writer.Write(line);
@@ -37,7 +39,7 @@ public class ContextInfoSerialiser : IContextInfoSerialiser
 
       int size =
          nameSize +
-         (sizeof(ulong) * 2) +
+         (sizeof(ulong) * 3) +
          sizeof(uint);
 
       return (ulong)size;

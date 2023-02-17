@@ -34,7 +34,7 @@ public class ContextLogger : BaseLogger, IContextLogger
       ulong id = WriteContext.CreateContextId();
       ulong fileId = GetFileId(file);
 
-      ContextInfo contextInfo = new ContextInfo(name, id, fileId, line);
+      ContextInfo contextInfo = new ContextInfo(name, id, ContextId, fileId, line);
       Collector.Deposit(contextInfo);
 
       return new ContextLogger(Collector, WriteContext, id);

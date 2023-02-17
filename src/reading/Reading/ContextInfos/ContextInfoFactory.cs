@@ -9,7 +9,7 @@ namespace TNO.Logging.Reading.ContextInfos;
 internal static class ContextInfoFactory
 {
    #region Functions
-   public static ContextInfo Version0(string name, ulong id, ulong fileId, uint lineInFile)
-      => new ContextInfo(name, id, fileId, lineInFile);
+   public static ContextInfo Version0(string name, ulong id, ulong parentId, ulong fileId, uint lineInFile)
+      => new ContextInfo(name, id, parentId, fileId, lineInFile);
    #endregion
 }

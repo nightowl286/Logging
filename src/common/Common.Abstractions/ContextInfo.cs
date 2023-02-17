@@ -13,6 +13,9 @@ public readonly struct ContextInfo
    /// <summary>The id of this context.</summary>
    public readonly ulong Id;
 
+   /// <summary>The id of this context's parent.</summary>
+   public readonly ulong ParentId;
+
    /// <summary>The id of the file where this context has been created.</summary>
    public readonly ulong FileId;
 
@@ -29,12 +32,14 @@ public readonly struct ContextInfo
    /// </summary>
    /// <param name="name">The name of the context.</param>
    /// <param name="id">The id of the context.</param>
+   /// <param name="parentId">The id of context's parent.</param>
    /// <param name="fileId">The id of the file where this context has been created.</param>
    /// <param name="lineInFile">The line number in the file where this context has been created.</param>
-   public ContextInfo(string name, ulong id, ulong fileId, uint lineInFile)
+   public ContextInfo(string name, ulong id, ulong parentId, ulong fileId, uint lineInFile)
    {
       Name = name;
       Id = id;
+      ParentId = parentId;
       FileId = fileId;
       LineInFile = lineInFile;
    }

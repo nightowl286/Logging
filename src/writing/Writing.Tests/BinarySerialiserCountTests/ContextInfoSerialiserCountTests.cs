@@ -10,7 +10,7 @@ public class ContextInfoSerialiserCountTests : BinarySerialiserCountTestBase<Con
    public void Count()
    {
       // Arrange
-      ContextInfo contextInfo = new ContextInfo("context", 5, 5, 5);
+      ContextInfo contextInfo = new ContextInfo("context", 5, 5, 5, 5);
 
       // Act + Verify
       CountTestBase(contextInfo);

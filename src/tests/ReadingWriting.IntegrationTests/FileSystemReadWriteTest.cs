@@ -29,6 +29,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
       string expectedContext = "context";
       ulong expectedContextId = 1;
+      ulong expectedContextParentId = 0;
       ulong expectedScope = 1;
 
 
@@ -82,6 +83,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
       Assert.AreEqual(contextInfo.Name, expectedContext);
       Assert.AreEqual(contextInfo.Id, expectedContextId);
+      Assert.AreEqual(contextInfo.ParentId, expectedContextParentId);
       Assert.AreEqual(contextInfo.FileId, expectedFileId);
       Assert.AreEqual(contextInfo.LineInFile, expectedLine);
 
