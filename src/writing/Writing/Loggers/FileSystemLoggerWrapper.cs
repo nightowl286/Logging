@@ -2,12 +2,12 @@
 
 namespace TNO.Logging.Writing.Loggers;
 
-internal class FileSystemLogger : DisposableLogger, IFileSystemLogger
+internal class FileSystemLoggerWrapper : DisposableLogger, IFileSystemLogger
 {
    #region Properties
    public string LogPath { get; }
    #endregion
-   public FileSystemLogger(ILogger logger, IDisposable toDispose, string logPath) : base(logger, toDispose)
+   public FileSystemLoggerWrapper(ILogger logger, IDisposable toDispose, string logPath) : base(logger, toDispose)
    {
       LogPath = logPath;
    }

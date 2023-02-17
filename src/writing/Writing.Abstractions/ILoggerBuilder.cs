@@ -10,6 +10,9 @@ public interface ILoggerBuilder
    #region Properties
    /// <summary>The facade that was used to create this builder.</summary>
    ILogWriterFacade Facade { get; }
+
+   /// <summary>The logger that was built.</summary>
+   ILogger Logger { get; }
    #endregion
 
    #region Methods
@@ -20,7 +23,7 @@ public interface ILoggerBuilder
 
    /// <summary>Builds the requested logger.</summary>
    /// <param name="distributor">The internal distributor that was created.</param>
-   /// <returns>The built logger.</returns>
+   /// <returns>The built <see cref="Logger"/>.</returns>
    ILogger Build(out ILogDataDistributor distributor);
    #endregion
 }

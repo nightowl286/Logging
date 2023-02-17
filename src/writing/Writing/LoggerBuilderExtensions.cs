@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Loggers;
+using TNO.Logging.Writing.Loggers;
 using TNO.Logging.Writing.Loggers.Writers;
 
 namespace TNO.Logging.Writing;
@@ -10,20 +11,20 @@ namespace TNO.Logging.Writing;
 public static class LoggerBuilderExtensions
 {
    #region Methods
-   /// <summary>Includes a file system log <paramref name="writer"/>.</summary>
-   /// <param name="builder">The builder to include the <paramref name="writer"/> in.</param>
+   /// <summary>Includes a file system log <paramref name="logger"/>.</summary>
+   /// <param name="builder">The builder to include the <paramref name="logger"/> in.</param>
    /// <param name="directory">The directory in which the log should be saved.</param>
-   /// <param name="writer">The writer that can be used for disposing/closing reasons.</param>
+   /// <param name="logger">The writer that can be used for disposing/closing reasons.</param>
    /// <returns>The given <paramref name="builder"/> instance.</returns>
-   /// <remarks>It is the caller's responsibility to ensure that the <paramref name="writer"/> is disposed correctly.</remarks>
-   public static ILoggerBuilder WithFileSystem(this ILoggerBuilder builder, string directory, out IDisposable writer)
+   /// <remarks>It is the caller's responsibility to ensure that the <paramref name="logger"/> is disposed correctly.</remarks>
+   public static ILoggerBuilder WithFileSystem(this ILoggerBuilder builder, string directory, out IFileSystemLogger logger)
    {
       Directory.CreateDirectory(directory);
 
       FileSystemLogWriter fsWriter = new FileSystemLogWriter(builder.Facade, directory);
+      logger = new FileSystemLoggerWrapper(builder.Logger, fsWriter, directory);
 
       builder.With(fsWriter);
-      writer = fsWriter;
 
       return builder;
    }

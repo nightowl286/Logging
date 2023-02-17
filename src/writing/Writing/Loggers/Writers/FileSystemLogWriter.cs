@@ -119,7 +119,7 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
 
       FileSystemLogWriter logWriter = new FileSystemLogWriter(facade, directory);
       ScopedLogger logger = new ScopedLogger(logWriter, context);
-      FileSystemLogger fsLogger = new FileSystemLogger(logger, logWriter, directory);
+      FileSystemLoggerWrapper fsLogger = new FileSystemLoggerWrapper(logger, logWriter, directory);
 
       return fsLogger;
    }

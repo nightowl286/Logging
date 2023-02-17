@@ -14,8 +14,13 @@ internal sealed class LoggerBuilder : ILoggerBuilder
    #region Properties
    /// <inheritdoc/>
    public ILogWriterFacade Facade { get; }
+   public ILogger Logger { get; }
    #endregion
-   public LoggerBuilder(ILogWriterFacade facade) => Facade = facade;
+   public LoggerBuilder(ILogWriterFacade facade)
+   {
+      Facade = facade;
+      Logger = new ScopedLogger(_distributor, _context);
+   }
 
    #region Methods
    public ILoggerBuilder With(ILogDataCollector collector)
@@ -28,9 +33,7 @@ internal sealed class LoggerBuilder : ILoggerBuilder
    {
       distributor = _distributor;
 
-      ScopedLogger logger = new ScopedLogger(distributor, _context);
-
-      return logger;
+      return Logger;
    }
    #endregion
 }
