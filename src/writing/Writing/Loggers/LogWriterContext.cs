@@ -5,7 +5,7 @@ using TNO.Logging.Writing.Loggers.IdFactories;
 namespace TNO.Logging.Writing.Loggers;
 
 /// <summary>
-/// Represents a context that belongs to an <see cref="ILogWriter"/>.
+/// Represents a context that handles information about the current logging session.
 /// </summary>
 public class LogWriterContext : ILogWriteContext
 {

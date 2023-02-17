@@ -14,7 +14,6 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
 {
    #region Fields
    private readonly ILogWriterFacade _facade;
-   private readonly LogWriterContext _context;
    private readonly string _directory;
 
    private readonly IEntrySerialiser _entrySerialiser;
@@ -24,14 +23,15 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
    private readonly IFileReferenceSerialiser _fileReferenceSerialiser;
    private readonly ThreadedQueue<FileReference> _fileReferenceQueue;
    private readonly BinaryWriter _fileReferenceWriter;
-
    #endregion
 
    #region Constructor
+   /// <summary>Creates a new file system log writer.</summary>
+   /// <param name="facade">The writer facade to use.</param>
+   /// <param name="directory">The directory in which to save the log to</param>
    public FileSystemLogWriter(ILogWriterFacade facade, string directory)
    {
       _facade = facade;
-      _context = new LogWriterContext();
       _directory = directory;
 
       // entries
@@ -115,8 +115,10 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
    {
       Directory.CreateDirectory(directory);
 
+      LogWriterContext context = new LogWriterContext();
+
       FileSystemLogWriter logWriter = new FileSystemLogWriter(facade, directory);
-      ScopedLogger logger = new ScopedLogger(logWriter, logWriter._context);
+      ScopedLogger logger = new ScopedLogger(logWriter, context);
       FileSystemLogger fsLogger = new FileSystemLogger(logger, logWriter, directory);
 
       return fsLogger;
@@ -135,7 +137,7 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
    }
    private static void CreateArchive(string logDirectory)
    {
-      string name = Path.GetFileNameWithoutExtension(logDirectory);
+      string name = Path.GetFileName(logDirectory);
       string directory = Path.GetDirectoryName(logDirectory)!;
       string path = Path.Combine(directory, name + ".zip");
 
