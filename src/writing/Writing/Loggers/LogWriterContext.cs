@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.Loggers.IdFactories;
+using TNO.Logging.Writing.Writers.IdFactories;
 
 namespace TNO.Logging.Writing.Loggers;
 

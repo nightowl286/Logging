@@ -2,7 +2,7 @@
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Loggers;
-using TNO.Logging.Writing.Loggers.Writers;
+using TNO.Logging.Writing.Writers;
 
 namespace TNO.Logging.Writing.Builders;
 

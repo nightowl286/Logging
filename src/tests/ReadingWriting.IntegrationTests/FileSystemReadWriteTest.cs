@@ -6,7 +6,7 @@ using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Writing;
 using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.Loggers.Writers;
+using TNO.Logging.Writing.Writers;
 using TNO.ReadingWriting.IntegrationTests.TestBases.FileSystem;
 
 namespace TNO.ReadingWriting.IntegrationTests;

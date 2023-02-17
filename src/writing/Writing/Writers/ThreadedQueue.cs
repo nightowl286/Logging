@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace TNO.Logging.Writing.Loggers.Writers;
+namespace TNO.Logging.Writing.Writers;
 
 /// <summary>A delegate that represents a write request.</summary>
 /// <typeparam name="T">The type of the data.</typeparam>

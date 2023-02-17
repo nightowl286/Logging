@@ -1,4 +1,4 @@
-﻿namespace TNO.Logging.Writing.Loggers.IdFactories;
+﻿namespace TNO.Logging.Writing.Writers.IdFactories;
 
 internal class SafeIdFactory<T> where T : notnull
 {

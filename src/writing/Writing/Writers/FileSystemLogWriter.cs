@@ -6,8 +6,9 @@ using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Loggers;
 
-namespace TNO.Logging.Writing.Loggers.Writers;
+namespace TNO.Logging.Writing.Writers;
 
 /// <summary>
 /// Denotes a log writer that will save the log to the file system.
