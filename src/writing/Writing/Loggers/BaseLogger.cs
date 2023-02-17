@@ -12,27 +12,35 @@ namespace TNO.Logging.Writing.Loggers;
 /// <summary>
 /// Represents a scoped logger.
 /// </summary>
-public class ScopedLogger : ILogger
+public class BaseLogger : ILogger
 {
    #region Fields
-   private readonly ILogDataCollector _collector;
-   private readonly ILogWriteContext _writeContext;
-   private readonly ulong _contextId;
    private readonly ulong _scope;
    #endregion
 
+   #region Properties
+   /// <summary>The collector that should receive the log data.</summary>
+   protected ILogDataCollector Collector { get; }
+
+   /// <summary>The write context used by this logger.</summary>
+   protected ILogWriteContext WriteContext { get; }
+
+   /// <summary>The id of the context that this logger belongs to.</summary>
+   protected ulong ContextId { get; }
+   #endregion
+
    #region Constructors
-   /// <summary>Creates an instance of a new <see cref="ScopedLogger"/>.</summary>
+   /// <summary>Creates an instance of a new <see cref="BaseLogger"/>.</summary>
    /// <param name="collector">The collector to use.</param>
    /// <param name="writeContext">The write context to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="scope">The scope (inside the given <paramref name="contextId"/> that this logger belongs to.</param>
-   public ScopedLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ulong scope)
+   public BaseLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ulong scope)
    {
-      _collector = collector;
-      _writeContext = writeContext;
+      Collector = collector;
+      WriteContext = writeContext;
 
-      _contextId = contextId;
+      ContextId = contextId;
       _scope = scope;
    }
    #endregion
@@ -42,8 +50,8 @@ public class ScopedLogger : ILogger
    public ILogger Log(Importance Importance, string message,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
-      ulong id = _writeContext.NewEntryId();
-      TimeSpan timestamp = _writeContext.GetTimestamp();
+      ulong id = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
       ulong fileId = GetFileId(file);
 
       MessageComponent component = new MessageComponent(message);
@@ -56,10 +64,10 @@ public class ScopedLogger : ILogger
    #region Helpers
    private ulong GetFileId(string file)
    {
-      if (_writeContext.GetOrCreateFileId(file, out ulong fileId))
+      if (WriteContext.GetOrCreateFileId(file, out ulong fileId))
       {
          FileReference reference = new FileReference(file, fileId);
-         _collector.Deposit(reference);
+         Collector.Deposit(reference);
       }
 
       return fileId;
@@ -71,8 +79,8 @@ public class ScopedLogger : ILogger
          { component.Kind, component }
       };
 
-      Entry entry = new Entry(entryId, _contextId, _scope, Importance, timestamp, fileId, line, componentsByKind);
-      _collector.Deposit(entry);
+      Entry entry = new Entry(entryId, ContextId, _scope, Importance, timestamp, fileId, line, componentsByKind);
+      Collector.Deposit(entry);
    }
    #endregion
 }

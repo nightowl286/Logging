@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.Writers.IdFactories;
+using TNO.Logging.Writing.IdFactories;
 
 namespace TNO.Logging.Writing.Loggers;
 
@@ -12,6 +12,7 @@ public class LogWriterContext : ILogWriteContext
    #region Fields
    private readonly SafeIdFactory _entryIdFactory = new SafeIdFactory(1);
    private readonly SafeIdFactory<string> _fileIdFactory = new SafeIdFactory<string>(1);
+   private readonly SafeIdFactory _contextIdFactory = new SafeIdFactory(1);
    private readonly Stopwatch _timestampWatch = Stopwatch.StartNew();
    #endregion
 
@@ -24,5 +25,8 @@ public class LogWriterContext : ILogWriteContext
 
    /// <inheritdoc/>
    public bool GetOrCreateFileId(string file, out ulong fileId) => _fileIdFactory.GetOrCreate(file, out fileId);
+
+   /// <inheritdoc/>
+   public ulong CreateContextId() => _contextIdFactory.GetNext();
    #endregion
 }

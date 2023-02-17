@@ -6,7 +6,8 @@ using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Writing;
 using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.Writers;
+using TNO.Logging.Writing.Abstractions.Writers;
+using TNO.Logging.Writing.Builders;
 using TNO.ReadingWriting.IntegrationTests.TestBases.FileSystem;
 
 namespace TNO.ReadingWriting.IntegrationTests;
@@ -31,13 +32,18 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       {
          LogWriterFacade facade = new LogWriterFacade();
 
-         using IDisposableLogger logger = FileSystemLogWriter.Create(facade, logPath);
+         ILogger logger = facade.CreateBuilder()
+            .WithFileSystem(logPath, out IFileSystemLogWriter writer)
+            .Logger;
 
-         logger.Log(
-            expectedImportance,
-            expectedMessage,
-            expectedFile,
-            expectedLine);
+         using (writer)
+         {
+            logger.Log(
+               expectedImportance,
+               expectedMessage,
+               expectedFile,
+               expectedLine);
+         }
       }
 
       FileReference fileReference;

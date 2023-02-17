@@ -25,5 +25,9 @@ public interface ILogWriteContext
    /// had to be created, <see langword="false"/> otherwise.
    /// </returns>
    bool GetOrCreateFileId(string file, out ulong fileId);
+
+   /// <summary>Creates a new id for a context.</summary>
+   /// <returns>The id of the newly created context.</returns>
+   ulong CreateContextId();
    #endregion
 }

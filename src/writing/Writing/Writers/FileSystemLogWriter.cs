@@ -2,22 +2,19 @@
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions;
-using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Entries;
-using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Serialisers;
-using TNO.Logging.Writing.Loggers;
+using TNO.Logging.Writing.Abstractions.Writers;
 
 namespace TNO.Logging.Writing.Writers;
 
 /// <summary>
-/// Denotes a log writer that will save the log to the file system.
+/// Represents a log writer that will save the log to the file system.
 /// </summary>
-public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
+public sealed class FileSystemLogWriter : IFileSystemLogWriter
 {
    #region Fields
    private readonly ILogWriterFacade _facade;
-   private readonly string _directory;
 
    private readonly IEntrySerialiser _entrySerialiser;
    private readonly ThreadedQueue<IEntry> _entryQueue;
@@ -28,6 +25,11 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
    private readonly BinaryWriter _fileReferenceWriter;
    #endregion
 
+   #region Properties
+   /// <inheritdoc/>
+   public string LogPath { get; }
+   #endregion
+
    #region Constructor
    /// <summary>Creates a new file system log writer.</summary>
    /// <param name="facade">The writer facade to use.</param>
@@ -35,7 +37,7 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
    public FileSystemLogWriter(ILogWriterFacade facade, string directory)
    {
       _facade = facade;
-      _directory = directory;
+      LogPath = directory;
 
       // entries
       _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), entryQueue_WriteRequested, ThreadPriority.Lowest);
@@ -67,7 +69,7 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
       _fileReferenceQueue.Dispose();
       _fileReferenceWriter.Dispose();
 
-      CreateArchive(_directory);
+      CreateArchive(LogPath);
    }
 
    private void entryQueue_WriteRequested(IEntry data)
@@ -87,50 +89,15 @@ public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
       IDataVersionMapSerialiser serialiser = _facade.GetSerialiser<IDataVersionMapSerialiser>();
       DataVersionMap map = _facade.GetVersionMap();
 
-      string path = Path.Combine(_directory, "versions");
+      string path = Path.Combine(LogPath, "versions");
       using (BinaryWriter writer = OpenWriter(path))
          serialiser.Serialise(writer, map);
    }
    #endregion
 
-   #region Functions
-   /// <summary>Creates a new logger that will save to the file system.</summary>
-   /// <param name="facade">The facade for the log writing system.</param>
-   /// <param name="directory">
-   /// The directory to which the log should be saved. A new child directory
-   /// (formatted based on <see cref="DateTime.Now"/>) will be created.
-   /// </param>
-   /// <returns>An instance of the created logger.</returns>
-   public static IFileSystemLogger CreateDated(ILogWriterFacade facade, string directory)
-   {
-      DateTime date = DateTime.Now;
-      string dateStr = date.ToString("yyyy-MM-dd_HH-mm-ss");
-      directory = Path.Combine(directory, dateStr);
-
-      return Create(facade, directory);
-   }
-
-   /// <summary>Creates a new logger that will save to the file system.</summary>
-   /// <param name="facade">The facade for the log writing system.</param>
-   /// <param name="directory">The directory to save the log in.</param>
-   /// <returns>An instance of the created logger.</returns>
-   public static IFileSystemLogger Create(ILogWriterFacade facade, string directory)
-   {
-      Directory.CreateDirectory(directory);
-
-      LogWriterContext context = new LogWriterContext();
-
-      FileSystemLogWriter logWriter = new FileSystemLogWriter(facade, directory);
-      ScopedLogger logger = new ScopedLogger(logWriter, context, 0, 0);
-      FileSystemLoggerWrapper fsLogger = new FileSystemLoggerWrapper(logger, logWriter, directory);
-
-      return fsLogger;
-   }
-   #endregion
-
    #region Helpers
    private BinaryWriter OpenDirectoryWriter(string path)
-      => OpenWriter(Path.Combine(_directory, path));
+      => OpenWriter(Path.Combine(LogPath, path));
    private static BinaryWriter OpenWriter(string path)
    {
       FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);

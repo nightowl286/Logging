@@ -1,4 +1,4 @@
-﻿namespace TNO.Logging.Writing.Writers.IdFactories;
+﻿namespace TNO.Logging.Writing.IdFactories;
 internal class SafeIdFactory
 {
    #region Fields

@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
-using TNO.Logging.Writing.Abstractions.Loggers;
+using TNO.Logging.Writing.Abstractions.Loggers.Scopes;
 using TNO.Logging.Writing.Collectors;
 using TNO.Logging.Writing.Loggers;
 
@@ -16,12 +16,12 @@ internal sealed class LoggerBuilder : ILoggerBuilder
    #region Properties
    /// <inheritdoc/>
    public ILogWriterFacade Facade { get; }
-   public ILogger Logger { get; }
+   public IContextLogger Logger { get; }
    #endregion
    public LoggerBuilder(ILogWriterFacade facade)
    {
       Facade = facade;
-      Logger = new ScopedLogger(_distributor, _context, 0, 0);
+      Logger = new ContextLogger(_distributor, _context, 0);
    }
 
    #region Methods
@@ -31,7 +31,7 @@ internal sealed class LoggerBuilder : ILoggerBuilder
 
       return this;
    }
-   public ILogger Build(out ILogDataDistributor distributor)
+   public IContextLogger Build(out ILogDataDistributor distributor)
    {
       distributor = _distributor;
 
