@@ -14,6 +14,7 @@ public delegate void WriteRequestDelegate<T>(T data);
 public sealed class ThreadedQueue<T> : IDisposable where T : notnull
 {
    #region Fields
+   private static readonly TimeSpan ThreadSleepTimeout = TimeSpan.FromMilliseconds(50);
    private readonly SemaphoreSlim _queueLock = new SemaphoreSlim(1);
    private readonly Queue<T> _queue = new Queue<T>();
    private readonly Thread _thread;
@@ -80,6 +81,8 @@ public sealed class ThreadedQueue<T> : IDisposable where T : notnull
             Debug.Assert(data is not null);
             WriteRequested?.Invoke(data);
          }
+         else if (Thread.Yield() == false)
+            Thread.Sleep(ThreadSleepTimeout);
       }
    }
 
