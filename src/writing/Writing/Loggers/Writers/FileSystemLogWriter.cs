@@ -10,7 +10,7 @@ namespace TNO.Logging.Writing.Loggers.Writers;
 /// <summary>
 /// Denotes a log writer that will save the log to the file system.
 /// </summary>
-public sealed class FileSystemLogWriter : ILogWriter, IDisposable
+public sealed class FileSystemLogWriter : ILogDataCollector, IDisposable
 {
    #region Fields
    private readonly ILogWriterFacade _facade;
@@ -26,33 +26,34 @@ public sealed class FileSystemLogWriter : ILogWriter, IDisposable
    private readonly BinaryWriter _fileReferenceWriter;
 
    #endregion
-   private FileSystemLogWriter(ILogWriterFacade facade, string directory)
+
+   #region Constructor
+   public FileSystemLogWriter(ILogWriterFacade facade, string directory)
    {
       _facade = facade;
       _context = new LogWriterContext();
       _directory = directory;
 
       // entries
-      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), ThreadPriority.Lowest);
-      _entryQueue.WriteRequested += entryQueue_WriteRequested;
+      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), entryQueue_WriteRequested, ThreadPriority.Lowest);
       _entryWriter = OpenDirectoryWriter("entries");
       _entrySerialiser = facade.GetSerialiser<IEntrySerialiser>();
 
       // file references
-      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue), ThreadPriority.Lowest);
-      _fileReferenceQueue.WriteRequested += fileReferenceQueue_WriteRequested;
+      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue), fileReferenceQueue_WriteRequested, ThreadPriority.Lowest);
       _fileReferenceWriter = OpenDirectoryWriter("files");
       _fileReferenceSerialiser = facade.GetSerialiser<IFileReferenceSerialiser>();
 
       WriteVersions();
    }
+   #endregion
 
    #region Methods
    /// <inheritdoc/>
-   public void RequestWrite(IEntry entry) => _entryQueue.Enqueue(entry);
+   public void Deposit(IEntry entry) => _entryQueue.Enqueue(entry);
 
    /// <inheritdoc/>
-   public void RequestWrite(FileReference fileReference) => _fileReferenceQueue.Enqueue(fileReference);
+   public void Deposit(FileReference fileReference) => _fileReferenceQueue.Enqueue(fileReference);
 
    /// <inheritdoc/>
    public void Dispose()

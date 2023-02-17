@@ -3,7 +3,7 @@
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
 /// <summary>
-/// Denotes a context that belongs to a <see cref="ILogWriter"/>.
+/// Denotes a context that stores information about the current logging session.
 /// </summary>
 public interface ILogWriteContext
 {

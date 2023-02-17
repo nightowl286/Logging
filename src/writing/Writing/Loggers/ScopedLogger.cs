@@ -4,6 +4,7 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
 namespace TNO.Logging.Writing.Loggers;
@@ -14,17 +15,17 @@ namespace TNO.Logging.Writing.Loggers;
 public class ScopedLogger : ILogger
 {
    #region Fields
-   private readonly ILogWriter _writer;
+   private readonly ILogDataCollector _collector;
    private readonly ILogWriteContext _context;
    #endregion
 
    #region Constructors
    /// <summary>Creates an instance of a new <see cref="ScopedLogger"/>.</summary>
-   /// <param name="writer">The writer to use.</param>
+   /// <param name="collector">The collector to use.</param>
    /// <param name="context">The context to use.</param>
-   public ScopedLogger(ILogWriter writer, ILogWriteContext context)
+   public ScopedLogger(ILogDataCollector collector, ILogWriteContext context)
    {
-      _writer = writer;
+      _collector = collector;
       _context = context;
    }
    #endregion
@@ -51,7 +52,7 @@ public class ScopedLogger : ILogger
       if (_context.GetOrCreateFileId(file, out ulong fileId))
       {
          FileReference reference = new FileReference(file, fileId);
-         _writer.RequestWrite(reference);
+         _collector.Deposit(reference);
       }
 
       return fileId;
@@ -64,7 +65,7 @@ public class ScopedLogger : ILogger
       };
 
       Entry entry = new Entry(entryId, Importance, timestamp, fileId, line, componentsByKind);
-      _writer.RequestWrite(entry);
+      _collector.Deposit(entry);
    }
    #endregion
 }
