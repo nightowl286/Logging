@@ -48,7 +48,8 @@ public class LogReaderFacade : ILogReaderFacade
       RegisterSelectors(providerFacade);
 
       // components
-      RegisterFromKinds(providerFacade, map, VersionedDataKind.Message);
+      RegisterFromKinds(providerFacade, map,
+         VersionedDataKind.Message);
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
 
       RegisterFromKinds(providerFacade, map,

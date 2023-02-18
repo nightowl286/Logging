@@ -4,6 +4,7 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 using TNO.Logging.Writing.Abstractions.Writers;
 
 namespace TNO.Logging.Writing.Writers;
@@ -13,20 +14,48 @@ namespace TNO.Logging.Writing.Writers;
 /// </summary>
 public sealed class FileSystemLogWriter : IFileSystemLogWriter
 {
+   #region Subclasses
+   private sealed class DataWriter<T> : IDisposable where T : notnull
+   {
+      #region Fields
+      private readonly IBinarySerialiser<T> _serialiser;
+      private readonly ThreadedQueue<T> _queue;
+      private readonly BinaryWriter _writer;
+      #endregion
+      public DataWriter(BinaryWriter writer, IBinarySerialiser<T> serialiser)
+      {
+         _writer = writer;
+         _serialiser = serialiser;
+
+         _queue = new ThreadedQueue<T>(
+            $"{nameof(FileSystemLogWriter)}.{nameof(T)}",
+            WriteData,
+            ThreadPriority.Lowest);
+      }
+
+      #region Methods
+      private void WriteData(T data)
+      {
+         _serialiser.Serialise(_writer, data);
+
+         _writer.Flush();
+      }
+      public void Dispose()
+      {
+         _queue.Dispose();
+         _writer.Dispose();
+      }
+      public void Deposit(T data) => _queue.Enqueue(data);
+      #endregion
+   }
+   #endregion
+
    #region Fields
    private readonly ILogWriterFacade _facade;
 
-   private readonly IEntrySerialiser _entrySerialiser;
-   private readonly ThreadedQueue<IEntry> _entryQueue;
-   private readonly BinaryWriter _entryWriter;
-
-   private readonly IFileReferenceSerialiser _fileReferenceSerialiser;
-   private readonly ThreadedQueue<FileReference> _fileReferenceQueue;
-   private readonly BinaryWriter _fileReferenceWriter;
-
-   private readonly IContextInfoSerialiser _contextInfoSerialiser;
-   private readonly ThreadedQueue<ContextInfo> _contextInfoQueue;
-   private readonly BinaryWriter _contextInfoWriter;
+   private readonly DataWriter<IEntry> _entryDataWriter;
+   private readonly DataWriter<FileReference> _fileReferenceDataWriter;
+   private readonly DataWriter<ContextInfo> _contextInfoDataWriter;
    #endregion
 
    #region Properties
@@ -44,19 +73,19 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       LogPath = directory;
 
       // entries
-      _entryQueue = new ThreadedQueue<IEntry>(nameof(_entryQueue), WriteEntry, ThreadPriority.Lowest);
-      _entryWriter = OpenDirectoryWriter("entries");
-      _entrySerialiser = facade.GetSerialiser<IEntrySerialiser>();
+      _entryDataWriter = new DataWriter<IEntry>(
+         OpenDirectoryWriter("entries"),
+         facade.GetSerialiser<IEntrySerialiser>());
 
       // file references
-      _fileReferenceQueue = new ThreadedQueue<FileReference>(nameof(_fileReferenceQueue), WriteFileReference, ThreadPriority.Lowest);
-      _fileReferenceWriter = OpenDirectoryWriter("files");
-      _fileReferenceSerialiser = facade.GetSerialiser<IFileReferenceSerialiser>();
+      _fileReferenceDataWriter = new DataWriter<FileReference>(
+         OpenDirectoryWriter("files"),
+         facade.GetSerialiser<IFileReferenceSerialiser>());
 
       // context infos
-      _contextInfoQueue = new ThreadedQueue<ContextInfo>(nameof(_contextInfoQueue), WriteContextInfo, ThreadPriority.Lowest);
-      _contextInfoWriter = OpenDirectoryWriter("contexts");
-      _contextInfoSerialiser = facade.GetSerialiser<IContextInfoSerialiser>();
+      _contextInfoDataWriter = new DataWriter<ContextInfo>(
+         OpenDirectoryWriter("contexts"),
+         facade.GetSerialiser<IContextInfoSerialiser>());
 
       WriteVersions();
    }
@@ -64,46 +93,22 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
 
    #region Methods
    /// <inheritdoc/>
-   public void Deposit(IEntry entry) => _entryQueue.Enqueue(entry);
+   public void Deposit(IEntry entry) => _entryDataWriter.Deposit(entry);
 
    /// <inheritdoc/>
-   public void Deposit(FileReference fileReference) => _fileReferenceQueue.Enqueue(fileReference);
+   public void Deposit(FileReference fileReference) => _fileReferenceDataWriter.Deposit(fileReference);
 
    /// <inheritdoc/>
-   public void Deposit(ContextInfo contextInfo) => _contextInfoQueue.Enqueue(contextInfo);
+   public void Deposit(ContextInfo contextInfo) => _contextInfoDataWriter.Deposit(contextInfo);
 
    /// <inheritdoc/>
    public void Dispose()
    {
-      _entryQueue.Dispose();
-      _entryWriter.Dispose();
-
-      _fileReferenceQueue.Dispose();
-      _fileReferenceWriter.Dispose();
-
-      _contextInfoQueue.Dispose();
-      _contextInfoWriter.Dispose();
+      _entryDataWriter.Dispose();
+      _fileReferenceDataWriter.Dispose();
+      _contextInfoDataWriter.Dispose();
 
       CreateArchive(LogPath);
-   }
-
-   private void WriteEntry(IEntry data)
-   {
-      _entrySerialiser.Serialise(_entryWriter, data);
-
-      _entryWriter.Flush();
-   }
-   private void WriteFileReference(FileReference data)
-   {
-      _fileReferenceSerialiser.Serialise(_fileReferenceWriter, data);
-
-      _fileReferenceWriter.Flush();
-   }
-   private void WriteContextInfo(ContextInfo data)
-   {
-      _contextInfoSerialiser.Serialise(_contextInfoWriter, data);
-
-      _contextInfoWriter.Flush();
    }
    private void WriteVersions()
    {
