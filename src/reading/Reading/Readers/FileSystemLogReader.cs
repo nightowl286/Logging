@@ -53,8 +53,8 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
          _tempPath = path;
       }
 
-      FromDirectory(path);
       ReadDirectory = path;
+      FromDirectory(path);
    }
    #endregion
 
@@ -67,14 +67,17 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       DataVersionMap map = ReadVersionsMap(directory);
       IDeserialiserProvider deserialiserProvider = _facade.GenerateProvider(map);
 
-      BinaryReader entryReader = OpenReader(Path.Combine(directory, "entries"));
-      CreateEntryReader(deserialiserProvider, entryReader);
+      Entries = new BinaryDeserialiserReader<IEntry>(
+         GetReaderPath("entries"),
+         deserialiserProvider.GetDeserialiser<IEntryDeserialiser>());
 
-      BinaryReader fileReferenceReader = OpenReader(Path.Combine(directory, "files"));
-      CreateFileReferenceReader(deserialiserProvider, fileReferenceReader);
+      FileReferences = new BinaryDeserialiserReader<FileReference>(
+         GetReaderPath("files"),
+         deserialiserProvider.GetDeserialiser<IFileReferenceDeserialiser>());
 
-      BinaryReader contextInfoReader = OpenReader(Path.Combine(directory, "contexts"));
-      CreateContextInfoReader(deserialiserProvider, contextInfoReader);
+      ContextInfos = new BinaryDeserialiserReader<ContextInfo>(
+         GetReaderPath("contexts"),
+         deserialiserProvider.GetDeserialiser<IContextInfoDeserialiser>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
@@ -98,38 +101,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    }
    #endregion
 
-   #region Create Readers
-   [MemberNotNull(nameof(Entries))]
-   private void CreateEntryReader(IDeserialiserProvider provider, BinaryReader reader)
-   {
-      IEntryDeserialiser deserialiser = provider.GetDeserialiser<IEntryDeserialiser>();
-      BinaryDeserialiserReader<IEntryDeserialiser, IEntry> entryReader = new BinaryDeserialiserReader<IEntryDeserialiser, IEntry>(reader, deserialiser);
-
-      Entries = entryReader;
-   }
-
-   [MemberNotNull(nameof(FileReferences))]
-   private void CreateFileReferenceReader(IDeserialiserProvider provider, BinaryReader reader)
-   {
-      IFileReferenceDeserialiser deserialiser = provider.GetDeserialiser<IFileReferenceDeserialiser>();
-      BinaryDeserialiserReader<IFileReferenceDeserialiser, FileReference> fileReferenceReader =
-         new BinaryDeserialiserReader<IFileReferenceDeserialiser, FileReference>(reader, deserialiser);
-
-      FileReferences = fileReferenceReader;
-   }
-
-   [MemberNotNull(nameof(ContextInfos))]
-   private void CreateContextInfoReader(IDeserialiserProvider provider, BinaryReader reader)
-   {
-      IContextInfoDeserialiser deserialiser = provider.GetDeserialiser<IContextInfoDeserialiser>();
-      BinaryDeserialiserReader<IContextInfoDeserialiser, ContextInfo> contextInfoReader =
-         new BinaryDeserialiserReader<IContextInfoDeserialiser, ContextInfo>(reader, deserialiser);
-
-      ContextInfos = contextInfoReader;
-   }
-   #endregion
-
    #region Helpers
+   private string GetReaderPath(string dataName)
+      => Path.Combine(ReadDirectory, dataName);
    private static string ExtractZip(string path)
    {
       string tempPath = Path.GetTempPath();
@@ -173,12 +147,12 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       zipPath = null;
       return false;
    }
-   private static FileStream OpenStream(string path)
+   internal static FileStream OpenStream(string path)
    {
       FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
       return fs;
    }
-   private static BinaryReader OpenReader(string path)
+   internal static BinaryReader OpenReader(string path)
    {
       FileStream fs = OpenStream(path);
       BinaryReader reader = new BinaryReader(fs);

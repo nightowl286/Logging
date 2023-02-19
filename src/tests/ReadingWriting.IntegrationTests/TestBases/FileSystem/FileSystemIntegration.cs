@@ -8,7 +8,7 @@ public abstract class FileSystemIntegration : IntegrationTestBase
    #endregion
    public FileSystemIntegration()
    {
-      Path = FileSystemUtility.GetTestFolder();
+      Path = FileSystemUtility.GetTestClassFolder();
       Debug.WriteLine($"Test Folder: {Path}");
    }
 
@@ -19,7 +19,8 @@ public abstract class FileSystemIntegration : IntegrationTestBase
    #region Helpers
    protected string GetSubFolder(string path)
    {
-      string newPath = System.IO.Path.Combine(Path, path);
+      string testPath = FileSystemUtility.GetTestFolder(Path);
+      string newPath = System.IO.Path.Combine(testPath, path);
 
       if (Directory.Exists(newPath))
       {

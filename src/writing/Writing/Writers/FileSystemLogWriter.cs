@@ -4,7 +4,6 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Serialisers;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 using TNO.Logging.Writing.Abstractions.Writers;
 
 namespace TNO.Logging.Writing.Writers;
@@ -14,48 +13,12 @@ namespace TNO.Logging.Writing.Writers;
 /// </summary>
 public sealed class FileSystemLogWriter : IFileSystemLogWriter
 {
-   #region Subclasses
-   private sealed class DataWriter<T> : IDisposable where T : notnull
-   {
-      #region Fields
-      private readonly IBinarySerialiser<T> _serialiser;
-      private readonly ThreadedQueue<T> _queue;
-      private readonly BinaryWriter _writer;
-      #endregion
-      public DataWriter(BinaryWriter writer, IBinarySerialiser<T> serialiser)
-      {
-         _writer = writer;
-         _serialiser = serialiser;
-
-         _queue = new ThreadedQueue<T>(
-            $"{nameof(FileSystemLogWriter)}.{nameof(T)}",
-            WriteData,
-            ThreadPriority.Lowest);
-      }
-
-      #region Methods
-      private void WriteData(T data)
-      {
-         _serialiser.Serialise(_writer, data);
-
-         _writer.Flush();
-      }
-      public void Dispose()
-      {
-         _queue.Dispose();
-         _writer.Dispose();
-      }
-      public void Deposit(T data) => _queue.Enqueue(data);
-      #endregion
-   }
-   #endregion
-
    #region Fields
    private readonly ILogWriterFacade _facade;
 
-   private readonly DataWriter<IEntry> _entryDataWriter;
-   private readonly DataWriter<FileReference> _fileReferenceDataWriter;
-   private readonly DataWriter<ContextInfo> _contextInfoDataWriter;
+   private readonly BinarySerialiserWriter<IEntry> _entryDataWriter;
+   private readonly BinarySerialiserWriter<FileReference> _fileReferenceDataWriter;
+   private readonly BinarySerialiserWriter<ContextInfo> _contextInfoDataWriter;
    #endregion
 
    #region Properties
@@ -67,25 +30,35 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    /// <summary>Creates a new file system log writer.</summary>
    /// <param name="facade">The writer facade to use.</param>
    /// <param name="directory">The directory in which to save the log to</param>
-   public FileSystemLogWriter(ILogWriterFacade facade, string directory)
+   public FileSystemLogWriter(ILogWriterFacade facade, string directory) :
+      this(facade, new FileSystemLogWriterSettings(directory))
+   { }
+
+   /// <summary>Creates a new file system log writer.</summary>
+   /// <param name="facade">The writer facade to use.</param>
+   /// <param name="settings">The settings to use when setting up this writer.</param>
+   public FileSystemLogWriter(ILogWriterFacade facade, FileSystemLogWriterSettings settings)
    {
       _facade = facade;
-      LogPath = directory;
+      LogPath = settings.LogPath;
 
       // entries
-      _entryDataWriter = new DataWriter<IEntry>(
-         OpenDirectoryWriter("entries"),
-         facade.GetSerialiser<IEntrySerialiser>());
+      _entryDataWriter = new BinarySerialiserWriter<IEntry>(
+         GetWriterPath("entries"),
+         facade.GetSerialiser<IEntrySerialiser>(),
+         settings.EntryThreshold);
 
       // file references
-      _fileReferenceDataWriter = new DataWriter<FileReference>(
-         OpenDirectoryWriter("files"),
-         facade.GetSerialiser<IFileReferenceSerialiser>());
+      _fileReferenceDataWriter = new BinarySerialiserWriter<FileReference>(
+         GetWriterPath("files"),
+         facade.GetSerialiser<IFileReferenceSerialiser>(),
+         settings.FileReferenceThreshold);
 
       // context infos
-      _contextInfoDataWriter = new DataWriter<ContextInfo>(
-         OpenDirectoryWriter("contexts"),
-         facade.GetSerialiser<IContextInfoSerialiser>());
+      _contextInfoDataWriter = new BinarySerialiserWriter<ContextInfo>(
+         GetWriterPath("contexts"),
+         facade.GetSerialiser<IContextInfoSerialiser>(),
+         settings.ContextInfoThreshold);
 
       WriteVersions();
    }
@@ -115,18 +88,24 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       IDataVersionMapSerialiser serialiser = _facade.GetSerialiser<IDataVersionMapSerialiser>();
       DataVersionMap map = _facade.GetVersionMap();
 
-      string path = Path.Combine(LogPath, "versions");
-      using (BinaryWriter writer = OpenWriter(path))
+      string path = GetWriterPath("versions");
+      using (BinaryWriter writer = CreateWriter(path))
          serialiser.Serialise(writer, map);
    }
    #endregion
 
    #region Helpers
-   private BinaryWriter OpenDirectoryWriter(string path)
-      => OpenWriter(Path.Combine(LogPath, path));
-   private static BinaryWriter OpenWriter(string path)
+   private string GetWriterPath(string dataName)
+      => Path.Combine(LogPath, dataName);
+   internal static FileStream OpenStream(string path)
    {
-      FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
+      FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read);
+
+      return fs;
+   }
+   internal static BinaryWriter CreateWriter(string path)
+   {
+      FileStream fs = OpenStream(path);
       BinaryWriter writer = new BinaryWriter(fs);
 
       return writer;

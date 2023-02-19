@@ -24,15 +24,38 @@ public static class FileSystemUtility
    }
 
    #region Functions
-   public static string GetTestFolder()
+   public static string GetTestClassFolder()
    {
       Type? testClass = GetTestClass();
-      string subFolder = testClass is null ? "Unknown" : GetSafeFolderName(testClass);
+      string subFolder = testClass is null ? "Unknown" : GetSafeFolderName(testClass.Name);
 
       string path = Path.Combine(TestFolderRoot, subFolder);
       Directory.CreateDirectory(path);
 
       return path;
+   }
+   public static string GetTestFolder(string testClassFolder)
+   {
+      StackTrace trace = new StackTrace();
+      foreach (StackFrame frame in trace.GetFrames().Reverse())
+      {
+         MethodBase? method = frame.GetMethod();
+         if (method is null)
+            continue;
+
+         bool isTestMethod = method.GetCustomAttribute<TestMethodAttribute>() is not null;
+         if (isTestMethod == false)
+            continue;
+
+         string name = GetSafeFolderName(method.Name);
+         string path = Path.Combine(testClassFolder, name);
+
+         Directory.CreateDirectory(path);
+
+         return path;
+      }
+
+      return testClassFolder;
    }
 
    public static void CleanupTestFolder(string folder)
@@ -42,10 +65,9 @@ public static class FileSystemUtility
    #endregion
 
    #region Helpers
-   private static string GetSafeFolderName(Type type)
+   private static string GetSafeFolderName(string name)
    {
       char[] invalid = Path.GetInvalidPathChars();
-      string name = type.Name;
 
       foreach (char ch in invalid)
          name = name.Replace(ch, '_');
