@@ -47,16 +47,16 @@ public class BaseLogger : ILogger
 
    #region Methods
    /// <inheritdoc/>
-   public ILogger Log(Importance Importance, string message,
+   public ILogger Log(Importance Importance, string message, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
-      ulong id = WriteContext.NewEntryId();
+      entryId = WriteContext.NewEntryId();
       TimeSpan timestamp = WriteContext.GetTimestamp();
       ulong fileId = GetFileId(file);
 
       MessageComponent component = new MessageComponent(message);
 
-      Save(id, Importance.Normalised(), timestamp, fileId, line, component);
+      Save(entryId, Importance.Normalised(), timestamp, fileId, line, component);
       return this;
    }
    #endregion
