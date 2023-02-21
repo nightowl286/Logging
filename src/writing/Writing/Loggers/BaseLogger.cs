@@ -59,6 +59,29 @@ public class BaseLogger : ILogger
       Save(entryId, Importance.Normalised(), timestamp, fileId, line, component);
       return this;
    }
+
+   /// <inheritdoc/>
+   public IEntryBuilder StartEntry(Importance importance, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      EntryBuilder builder = new EntryBuilder(
+         this,
+         Collector,
+         WriteContext,
+         entryId,
+         ContextId,
+         _scope,
+         importance.Normalised(),
+         timestamp,
+         fileId,
+         line);
+
+      return builder;
+   }
    #endregion
 
    #region Helpers
