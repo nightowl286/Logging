@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
-using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Collectors;
@@ -47,7 +47,7 @@ public class BaseLogger : ILogger
 
    #region Methods
    /// <inheritdoc/>
-   public ILogger Log(Importance Importance, string message, out ulong entryId,
+   public ILogger Log(Importance importance, string message, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -56,7 +56,22 @@ public class BaseLogger : ILogger
 
       MessageComponent component = new MessageComponent(message);
 
-      Save(entryId, Importance.Normalised(), timestamp, fileId, line, component);
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
+      return this;
+   }
+
+   /// <inheritdoc/>
+   public ILogger LogTag(Importance importance, string tag, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+      ulong tagId = GetTagId(tag);
+
+      TagComponent component = new TagComponent(tagId);
+
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
       return this;
    }
 
@@ -90,7 +105,7 @@ public class BaseLogger : ILogger
    /// a <see cref="FileReference"/> will be deposited in the <see cref="Collector"/>.
    /// </summary>
    /// <param name="file">The file to get the id of.</param>
-   /// <returns>The id of the given <paramref name="file"/></returns>
+   /// <returns>The id of the given <paramref name="file"/>.</returns>
    protected ulong GetFileId(string file)
    {
       if (WriteContext.GetOrCreateFileId(file, out ulong fileId))
@@ -101,6 +116,24 @@ public class BaseLogger : ILogger
 
       return fileId;
    }
+
+   /// <summary>
+   /// Gets the id for the given <paramref name="tag"/>, if a new id had to be created
+   /// a <see cref="TagReference"/> will be deposited in the <see cref="Collector"/>.
+   /// </summary>
+   /// <param name="tag">The tag to get the id of.</param>
+   /// <returns>The id of the given <paramref name="tag"/>.</returns>
+   protected ulong GetTagId(string tag)
+   {
+      if (WriteContext.GetOrCreateFileId(tag, out ulong tagId))
+      {
+         TagReference reference = new TagReference(tag, tagId);
+         Collector.Deposit(reference);
+      }
+
+      return tagId;
+   }
+
    private void Save(ulong entryId, Importance Importance, TimeSpan timestamp, ulong fileId, uint line, IComponent component)
    {
       Dictionary<ComponentKind, IComponent> componentsByKind = new Dictionary<ComponentKind, IComponent>

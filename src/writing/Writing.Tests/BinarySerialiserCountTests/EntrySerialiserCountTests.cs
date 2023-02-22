@@ -16,6 +16,7 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
    {
       // Arrange
       MessageComponent messageComponent = new MessageComponent("some message");
+      TagComponent tagComponent = new TagComponent(7);
 
       ulong id = 1;
       ulong contextId = 2;
@@ -27,7 +28,8 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
       Importance Importance = Severity.Negligible | Purpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
-         { ComponentKind.Message, messageComponent }
+         { ComponentKind.Message, messageComponent },
+         { ComponentKind.Tag, tagComponent }
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
@@ -42,7 +44,8 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
    {
       ComponentSerialiserDispatcher componentSerialiser =
          new ComponentSerialiserDispatcher(
-            new MessageComponentSerialiser());
+            new MessageComponentSerialiser(),
+            new TagComponentSerialiser());
 
       return new EntrySerialiser(componentSerialiser);
    }

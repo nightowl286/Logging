@@ -16,13 +16,15 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
    {
       ComponentSerialiserDispatcher componentSerialiser =
          new ComponentSerialiserDispatcher(
-            new MessageComponentSerialiser());
+            new MessageComponentSerialiser(),
+            new TagComponentSerialiser());
 
       writer = new EntrySerialiser(componentSerialiser);
 
       ComponentDeserialiserDispatcher componentDeserialiser =
          new ComponentDeserialiserDispatcher(
-            new MessageComponentDeserialiserLatest());
+            new MessageComponentDeserialiserLatest(),
+            new TagComponentDeserialiserLatest());
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }
@@ -30,6 +32,7 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
    protected override IEntry CreateData()
    {
       MessageComponent messageComponent = new MessageComponent("some message");
+      TagComponent tagComponent = new TagComponent(7);
 
       ulong id = 1;
       ulong contextId = 2;
@@ -41,7 +44,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
       Importance Importance = Severity.Negligible | Purpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
-         { ComponentKind.Message, messageComponent }
+         { ComponentKind.Message, messageComponent },
+         { ComponentKind.Tag, tagComponent }
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
@@ -63,14 +67,32 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
       // Message component
       {
          IMessageComponent expectedComponent = (IMessageComponent)expected.Components[ComponentKind.Message];
+         IMessageComponent resultComponent = AssertGetComponent<IMessageComponent>(result, ComponentKind.Message);
 
-         Assert.IsTrue(result.Components.TryGetValue(ComponentKind.Message, out IComponent? resultComponent));
-         IMessageComponent? typedResultComponent = resultComponent as IMessageComponent;
-
-         Assert.IsNotNull(typedResultComponent);
-
-         Assert.AreEqual(expectedComponent.Message, typedResultComponent.Message);
+         Assert.AreEqual(expectedComponent.Message, resultComponent.Message);
       }
+
+      // Tag component
+      {
+         ITagComponent expectedComponent = (ITagComponent)expected.Components[ComponentKind.Tag];
+         ITagComponent resultComponent = AssertGetComponent<ITagComponent>(result, ComponentKind.Tag);
+
+         Assert.AreEqual(expectedComponent.TagId, resultComponent.TagId);
+      }
+   }
+   #endregion
+
+   #region Helpers
+   private T AssertGetComponent<T>(IEntry entry, ComponentKind kind) where T : class, IComponent
+   {
+      Assert.IsTrue(entry.Components.TryGetValue(kind, out IComponent? component));
+
+      T? typedComponent = component as T;
+
+      Assert.IsNotNull(typedComponent);
+
+      return typedComponent;
+
    }
    #endregion
 }

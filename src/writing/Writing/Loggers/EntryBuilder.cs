@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Collectors;
@@ -61,6 +62,21 @@ internal class EntryBuilder : IEntryBuilder
       ThrowIfHasComponent(ComponentKind.Message);
 
       MessageComponent component = new MessageComponent(message);
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
+   public IEntryBuilder WithTag(string tag)
+   {
+      ThrowIfHasComponent(ComponentKind.Tag);
+
+      if (_writeContext.GetOrCreateTagId(tag, out ulong tagId))
+      {
+         TagReference reference = new TagReference(tag, tagId);
+         _collector.Deposit(reference);
+      }
+
+      TagComponent component = new TagComponent(tagId);
       return AddComponent(component);
    }
 

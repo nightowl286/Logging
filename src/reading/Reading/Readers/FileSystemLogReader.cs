@@ -3,10 +3,12 @@ using System.IO.Compression;
 using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Reading.Abstractions;
-using TNO.Logging.Reading.Abstractions.ContextInfos;
 using TNO.Logging.Reading.Abstractions.Entries;
-using TNO.Logging.Reading.Abstractions.FileReferences;
+using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
+using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
+using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
 
 namespace TNO.Logging.Reading.Readers;
@@ -36,6 +38,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
    /// <inheritdoc/>
    public IReader<ContextInfo> ContextInfos { get; private set; }
+
+   /// <inheritdoc/>
+   public IReader<TagReference> TagReferences { get; private set; }
    #endregion
 
    #region Constructors
@@ -62,6 +67,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(Entries))]
    [MemberNotNull(nameof(FileReferences))]
    [MemberNotNull(nameof(ContextInfos))]
+   [MemberNotNull(nameof(TagReferences))]
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
@@ -78,6 +84,10 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       ContextInfos = new BinaryDeserialiserReader<ContextInfo>(
          GetReaderPath("contexts"),
          deserialiserProvider.GetDeserialiser<IContextInfoDeserialiser>());
+
+      TagReferences = new BinaryDeserialiserReader<TagReference>(
+         GetReaderPath("tags"),
+         deserialiserProvider.GetDeserialiser<ITagReferenceDeserialiser>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
@@ -95,6 +105,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       Entries.TryDispose();
       FileReferences.TryDispose();
       ContextInfos.TryDispose();
+      TagReferences.TryDispose();
 
       if (_tempPath is not null)
          Directory.Delete(_tempPath, true);

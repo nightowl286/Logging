@@ -2,6 +2,7 @@
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Writing;
@@ -36,6 +37,9 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       ulong expectedContextParentId = 0;
       ulong expectedScope = 1;
 
+      string expectedTag = "tag";
+      ulong expectedTagId = 1;
+
 
       string logPath = GetSubFolder("Log");
 
@@ -51,18 +55,21 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
          using (writer)
          {
-            logger.Log(
-               expectedImportance,
-               expectedMessage,
-               expectedFile,
-               expectedLine);
+            logger
+               .StartEntry(expectedImportance, expectedFile, expectedLine)
+               .With(expectedMessage)
+               .WithTag(expectedTag)
+               .FinishEntry();
          }
       }
 
       FileReference fileReference;
       IEntry entry;
       ContextInfo contextInfo;
+      TagReference tagReference;
+
       IMessageComponent message;
+      ITagComponent tag;
 
       // Read
       {
@@ -72,7 +79,10 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          fileReference = AssertReadSingle(reader.FileReferences);
          entry = AssertReadSingle(reader.Entries);
          contextInfo = AssertReadSingle(reader.ContextInfos);
+         tagReference = AssertReadSingle(reader.TagReferences);
+
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
+         tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
       }
 
       // Assert
@@ -92,7 +102,11 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          Assert.AreEqual(contextInfo.FileId, expectedFileId);
          Assert.AreEqual(contextInfo.LineInFile, expectedLine);
 
+         Assert.AreEqual(tagReference.Tag, expectedTag);
+         Assert.AreEqual(tagReference.Id, expectedTagId);
+
          Assert.AreEqual(expectedMessage, message.Message);
+         Assert.AreEqual(expectedTagId, tag.TagId);
       }
    }
 

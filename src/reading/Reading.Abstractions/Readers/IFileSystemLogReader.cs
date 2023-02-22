@@ -1,6 +1,6 @@
 ﻿using System;
-using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.LogData;
 
 namespace TNO.Logging.Reading.Abstractions.Readers;
 
@@ -24,5 +24,8 @@ public interface IFileSystemLogReader : IDisposable
 
    /// <summary>An <see cref="IReader{T}"/> that can be used to read context infos.</summary>
    IReader<ContextInfo> ContextInfos { get; }
+
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read tag references.</summary>
+   IReader<TagReference> TagReferences { get; }
    #endregion
 }

@@ -11,12 +11,18 @@ public enum VersionedDataKind : ushort
    /// <summary>Represents the <see cref="IEntry"/>.</summary>
    Entry,
 
+   /// <summary>Represents the <see cref="LogData.FileReference"/>.</summary>
+   FileReference,
+
+   /// <summary>Represents the <see cref="LogData.ContextInfo"/>.</summary>
+   ContextInfo,
+
+   /// <summary>Represents the <see cref="LogData.TagReference"/>.</summary>
+   TagReference,
+
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,
 
-   /// <summary>Represents the <see cref="Abstractions.FileReference"/>.</summary>
-   FileReference,
-
-   /// <summary>Represents the <see cref="Abstractions.ContextInfo"/>.</summary>
-   ContextInfo,
+   /// <summary>Represents the <see cref="ITagComponent"/>.</summary>
+   Tag,
 }

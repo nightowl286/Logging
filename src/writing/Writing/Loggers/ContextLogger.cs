@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Loggers.Scopes;

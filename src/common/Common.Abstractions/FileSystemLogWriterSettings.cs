@@ -17,11 +17,14 @@ public class FileSystemLogWriterSettings
    /// <summary>The threshold that should be reached for saved entries before they get compressed. In bytes.</summary>
    public long EntryThreshold { get; set; } = DefaultThreshold;
 
-   /// <summary>The threshold that should be reached for saved file referenced before they get compressed. In bytes.</summary>
+   /// <summary>The threshold that should be reached for saved file references before they get compressed. In bytes.</summary>
    public long FileReferenceThreshold { get; set; } = DefaultThreshold;
 
    /// <summary>The threshold that should be reached for saved context infos before they get compressed. In bytes.</summary>
    public long ContextInfoThreshold { get; set; } = DefaultThreshold;
+
+   /// <summary>The threshold that should be reached for saved tag references before they get compressed. In bytes.</summary>
+   public long TagReferenceThreshold { get; set; } = DefaultThreshold;
    #endregion
 
    #region Constructors

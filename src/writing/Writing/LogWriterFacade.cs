@@ -8,9 +8,11 @@ using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Serialisers;
+using TNO.Logging.Writing.Serialisers.LogData;
 
 namespace TNO.Logging.Writing;
 
@@ -75,12 +77,14 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<IEntrySerialiser, EntrySerialiser>(facade);
       VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(facade);
       VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(facade);
+      VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(facade);
 
       facade.Singleton<IDataVersionMapSerialiser, DataVersionMapSerialiser>();
    }
    private static void RegisterComponentSerialisers(IServiceFacade facade)
    {
       VersionedSingleton<IMessageComponentSerialiser, MessageComponentSerialiser>(facade);
+      VersionedSingleton<ITagComponentSerialiser, TagComponentSerialiser>(facade);
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }

@@ -15,14 +15,19 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
 {
    #region Fields
    private readonly IMessageComponentSerialiser _messageSerialiser;
+   private readonly ITagComponentSerialiser _tagSerialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ComponentSerialiserDispatcher"/>.</summary>
    /// <param name="messageSerialiser">The message serialiser to use.</param>
-   public ComponentSerialiserDispatcher(IMessageComponentSerialiser messageSerialiser)
+   /// <param name="tagSerialiser">The tag serialiser to use.</param>
+   public ComponentSerialiserDispatcher(
+      IMessageComponentSerialiser messageSerialiser,
+      ITagComponentSerialiser tagSerialiser)
    {
       _messageSerialiser = messageSerialiser;
+      _tagSerialiser = tagSerialiser;
    }
 
    #endregion
@@ -31,10 +36,15 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IComponent data)
    {
-      if (data is IMessageComponent messageComponent)
+      if (data is IMessageComponent message)
       {
-         Debug.Assert(messageComponent.Kind is ComponentKind.Message);
-         _messageSerialiser.Serialise(writer, messageComponent);
+         Debug.Assert(message.Kind is ComponentKind.Message);
+         _messageSerialiser.Serialise(writer, message);
+      }
+      else if (data is ITagComponent tag)
+      {
+         Debug.Assert(tag.Kind is ComponentKind.Tag);
+         _tagSerialiser.Serialise(writer, tag);
       }
       else
          throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
@@ -43,10 +53,13 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    /// <inheritdoc/>
    public ulong Count(IComponent data)
    {
-      if (data is IMessageComponent messageComponent)
-         return _messageSerialiser.Count(messageComponent);
+      return data switch
+      {
+         IMessageComponent message => _messageSerialiser.Count(message),
+         ITagComponent tag => _tagSerialiser.Count(tag),
 
-      throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
+         _ => throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data))
+      };
    }
    #endregion
 }

@@ -13,5 +13,10 @@ public static class ILoggerExtensions
    public static ILogger Log(this ILogger logger, Importance importance, string message,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
       => logger.Log(importance, message, out _, file, line);
+
+   /// <inheritdoc cref="ILogger.StartEntry(Importance, out ulong, string, uint)"/>
+   public static IEntryBuilder StartEntry(this ILogger logger, Importance importance,
+     [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+      => logger.StartEntry(importance, out _, file, line);
    #endregion
 }

@@ -1,5 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
 
 namespace TNO.Logging.Writing.Collectors;
@@ -78,6 +78,13 @@ public sealed class LogDataDistributor : ILogDataDistributor
       foreach (ILogDataCollector collector in EnumerateCollectors())
          collector.Deposit(contextInfo);
    }
+
+   /// <inheritdoc/>
+   public void Deposit(TagReference tagReference)
+   {
+      foreach (ILogDataCollector collector in EnumerateCollectors())
+         collector.Deposit(tagReference);
+   }
    #endregion
 
    #region Helpers
@@ -94,5 +101,7 @@ public sealed class LogDataDistributor : ILogDataDistributor
          _collectorsLock.ExitReadLock();
       }
    }
+
+
    #endregion
 }

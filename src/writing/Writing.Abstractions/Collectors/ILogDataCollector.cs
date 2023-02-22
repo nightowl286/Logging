@@ -1,5 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.LogData;
 
 namespace TNO.Logging.Writing.Abstractions.Collectors;
 
@@ -20,5 +20,9 @@ public interface ILogDataCollector
    /// <summary>Deposits <paramref name="contextInfo"/> data.</summary>
    /// <param name="contextInfo">The context info to deposit.</param>
    void Deposit(ContextInfo contextInfo);
+
+   /// <summary>Deposits <paramref name="tagReference"/> data.</summary>
+   /// <param name="tagReference">The tag reference to deposit.</param>
+   void Deposit(TagReference tagReference);
    #endregion
 }

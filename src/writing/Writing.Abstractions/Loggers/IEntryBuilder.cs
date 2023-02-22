@@ -14,6 +14,12 @@ public interface IEntryBuilder
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
    IEntryBuilder With(string message);
 
+   /// <summary>Adds the given <paramref name="tag"/> as an <see cref="ITagComponent"/>.</summary>
+   /// <param name="tag">The tag to add.</param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder WithTag(string tag);
+
    /// <summary>Builds the entry and logs it.</summary>
    /// <returns>The logger that was used.</returns>
    ILogger FinishEntry();

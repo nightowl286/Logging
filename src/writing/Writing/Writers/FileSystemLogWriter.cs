@@ -1,9 +1,11 @@
 ﻿using System.IO.Compression;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
 using TNO.Logging.Writing.Abstractions.Writers;
 
 namespace TNO.Logging.Writing.Writers;
@@ -19,6 +21,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    private readonly BinarySerialiserWriter<IEntry> _entryDataWriter;
    private readonly BinarySerialiserWriter<FileReference> _fileReferenceDataWriter;
    private readonly BinarySerialiserWriter<ContextInfo> _contextInfoDataWriter;
+   private readonly BinarySerialiserWriter<TagReference> _tagReferenceDataWriter;
    #endregion
 
    #region Properties
@@ -60,6 +63,12 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
          facade.GetSerialiser<IContextInfoSerialiser>(),
          settings.ContextInfoThreshold);
 
+      // tag references
+      _tagReferenceDataWriter = new BinarySerialiserWriter<TagReference>(
+         GetWriterPath("tags"),
+         facade.GetSerialiser<ITagReferenceSerialiser>(),
+         settings.TagReferenceThreshold);
+
       WriteVersions();
    }
    #endregion
@@ -75,11 +84,15 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    public void Deposit(ContextInfo contextInfo) => _contextInfoDataWriter.Deposit(contextInfo);
 
    /// <inheritdoc/>
+   public void Deposit(TagReference tagReference) => _tagReferenceDataWriter.Deposit(tagReference);
+
+   /// <inheritdoc/>
    public void Dispose()
    {
       _entryDataWriter.Dispose();
       _fileReferenceDataWriter.Dispose();
       _contextInfoDataWriter.Dispose();
+      _tagReferenceDataWriter.Dispose();
 
       CreateArchive(LogPath);
    }
