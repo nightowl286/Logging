@@ -25,4 +25,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="ITagComponent"/>.</summary>
    Tag,
+
+   /// <summary>Represents the <see cref="IThreadComponent"/>.</summary>
+   Thread,
 }
