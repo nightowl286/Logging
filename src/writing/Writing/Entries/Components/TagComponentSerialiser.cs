@@ -11,7 +11,6 @@ public sealed class TagComponentSerialiser : ITagComponentSerialiser
    #region Properties
    /// <inheritdoc/>
    public uint Version => 0;
-
    #endregion
 
    #region Methods

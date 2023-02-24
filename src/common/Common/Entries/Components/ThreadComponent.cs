@@ -14,7 +14,7 @@ namespace TNO.Logging.Common.Entries.Components;
 /// <param name="ApartmentState">The apartment state of the thread.</param>
 public record class ThreadComponent(
    int ManagedId,
-   string? Name,
+   string Name,
    ThreadState State,
    bool IsThreadPoolThread,
    ThreadPriority Priority,

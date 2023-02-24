@@ -14,7 +14,7 @@ public interface IThreadComponent : IComponent
 
    /// <summary>The optional name of the thread.</summary>
    /// <seealso cref="Thread.Name"/>
-   string? Name { get; }
+   string Name { get; }
 
    /// <summary>The current state of the thread.</summary>
    /// <seealso cref="Thread.ThreadState"/>
