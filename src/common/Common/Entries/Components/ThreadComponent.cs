@@ -24,4 +24,22 @@ public record class ThreadComponent(
    /// <inheritdoc/>
    public ComponentKind Kind => ComponentKind.Thread;
    #endregion
+
+   #region Functions
+   /// <summary>Creates a <see cref="ThreadComponent"/> from the given <paramref name="thread"/>.</summary>
+   /// <param name="thread">The thread to extract information from.</param>
+   /// <returns>The newly created <see cref="ThreadComponent"/>.</returns>
+   public static ThreadComponent FromThread(Thread thread)
+   {
+      ThreadComponent component = new ThreadComponent(
+         thread.ManagedThreadId,
+         thread.Name ?? string.Empty,
+         thread.ThreadState,
+         thread.IsBackground,
+         thread.Priority,
+         thread.GetApartmentState());
+
+      return component;
+   }
+   #endregion
 }

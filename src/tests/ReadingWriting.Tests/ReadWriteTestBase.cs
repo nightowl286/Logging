@@ -38,7 +38,7 @@ public abstract class ReadWriteTestBase<TWriter, TReader, TData>
          result = reader.Deserialise(br);
 
       // Assert
-      Assert.AreEqual(memoryStream.Length, memoryStream.Position, "Not all written data was read.");
+      Assert.That.AreEqual(memoryStream.Length, memoryStream.Position, "Not all written data was read.");
       Verify(expected, result);
    }
    #endregion

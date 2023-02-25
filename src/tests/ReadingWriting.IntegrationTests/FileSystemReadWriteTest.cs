@@ -32,6 +32,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       ulong expectedFileId = 1;
       uint expectedLine = 5;
 
+      Thread expectedThread = new Thread(() => { });
       string expectedContext = "context";
       ulong expectedContextId = 1;
       ulong expectedContextParentId = 0;
@@ -59,6 +60,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
                .StartEntry(expectedImportance, expectedFile, expectedLine)
                .With(expectedMessage)
                .WithTag(expectedTag)
+               .With(expectedThread)
                .FinishEntry();
          }
       }
@@ -70,6 +72,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
       IMessageComponent message;
       ITagComponent tag;
+      IThreadComponent thread;
 
       // Read
       {
@@ -83,30 +86,38 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
          tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
+         thread = AssertGetComponent<IThreadComponent>(entry, ComponentKind.Thread);
       }
 
       // Assert
       {
-         Assert.AreEqual(fileReference.File, expectedFile);
-         Assert.AreEqual(fileReference.Id, expectedFileId);
+         Assert.That.AreEqual(fileReference.File, expectedFile);
+         Assert.That.AreEqual(fileReference.Id, expectedFileId);
 
-         Assert.AreEqual(fileReference.Id, entry.FileId);
-         Assert.AreEqual(expectedLine, entry.LineInFile);
-         Assert.AreEqual(expectedImportance, entry.Importance);
-         Assert.AreEqual(expectedContextId, entry.Id);
-         Assert.AreEqual(expectedScope, entry.Scope);
+         Assert.That.AreEqual(fileReference.Id, entry.FileId);
+         Assert.That.AreEqual(expectedLine, entry.LineInFile);
+         Assert.That.AreEqual(expectedImportance, entry.Importance);
+         Assert.That.AreEqual(expectedContextId, entry.Id);
+         Assert.That.AreEqual(expectedScope, entry.Scope);
 
-         Assert.AreEqual(contextInfo.Name, expectedContext);
-         Assert.AreEqual(contextInfo.Id, expectedContextId);
-         Assert.AreEqual(contextInfo.ParentId, expectedContextParentId);
-         Assert.AreEqual(contextInfo.FileId, expectedFileId);
-         Assert.AreEqual(contextInfo.LineInFile, expectedLine);
+         Assert.That.AreEqual(contextInfo.Name, expectedContext);
+         Assert.That.AreEqual(contextInfo.Id, expectedContextId);
+         Assert.That.AreEqual(contextInfo.ParentId, expectedContextParentId);
+         Assert.That.AreEqual(contextInfo.FileId, expectedFileId);
+         Assert.That.AreEqual(contextInfo.LineInFile, expectedLine);
 
-         Assert.AreEqual(tagReference.Tag, expectedTag);
-         Assert.AreEqual(tagReference.Id, expectedTagId);
+         Assert.That.AreEqual(tagReference.Tag, expectedTag);
+         Assert.That.AreEqual(tagReference.Id, expectedTagId);
 
-         Assert.AreEqual(expectedMessage, message.Message);
-         Assert.AreEqual(expectedTagId, tag.TagId);
+         Assert.That.AreEqual(expectedMessage, message.Message);
+         Assert.That.AreEqual(expectedTagId, tag.TagId);
+
+         Assert.That.AreEqual(expectedThread.ManagedThreadId, thread.ManagedId);
+         Assert.That.AreEqual(expectedThread.Name ?? string.Empty, thread.Name);
+         Assert.That.AreEqual(expectedThread.IsThreadPoolThread, thread.IsThreadPoolThread);
+         Assert.That.AreEqual(expectedThread.ThreadState, thread.State);
+         Assert.That.AreEqual(expectedThread.Priority, thread.Priority);
+         Assert.That.AreEqual(expectedThread.GetApartmentState(), thread.ApartmentState);
       }
    }
 
@@ -179,7 +190,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
             IEntry entry1 = AssertRead(reader.Entries);
 
             IMessageComponent message1 = AssertGetComponent<IMessageComponent>(entry1, ComponentKind.Message);
-            Assert.AreEqual(expectedMessage1, message1.Message);
+            Assert.That.AreEqual(expectedMessage1, message1.Message);
          }
 
          AssertCantRead(reader.Entries);
@@ -188,7 +199,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
             IEntry entry2 = AssertRead(reader.Entries);
 
             IMessageComponent message2 = AssertGetComponent<IMessageComponent>(entry2, ComponentKind.Message);
-            Assert.AreEqual(expectedMessage2, message2.Message);
+            Assert.That.AreEqual(expectedMessage2, message2.Message);
          }
 
          AssertCantRead(reader.Entries);

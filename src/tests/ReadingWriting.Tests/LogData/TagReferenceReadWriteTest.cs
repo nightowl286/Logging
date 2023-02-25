@@ -14,8 +14,8 @@ public class TagReferenceReadWriteTest : ReadWriteTestBase<TagReferenceSerialise
 
    protected override void Verify(TagReference expected, TagReference result)
    {
-      Assert.AreEqual(expected.Tag, result.Tag);
-      Assert.AreEqual(expected.Id, result.Id);
+      Assert.That.AreEqual(expected.Tag, result.Tag);
+      Assert.That.AreEqual(expected.Id, result.Id);
    }
    #endregion
 }

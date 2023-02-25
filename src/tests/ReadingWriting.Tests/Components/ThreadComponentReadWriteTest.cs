@@ -23,13 +23,13 @@ public class ThreadComponentReadWriteTest : ReadWriteTestBase<ThreadComponentSer
    }
    protected override void Verify(IThreadComponent expected, IThreadComponent result)
    {
-      Assert.AreEqual(expected.ManagedId, result.ManagedId);
-      Assert.AreEqual(expected.Name, result.Name);
-      Assert.AreEqual(expected.IsThreadPoolThread, result.IsThreadPoolThread);
+      Assert.That.AreEqual(expected.ManagedId, result.ManagedId);
+      Assert.That.AreEqual(expected.Name, result.Name);
+      Assert.That.AreEqual(expected.IsThreadPoolThread, result.IsThreadPoolThread);
 
-      Assert.AreEqual(expected.State, result.State);
-      Assert.AreEqual(expected.Priority, result.Priority);
-      Assert.AreEqual(expected.ApartmentState, result.ApartmentState);
+      Assert.That.AreEqual(expected.State, result.State);
+      Assert.That.AreEqual(expected.Priority, result.Priority);
+      Assert.That.AreEqual(expected.ApartmentState, result.ApartmentState);
    }
    #endregion
 }

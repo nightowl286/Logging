@@ -81,6 +81,16 @@ internal class EntryBuilder : IEntryBuilder
    }
 
    /// <inheritdoc/>
+   public IEntryBuilder With(Thread thread)
+   {
+      ThrowIfHasComponent(ComponentKind.Thread);
+
+      ThreadComponent component = ThreadComponent.FromThread(thread);
+
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
    public ILogger FinishEntry()
    {
       Entry entry = new Entry(
@@ -110,5 +120,6 @@ internal class EntryBuilder : IEntryBuilder
       if (_components.ContainsKey(kind))
          throw new InvalidOperationException($"This builder already has the component {kind}.");
    }
+
    #endregion
 }

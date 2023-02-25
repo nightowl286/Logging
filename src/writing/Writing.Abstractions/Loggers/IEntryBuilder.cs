@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using System.Threading;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -19,6 +20,12 @@ public interface IEntryBuilder
    /// <returns>The builder that was used.</returns>
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
    IEntryBuilder WithTag(string tag);
+
+   /// <summary>Adds the given <paramref name="thread"/> as an <see cref="IThreadComponent"/>.</summary>
+   /// <param name="thread">The thread to add.</param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder With(Thread thread);
 
    /// <summary>Builds the entry and logs it.</summary>
    /// <returns>The logger that was used.</returns>

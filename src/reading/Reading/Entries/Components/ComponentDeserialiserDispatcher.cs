@@ -4,6 +4,7 @@ using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 
 namespace TNO.Logging.Reading.Entries.Components;
 
@@ -17,18 +18,22 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    #region Fields
    private readonly IMessageComponentDeserialiser _messageDeserialiser;
    private readonly ITagComponentDeserialiser _tagDeserialiser;
+   private readonly IThreadComponentDeserialiser _threadDeserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ComponentDeserialiserDispatcher"/>.</summary>
    /// <param name="messageDeserialiser">The message deserialiser to use.</param>
    /// <param name="tagDeserialiser">The tag deserialiser to use.</param>
+   /// <param name="threadDeserialiser">The thread deserialiser to use.</param>
    public ComponentDeserialiserDispatcher(
       IMessageComponentDeserialiser messageDeserialiser,
-      ITagComponentDeserialiser tagDeserialiser)
+      ITagComponentDeserialiser tagDeserialiser,
+      IThreadComponentDeserialiser threadDeserialiser)
    {
       _messageDeserialiser = messageDeserialiser;
       _tagDeserialiser = tagDeserialiser;
+      _threadDeserialiser = threadDeserialiser;
    }
    #endregion
 
@@ -40,6 +45,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
       {
          ComponentKind.Message => _messageDeserialiser.Deserialise(reader),
          ComponentKind.Tag => _tagDeserialiser.Deserialise(reader),
+         ComponentKind.Thread => _threadDeserialiser.Deserialise(reader),
 
          _ => throw new ArgumentException($"Unknown component kind ({componentKind}).")
       };

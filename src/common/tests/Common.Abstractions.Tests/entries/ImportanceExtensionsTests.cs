@@ -55,8 +55,8 @@ public class ImportanceExtensionsTests
 
       // Assert
       Assert.IsTrue(result.IsSeveritySet(), $"No severity has been added.");
-      Assert.AreEqual(result.GetSetSeverity(), Importance.NoSeverity, $"The wrong severity has been set.");
-      Assert.AreEqual(value.GetSetPurpose(), result.GetSetPurpose(), $"The purpose has changed when it shouldn't have.");
+      Assert.That.AreEqual(result.GetSetSeverity(), Importance.NoSeverity, $"The wrong severity has been set.");
+      Assert.That.AreEqual(value.GetSetPurpose(), result.GetSetPurpose(), $"The purpose has changed when it shouldn't have.");
    }
 
    [DataRow(Importance.NoSeverity)]
@@ -74,8 +74,8 @@ public class ImportanceExtensionsTests
 
       // Assert
       Assert.IsTrue(result.IsPurposeSet(), $"No purpose has been added.");
-      Assert.AreEqual(result.GetSetPurpose(), Importance.NoPurpose, $"The wrong purpose has been set.");
-      Assert.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
+      Assert.That.AreEqual(result.GetSetPurpose(), Importance.NoPurpose, $"The wrong purpose has been set.");
+      Assert.That.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
    }
 
    [DataRow(Importance.None,
@@ -95,8 +95,8 @@ public class ImportanceExtensionsTests
       Importance result = ImportanceExtensions.Normalised(value);
 
       // Assert
-      Assert.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
-      Assert.AreEqual(value.GetSetPurpose(), result.GetSetPurpose(), $"The purpose has changed when it shouldn't have.");
+      Assert.That.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
+      Assert.That.AreEqual(value.GetSetPurpose(), result.GetSetPurpose(), $"The purpose has changed when it shouldn't have.");
    }
 
    [TestMethod]
@@ -110,7 +110,7 @@ public class ImportanceExtensionsTests
       Importance result = ImportanceExtensions.Normalised(value);
 
       // Assert
-      Assert.AreEqual(expected, result);
+      Assert.That.AreEqual(expected, result);
    }
    #endregion
 
@@ -135,7 +135,7 @@ public class ImportanceExtensionsTests
       value.Normalise();
 
       // Assert
-      Assert.AreEqual(expected, value);
+      Assert.That.AreEqual(expected, value);
    }
    #endregion
    #endregion

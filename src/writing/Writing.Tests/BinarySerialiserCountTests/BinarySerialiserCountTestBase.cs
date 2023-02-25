@@ -23,7 +23,7 @@ public abstract class BinarySerialiserCountTestBase<TWriter, TData>
       ulong result = writer.Count(data);
 
       // Assert
-      Assert.AreEqual(expectedResult, result);
+      Assert.That.AreEqual(expectedResult, result);
    }
 
    private static ulong GetActualSize(TWriter writer, TData data)

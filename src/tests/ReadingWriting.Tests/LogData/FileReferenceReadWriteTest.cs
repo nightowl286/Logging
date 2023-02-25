@@ -14,8 +14,8 @@ public class FileReferenceReadWriteTest : ReadWriteTestBase<FileReferenceSeriali
 
    protected override void Verify(FileReference expected, FileReference result)
    {
-      Assert.AreEqual(expected.File, result.File);
-      Assert.AreEqual(expected.Id, result.Id);
+      Assert.That.AreEqual(expected.File, result.File);
+      Assert.That.AreEqual(expected.Id, result.Id);
    }
    #endregion
 }

@@ -20,14 +20,14 @@ public class DataVersionMapReadWriteTest : ReadWriteTestBase<DataVersionMapSeria
    }
    protected override void Verify(DataVersionMap expected, DataVersionMap result)
    {
-      Assert.AreEqual(expected.Count, result.Count, "The result contains a different amount of versions.");
+      Assert.That.AreEqual(expected.Count, result.Count, "The result contains a different amount of versions.");
 
       foreach (KeyValuePair<VersionedDataKind, uint> pair in expected)
       {
          bool contains = result.TryGetValue(pair.Key, out uint resultValue);
          Assert.IsTrue(contains, $"Result does not contain the kind ({pair.Key}).");
 
-         Assert.AreEqual(pair.Value, resultValue, $"The version for the kind ({pair.Key}) does not match.");
+         Assert.That.AreEqual(pair.Value, resultValue, $"The version for the kind ({pair.Key}) does not match.");
       }
    }
    #endregion

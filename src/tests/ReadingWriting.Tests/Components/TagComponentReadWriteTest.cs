@@ -18,7 +18,7 @@ public class TagComponentReadWriteTest : ReadWriteTestBase<TagComponentSerialise
    }
    protected override void Verify(ITagComponent expected, ITagComponent result)
    {
-      Assert.AreEqual(expected.TagId, result.TagId);
+      Assert.That.AreEqual(expected.TagId, result.TagId);
    }
    #endregion
 }

@@ -54,7 +54,7 @@ public class PurposeExtensionsTests
       Importance result = PurposeExtensions.GetSetPurpose(value);
 
       // Assert
-      Assert.AreEqual(expected, result);
+      Assert.That.AreEqual(expected, result);
    }
 
    [DataRow(Importance.Empty, DisplayName = "Empty")]
@@ -71,7 +71,7 @@ public class PurposeExtensionsTests
       Importance result = PurposeExtensions.GetSetPurpose(value);
 
       // Assert
-      Assert.AreEqual(expected, result);
+      Assert.That.AreEqual(expected, result);
    }
    #endregion
    #region Get Purpose
@@ -88,7 +88,7 @@ public class PurposeExtensionsTests
       Importance result = PurposeExtensions.GetPurpose(value);
 
       // Assert
-      Assert.AreEqual(expected, result);
+      Assert.That.AreEqual(expected, result);
    }
 
    [DataRow(Importance.Empty, DisplayName = "Empty")]
@@ -105,7 +105,7 @@ public class PurposeExtensionsTests
       Importance result = PurposeExtensions.GetPurpose(value);
 
       // Assert
-      Assert.AreEqual(expected, result);
+      Assert.That.AreEqual(expected, result);
    }
    #endregion
 

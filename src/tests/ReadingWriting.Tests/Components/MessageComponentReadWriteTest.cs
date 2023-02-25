@@ -18,7 +18,7 @@ public class MessageComponentReadWriteTest : ReadWriteTestBase<MessageComponentS
    }
    protected override void Verify(IMessageComponent expected, IMessageComponent result)
    {
-      Assert.AreEqual(expected.Message, result.Message);
+      Assert.That.AreEqual(expected.Message, result.Message);
    }
    #endregion
 }

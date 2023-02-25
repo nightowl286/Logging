@@ -76,6 +76,20 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
+   public ILogger Log(Importance importance, Thread thread, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      ThreadComponent component = ThreadComponent.FromThread(thread);
+
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
+      return this;
+   }
+
+   /// <inheritdoc/>
    public IEntryBuilder StartEntry(Importance importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
