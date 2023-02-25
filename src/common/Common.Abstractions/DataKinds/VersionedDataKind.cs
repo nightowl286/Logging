@@ -28,4 +28,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="IThreadComponent"/>.</summary>
    Thread,
+
+   /// <summary>Represents the <see cref="IEntryLinkComponent"/>.</summary>
+   EntryLink,
 }

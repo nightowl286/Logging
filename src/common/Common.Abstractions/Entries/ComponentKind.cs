@@ -17,6 +17,9 @@ public enum ComponentKind : ushort
    /// <summary>Information gathered about a <see cref="System.Threading.Thread"/>.</summary>
    Thread = 4,
 
+   /// <summary>A link to a different <see cref="IEntry"/>.</summary>
+   EntryLink = 8,
+
    /// <summary>This entry is reserved for possible future expansion.</summary>
    ReservedForExpansion = 32_768,
 }
