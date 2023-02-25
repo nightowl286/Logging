@@ -7,7 +7,7 @@ namespace TNO.Logging.Common.Entries.Components;
 /// Represents a <see cref="ComponentKind.EntryLink"/> component.
 /// </summary>
 /// <param name="EntryId">The linked <see cref="IEntry.Id"/>.</param>
-public record class EntryLinkComponent(ulong EntryId) : IComponent
+public record class EntryLinkComponent(ulong EntryId) : IEntryLinkComponent
 {
    #region Properties
    /// <inheritdoc/>
