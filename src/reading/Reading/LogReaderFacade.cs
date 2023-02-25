@@ -9,6 +9,7 @@ using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
@@ -17,6 +18,7 @@ using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.Message;
 using TNO.Logging.Reading.Entries.Components.Tag;
+using TNO.Logging.Reading.Entries.Components.Thread;
 using TNO.Logging.Reading.LogData.ContextInfos;
 using TNO.Logging.Reading.LogData.FileReferences;
 using TNO.Logging.Reading.LogData.TagReferences;
@@ -54,7 +56,8 @@ public class LogReaderFacade : ILogReaderFacade
       // components
       RegisterFromKinds(providerFacade, map,
          VersionedDataKind.Message,
-         VersionedDataKind.Tag);
+         VersionedDataKind.Tag,
+         VersionedDataKind.Thread);
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
 
       RegisterFromKinds(providerFacade, map,
@@ -102,7 +105,8 @@ public class LogReaderFacade : ILogReaderFacade
    {
       facade
          .Singleton<IMessageComponentDeserialiserSelector, MessageComponentDeserialiserSelector>()
-         .Singleton<ITagComponentDeserialiserSelector, TagComponentDeserialiserSelector>();
+         .Singleton<ITagComponentDeserialiserSelector, TagComponentDeserialiserSelector>()
+         .Singleton<IThreadComponentDeserialiserSelector, ThreadComponentDeserialiserSelector>();
    }
    private static void RegisterFromKind(IServiceFacade facade, VersionedDataKind kind, uint version)
    {
@@ -112,6 +116,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.Tag)
          RegisterWithProvider<ITagComponentDeserialiserSelector, ITagComponentDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.Thread)
+         RegisterWithProvider<IThreadComponentDeserialiserSelector, IThreadComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.FileReference)
          RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.ContextInfo)
