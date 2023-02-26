@@ -40,7 +40,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
 
       string expectedTag = "tag";
       ulong expectedTagId = 1;
-
+      ulong entryId;
 
       string logPath = GetSubFolder("Log");
 
@@ -57,10 +57,11 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          using (writer)
          {
             logger
-               .StartEntry(expectedImportance, expectedFile, expectedLine)
+               .StartEntry(expectedImportance, out entryId, expectedFile, expectedLine)
                .With(expectedMessage)
                .WithTag(expectedTag)
                .With(expectedThread)
+               .With(entryId)
                .FinishEntry();
          }
       }
@@ -73,6 +74,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       IMessageComponent message;
       ITagComponent tag;
       IThreadComponent thread;
+      IEntryLinkComponent entryLink;
 
       // Read
       {
@@ -87,6 +89,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
          tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
          thread = AssertGetComponent<IThreadComponent>(entry, ComponentKind.Thread);
+         entryLink = AssertGetComponent<IEntryLinkComponent>(entry, ComponentKind.EntryLink);
       }
 
       // Assert
@@ -118,6 +121,8 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          Assert.That.AreEqual(expectedThread.ThreadState, thread.State);
          Assert.That.AreEqual(expectedThread.Priority, thread.Priority);
          Assert.That.AreEqual(expectedThread.GetApartmentState(), thread.ApartmentState);
+
+         Assert.That.AreEqual(entryId, entryLink.EntryId);
       }
    }
 

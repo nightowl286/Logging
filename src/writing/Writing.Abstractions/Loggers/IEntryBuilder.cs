@@ -21,6 +21,12 @@ public interface IEntryBuilder
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
    IEntryBuilder WithTag(string tag);
 
+   /// <summary>Adds the given <paramref name="entryIdToLink"/> as an <see cref="IEntryLinkComponent"/>.</summary>
+   /// <param name="entryIdToLink">The id of the entry to link to.</param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder With(ulong entryIdToLink);
+
    /// <summary>Adds the given <paramref name="thread"/> as an <see cref="IThreadComponent"/>.</summary>
    /// <param name="thread">The thread to add.</param>
    /// <returns>The builder that was used.</returns>

@@ -17,6 +17,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    private readonly IMessageComponentSerialiser _messageSerialiser;
    private readonly ITagComponentSerialiser _tagSerialiser;
    private readonly IThreadComponentSerialiser _threadSerialiser;
+   private readonly IEntryLinkComponentSerialiser _entryLinkSerialiser;
    #endregion
 
    #region Constructors
@@ -24,14 +25,17 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    /// <param name="messageSerialiser">The message serialiser to use.</param>
    /// <param name="tagSerialiser">The tag serialiser to use.</param>
    /// <param name="threadSerialiser">The thread serialiser to use.</param>
+   /// <param name="entryLinkSerialiser">The entry link serialiser to use.</param>
    public ComponentSerialiserDispatcher(
       IMessageComponentSerialiser messageSerialiser,
       ITagComponentSerialiser tagSerialiser,
-      IThreadComponentSerialiser threadSerialiser)
+      IThreadComponentSerialiser threadSerialiser,
+      IEntryLinkComponentSerialiser entryLinkSerialiser)
    {
       _messageSerialiser = messageSerialiser;
       _tagSerialiser = tagSerialiser;
       _threadSerialiser = threadSerialiser;
+      _entryLinkSerialiser = entryLinkSerialiser;
    }
 
    #endregion
@@ -55,6 +59,11 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
          Debug.Assert(thread.Kind is ComponentKind.Thread);
          _threadSerialiser.Serialise(writer, thread);
       }
+      else if (data is IEntryLinkComponent entryLink)
+      {
+         Debug.Assert(entryLink.Kind is ComponentKind.EntryLink);
+         _entryLinkSerialiser.Serialise(writer, entryLink);
+      }
       else
          throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
    }
@@ -67,6 +76,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
          IMessageComponent message => _messageSerialiser.Count(message),
          ITagComponent tag => _tagSerialiser.Count(tag),
          IThreadComponent thread => _threadSerialiser.Count(thread),
+         IEntryLinkComponent entryLink => _entryLinkSerialiser.Count(entryLink),
 
          _ => throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data))
       };

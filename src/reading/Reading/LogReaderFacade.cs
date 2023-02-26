@@ -7,6 +7,7 @@ using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
+using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
@@ -16,6 +17,7 @@ using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
+using TNO.Logging.Reading.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Entries.Components.Message;
 using TNO.Logging.Reading.Entries.Components.Tag;
 using TNO.Logging.Reading.Entries.Components.Thread;
@@ -57,7 +59,8 @@ public class LogReaderFacade : ILogReaderFacade
       RegisterFromKinds(providerFacade, map,
          VersionedDataKind.Message,
          VersionedDataKind.Tag,
-         VersionedDataKind.Thread);
+         VersionedDataKind.Thread,
+         VersionedDataKind.EntryLink);
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
 
       RegisterFromKinds(providerFacade, map,
@@ -106,7 +109,8 @@ public class LogReaderFacade : ILogReaderFacade
       facade
          .Singleton<IMessageComponentDeserialiserSelector, MessageComponentDeserialiserSelector>()
          .Singleton<ITagComponentDeserialiserSelector, TagComponentDeserialiserSelector>()
-         .Singleton<IThreadComponentDeserialiserSelector, ThreadComponentDeserialiserSelector>();
+         .Singleton<IThreadComponentDeserialiserSelector, ThreadComponentDeserialiserSelector>()
+         .Singleton<IEntryLinkComponentDeserialiserSelector, EntryLinkComponentDeserialiserSelector>();
    }
    private static void RegisterFromKind(IServiceFacade facade, VersionedDataKind kind, uint version)
    {
@@ -118,6 +122,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<ITagComponentDeserialiserSelector, ITagComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.Thread)
          RegisterWithProvider<IThreadComponentDeserialiserSelector, IThreadComponentDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.EntryLink)
+         RegisterWithProvider<IEntryLinkComponentDeserialiserSelector, IEntryLinkComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.FileReference)
          RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.ContextInfo)

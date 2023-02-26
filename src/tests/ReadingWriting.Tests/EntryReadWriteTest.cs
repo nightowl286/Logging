@@ -5,7 +5,6 @@ using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
-using TNO.Tests.Common;
 
 namespace TNO.ReadingWriting.Tests;
 
@@ -19,7 +18,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
          new ComponentSerialiserDispatcher(
             new MessageComponentSerialiser(),
             new TagComponentSerialiser(),
-            new ThreadComponentSerialiser());
+            new ThreadComponentSerialiser(),
+            new EntryLinkComponentSerialiser());
 
       writer = new EntrySerialiser(componentSerialiser);
 
@@ -27,7 +27,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
          new ComponentDeserialiserDispatcher(
             new MessageComponentDeserialiserLatest(),
             new TagComponentDeserialiserLatest(),
-            new ThreadComponentDeserialiserLatest());
+            new ThreadComponentDeserialiserLatest(),
+            new EntryLinkComponentDeserialiserLatest());
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }

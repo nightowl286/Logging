@@ -91,6 +91,16 @@ internal class EntryBuilder : IEntryBuilder
    }
 
    /// <inheritdoc/>
+   public IEntryBuilder With(ulong entryIdToLink)
+   {
+      ThrowIfHasComponent(ComponentKind.EntryLink);
+
+      EntryLinkComponent component = new EntryLinkComponent(entryIdToLink);
+
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
    public ILogger FinishEntry()
    {
       Entry entry = new Entry(
@@ -120,6 +130,5 @@ internal class EntryBuilder : IEntryBuilder
       if (_components.ContainsKey(kind))
          throw new InvalidOperationException($"This builder already has the component {kind}.");
    }
-
    #endregion
 }
