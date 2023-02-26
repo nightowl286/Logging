@@ -20,6 +20,9 @@ public enum ComponentKind : ushort
    /// <summary>A link to a different <see cref="IEntry"/>.</summary>
    EntryLink = 8,
 
+   /// <summary>A table that can contain custom key/value pairs.</summary>
+   Table = 16,
+
    /// <summary>This entry is reserved for possible future expansion.</summary>
    ReservedForExpansion = 32_768,
 }

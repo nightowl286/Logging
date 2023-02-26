@@ -20,6 +20,9 @@ public enum VersionedDataKind : ushort
    /// <summary>Represents the <see cref="LogData.TagReference"/>.</summary>
    TagReference,
 
+   /// <summary>Represents the <see cref="LogData.TableKeyReference"/>.</summary>
+   TableKeyReference,
+
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,
 
@@ -31,4 +34,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="IEntryLinkComponent"/>.</summary>
    EntryLink,
+
+   /// <summary>Represents the <see cref="ITableComponent"/>.</summary>
+   Table,
 }
