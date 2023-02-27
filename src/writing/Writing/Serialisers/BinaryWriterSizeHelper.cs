@@ -20,6 +20,21 @@ internal static class BinaryWriterSizeHelper
       return stringSize + stringSizeSize;
    }
 
+   public static int CharSize(char value)
+   {
+      // Based on the internal implementations of:
+      // BinaryWriter.Write(char);
+      // Rune.TryEncodeToUtf8;
+
+      if (Rune.TryCreate(value, out Rune rune) == false)
+         throw new ArgumentException($"Surrogates as a single char value cannot be handled by the ({typeof(BinaryWriter)}).");
+
+      if (rune.IsAscii) return 1;
+      if (rune.Value <= 0x7FFu) return 2;
+      if (rune.Value <= 0xFFFFu) return 3;
+      return 4; // should not be possible as the BinaryWriter cannot handle it.
+   }
+
    public static int Encoded7BitIntSize(int value)
    {
       // Based on the internal implementations of:

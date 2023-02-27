@@ -1,0 +1,20 @@
+﻿using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Writing.Serialisers.LogData;
+
+namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData;
+
+[TestClass]
+public class TableKeyReferenceSerialiserCountTests : BinarySerialiserCountTestBase<TableKeyReferenceSerialiser, TableKeyReference>
+{
+   #region Tests
+   [TestMethod]
+   public void Count()
+   {
+      // Arrange
+      TableKeyReference reference = new TableKeyReference("key", 5);
+
+      // Act + Verify
+      CountTestBase(reference);
+   }
+   #endregion
+}
