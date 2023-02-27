@@ -9,20 +9,24 @@ using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
+using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Entries.Components.Message;
+using TNO.Logging.Reading.Entries.Components.Table;
 using TNO.Logging.Reading.Entries.Components.Tag;
 using TNO.Logging.Reading.Entries.Components.Thread;
 using TNO.Logging.Reading.LogData.ContextInfos;
 using TNO.Logging.Reading.LogData.FileReferences;
+using TNO.Logging.Reading.LogData.TableKeyReferences;
 using TNO.Logging.Reading.LogData.TagReferences;
 using TNO.Logging.Reading.Readers;
 
@@ -60,14 +64,16 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.Message,
          VersionedDataKind.Tag,
          VersionedDataKind.Thread,
-         VersionedDataKind.EntryLink);
+         VersionedDataKind.EntryLink,
+         VersionedDataKind.Table);
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
 
       RegisterFromKinds(providerFacade, map,
          VersionedDataKind.Entry,
          VersionedDataKind.FileReference,
          VersionedDataKind.ContextInfo,
-         VersionedDataKind.TagReference);
+         VersionedDataKind.TagReference,
+         VersionedDataKind.TableKeyReference);
 
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
@@ -97,12 +103,16 @@ public class LogReaderFacade : ILogReaderFacade
    private static void RegisterSelectors(IServiceFacade facade)
    {
       RegisterComponentSelectors(facade);
-
+      RegisterLogDataSelectors(facade);
+   }
+   private static void RegisterLogDataSelectors(IServiceFacade facade)
+   {
       facade
          .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>()
          .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>()
          .Singleton<IContextInfoDeserialiserSelector, ContextInfoDeserialiserSelector>()
-         .Singleton<ITagReferenceDeserialiserSelector, TagReferenceDeserialiserSelector>();
+         .Singleton<ITagReferenceDeserialiserSelector, TagReferenceDeserialiserSelector>()
+         .Singleton<ITableKeyReferenceDeserialiserSelector, TableKeyReferenceDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
@@ -110,7 +120,8 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IMessageComponentDeserialiserSelector, MessageComponentDeserialiserSelector>()
          .Singleton<ITagComponentDeserialiserSelector, TagComponentDeserialiserSelector>()
          .Singleton<IThreadComponentDeserialiserSelector, ThreadComponentDeserialiserSelector>()
-         .Singleton<IEntryLinkComponentDeserialiserSelector, EntryLinkComponentDeserialiserSelector>();
+         .Singleton<IEntryLinkComponentDeserialiserSelector, EntryLinkComponentDeserialiserSelector>()
+         .Singleton<ITableComponentDeserialiserSelector, TableComponentDeserialiserSelector>();
    }
    private static void RegisterFromKind(IServiceFacade facade, VersionedDataKind kind, uint version)
    {
@@ -124,12 +135,16 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IThreadComponentDeserialiserSelector, IThreadComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.EntryLink)
          RegisterWithProvider<IEntryLinkComponentDeserialiserSelector, IEntryLinkComponentDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.Table)
+         RegisterWithProvider<ITableComponentDeserialiserSelector, ITableComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.FileReference)
          RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.ContextInfo)
          RegisterWithProvider<IContextInfoDeserialiserSelector, IContextInfoDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.TagReference)
          RegisterWithProvider<ITagReferenceDeserialiserSelector, ITagReferenceDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.TableKeyReference)
+         RegisterWithProvider<ITableKeyReferenceDeserialiserSelector, ITableKeyReferenceDeserialiser>(facade, version);
    }
    private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>

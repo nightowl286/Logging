@@ -19,7 +19,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             new MessageComponentSerialiser(),
             new TagComponentSerialiser(),
             new ThreadComponentSerialiser(),
-            new EntryLinkComponentSerialiser());
+            new EntryLinkComponentSerialiser(),
+            new TableComponentSerialiser());
 
       writer = new EntrySerialiser(componentSerialiser);
 
@@ -28,7 +29,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             new MessageComponentDeserialiserLatest(),
             new TagComponentDeserialiserLatest(),
             new ThreadComponentDeserialiserLatest(),
-            new EntryLinkComponentDeserialiserLatest());
+            new EntryLinkComponentDeserialiserLatest(),
+            new TableComponentDeserialiserLatest());
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }

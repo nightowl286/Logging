@@ -4,6 +4,7 @@ using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 
@@ -21,6 +22,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    private readonly ITagComponentDeserialiser _tagDeserialiser;
    private readonly IThreadComponentDeserialiser _threadDeserialiser;
    private readonly IEntryLinkComponentDeserialiser _entryLinkDeserialiser;
+   private readonly ITableComponentDeserialiser _tableDeserialiser;
    #endregion
 
    #region Constructors
@@ -29,16 +31,19 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    /// <param name="tagDeserialiser">The tag deserialiser to use.</param>
    /// <param name="threadDeserialiser">The thread deserialiser to use.</param>
    /// <param name="entryLinkDeserialiser">The entry link deserialiser to use.</param>
+   /// <param name="tableDeserialiser">The table deserialiser to use.</param>
    public ComponentDeserialiserDispatcher(
       IMessageComponentDeserialiser messageDeserialiser,
       ITagComponentDeserialiser tagDeserialiser,
       IThreadComponentDeserialiser threadDeserialiser,
-      IEntryLinkComponentDeserialiser entryLinkDeserialiser)
+      IEntryLinkComponentDeserialiser entryLinkDeserialiser,
+      ITableComponentDeserialiser tableDeserialiser)
    {
       _messageDeserialiser = messageDeserialiser;
       _tagDeserialiser = tagDeserialiser;
       _threadDeserialiser = threadDeserialiser;
       _entryLinkDeserialiser = entryLinkDeserialiser;
+      _tableDeserialiser = tableDeserialiser;
    }
    #endregion
 
@@ -52,6 +57,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
          ComponentKind.Tag => _tagDeserialiser.Deserialise(reader),
          ComponentKind.Thread => _threadDeserialiser.Deserialise(reader),
          ComponentKind.EntryLink => _entryLinkDeserialiser.Deserialise(reader),
+         ComponentKind.Table => _tableDeserialiser.Deserialise(reader),
 
          _ => throw new ArgumentException($"Unknown component kind ({componentKind}).")
       };
