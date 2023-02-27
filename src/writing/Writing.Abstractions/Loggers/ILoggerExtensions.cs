@@ -49,5 +49,10 @@ public static class ILoggerExtensions
    public static IEntryBuilder StartEntry(this ILogger logger, Importance importance,
      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
       => logger.StartEntry(importance, out _, file, line);
+
+   /// <inheritdoc cref="ILogger.StartTable(Importance, out ulong, string, uint)"/>
+   public static ITableComponentBuilder<ILogger> StartTable(this ILogger logger, Importance importance,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+      => logger.StartTable(importance, out _, file, line);
    #endregion
 }

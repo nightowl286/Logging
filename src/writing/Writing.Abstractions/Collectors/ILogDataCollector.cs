@@ -24,5 +24,10 @@ public interface ILogDataCollector
    /// <summary>Deposits <paramref name="tagReference"/> data.</summary>
    /// <param name="tagReference">The tag reference to deposit.</param>
    void Deposit(TagReference tagReference);
+
+
+   /// <summary>Deposits <paramref name="tableKeyReference"/> data.</summary>
+   /// <param name="tableKeyReference">The table key reference to deposit.</param>
+   void Deposit(TableKeyReference tableKeyReference);
    #endregion
 }

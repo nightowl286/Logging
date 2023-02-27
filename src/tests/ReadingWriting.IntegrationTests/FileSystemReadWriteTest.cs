@@ -42,6 +42,10 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       ulong expectedTagId = 1;
       ulong entryId;
 
+      string expectedTableKey = "key";
+      uint expectedTableKeyId = 1;
+      string expectedTableValue = "test";
+
       string logPath = GetSubFolder("Log");
 
       // Write
@@ -58,10 +62,13 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          {
             logger
                .StartEntry(expectedImportance, out entryId, expectedFile, expectedLine)
-               .With(expectedMessage)
-               .WithTag(expectedTag)
-               .With(expectedThread)
-               .With(entryId)
+                  .With(expectedMessage)
+                  .WithTag(expectedTag)
+                  .With(expectedThread)
+                  .With(entryId)
+                  .WithTable()
+                     .With(expectedTableKey, expectedTableValue)
+                     .BuildTable()
                .FinishEntry();
          }
       }
@@ -70,11 +77,13 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       IEntry entry;
       ContextInfo contextInfo;
       TagReference tagReference;
+      TableKeyReference tableKeyReference;
 
       IMessageComponent message;
       ITagComponent tag;
       IThreadComponent thread;
       IEntryLinkComponent entryLink;
+      ITableComponent table;
 
       // Read
       {
@@ -85,11 +94,13 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          entry = AssertReadSingle(reader.Entries);
          contextInfo = AssertReadSingle(reader.ContextInfos);
          tagReference = AssertReadSingle(reader.TagReferences);
+         tableKeyReference = AssertReadSingle(reader.TableKeyReferences);
 
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
          tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
          thread = AssertGetComponent<IThreadComponent>(entry, ComponentKind.Thread);
          entryLink = AssertGetComponent<IEntryLinkComponent>(entry, ComponentKind.EntryLink);
+         table = AssertGetComponent<ITableComponent>(entry, ComponentKind.Table);
       }
 
       // Assert
@@ -123,6 +134,13 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          Assert.That.AreEqual(expectedThread.GetApartmentState(), thread.ApartmentState);
 
          Assert.That.AreEqual(entryId, entryLink.EntryId);
+
+         Assert.That.AreEqual(expectedTableKeyId, tableKeyReference.Id);
+         Assert.That.AreEqual(expectedTableKey, tableKeyReference.Key);
+
+         Assert.That.AreEqual(1, table.Table.Count);
+         object tableValue = table.Table[expectedTableKeyId];
+         Assert.That.AreEqual(expectedTableValue, tableValue);
       }
    }
 

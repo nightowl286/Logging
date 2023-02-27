@@ -8,6 +8,7 @@ using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
+using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
 
@@ -41,6 +42,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
    /// <inheritdoc/>
    public IReader<TagReference> TagReferences { get; private set; }
+
+   /// <inheritdoc/>
+   public IReader<TableKeyReference> TableKeyReferences { get; private set; }
    #endregion
 
    #region Constructors
@@ -68,6 +72,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(FileReferences))]
    [MemberNotNull(nameof(ContextInfos))]
    [MemberNotNull(nameof(TagReferences))]
+   [MemberNotNull(nameof(TableKeyReferences))]
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
@@ -88,6 +93,10 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       TagReferences = new BinaryDeserialiserReader<TagReference>(
          GetReaderPath("tags"),
          deserialiserProvider.GetDeserialiser<ITagReferenceDeserialiser>());
+
+      TableKeyReferences = new BinaryDeserialiserReader<TableKeyReference>(
+         GetReaderPath("table-keys"),
+         deserialiserProvider.GetDeserialiser<ITableKeyReferenceDeserialiser>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
@@ -106,6 +115,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       FileReferences.TryDispose();
       ContextInfos.TryDispose();
       TagReferences.TryDispose();
+      TableKeyReferences.TryDispose();
 
       if (_tempPath is not null)
          Directory.Delete(_tempPath, true);

@@ -85,6 +85,13 @@ public sealed class LogDataDistributor : ILogDataDistributor
       foreach (ILogDataCollector collector in EnumerateCollectors())
          collector.Deposit(tagReference);
    }
+
+   /// <inheritdoc/>
+   public void Deposit(TableKeyReference tableKeyReference)
+   {
+      foreach (ILogDataCollector collector in EnumerateCollectors())
+         collector.Deposit(tableKeyReference);
+   }
    #endregion
 
    #region Helpers
@@ -101,7 +108,5 @@ public sealed class LogDataDistributor : ILogDataDistributor
          _collectorsLock.ExitReadLock();
       }
    }
-
-
    #endregion
 }

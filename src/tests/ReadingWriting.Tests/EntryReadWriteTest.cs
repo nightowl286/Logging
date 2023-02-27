@@ -41,6 +41,10 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
       TagComponent tagComponent = new TagComponent(7);
       ThreadComponent threadComponent = ThreadComponent.FromThread(Thread.CurrentThread);
 
+      Dictionary<uint, object> table = new Dictionary<uint, object>() { { 1, 5 } };
+      TableComponent tableComponent = new TableComponent(table);
+
+
       ulong id = 1;
       ulong contextId = 2;
       ulong scope = 3;
@@ -53,7 +57,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
       {
          { ComponentKind.Message, messageComponent },
          { ComponentKind.Tag, tagComponent },
-         { ComponentKind.Thread, threadComponent }
+         { ComponentKind.Thread, threadComponent },
+         { ComponentKind.Table, tableComponent }
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
@@ -84,8 +89,7 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       // Message component
       {
-         GetComponents(
-            ComponentKind.Message,
+         GetComponents(ComponentKind.Message,
             out IMessageComponent expectedComponent,
             out IMessageComponent resultComponent);
 
@@ -94,8 +98,7 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       // Tag component
       {
-         GetComponents(
-            ComponentKind.Tag,
+         GetComponents(ComponentKind.Tag,
             out ITagComponent expectedComponent,
             out ITagComponent resultComponent);
 
@@ -104,8 +107,7 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       // Thread component
       {
-         GetComponents(
-            ComponentKind.Thread,
+         GetComponents(ComponentKind.Thread,
             out IThreadComponent expectedComponent,
             out IThreadComponent resultComponent);
 
@@ -115,6 +117,22 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
          Assert.That.AreEqual(expectedComponent.State, resultComponent.State);
          Assert.That.AreEqual(expectedComponent.Priority, resultComponent.Priority);
          Assert.That.AreEqual(expectedComponent.ApartmentState, resultComponent.ApartmentState);
+      }
+
+      // Table component
+      {
+         GetComponents(ComponentKind.Table,
+            out ITableComponent expectedComponent,
+            out ITableComponent resultComponent);
+
+         Assert.That.AreEqual(expectedComponent.Table.Count, resultComponent.Table.Count);
+         foreach (KeyValuePair<uint, object> expectedPair in expectedComponent.Table)
+         {
+            object expectedTableValue = expectedPair.Value;
+            object resultTableValue = expectedComponent.Table[expectedPair.Key];
+
+            Assert.That.AreEqual(expectedTableValue, resultTableValue);
+         }
       }
    }
    #endregion

@@ -27,5 +27,8 @@ public interface IFileSystemLogReader : IDisposable
 
    /// <summary>An <see cref="IReader{T}"/> that can be used to read tag references.</summary>
    IReader<TagReference> TagReferences { get; }
+
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read table key references.</summary>
+   IReader<TableKeyReference> TableKeyReferences { get; }
    #endregion
 }

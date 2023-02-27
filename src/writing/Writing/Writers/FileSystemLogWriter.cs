@@ -22,6 +22,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    private readonly BinarySerialiserWriter<FileReference> _fileReferenceDataWriter;
    private readonly BinarySerialiserWriter<ContextInfo> _contextInfoDataWriter;
    private readonly BinarySerialiserWriter<TagReference> _tagReferenceDataWriter;
+   private readonly BinarySerialiserWriter<TableKeyReference> _tableKeyReferenceDataWriter;
    #endregion
 
    #region Properties
@@ -69,6 +70,12 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
          facade.GetSerialiser<ITagReferenceSerialiser>(),
          settings.TagReferenceThreshold);
 
+      // table key references
+      _tableKeyReferenceDataWriter = new BinarySerialiserWriter<TableKeyReference>(
+         GetWriterPath("table-keys"),
+         facade.GetSerialiser<ITableKeyReferenceSerialiser>(),
+         settings.TableKeyReferenceThreshold);
+
       WriteVersions();
    }
    #endregion
@@ -87,12 +94,16 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    public void Deposit(TagReference tagReference) => _tagReferenceDataWriter.Deposit(tagReference);
 
    /// <inheritdoc/>
+   public void Deposit(TableKeyReference tableKeyReference) => _tableKeyReferenceDataWriter.Deposit(tableKeyReference);
+
+   /// <inheritdoc/>
    public void Dispose()
    {
       _entryDataWriter.Dispose();
       _fileReferenceDataWriter.Dispose();
       _contextInfoDataWriter.Dispose();
       _tagReferenceDataWriter.Dispose();
+      _tableKeyReferenceDataWriter.Dispose();
 
       CreateArchive(LogPath);
    }

@@ -35,6 +35,15 @@ public interface ILogWriteContext
    /// </returns>
    bool GetOrCreateTagId(string tag, out ulong tagId);
 
+   /// <summary>Gets or creates the <paramref name="tableKeyId"/> for the given <paramref name="key"/>.</summary>
+   /// <param name="key">The key to get or create the <paramref name="tableKeyId"/> for.</param>
+   /// <param name="tableKeyId">The id of the given <paramref name="key"/>.</param>
+   /// <returns>
+   /// <see langword="true"/> if a new <paramref name="tableKeyId"/> 
+   /// had to be created, <see langword="false"/> otherwise.
+   /// </returns>
+   bool GetOrCreateTableKeyId(string key, out uint tableKeyId);
+
    /// <summary>Creates a new id for a context.</summary>
    /// <returns>The id of the newly created context.</returns>
    ulong CreateContextId();

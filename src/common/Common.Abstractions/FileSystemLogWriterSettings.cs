@@ -25,6 +25,9 @@ public class FileSystemLogWriterSettings
 
    /// <summary>The threshold that should be reached for saved tag references before they get compressed. In bytes.</summary>
    public long TagReferenceThreshold { get; set; } = DefaultThreshold;
+
+   /// <summary>The threshold that should be reached for saved table key references before they get compressed. In bytes.</summary>
+   public long TableKeyReferenceThreshold { get; set; } = DefaultThreshold;
    #endregion
 
    #region Constructors

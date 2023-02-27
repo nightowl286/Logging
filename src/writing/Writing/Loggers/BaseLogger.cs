@@ -93,22 +93,40 @@ public class BaseLogger : ILogger
    public IEntryBuilder StartEntry(Importance importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
-      entryId = WriteContext.NewEntryId();
+      ulong id = WriteContext.NewEntryId();
+      entryId = id;
+
       TimeSpan timestamp = WriteContext.GetTimestamp();
       ulong fileId = GetFileId(file);
 
-      EntryBuilder builder = new EntryBuilder(
-         this,
-         Collector,
-         WriteContext,
-         entryId,
-         ContextId,
-         _scope,
-         importance.Normalised(),
-         timestamp,
-         fileId,
-         line);
+      void SaveEntry(IReadOnlyDictionary<ComponentKind, IComponent> components)
+      {
+         Entry entry = new Entry(id, ContextId, _scope, importance.Normalised(), timestamp, fileId, line, components);
 
+         Collector.Deposit(entry);
+      }
+
+      EntryBuilder builder = new EntryBuilder(this, Collector, WriteContext, SaveEntry);
+
+      return builder;
+   }
+
+   /// <inheritdoc/>
+   public ITableComponentBuilder<ILogger> StartTable(Importance importance, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      ulong id = WriteContext.NewEntryId();
+      entryId = id;
+
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      void SaveTable(ITableComponent component)
+      {
+         Save(id, importance.Normalised(), timestamp, fileId, line, component);
+      }
+
+      TableComponentBuilder<ILogger> builder = new TableComponentBuilder<ILogger>(this, WriteContext, Collector, SaveTable);
       return builder;
    }
    #endregion
@@ -148,14 +166,14 @@ public class BaseLogger : ILogger
       return tagId;
    }
 
-   private void Save(ulong entryId, Importance Importance, TimeSpan timestamp, ulong fileId, uint line, IComponent component)
+   private void Save(ulong entryId, Importance importance, TimeSpan timestamp, ulong fileId, uint line, IComponent component)
    {
       Dictionary<ComponentKind, IComponent> componentsByKind = new Dictionary<ComponentKind, IComponent>
       {
          { component.Kind, component }
       };
 
-      Entry entry = new Entry(entryId, ContextId, _scope, Importance, timestamp, fileId, line, componentsByKind);
+      Entry entry = new Entry(entryId, ContextId, _scope, importance, timestamp, fileId, line, componentsByKind);
       Collector.Deposit(entry);
    }
    #endregion

@@ -14,6 +14,7 @@ public class LogWriterContext : ILogWriteContext
    private readonly SafeIdFactory<string> _fileIdFactory = new SafeIdFactory<string>(1);
    private readonly SafeIdFactory _contextIdFactory = new SafeIdFactory(1);
    private readonly SafeIdFactory<string> _tagIdFactory = new SafeIdFactory<string>(1);
+   private readonly SafeIdFactory<string> _tableKeyIdFactory = new SafeIdFactory<string>(1);
    private readonly Stopwatch _timestampWatch = Stopwatch.StartNew();
    #endregion
 
@@ -32,5 +33,14 @@ public class LogWriterContext : ILogWriteContext
 
    /// <inheritdoc/>
    public bool GetOrCreateTagId(string tag, out ulong tagId) => _tagIdFactory.GetOrCreate(tag, out tagId);
+
+   /// <inheritdoc/>
+   public bool GetOrCreateTableKeyId(string key, out uint tableKeyId)
+   {
+      bool isNewId = _tableKeyIdFactory.GetOrCreate(key, out ulong keyId);
+      tableKeyId = (uint)keyId;
+
+      return isNewId;
+   }
    #endregion
 }
