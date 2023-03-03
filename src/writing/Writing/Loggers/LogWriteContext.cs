@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.IdFactories;
 
@@ -7,7 +8,7 @@ namespace TNO.Logging.Writing.Loggers;
 /// <summary>
 /// Represents a context that handles information about the current logging session.
 /// </summary>
-public class LogWriterContext : ILogWriteContext
+public class LogWriteContext : ILogWriteContext
 {
    #region Fields
    private readonly SafeIdFactory _entryIdFactory = new SafeIdFactory(1);
@@ -15,6 +16,7 @@ public class LogWriterContext : ILogWriteContext
    private readonly SafeIdFactory _contextIdFactory = new SafeIdFactory(1);
    private readonly SafeIdFactory<string> _tagIdFactory = new SafeIdFactory<string>(1);
    private readonly SafeIdFactory<string> _tableKeyIdFactory = new SafeIdFactory<string>(1);
+   private readonly SafeIdFactory<AssemblyIdentity> _assemblyIdFactory = new SafeIdFactory<AssemblyIdentity>(1);
    private readonly Stopwatch _timestampWatch = Stopwatch.StartNew();
    #endregion
 
@@ -33,6 +35,9 @@ public class LogWriterContext : ILogWriteContext
 
    /// <inheritdoc/>
    public bool GetOrCreateTagId(string tag, out ulong tagId) => _tagIdFactory.GetOrCreate(tag, out tagId);
+
+   /// <inheritdoc/>
+   public bool GetOrCreateAssemblyId(AssemblyIdentity assemblyIdentity, out ulong assemblyId) => _assemblyIdFactory.GetOrCreate(assemblyIdentity, out assemblyId);
 
    /// <inheritdoc/>
    public bool GetOrCreateTableKeyId(string key, out uint tableKeyId)

@@ -1,4 +1,5 @@
 ﻿using System;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -43,6 +44,15 @@ public interface ILogWriteContext
    /// had to be created, <see langword="false"/> otherwise.
    /// </returns>
    bool GetOrCreateTableKeyId(string key, out uint tableKeyId);
+
+   /// <summary>Gets or creates the <paramref name="assemblyId"/> for the given <paramref name="assemblyIdentity"/>.</summary>
+   /// <param name="assemblyIdentity">The <see cref="AssemblyIdentity"/> to get or create the <paramref name="assemblyId"/> for.</param>
+   /// <param name="assemblyId">The id of the given <paramref name="assemblyIdentity"/>.</param>
+   /// <returns>
+   /// <see langword="true"/> if a new <paramref name="assemblyId"/> 
+   /// had to be created, <see langword="false"/> otherwise.
+   /// </returns>
+   bool GetOrCreateAssemblyId(AssemblyIdentity assemblyIdentity, out ulong assemblyId);
 
    /// <summary>Creates a new id for a context.</summary>
    /// <returns>The id of the newly created context.</returns>

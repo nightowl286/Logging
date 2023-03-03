@@ -9,7 +9,7 @@ namespace TNO.Logging.Writing.Builders;
 internal sealed class LoggerConfigurator : ILoggerConfigurator
 {
    #region Fields
-   private readonly LogWriterContext _context = new LogWriterContext();
+   private readonly LogWriteContext _context = new LogWriteContext();
    #endregion
 
    #region Properties
