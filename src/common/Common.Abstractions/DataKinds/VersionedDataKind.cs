@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 
 namespace TNO.Logging.Common.Abstractions.DataKinds;
 
@@ -22,6 +23,9 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="LogData.TableKeyReference"/>.</summary>
    TableKeyReference,
+
+   /// <summary>Represents the <see cref="IAssemblyInfo"/>.</summary>
+   AssemblyInfo,
 
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,
