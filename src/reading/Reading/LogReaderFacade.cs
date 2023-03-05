@@ -12,6 +12,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
+using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
@@ -24,6 +25,7 @@ using TNO.Logging.Reading.Entries.Components.Message;
 using TNO.Logging.Reading.Entries.Components.Table;
 using TNO.Logging.Reading.Entries.Components.Tag;
 using TNO.Logging.Reading.Entries.Components.Thread;
+using TNO.Logging.Reading.LogData.AssemblyInfos;
 using TNO.Logging.Reading.LogData.ContextInfos;
 using TNO.Logging.Reading.LogData.FileReferences;
 using TNO.Logging.Reading.LogData.TableKeyReferences;
@@ -73,7 +75,8 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.FileReference,
          VersionedDataKind.ContextInfo,
          VersionedDataKind.TagReference,
-         VersionedDataKind.TableKeyReference);
+         VersionedDataKind.TableKeyReference,
+         VersionedDataKind.AssemblyInfo);
 
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
@@ -112,7 +115,8 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>()
          .Singleton<IContextInfoDeserialiserSelector, ContextInfoDeserialiserSelector>()
          .Singleton<ITagReferenceDeserialiserSelector, TagReferenceDeserialiserSelector>()
-         .Singleton<ITableKeyReferenceDeserialiserSelector, TableKeyReferenceDeserialiserSelector>();
+         .Singleton<ITableKeyReferenceDeserialiserSelector, TableKeyReferenceDeserialiserSelector>()
+         .Singleton<IAssemblyInfoDeserialiserSelector, AssemblyInfoDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
@@ -145,6 +149,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<ITagReferenceDeserialiserSelector, ITagReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.TableKeyReference)
          RegisterWithProvider<ITableKeyReferenceDeserialiserSelector, ITableKeyReferenceDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.AssemblyInfo)
+         RegisterWithProvider<IAssemblyInfoDeserialiserSelector, IAssemblyInfoDeserialiser>(facade, version);
    }
    private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>
