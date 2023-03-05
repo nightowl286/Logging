@@ -7,6 +7,7 @@ namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData;
 public class ContextInfoSerialiserCountTests : BinarySerialiserCountTestBase<ContextInfoSerialiser, ContextInfo>
 {
    #region Tests
+   [TestMethod]
    public void Count()
    {
       // Arrange

@@ -9,8 +9,11 @@ internal static class BinaryWriterSizeHelper
    #endregion
 
    #region Functions
-   public static int StringSize(string value)
+   public static int StringSize(string? value)
    {
+      if (value == null)
+         return 0;
+
       // Based on the internal implementation of:
       // BinaryWriter.Write(string)
 

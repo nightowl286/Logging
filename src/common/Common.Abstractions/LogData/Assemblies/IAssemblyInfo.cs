@@ -27,7 +27,7 @@ public interface IAssemblyInfo
    /// <summary>The kind of the location where the assembly is located.</summary>
    AssemblyLocationKind LocationKind { get; }
 
-   /// <summary>The location where the assembly is located</summary>
+   /// <summary>The location where the assembly is located.</summary>
    string Location { get; }
 
    /// <summary>The debugging flags associated with this assembly.</summary>
