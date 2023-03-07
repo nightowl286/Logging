@@ -23,6 +23,9 @@ public enum ComponentKind : ushort
    /// <summary>A table that can contain custom key/value pairs.</summary>
    Table = 16,
 
+   /// <summary>Information gathered about a <see cref="System.Reflection.Assembly"/>.</summary>
+   Assembly = 32,
+
    /// <summary>This entry is reserved for possible future expansion.</summary>
    ReservedForExpansion = 32_768,
 }

@@ -41,4 +41,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="ITableComponent"/>.</summary>
    Table,
+
+   /// <summary>Represents the <see cref="IAssemblyComponent"/>.</summary>
+   Assembly,
 }
