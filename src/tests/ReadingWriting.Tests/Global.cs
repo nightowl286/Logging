@@ -1,5 +1,6 @@
 ﻿global using Microsoft.VisualStudio.TestTools.UnitTesting;
 global using TNO.Tests.Common;
+global using AssemblyComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Assembly.Versions.AssemblyComponentDeserialiser0;
 global using EntryLinkComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.EntryLink.Versions.EntryLinkComponentDeserialiser0;
 global using MessageComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Message.Versions.MessageComponentDeserialiser0;
 global using TableComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Table.Versions.TableComponentDeserialiser0;
