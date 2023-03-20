@@ -20,7 +20,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             new TagComponentSerialiser(),
             new ThreadComponentSerialiser(),
             new EntryLinkComponentSerialiser(),
-            new TableComponentSerialiser());
+            new TableComponentSerialiser(),
+            new AssemblyComponentSerialiser());
 
       writer = new EntrySerialiser(componentSerialiser);
 
@@ -30,7 +31,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             new TagComponentDeserialiserLatest(),
             new ThreadComponentDeserialiserLatest(),
             new EntryLinkComponentDeserialiserLatest(),
-            new TableComponentDeserialiserLatest());
+            new TableComponentDeserialiserLatest(),
+            new AssemblyComponentDeserialiserLatest());
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }
@@ -43,7 +45,7 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
 
       Dictionary<uint, object> table = new Dictionary<uint, object>() { { 1, 5 } };
       TableComponent tableComponent = new TableComponent(table);
-
+      AssemblyComponent assemblyComponent = new AssemblyComponent(0);
 
       ulong id = 1;
       ulong contextId = 2;
@@ -58,7 +60,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
          { ComponentKind.Message, messageComponent },
          { ComponentKind.Tag, tagComponent },
          { ComponentKind.Thread, threadComponent },
-         { ComponentKind.Table, tableComponent }
+         { ComponentKind.Table, tableComponent },
+         { ComponentKind.Assembly, assemblyComponent }
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
@@ -76,7 +79,6 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
          expectedComponent = (T)expected.Components[kind];
          resultComponent = AssertGetComponent<T>(result, kind);
       }
-
 
       Assert.That.AreEqual(expected.Id, result.Id);
       Assert.That.AreEqual(expected.ContextId, result.ContextId);
@@ -134,11 +136,20 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             Assert.That.AreEqual(expectedTableValue, resultTableValue);
          }
       }
+
+      // Assembly component
+      {
+         GetComponents(ComponentKind.Assembly,
+            out IAssemblyComponent expectedComponent,
+            out IAssemblyComponent resultComponent);
+
+         Assert.That.AreEqual(expectedComponent.AssemblyId, resultComponent.AssemblyId);
+      }
    }
    #endregion
 
    #region Helpers
-   private T AssertGetComponent<T>(IEntry entry, ComponentKind kind) where T : class, IComponent
+   private static T AssertGetComponent<T>(IEntry entry, ComponentKind kind) where T : class, IComponent
    {
       Assert.IsTrue(entry.Components.TryGetValue(kind, out IComponent? component));
 

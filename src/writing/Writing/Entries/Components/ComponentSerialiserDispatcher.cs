@@ -19,6 +19,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    private readonly IThreadComponentSerialiser _threadSerialiser;
    private readonly IEntryLinkComponentSerialiser _entryLinkSerialiser;
    private readonly ITableComponentSerialiser _tableSerialiser;
+   private readonly IAssemblyComponentSerialiser _assemblySerialiser;
    #endregion
 
    #region Constructors
@@ -28,18 +29,21 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    /// <param name="threadSerialiser">The thread serialiser to use.</param>
    /// <param name="entryLinkSerialiser">The entry link serialiser to use.</param>
    /// <param name="tableSerialiser">The table serialiser to use.</param>
+   /// <param name="assemblySerialiser">The assembly serialiser to use.</param>
    public ComponentSerialiserDispatcher(
       IMessageComponentSerialiser messageSerialiser,
       ITagComponentSerialiser tagSerialiser,
       IThreadComponentSerialiser threadSerialiser,
       IEntryLinkComponentSerialiser entryLinkSerialiser,
-      ITableComponentSerialiser tableSerialiser)
+      ITableComponentSerialiser tableSerialiser,
+      IAssemblyComponentSerialiser assemblySerialiser)
    {
       _messageSerialiser = messageSerialiser;
       _tagSerialiser = tagSerialiser;
       _threadSerialiser = threadSerialiser;
       _entryLinkSerialiser = entryLinkSerialiser;
       _tableSerialiser = tableSerialiser;
+      _assemblySerialiser = assemblySerialiser;
    }
 
    #endregion
@@ -73,6 +77,11 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
          Debug.Assert(table.Kind is ComponentKind.Table);
          _tableSerialiser.Serialise(writer, table);
       }
+      else if (data is IAssemblyComponent assembly)
+      {
+         Debug.Assert(assembly.Kind is ComponentKind.Assembly);
+         _assemblySerialiser.Serialise(writer, assembly);
+      }
       else
          throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
    }
@@ -87,6 +96,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
          IThreadComponent thread => _threadSerialiser.Count(thread),
          IEntryLinkComponent entryLink => _entryLinkSerialiser.Count(entryLink),
          ITableComponent table => _tableSerialiser.Count(table),
+         IAssemblyComponent assembly => _assemblySerialiser.Count(assembly),
 
          _ => throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data))
       };

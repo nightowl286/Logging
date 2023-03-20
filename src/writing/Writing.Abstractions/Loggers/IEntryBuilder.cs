@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System.Reflection;
+using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -32,6 +34,15 @@ public interface IEntryBuilder
    /// <returns>The builder that was used.</returns>
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
    IEntryBuilder With(Thread thread);
+
+   /// <summary>
+   /// Adds the given <paramref name="assembly"/> as an <see cref="IAssemblyComponent"/>.
+   /// The assembly info will be saved as <see cref="IAssemblyInfo"/>.
+   /// </summary>
+   /// <param name="assembly">The assembly to add.</param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder With(Assembly assembly);
 
    /// <summary>Starts creating a table that will be added as an <see cref="ITableComponent"/>.</summary>
    /// <returns>The table component builder that can be used to customise the table.</returns>

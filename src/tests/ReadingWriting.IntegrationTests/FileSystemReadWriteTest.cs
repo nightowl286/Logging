@@ -1,8 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.LogData;
 using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Writing;
@@ -46,6 +49,10 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       uint expectedTableKeyId = 1;
       string expectedTableValue = "test";
 
+      Assembly assembly = Assembly.GetExecutingAssembly();
+      ulong expectedAssemblyInfoId = 1;
+      AssemblyInfo expectedAssemblyInfo = AssemblyInfo.FromAssembly(expectedAssemblyInfoId, assembly);
+
       string logPath = GetSubFolder("Log");
 
       // Write
@@ -69,6 +76,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
                   .WithTable()
                      .With(expectedTableKey, expectedTableValue)
                      .BuildTable()
+                  .With(assembly)
                .FinishEntry();
          }
       }
@@ -78,12 +86,14 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       ContextInfo contextInfo;
       TagReference tagReference;
       TableKeyReference tableKeyReference;
+      IAssemblyInfo assemblyInfo;
 
       IMessageComponent message;
       ITagComponent tag;
       IThreadComponent thread;
       IEntryLinkComponent entryLink;
       ITableComponent table;
+      IAssemblyComponent assemblyComponent;
 
       // Read
       {
@@ -95,12 +105,14 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          contextInfo = AssertReadSingle(reader.ContextInfos);
          tagReference = AssertReadSingle(reader.TagReferences);
          tableKeyReference = AssertReadSingle(reader.TableKeyReferences);
+         assemblyInfo = AssertReadSingle(reader.AssemblyInfos);
 
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
          tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
          thread = AssertGetComponent<IThreadComponent>(entry, ComponentKind.Thread);
          entryLink = AssertGetComponent<IEntryLinkComponent>(entry, ComponentKind.EntryLink);
          table = AssertGetComponent<ITableComponent>(entry, ComponentKind.Table);
+         assemblyComponent = AssertGetComponent<IAssemblyComponent>(entry, ComponentKind.Assembly);
       }
 
       // Assert
@@ -141,6 +153,19 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          Assert.That.AreEqual(1, table.Table.Count);
          object tableValue = table.Table[expectedTableKeyId];
          Assert.That.AreEqual(expectedTableValue, tableValue);
+
+         Assert.That.AreEqual(expectedAssemblyInfoId, assemblyComponent.AssemblyId);
+         Assert.That.AreEqual(expectedAssemblyInfo.Id, assemblyInfo.Id);
+         Assert.That.AreEqual(expectedAssemblyInfo.Name, assemblyInfo.Name);
+         Assert.That.AreEqual(expectedAssemblyInfo.Version?.Major, assemblyInfo.Version?.Major);
+         Assert.That.AreEqual(expectedAssemblyInfo.Version?.Minor, assemblyInfo.Version?.Minor);
+         Assert.That.AreEqual(expectedAssemblyInfo.Version?.Build, assemblyInfo.Version?.Build);
+         Assert.That.AreEqual(expectedAssemblyInfo.Version?.Revision, assemblyInfo.Version?.Revision);
+         Assert.That.AreEqual(expectedAssemblyInfo.Culture?.Name, assemblyInfo.Culture?.Name);
+         Assert.That.AreEqual(expectedAssemblyInfo.DebuggingFlags, assemblyInfo.DebuggingFlags);
+         Assert.That.AreEqual(expectedAssemblyInfo.Configuration, assemblyInfo.Configuration);
+         Assert.That.AreEqual(expectedAssemblyInfo.PeKinds, assemblyInfo.PeKinds);
+         Assert.That.AreEqual(expectedAssemblyInfo.TargetPlatform, assemblyInfo.TargetPlatform);
       }
    }
 

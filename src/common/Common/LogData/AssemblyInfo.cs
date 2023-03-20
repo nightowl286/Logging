@@ -28,4 +28,32 @@ public record class AssemblyInfo(
    DebuggableAttribute.DebuggingModes? DebuggingFlags,
    string Configuration,
    PortableExecutableKinds PeKinds,
-   ImageFileMachine TargetPlatform) : IAssemblyInfo;
+   ImageFileMachine TargetPlatform) : IAssemblyInfo
+{
+   #region Functions
+   /// <summary>Creates an <see cref="AssemblyInfo"/> with the given
+   /// <paramref name="id"/>, for the given <paramref name="assembly"/>.</summary>
+   /// <param name="id">The id that will be assigned to the created <see cref="AssemblyInfo"/>.</param>
+   /// <param name="assembly">The assembly to create the <see cref="AssemblyInfo"/> for.</param>
+   /// <returns>The created <see cref="AssemblyInfo"/>.</returns>
+   public static AssemblyInfo FromAssembly(ulong id, Assembly assembly)
+   {
+      AssemblyName assemblyName = assembly.GetName();
+      string location = AssemblyLocationResolver.Instance.GetLocation(assembly.Location, out AssemblyLocationKind locationKind);
+      DebuggableAttribute.DebuggingModes? debuggingModes = assembly.GetCustomAttribute<DebuggableAttribute>()?.DebuggingFlags;
+      string configuration = assembly.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration ?? string.Empty;
+      assembly.ManifestModule.GetPEKind(out PortableExecutableKinds peKinds, out ImageFileMachine targetMachine);
+
+      return new AssemblyInfo(
+         id,
+         assemblyName.Name,
+         assemblyName.Version,
+         assemblyName.CultureInfo,
+         locationKind, location,
+         debuggingModes,
+         configuration,
+         peKinds,
+         targetMachine);
+   }
+   #endregion
+}

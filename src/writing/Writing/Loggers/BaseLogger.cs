@@ -1,9 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
+using TNO.Logging.Common.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -90,6 +93,21 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
+   public ILogger Log(Importance importance, Assembly assembly, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      ulong assemblyId = GetAssemblyId(assembly);
+      AssemblyComponent component = new AssemblyComponent(assemblyId);
+
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
+      return this;
+   }
+
+   /// <inheritdoc/>
    public IEntryBuilder StartEntry(Importance importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
@@ -164,6 +182,24 @@ public class BaseLogger : ILogger
       }
 
       return tagId;
+   }
+
+   /// <summary>
+   /// Gets the id for the given <paramref name="assembly"/>, if a new id had to be created
+   /// an <see cref="IAssemblyInfo"/> will be deposited in the <see cref="Collector"/>.
+   /// </summary>
+   /// <param name="assembly">The assembly to get the id of.</param>
+   /// <returns>The id of the given <paramref name="assembly"/>.</returns>
+   protected ulong GetAssemblyId(Assembly assembly)
+   {
+      AssemblyIdentity identity = new AssemblyIdentity(assembly);
+      if (WriteContext.GetOrCreateAssemblyId(identity, out ulong assemblyId))
+      {
+         AssemblyInfo assemblyInfo = AssemblyInfo.FromAssembly(assemblyId, assembly);
+         Collector.Deposit(assemblyInfo);
+      }
+
+      return assemblyId;
    }
 
    private void Save(ulong entryId, Importance importance, TimeSpan timestamp, ulong fileId, uint line, IComponent component)

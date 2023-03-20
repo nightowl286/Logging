@@ -1,7 +1,10 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using System.Reflection;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Entries.Components;
+using TNO.Logging.Common.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -82,6 +85,22 @@ internal class EntryBuilder : IEntryBuilder
    }
 
    /// <inheritdoc/>
+   public IEntryBuilder With(Assembly assembly)
+   {
+      ThrowIfHasComponent(ComponentKind.Assembly);
+
+      AssemblyIdentity identity = new AssemblyIdentity(assembly);
+      if (_writeContext.GetOrCreateAssemblyId(identity, out ulong assemblyId))
+      {
+         AssemblyInfo assemblyInfo = AssemblyInfo.FromAssembly(assemblyId, assembly);
+         _collector.Deposit(assemblyInfo);
+      }
+
+      AssemblyComponent component = new AssemblyComponent(assemblyId);
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
    public ITableComponentBuilder<IEntryBuilder> WithTable()
    {
       ThrowIfHasComponent(ComponentKind.Table);
@@ -116,7 +135,5 @@ internal class EntryBuilder : IEntryBuilder
       if (_components.ContainsKey(kind))
          throw new InvalidOperationException($"This builder already has the component {kind}.");
    }
-
-
    #endregion
 }
