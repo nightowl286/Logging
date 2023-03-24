@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
@@ -47,6 +48,22 @@ public interface IEntryBuilder
    /// <summary>Starts creating a table that will be added as an <see cref="ITableComponent"/>.</summary>
    /// <returns>The table component builder that can be used to customise the table.</returns>
    ITableComponentBuilder<IEntryBuilder> WithTable();
+
+   /// <summary>
+   /// Adds the given <paramref name="stackTrace"/> and the <paramref name="threadId"/>
+   /// as an <see cref="ISimpleStackTraceComponent"/>.
+   /// </summary>
+   /// <param name="stackTrace">The stack trace to add.</param>
+   /// <param name="threadId">
+   /// The <see cref="Thread.ManagedThreadId"/> of the thread 
+   /// that the <paramref name="stackTrace"/> is from.
+   /// 
+   /// If <see langword="null"/> is used, then the id of the
+   /// <see cref="Thread.CurrentThread"/> will be used instead.
+   /// </param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder WithSimple(StackTrace stackTrace, int? threadId = null);
 
    /// <summary>Builds the entry and logs it.</summary>
    /// <returns>The logger that was used.</returns>

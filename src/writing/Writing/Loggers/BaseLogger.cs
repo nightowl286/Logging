@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
@@ -102,6 +103,22 @@ public class BaseLogger : ILogger
 
       ulong assemblyId = GetAssemblyId(assembly);
       AssemblyComponent component = new AssemblyComponent(assemblyId);
+
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
+      return this;
+   }
+
+   /// <inheritdoc/>
+   public ILogger LogSimple(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      threadId ??= Environment.CurrentManagedThreadId;
+      string stackTraceStr = stackTrace.ToString();
+      SimpleStackTraceComponent component = new SimpleStackTraceComponent(stackTraceStr, threadId.Value);
 
       Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
       return this;

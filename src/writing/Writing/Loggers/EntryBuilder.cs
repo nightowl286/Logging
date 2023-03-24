@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -112,6 +113,19 @@ internal class EntryBuilder : IEntryBuilder
 
       TableComponentBuilder<IEntryBuilder> builder = new TableComponentBuilder<IEntryBuilder>(this, _writeContext, _collector, AddTable);
       return builder;
+   }
+
+   /// <inheritdoc/>
+   public IEntryBuilder WithSimple(StackTrace stackTrace, int? threadId = null)
+   {
+      ThrowIfHasComponent(ComponentKind.SimpleStackTrace);
+
+      threadId ??= Environment.CurrentManagedThreadId;
+      string stackTraceStr = stackTrace.ToString();
+
+      SimpleStackTraceComponent component = new SimpleStackTraceComponent(stackTraceStr, threadId.Value);
+
+      return AddComponent(component);
    }
 
    /// <inheritdoc/>

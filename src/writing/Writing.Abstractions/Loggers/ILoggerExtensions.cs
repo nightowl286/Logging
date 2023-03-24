@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries;
 
@@ -42,6 +43,33 @@ public static class ILoggerExtensions
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       logger.Log(importance, Thread.CurrentThread, out _, file, line);
+      return logger;
+   }
+
+   /// <inheritdoc cref="ILogger.LogSimple(Importance, StackTrace, int?, out ulong, string, uint)"/>
+   public static ILogger LogSimple(this ILogger logger, Importance importance, StackTrace stackTrace, int? threadId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.LogSimple(importance, stackTrace, threadId, out _, file, line);
+      return logger;
+   }
+
+   /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from the <see cref="Thread.CurrentThread"/>.</remarks>
+   /// <inheritdoc cref="ILogger.LogSimple(Importance, StackTrace, int?, out ulong, string, uint)"/>
+   public static ILogger LogSimple(this ILogger logger, Importance importance, StackTrace stackTrace, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.LogSimple(importance, stackTrace, null, out entryId, file, line);
+      return logger;
+   }
+
+
+   /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from the <see cref="Thread.CurrentThread"/>.</remarks>
+   /// <inheritdoc cref="ILogger.LogSimple(Importance, StackTrace, int?, out ulong, string, uint)"/>
+   public static ILogger LogSimple(this ILogger logger, Importance importance, StackTrace stackTrace,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.LogSimple(importance, stackTrace, null, out _, file, line);
       return logger;
    }
 
