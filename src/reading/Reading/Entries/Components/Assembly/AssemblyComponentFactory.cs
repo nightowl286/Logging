@@ -5,7 +5,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components.Assembly;
 namespace TNO.Logging.Reading.Entries.Components.Assembly;
 
 /// <summary>
-/// A factory class that should be used instances of the <see cref="IAssemblyComponentDeserialiser"/>.
+/// A factory class that should be used in instances of the <see cref="IAssemblyComponentDeserialiser"/>.
 /// </summary>
 internal static class AssemblyComponentFactory
 {

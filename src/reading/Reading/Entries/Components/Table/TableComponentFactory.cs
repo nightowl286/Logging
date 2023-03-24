@@ -5,7 +5,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 namespace TNO.Logging.Reading.Entries.Components.Table;
 
 /// <summary>
-/// A factory class that should be used instances of the <see cref="ITableComponentDeserialiser"/>.
+/// A factory class that should be used in instances of the <see cref="ITableComponentDeserialiser"/>.
 /// </summary>
 internal static class TableComponentFactory
 {
