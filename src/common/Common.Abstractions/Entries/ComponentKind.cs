@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace TNO.Logging.Common.Abstractions.Entries;
 
@@ -25,6 +26,9 @@ public enum ComponentKind : ushort
 
    /// <summary>Information gathered about a <see cref="System.Reflection.Assembly"/>.</summary>
    Assembly = 32,
+
+   /// <summary>Simple information about a <see cref="StackTrace"/>.</summary>
+   SimpleStackTrace = 64,
 
    /// <summary>This entry is reserved for possible future expansion.</summary>
    ReservedForExpansion = 32_768,

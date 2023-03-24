@@ -44,4 +44,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="IAssemblyComponent"/>.</summary>
    Assembly,
+
+   /// <summary>Represents the <see cref="ISimpleStackTraceComponent"/>.</summary>
+   SimpleStackTrace,
 }
