@@ -21,7 +21,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             new ThreadComponentSerialiser(),
             new EntryLinkComponentSerialiser(),
             new TableComponentSerialiser(),
-            new AssemblyComponentSerialiser());
+            new AssemblyComponentSerialiser(),
+            new SimpleStackTraceComponentSerialiser());
 
       writer = new EntrySerialiser(componentSerialiser);
 
@@ -32,7 +33,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             new ThreadComponentDeserialiserLatest(),
             new EntryLinkComponentDeserialiserLatest(),
             new TableComponentDeserialiserLatest(),
-            new AssemblyComponentDeserialiserLatest());
+            new AssemblyComponentDeserialiserLatest(),
+            new SimpleStackTraceComponentDeserialiserLatest());
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }
@@ -46,6 +48,7 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
       Dictionary<uint, object> table = new Dictionary<uint, object>() { { 1, 5 } };
       TableComponent tableComponent = new TableComponent(table);
       AssemblyComponent assemblyComponent = new AssemblyComponent(0);
+      SimpleStackTraceComponent simpleStackTraceComponent = new SimpleStackTraceComponent("some stack trace", 6);
 
       ulong id = 1;
       ulong contextId = 2;
@@ -61,7 +64,8 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
          { ComponentKind.Tag, tagComponent },
          { ComponentKind.Thread, threadComponent },
          { ComponentKind.Table, tableComponent },
-         { ComponentKind.Assembly, assemblyComponent }
+         { ComponentKind.Assembly, assemblyComponent },
+         { ComponentKind.SimpleStackTrace, simpleStackTraceComponent }
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
@@ -144,6 +148,16 @@ public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeseri
             out IAssemblyComponent resultComponent);
 
          Assert.That.AreEqual(expectedComponent.AssemblyId, resultComponent.AssemblyId);
+      }
+
+      // Simple stack trace component
+      {
+         GetComponents(ComponentKind.SimpleStackTrace,
+            out ISimpleStackTraceComponent expectedComponent,
+            out ISimpleStackTraceComponent resultComponent);
+
+         Assert.That.AreEqual(expectedComponent.ThreadId, resultComponent.ThreadId);
+         Assert.That.AreEqual(expectedComponent.StackTrace, resultComponent.StackTrace);
       }
    }
    #endregion

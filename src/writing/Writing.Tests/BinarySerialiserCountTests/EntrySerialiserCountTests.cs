@@ -49,7 +49,8 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
             new ThreadComponentSerialiser(),
             new EntryLinkComponentSerialiser(),
             new TableComponentSerialiser(),
-            new AssemblyComponentSerialiser());
+            new AssemblyComponentSerialiser(),
+            new SimpleStackTraceComponentSerialiser());
 
       return new EntrySerialiser(componentSerialiser);
    }

@@ -95,6 +95,7 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<IEntryLinkComponentSerialiser, EntryLinkComponentSerialiser>(facade);
       VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(facade);
       VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(facade);
+      VersionedSingleton<ISimpleStackTraceComponentSerialiser, SimpleStackTraceComponentSerialiser>(facade);
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }
