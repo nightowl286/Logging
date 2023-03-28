@@ -15,15 +15,15 @@ internal static class AssemblyInfoFactory
    #region Functions
    public static IAssemblyInfo Version0(
       ulong id,
-   string? name,
-   Version? version,
-   CultureInfo? culture,
-   AssemblyLocationKind locationKind,
-   string location,
-   DebuggableAttribute.DebuggingModes? debuggingFlags,
-   string configuration,
-   PortableExecutableKinds peKinds,
-   ImageFileMachine targetPlatform)
+      string? name,
+      Version? version,
+      CultureInfo? culture,
+      AssemblyLocationKind locationKind,
+      string location,
+      DebuggableAttribute.DebuggingModes? debuggingFlags,
+      string configuration,
+      PortableExecutableKinds peKinds,
+      ImageFileMachine targetPlatform)
    {
       AssemblyInfo assemblyInfo = new AssemblyInfo(
          id,

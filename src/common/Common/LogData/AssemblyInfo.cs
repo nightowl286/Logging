@@ -31,8 +31,10 @@ public record class AssemblyInfo(
    ImageFileMachine TargetPlatform) : IAssemblyInfo
 {
    #region Functions
-   /// <summary>Creates an <see cref="AssemblyInfo"/> with the given
-   /// <paramref name="id"/>, for the given <paramref name="assembly"/>.</summary>
+   /// <summary>
+   /// Creates an <see cref="AssemblyInfo"/> with the given
+   /// <paramref name="id"/>, for the given <paramref name="assembly"/>.
+   /// </summary>
    /// <param name="id">The id that will be assigned to the created <see cref="AssemblyInfo"/>.</param>
    /// <param name="assembly">The assembly to create the <see cref="AssemblyInfo"/> for.</param>
    /// <returns>The created <see cref="AssemblyInfo"/>.</returns>
