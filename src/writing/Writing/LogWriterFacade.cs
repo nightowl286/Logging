@@ -86,6 +86,7 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(facade);
       VersionedSingleton<ITableKeyReferenceSerialiser, TableKeyReferenceSerialiser>(facade);
       VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(facade);
+      VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(facade);
    }
    private static void RegisterComponentSerialisers(IServiceFacade facade)
    {
