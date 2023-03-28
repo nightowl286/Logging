@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.IdFactories;
 
@@ -17,6 +18,7 @@ public class LogWriteContext : ILogWriteContext
    private readonly SafeIdFactory<string> _tagIdFactory = new SafeIdFactory<string>(1);
    private readonly SafeIdFactory<string> _tableKeyIdFactory = new SafeIdFactory<string>(1);
    private readonly SafeIdFactory<AssemblyIdentity> _assemblyIdFactory = new SafeIdFactory<AssemblyIdentity>(1);
+   private readonly SafeIdFactory<TypeIdentity> _typeIdFactory = new SafeIdFactory<TypeIdentity>(1);
    private readonly Stopwatch _timestampWatch = Stopwatch.StartNew();
    #endregion
 
@@ -38,6 +40,9 @@ public class LogWriteContext : ILogWriteContext
 
    /// <inheritdoc/>
    public bool GetOrCreateAssemblyId(AssemblyIdentity assemblyIdentity, out ulong assemblyId) => _assemblyIdFactory.GetOrCreate(assemblyIdentity, out assemblyId);
+
+   /// <inheritdoc/>
+   public bool GetOrCreateTypeId(TypeIdentity typeIdentity, out ulong typeId) => _typeIdFactory.GetOrCreate(typeIdentity, out typeId);
 
    /// <inheritdoc/>
    public bool GetOrCreateTableKeyId(string key, out uint tableKeyId)

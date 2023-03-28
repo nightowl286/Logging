@@ -31,6 +31,9 @@ public class FileSystemLogWriterSettings
 
    /// <summary>The threshold that should be reached for saved assembly infos before they get compressed. In bytes.</summary>
    public long AssemblyInfoThreshold { get; set; } = DefaultThreshold;
+
+   /// <summary>The threshold that should be reached for saved type infos before they get compressed. In bytes.</summary>
+   public long TypeInfoThreshold { get; set; } = DefaultThreshold;
    #endregion
 
    #region Constructors

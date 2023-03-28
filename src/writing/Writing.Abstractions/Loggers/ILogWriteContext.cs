@@ -1,5 +1,6 @@
 ﻿using System;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -53,6 +54,15 @@ public interface ILogWriteContext
    /// had to be created, <see langword="false"/> otherwise.
    /// </returns>
    bool GetOrCreateAssemblyId(AssemblyIdentity assemblyIdentity, out ulong assemblyId);
+
+   /// <summary>Gets or creates the <paramref name="typeId"/> for the given <paramref name="typeIdentity"/>.</summary>
+   /// <param name="typeIdentity">The <see cref="TypeIdentity"/> to get or create the <paramref name="typeId"/> for.</param>
+   /// <param name="typeId">The id of the given <paramref name="typeIdentity"/>.</param>
+   /// <returns>
+   /// <see langword="true"/> if a new <paramref name="typeId"/> 
+   /// had to be created, <see langword="false"/> otherwise.
+   /// </returns>
+   bool GetOrCreateTypeId(TypeIdentity typeIdentity, out ulong typeId);
 
    /// <summary>Creates a new id for a context.</summary>
    /// <returns>The id of the newly created context.</returns>

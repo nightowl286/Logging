@@ -1,6 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Writing.Abstractions.Collectors;
 
 namespace TNO.Logging.Writing.Collectors;
@@ -99,6 +100,13 @@ public sealed class LogDataDistributor : ILogDataDistributor
    {
       foreach (ILogDataCollector collector in EnumerateCollectors())
          collector.Deposit(assemblyInfo);
+   }
+
+   /// <inheritdoc/>
+   public void Deposit(ITypeInfo typeInfo)
+   {
+      foreach (ILogDataCollector collector in EnumerateCollectors())
+         collector.Deposit(typeInfo);
    }
    #endregion
 

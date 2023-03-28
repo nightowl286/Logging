@@ -5,6 +5,7 @@ using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
@@ -12,6 +13,7 @@ using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
+using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
 using TNO.Logging.Reading.Abstractions.Readers;
 
 namespace TNO.Logging.Reading.Readers;
@@ -50,6 +52,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
    /// <inheritdoc/>
    public IReader<IAssemblyInfo> AssemblyInfos { get; private set; }
+
+   /// <inheritdoc/>
+   public IReader<ITypeInfo> TypeInfos { get; private set; }
    #endregion
 
    #region Constructors
@@ -79,6 +84,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(TagReferences))]
    [MemberNotNull(nameof(TableKeyReferences))]
    [MemberNotNull(nameof(AssemblyInfos))]
+   [MemberNotNull(nameof(TypeInfos))]
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
@@ -107,6 +113,10 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       AssemblyInfos = new BinaryDeserialiserReader<IAssemblyInfo>(
          GetReaderPath("assemblies"),
          deserialiserProvider.GetDeserialiser<IAssemblyInfoDeserialiser>());
+
+      TypeInfos = new BinaryDeserialiserReader<ITypeInfo>(
+         GetReaderPath("types"),
+         deserialiserProvider.GetDeserialiser<ITypeInfoDeserialiser>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
@@ -127,6 +137,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       TagReferences.TryDispose();
       TableKeyReferences.TryDispose();
       AssemblyInfos.TryDispose();
+      TypeInfos.TryDispose();
 
       if (_tempPath is not null)
          Directory.Delete(_tempPath, true);

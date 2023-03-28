@@ -3,6 +3,7 @@ using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Serialisers;
@@ -25,6 +26,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    private readonly BinarySerialiserWriter<TagReference> _tagReferenceDataWriter;
    private readonly BinarySerialiserWriter<TableKeyReference> _tableKeyReferenceDataWriter;
    private readonly BinarySerialiserWriter<IAssemblyInfo> _assemblyInfoDataWriter;
+   private readonly BinarySerialiserWriter<ITypeInfo> _typeInfoDataWriter;
    #endregion
 
    #region Properties
@@ -84,6 +86,12 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
          facade.GetSerialiser<IAssemblyInfoSerialiser>(),
          settings.AssemblyInfoThreshold);
 
+      // type infos
+      _typeInfoDataWriter = new BinarySerialiserWriter<ITypeInfo>(
+         GetWriterPath("types"),
+         facade.GetSerialiser<ITypeInfoSerialiser>(),
+         settings.TypeInfoThreshold);
+
       WriteVersions();
    }
    #endregion
@@ -108,6 +116,9 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    public void Deposit(IAssemblyInfo assemblyInfo) => _assemblyInfoDataWriter.Deposit(assemblyInfo);
 
    /// <inheritdoc/>
+   public void Deposit(ITypeInfo typeInfo) => _typeInfoDataWriter.Deposit(typeInfo);
+
+   /// <inheritdoc/>
    public void Dispose()
    {
       _entryDataWriter.Dispose();
@@ -116,6 +127,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       _tagReferenceDataWriter.Dispose();
       _tableKeyReferenceDataWriter.Dispose();
       _assemblyInfoDataWriter.Dispose();
+      _typeInfoDataWriter.Dispose();
 
       CreateArchive(LogPath);
    }
