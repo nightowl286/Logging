@@ -26,6 +26,14 @@ public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
       string fullName = reader.ReadString();
       string @namespace = reader.ReadString();
 
+      int genericTypeIdsCount = reader.Read7BitEncodedInt();
+      List<ulong> genericTypeIds = new List<ulong>(genericTypeIdsCount);
+      for (int i = 0; i < genericTypeIdsCount; i++)
+      {
+         ulong genericTypeId = reader.ReadUInt64();
+         genericTypeIds.Add(genericTypeId);
+      }
+
       return TypeInfoFactory.Version0(
          id,
          assemblyId,
@@ -33,7 +41,8 @@ public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
          declaringTypeId,
          name,
          fullName,
-         @namespace);
+         @namespace,
+         genericTypeIds);
    }
    #endregion
 }

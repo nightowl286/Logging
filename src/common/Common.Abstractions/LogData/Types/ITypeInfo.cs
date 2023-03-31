@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace TNO.Logging.Common.Abstractions.LogData.Types;
@@ -49,5 +50,8 @@ public interface ITypeInfo
    /// as described in the <see href="https://learn.microsoft.com/en-us/dotnet/api/system.type.namespace#property-value">documentation</see>.
    /// </remarks>
    string Namespace { get; }
+
+   /// <summary>The ids of the <see cref="Type.GenericTypeArguments"/>.</summary>
+   IReadOnlyList<ulong> GenericTypeIds { get; }
    #endregion
 }

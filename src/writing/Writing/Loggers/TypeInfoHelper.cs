@@ -28,16 +28,27 @@ public static class TypeInfoHelper
       ulong baseTypeId = 0;
       ulong declaringTypeId = 0;
 
+      List<ulong> genericTypeIds = new List<ulong>();
+
       if (type.BaseType is not null)
          baseTypeId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, type.BaseType);
 
       if (type.DeclaringType is not null)
          declaringTypeId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, type.DeclaringType);
 
+      if (type.IsGenericType)
+      {
+         foreach (Type genericType in type.GenericTypeArguments)
+         {
+            ulong genericTypeId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, genericType);
+            genericTypeIds.Add(genericTypeId);
+         }
+      }
+
       TypeIdentity identity = new TypeIdentity(type);
       if (writeContext.GetOrCreateTypeId(identity, out ulong typeId))
       {
-         ITypeInfo typeInfo = TypeInfo.FromType(typeId, assemblyId, declaringTypeId, baseTypeId, type);
+         ITypeInfo typeInfo = TypeInfo.FromType(typeId, assemblyId, declaringTypeId, baseTypeId, genericTypeIds, type);
          dataCollector.Deposit(typeInfo);
       }
 

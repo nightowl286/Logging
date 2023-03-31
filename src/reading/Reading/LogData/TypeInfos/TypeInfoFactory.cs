@@ -17,7 +17,8 @@ internal static class TypeInfoFactory
       ulong declaringTypeId,
       string name,
       string fullName,
-      string @namespace)
+      string @namespace,
+      IReadOnlyList<ulong> genericTypeIds)
    {
       return new TypeInfo(
          id,
@@ -26,7 +27,8 @@ internal static class TypeInfoFactory
          baseTypeId,
          name,
          fullName,
-         @namespace);
+         @namespace,
+         genericTypeIds);
    }
    #endregion
 }

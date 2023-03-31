@@ -13,6 +13,7 @@ namespace TNO.Logging.Common.LogData;
 /// <param name="Name">The <see cref="MemberInfo.Name"/> of the <see cref="Type"/>.</param>
 /// <param name="FullName">The <see cref="Type.FullName"/>, or <see cref="string.Empty"/> instead of <see langword="null"/>.</param>
 /// <param name="Namespace">The <see cref="Type.Namespace"/>, or <see cref="string.Empty"/> instead of <see langword="null"/>.</param>
+/// <param name="GenericTypeIds">The ids of the <see cref="Type.GenericTypeArguments"/>.</param>
 public record class TypeInfo(
    ulong Id,
    ulong AssemblyId,
@@ -20,7 +21,8 @@ public record class TypeInfo(
    ulong BaseTypeId,
    string Name,
    string FullName,
-   string Namespace) : ITypeInfo
+   string Namespace,
+   IReadOnlyList<ulong> GenericTypeIds) : ITypeInfo
 {
    #region Functions
    /// <summary>
@@ -31,9 +33,10 @@ public record class TypeInfo(
    /// <param name="assemblyId">The id that will be assigned to the created <see cref="AssemblyId"/>.</param>
    /// <param name="declaringTypeId">The id that will be assigned to the created <see cref="DeclaringTypeId"/>.</param>
    /// <param name="baseTypeId">The id that will be assigned to the created <see cref="BaseTypeId"/>.</param>
+   /// <param name="genericTypeIds">The ids that will be assigned to the created <see cref="GenericTypeIds"/>.</param>
    /// <param name="type">The type to create the <see cref="TypeInfo"/> for.</param>
    /// <returns>The created <see cref="TypeInfo"/>.</returns>
-   public static TypeInfo FromType(ulong id, ulong assemblyId, ulong declaringTypeId, ulong baseTypeId, Type type)
+   public static TypeInfo FromType(ulong id, ulong assemblyId, ulong declaringTypeId, ulong baseTypeId, IReadOnlyList<ulong> genericTypeIds, Type type)
    {
       string name = type.Name;
       string fullName = type.FullName ?? string.Empty;
@@ -46,7 +49,8 @@ public record class TypeInfo(
          baseTypeId,
          name,
          fullName,
-         @namespace);
+         @namespace,
+         genericTypeIds);
    }
    #endregion
 }

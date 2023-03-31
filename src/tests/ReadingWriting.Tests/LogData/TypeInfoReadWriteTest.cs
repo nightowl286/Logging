@@ -17,7 +17,8 @@ public class TypeInfoReadWriteTest : ReadWriteTestBase<TypeInfoSerialiser, TypeI
          2,
          "name",
          "full name",
-         "name space");
+         "name space",
+         new List<ulong> { 1, 2, 3 });
 
       return typeInfo;
    }
@@ -31,6 +32,10 @@ public class TypeInfoReadWriteTest : ReadWriteTestBase<TypeInfoSerialiser, TypeI
       Assert.That.AreEqual(expected.Name, result.Name);
       Assert.That.AreEqual(expected.FullName, result.FullName);
       Assert.That.AreEqual(expected.Namespace, result.Namespace);
+
+      List<ulong> expectedGenericTypeIds = expected.GenericTypeIds.ToList();
+      List<ulong> resultGenericTypeIds = result.GenericTypeIds.ToList();
+      CollectionAssert.AreEqual(expectedGenericTypeIds, resultGenericTypeIds);
    }
    #endregion
 }

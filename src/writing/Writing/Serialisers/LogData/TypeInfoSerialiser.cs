@@ -26,6 +26,8 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
       string fullName = data.FullName;
       string @namespace = data.Namespace;
 
+      IReadOnlyList<ulong> genericTypeIds = data.GenericTypeIds;
+
       writer.Write(id);
       writer.Write(assemblyId);
       writer.Write(declaringTypeId);
@@ -34,6 +36,10 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
       writer.Write(name);
       writer.Write(fullName);
       writer.Write(@namespace);
+
+      writer.Write7BitEncodedInt(genericTypeIds.Count);
+      foreach (ulong genericTypeId in genericTypeIds)
+         writer.Write(genericTypeId);
    }
 
    /// <inheritdoc/>
@@ -45,8 +51,10 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
       int fullNameSize = BinaryWriterSizeHelper.StringSize(data.FullName);
       int namespaceSize = BinaryWriterSizeHelper.StringSize(data.Namespace);
+      int genericTypeIdsCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.GenericTypeIds.Count);
+      int genericTypeIdsCount = sizeof(ulong) * data.GenericTypeIds.Count;
 
-      return (ulong)(size + nameSize + fullNameSize + namespaceSize);
+      return (ulong)(size + nameSize + fullNameSize + namespaceSize + genericTypeIdsCountSize + genericTypeIdsCount);
    }
    #endregion
 }

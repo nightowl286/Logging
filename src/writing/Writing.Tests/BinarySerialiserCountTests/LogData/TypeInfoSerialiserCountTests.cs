@@ -19,7 +19,8 @@ public class TypeInfoSerialiserCountTests : BinarySerialiserCountTestBase<TypeIn
          2,
          "name",
          "full name",
-         "name space");
+         "name space",
+         new List<ulong> { 1, 2, 3 });
 
       // Act + Verify
       CountTestBase(typeInfo);
