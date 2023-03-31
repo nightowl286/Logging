@@ -1,4 +1,5 @@
 ﻿global using Microsoft.VisualStudio.TestTools.UnitTesting;
+global using Moq;
 global using TNO.Tests.Common;
 
 #if DEBUG
