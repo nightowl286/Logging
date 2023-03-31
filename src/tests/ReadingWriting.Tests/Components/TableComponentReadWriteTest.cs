@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using System.Diagnostics;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Writing.Entries.Components;
 
@@ -43,6 +44,8 @@ public class TableComponentReadWriteTest : ReadWriteTestBase<TableComponentSeria
       {
          object expectedValue = expectedPair.Value;
          object resultValue = result.Table[expectedPair.Key];
+
+         Debug.WriteLine($"Checking types: <{expectedValue.GetType()}> <{resultValue.GetType()}>");
 
          Assert.That.AreEqual(expectedValue, resultValue);
       }

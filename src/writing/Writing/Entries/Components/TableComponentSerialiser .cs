@@ -98,7 +98,7 @@ public sealed class TableComponentSerialiser : ITableComponentSerialiser
          else if (value is DateTime dateTime) writer.Write(dateTime.Ticks);
          else if (value is DateTimeOffset dateTimeOffset)
          {
-            writer.Write(dateTimeOffset.UtcTicks);
+            writer.Write(dateTimeOffset.Ticks);
             writer.Write(dateTimeOffset.Offset.Ticks);
          }
          else if (value is TimeZoneInfo timeZoneInfo) writer.Write(timeZoneInfo.Id);
