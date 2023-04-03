@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Writing.Serialisers.LogData;
+using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 
-namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData;
+namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Assemblies;
 
 [TestClass]
 public class AssemblyInfoSerialiserCountTests : BinarySerialiserCountTestBase<AssemblyInfoSerialiser, IAssemblyInfo>
@@ -16,7 +16,6 @@ public class AssemblyInfoSerialiserCountTests : BinarySerialiserCountTestBase<As
    {
       // Arrange
       AssemblyInfo assemblyInfo = new AssemblyInfo(
-         0,
          null,
          null,
          null,
@@ -27,7 +26,7 @@ public class AssemblyInfoSerialiserCountTests : BinarySerialiserCountTestBase<As
          default,
          default);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(assemblyInfo);
    }
 
@@ -36,7 +35,6 @@ public class AssemblyInfoSerialiserCountTests : BinarySerialiserCountTestBase<As
    {
       // Arrange
       AssemblyInfo assemblyInfo = new AssemblyInfo(
-         0,
          "name",
          new Version(1, 2, 3, 4),
          CultureInfo.InvariantCulture,
@@ -47,7 +45,7 @@ public class AssemblyInfoSerialiserCountTests : BinarySerialiserCountTestBase<As
          PortableExecutableKinds.Preferred32Bit,
          ImageFileMachine.AMD64);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(assemblyInfo);
    }
    #endregion

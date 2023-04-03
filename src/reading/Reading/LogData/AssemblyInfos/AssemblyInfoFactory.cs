@@ -14,7 +14,6 @@ internal static class AssemblyInfoFactory
 {
    #region Functions
    public static IAssemblyInfo Version0(
-      ulong id,
       string? name,
       Version? version,
       CultureInfo? culture,
@@ -26,7 +25,6 @@ internal static class AssemblyInfoFactory
       ImageFileMachine targetPlatform)
    {
       AssemblyInfo assemblyInfo = new AssemblyInfo(
-         id,
          name,
          version,
          culture,

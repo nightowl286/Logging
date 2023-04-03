@@ -2,6 +2,7 @@
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
+using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
 using TNO.Logging.Reading.Deserialisers;
 using TNO.Logging.Reading.LogData.AssemblyInfos.Versions;
 

@@ -212,8 +212,10 @@ public class BaseLogger : ILogger
       AssemblyIdentity identity = new AssemblyIdentity(assembly);
       if (WriteContext.GetOrCreateAssemblyId(identity, out ulong assemblyId))
       {
-         AssemblyInfo assemblyInfo = AssemblyInfo.FromAssembly(assemblyId, assembly);
-         Collector.Deposit(assemblyInfo);
+         AssemblyInfo assemblyInfo = AssemblyInfo.FromAssembly(assembly);
+         AssemblyReference assemblyReference = new AssemblyReference(assemblyInfo, assemblyId);
+
+         Collector.Deposit(assemblyReference);
       }
 
       return assemblyId;

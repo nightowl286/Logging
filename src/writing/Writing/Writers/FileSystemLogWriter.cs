@@ -2,12 +2,12 @@
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
 using TNO.Logging.Writing.Abstractions.Writers;
 
 namespace TNO.Logging.Writing.Writers;
@@ -25,7 +25,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    private readonly BinarySerialiserWriter<ContextInfo> _contextInfoDataWriter;
    private readonly BinarySerialiserWriter<TagReference> _tagReferenceDataWriter;
    private readonly BinarySerialiserWriter<TableKeyReference> _tableKeyReferenceDataWriter;
-   private readonly BinarySerialiserWriter<IAssemblyInfo> _assemblyInfoDataWriter;
+   private readonly BinarySerialiserWriter<AssemblyReference> _assemblyReferenceDataWriter;
    private readonly BinarySerialiserWriter<ITypeInfo> _typeInfoDataWriter;
    #endregion
 
@@ -81,10 +81,10 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
          settings.TableKeyReferenceThreshold);
 
       // assembly infos
-      _assemblyInfoDataWriter = new BinarySerialiserWriter<IAssemblyInfo>(
+      _assemblyReferenceDataWriter = new BinarySerialiserWriter<AssemblyReference>(
          GetWriterPath("assemblies"),
-         facade.GetSerialiser<IAssemblyInfoSerialiser>(),
-         settings.AssemblyInfoThreshold);
+         facade.GetSerialiser<IAssemblyReferenceSerialiser>(),
+         settings.AssemblyReferenceThreshold);
 
       // type infos
       _typeInfoDataWriter = new BinarySerialiserWriter<ITypeInfo>(
@@ -113,7 +113,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    public void Deposit(TableKeyReference tableKeyReference) => _tableKeyReferenceDataWriter.Deposit(tableKeyReference);
 
    /// <inheritdoc/>
-   public void Deposit(IAssemblyInfo assemblyInfo) => _assemblyInfoDataWriter.Deposit(assemblyInfo);
+   public void Deposit(AssemblyReference assemblyReference) => _assemblyReferenceDataWriter.Deposit(assemblyReference);
 
    /// <inheritdoc/>
    public void Deposit(ITypeInfo typeInfo) => _typeInfoDataWriter.Deposit(typeInfo);
@@ -126,7 +126,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       _contextInfoDataWriter.Dispose();
       _tagReferenceDataWriter.Dispose();
       _tableKeyReferenceDataWriter.Dispose();
-      _assemblyInfoDataWriter.Dispose();
+      _assemblyReferenceDataWriter.Dispose();
       _typeInfoDataWriter.Dispose();
 
       CreateArchive(LogPath);

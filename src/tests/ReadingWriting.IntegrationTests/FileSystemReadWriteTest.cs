@@ -51,8 +51,9 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       string expectedTableValue = "test";
 
       Assembly assembly = Assembly.GetExecutingAssembly();
-      ulong expectedAssemblyInfoId = 1;
-      AssemblyInfo expectedAssemblyInfo = AssemblyInfo.FromAssembly(expectedAssemblyInfoId, assembly);
+      ulong expectedAssemblyId = 1;
+      AssemblyInfo expectedAssemblyInfo = AssemblyInfo.FromAssembly(assembly);
+      AssemblyReference expectedAssemblyReference = new AssemblyReference(expectedAssemblyInfo, expectedAssemblyId);
 
       StackTrace stackTrace = new StackTrace(true);
       string expectedStackTrace = stackTrace.ToString();
@@ -92,7 +93,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
       ContextInfo contextInfo;
       TagReference tagReference;
       TableKeyReference tableKeyReference;
-      IAssemblyInfo assemblyInfo;
+      AssemblyReference assemblyReference;
 
       IMessageComponent message;
       ITagComponent tag;
@@ -112,7 +113,7 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          contextInfo = AssertReadSingle(reader.ContextInfos);
          tagReference = AssertReadSingle(reader.TagReferences);
          tableKeyReference = AssertReadSingle(reader.TableKeyReferences);
-         assemblyInfo = AssertReadSingle(reader.AssemblyInfos);
+         assemblyReference = AssertReadSingle(reader.AssemblyReferences);
 
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
          tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
@@ -162,8 +163,10 @@ public class FileSystemReadWriteTest : FileSystemIntegration
          object tableValue = table.Table[expectedTableKeyId];
          Assert.That.AreEqual(expectedTableValue, tableValue);
 
-         Assert.That.AreEqual(expectedAssemblyInfoId, assemblyComponent.AssemblyId);
-         Assert.That.AreEqual(expectedAssemblyInfo.Id, assemblyInfo.Id);
+         Assert.That.AreEqual(expectedAssemblyId, assemblyComponent.AssemblyId);
+         Assert.That.AreEqual(expectedAssemblyId, assemblyReference.Id);
+         IAssemblyInfo assemblyInfo = assemblyReference.AssemblyInfo;
+
          Assert.That.AreEqual(expectedAssemblyInfo.Name, assemblyInfo.Name);
          Assert.That.AreEqual(expectedAssemblyInfo.Version?.Major, assemblyInfo.Version?.Major);
          Assert.That.AreEqual(expectedAssemblyInfo.Version?.Minor, assemblyInfo.Version?.Minor);

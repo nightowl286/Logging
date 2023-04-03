@@ -93,8 +93,10 @@ internal class EntryBuilder : IEntryBuilder
       AssemblyIdentity identity = new AssemblyIdentity(assembly);
       if (_writeContext.GetOrCreateAssemblyId(identity, out ulong assemblyId))
       {
-         AssemblyInfo assemblyInfo = AssemblyInfo.FromAssembly(assemblyId, assembly);
-         _collector.Deposit(assemblyInfo);
+         AssemblyInfo assemblyInfo = AssemblyInfo.FromAssembly(assembly);
+         AssemblyReference assemblyReference = new AssemblyReference(assemblyInfo, assemblyId);
+
+         _collector.Deposit(assemblyReference);
       }
 
       AssemblyComponent component = new AssemblyComponent(assemblyId);

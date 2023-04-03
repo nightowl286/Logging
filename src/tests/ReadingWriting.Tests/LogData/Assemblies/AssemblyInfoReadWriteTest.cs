@@ -2,9 +2,9 @@
 using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Writing.Serialisers.LogData;
+using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 
-namespace TNO.ReadingWriting.Tests.LogData;
+namespace TNO.ReadingWriting.Tests.LogData.Assemblies;
 
 [TestClass]
 public class AssemblyInfoReadWriteTest : ReadWriteTestBase<AssemblyInfoSerialiser, AssemblyInfoDeserialiserLatest, IAssemblyInfo>
@@ -13,7 +13,6 @@ public class AssemblyInfoReadWriteTest : ReadWriteTestBase<AssemblyInfoSerialise
    protected override IAssemblyInfo CreateData()
    {
       AssemblyInfo assemblyInfo = new AssemblyInfo(
-         1,
          "name",
          new Version(1, 2, 3, 4),
          CultureInfo.InvariantCulture,
@@ -29,7 +28,6 @@ public class AssemblyInfoReadWriteTest : ReadWriteTestBase<AssemblyInfoSerialise
 
    protected override void Verify(IAssemblyInfo expected, IAssemblyInfo result)
    {
-      Assert.That.AreEqual(expected.Id, result.Id);
       Assert.That.AreEqual(expected.Name, result.Name);
       Assert.That.AreEqual(expected.Version?.Major, result.Version?.Major);
       Assert.That.AreEqual(expected.Version?.Minor, result.Version?.Minor);

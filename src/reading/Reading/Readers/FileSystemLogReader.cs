@@ -4,11 +4,10 @@ using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Entries;
-using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
+using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
@@ -51,7 +50,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    public IReader<TableKeyReference> TableKeyReferences { get; private set; }
 
    /// <inheritdoc/>
-   public IReader<IAssemblyInfo> AssemblyInfos { get; private set; }
+   public IReader<AssemblyReference> AssemblyReferences { get; private set; }
 
    /// <inheritdoc/>
    public IReader<ITypeInfo> TypeInfos { get; private set; }
@@ -83,7 +82,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(ContextInfos))]
    [MemberNotNull(nameof(TagReferences))]
    [MemberNotNull(nameof(TableKeyReferences))]
-   [MemberNotNull(nameof(AssemblyInfos))]
+   [MemberNotNull(nameof(AssemblyReferences))]
    [MemberNotNull(nameof(TypeInfos))]
    private void FromDirectory(string directory)
    {
@@ -110,9 +109,9 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
          GetReaderPath("table-keys"),
          deserialiserProvider.GetDeserialiser<ITableKeyReferenceDeserialiser>());
 
-      AssemblyInfos = new BinaryDeserialiserReader<IAssemblyInfo>(
+      AssemblyReferences = new BinaryDeserialiserReader<AssemblyReference>(
          GetReaderPath("assemblies"),
-         deserialiserProvider.GetDeserialiser<IAssemblyInfoDeserialiser>());
+         deserialiserProvider.GetDeserialiser<IAssemblyReferenceDeserialiser>());
 
       TypeInfos = new BinaryDeserialiserReader<ITypeInfo>(
          GetReaderPath("types"),
@@ -136,7 +135,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       ContextInfos.TryDispose();
       TagReferences.TryDispose();
       TableKeyReferences.TryDispose();
-      AssemblyInfos.TryDispose();
+      AssemblyReferences.TryDispose();
       TypeInfos.TryDispose();
 
       if (_tempPath is not null)

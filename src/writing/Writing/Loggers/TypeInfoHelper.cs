@@ -4,6 +4,7 @@ using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
+using AssemblyReference = TNO.Logging.Common.Abstractions.LogData.AssemblyReference;
 using TypeInfo = TNO.Logging.Common.LogData.TypeInfo;
 
 namespace TNO.Logging.Writing.Loggers;
@@ -65,8 +66,10 @@ public static class TypeInfoHelper
       AssemblyIdentity identity = new AssemblyIdentity(assembly);
       if (writeContext.GetOrCreateAssemblyId(identity, out ulong assemblyId))
       {
-         IAssemblyInfo info = AssemblyInfo.FromAssembly(assemblyId, assembly);
-         dataCollector.Deposit(info);
+         IAssemblyInfo info = AssemblyInfo.FromAssembly(assembly);
+         AssemblyReference assemblyReference = new AssemblyReference(info, assemblyId);
+
+         dataCollector.Deposit(assemblyReference);
       }
 
       return assemblyId;

@@ -1,7 +1,6 @@
 ﻿using System;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 
 namespace TNO.Logging.Reading.Abstractions.Readers;
 
@@ -32,7 +31,7 @@ public interface IFileSystemLogReader : IDisposable
    /// <summary>An <see cref="IReader{T}"/> that can be used to read table key references.</summary>
    IReader<TableKeyReference> TableKeyReferences { get; }
 
-   /// <summary>An <see cref="IReader{T}"/> that can be used to read assembly infos.</summary>
-   IReader<IAssemblyInfo> AssemblyInfos { get; }
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read assembly references.</summary>
+   IReader<AssemblyReference> AssemblyReferences { get; }
    #endregion
 }

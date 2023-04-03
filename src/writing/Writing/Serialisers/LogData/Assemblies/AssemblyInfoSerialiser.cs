@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
 
-namespace TNO.Logging.Writing.Serialisers.LogData;
+namespace TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 
 /// <summary>
 /// A serialiser for <see cref="IAssemblyInfo"/>.
@@ -20,7 +20,6 @@ public class AssemblyInfoSerialiser : IAssemblyInfoSerialiser
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IAssemblyInfo data)
    {
-      ulong id = data.Id;
       string? name = data.Name;
       Version? version = data.Version;
       CultureInfo? culture = data.Culture;
@@ -36,7 +35,6 @@ public class AssemblyInfoSerialiser : IAssemblyInfoSerialiser
       int rawPeKinds = (int)peKinds;
       int rawTargetPlatform = (int)targetPlatform;
 
-      writer.Write(id);
       if (writer.TryWriteNullable(name))
          writer.Write(name);
 
@@ -66,7 +64,6 @@ public class AssemblyInfoSerialiser : IAssemblyInfoSerialiser
    public ulong Count(IAssemblyInfo data)
    {
       int size =
-         sizeof(ulong) +
          (sizeof(int) * 2) +
          (sizeof(byte) * 5);
 

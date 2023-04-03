@@ -9,6 +9,7 @@ global using TagComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Compon
 global using ThreadComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Thread.Versions.ThreadComponentDeserialiser0;
 global using EntryDeserialiserLatest = TNO.Logging.Reading.Entries.Versions.EntryDeserialiser0;
 global using AssemblyInfoDeserialiserLatest = TNO.Logging.Reading.LogData.AssemblyInfos.Versions.AssemblyInfoDeserialiser0;
+global using AssemblyReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.AssemblyReferences.Versions.AssemblyReferenceDeserialiser0;
 global using ContextInfoDeserialiserLatest = TNO.Logging.Reading.LogData.ContextInfos.Versions.ContextInfoDeserialiser0;
 global using FileReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.FileReferences.Versions.FileReferenceDeserialiser0;
 global using TableKeyReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.TableKeyReferences.Versions.TableKeyReferenceDeserialiser0;

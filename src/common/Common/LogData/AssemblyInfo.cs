@@ -8,7 +8,6 @@ namespace TNO.Logging.Common.LogData;
 /// <summary>
 /// Represents info about an <see cref="Assembly"/>.
 /// </summary>
-/// <param name="Id">The id of the assembly.</param>
 /// <param name="Name">The name of the assembly.</param>
 /// <param name="Version">The version of the assembly.</param>
 /// <param name="Culture">The culture supported by the assembly.</param>
@@ -19,7 +18,6 @@ namespace TNO.Logging.Common.LogData;
 /// <param name="PeKinds">The nature of the code in the <see cref="Assembly.ManifestModule"/>.</param>
 /// <param name="TargetPlatform">The platform targeted by the <see cref="Assembly.ManifestModule"/>.</param>
 public record class AssemblyInfo(
-   ulong Id,
    string? Name,
    Version? Version,
    CultureInfo? Culture,
@@ -31,14 +29,10 @@ public record class AssemblyInfo(
    ImageFileMachine TargetPlatform) : IAssemblyInfo
 {
    #region Functions
-   /// <summary>
-   /// Creates an <see cref="AssemblyInfo"/> with the given
-   /// <paramref name="id"/>, for the given <paramref name="assembly"/>.
-   /// </summary>
-   /// <param name="id">The id that will be assigned to the created <see cref="AssemblyInfo"/>.</param>
+   /// <summary>Creates an <see cref="AssemblyInfo"/> for the given <paramref name="assembly"/>.</summary>
    /// <param name="assembly">The assembly to create the <see cref="AssemblyInfo"/> for.</param>
    /// <returns>The created <see cref="AssemblyInfo"/>.</returns>
-   public static AssemblyInfo FromAssembly(ulong id, Assembly assembly)
+   public static AssemblyInfo FromAssembly(Assembly assembly)
    {
       AssemblyName assemblyName = assembly.GetName();
       string location = AssemblyLocationResolver.Instance.GetLocation(assembly.Location, out AssemblyLocationKind locationKind);
@@ -47,7 +41,6 @@ public record class AssemblyInfo(
       assembly.ManifestModule.GetPEKind(out PortableExecutableKinds peKinds, out ImageFileMachine targetMachine);
 
       return new AssemblyInfo(
-         id,
          assemblyName.Name,
          assemblyName.Version,
          assemblyName.CultureInfo,

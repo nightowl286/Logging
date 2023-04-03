@@ -11,10 +11,6 @@ namespace TNO.Logging.Common.Abstractions.LogData.Assemblies;
 public interface IAssemblyInfo
 {
    #region Properties
-   /// <summary>The id of the assembly.</summary>
-   /// <remarks>This id is only used within the log.</remarks>
-   ulong Id { get; }
-
    /// <summary>The name of the assembly.</summary>
    string? Name { get; }
 

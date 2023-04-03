@@ -21,8 +21,6 @@ public sealed class AssemblyInfoDeserialiser0 : IAssemblyInfoDeserialiser
    /// <inheritdoc/>
    public IAssemblyInfo Deserialise(BinaryReader reader)
    {
-      ulong id = reader.ReadUInt64();
-
       string? name = reader.TryReadNullable(reader.ReadString);
       Version? version = null;
       if (reader.ReadBoolean())
@@ -52,7 +50,6 @@ public sealed class AssemblyInfoDeserialiser0 : IAssemblyInfoDeserialiser
       ImageFileMachine targetPlatform = (ImageFileMachine)rawTargetPlatform;
 
       return AssemblyInfoFactory.Version0(
-         id,
          name,
          version,
          culture,
