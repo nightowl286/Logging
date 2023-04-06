@@ -1,6 +1,8 @@
 ﻿using System;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 
 namespace TNO.Logging.Reading.Abstractions.Readers;
 
@@ -33,5 +35,8 @@ public interface IFileSystemLogReader : IDisposable
 
    /// <summary>An <see cref="IReader{T}"/> that can be used to read assembly references.</summary>
    IReader<AssemblyReference> AssemblyReferences { get; }
+
+   /// <summary>An <see cref="IReader{T}"/> that can be used to read type references.</summary>
+   IReader<TypeReference> TypeReferences { get; }
    #endregion
 }

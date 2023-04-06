@@ -21,6 +21,7 @@ using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
+using TNO.Logging.Reading.Abstractions.LogData.TypeReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
@@ -38,6 +39,7 @@ using TNO.Logging.Reading.LogData.FileReferences;
 using TNO.Logging.Reading.LogData.TableKeyReferences;
 using TNO.Logging.Reading.LogData.TagReferences;
 using TNO.Logging.Reading.LogData.TypeInfos;
+using TNO.Logging.Reading.LogData.TypeReferences;
 using TNO.Logging.Reading.Readers;
 
 namespace TNO.Logging.Reading;
@@ -88,7 +90,8 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.TableKeyReference,
          VersionedDataKind.AssemblyInfo,
          VersionedDataKind.TypeInfo,
-         VersionedDataKind.AssemblyReference);
+         VersionedDataKind.AssemblyReference,
+         VersionedDataKind.TypeReference);
 
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
@@ -130,7 +133,8 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<ITableKeyReferenceDeserialiserSelector, TableKeyReferenceDeserialiserSelector>()
          .Singleton<IAssemblyInfoDeserialiserSelector, AssemblyInfoDeserialiserSelector>()
          .Singleton<ITypeInfoDeserialiserSelector, TypeInfoDeserialiserSelector>()
-         .Singleton<IAssemblyReferenceDeserialiserSelector, AssemblyReferenceDeserialiserSelector>();
+         .Singleton<IAssemblyReferenceDeserialiserSelector, AssemblyReferenceDeserialiserSelector>()
+         .SingletonIfMissing<ITypeReferenceDeserialiserSelector, TypeReferenceDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
@@ -173,6 +177,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IAssemblyReferenceDeserialiserSelector, IAssemblyReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.TypeInfo)
          RegisterWithProvider<ITypeInfoDeserialiserSelector, ITypeInfoDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.TypeReference)
+         RegisterWithProvider<ITypeReferenceDeserialiserSelector, ITypeReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.SimpleStackTrace)
          RegisterWithProvider<ISimpleStackTraceComponentDeserialiserSelector, ISimpleStackTraceComponentDeserialiser>(facade, version);
    }

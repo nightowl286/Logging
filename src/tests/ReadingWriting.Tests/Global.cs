@@ -15,6 +15,7 @@ global using FileReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.FileR
 global using TableKeyReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.TableKeyReferences.Versions.TableKeyReferenceDeserialiser0;
 global using TagReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.TagReferences.Versions.TagReferenceDeserialiser0;
 global using TypeInfoDeserialiserLatest = TNO.Logging.Reading.LogData.TypeInfos.Versions.TypeInfoDeserialiser0;
+global using TypeReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.TypeReferences.Versions.TypeReferenceDeserialiser0;
 
 #if DEBUG
 [assembly: Parallelize(Scope = ExecutionScope.ClassLevel, Workers = 1)]

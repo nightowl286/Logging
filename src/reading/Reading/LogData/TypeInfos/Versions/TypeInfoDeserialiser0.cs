@@ -17,7 +17,6 @@ public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
    /// <inheritdoc/>
    public ITypeInfo Deserialise(BinaryReader reader)
    {
-      ulong id = reader.ReadUInt64();
       ulong assemblyId = reader.ReadUInt64();
       ulong declaringTypeId = reader.ReadUInt64();
       ulong baseTypeId = reader.ReadUInt64();
@@ -35,7 +34,6 @@ public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
       }
 
       return TypeInfoFactory.Version0(
-         id,
          assemblyId,
          baseTypeId,
          declaringTypeId,

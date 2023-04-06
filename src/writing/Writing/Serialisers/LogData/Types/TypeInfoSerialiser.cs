@@ -1,7 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
 
-namespace TNO.Logging.Writing.Serialisers.LogData;
+namespace TNO.Logging.Writing.Serialisers.LogData.Types;
 
 /// <summary>
 /// A serialiser for <see cref="ITypeInfo"/>.
@@ -17,7 +17,6 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, ITypeInfo data)
    {
-      ulong id = data.Id;
       ulong assemblyId = data.AssemblyId;
       ulong declaringTypeId = data.DeclaringTypeId;
       ulong baseTypeId = data.BaseTypeId;
@@ -28,7 +27,6 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
 
       IReadOnlyList<ulong> genericTypeIds = data.GenericTypeIds;
 
-      writer.Write(id);
       writer.Write(assemblyId);
       writer.Write(declaringTypeId);
       writer.Write(baseTypeId);
@@ -46,7 +44,7 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
    public ulong Count(ITypeInfo data)
    {
       int size =
-         sizeof(ulong) * 4;
+         sizeof(ulong) * 3;
 
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
       int fullNameSize = BinaryWriterSizeHelper.StringSize(data.FullName);

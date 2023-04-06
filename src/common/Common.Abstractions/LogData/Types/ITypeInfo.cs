@@ -10,10 +10,6 @@ namespace TNO.Logging.Common.Abstractions.LogData.Types;
 public interface ITypeInfo
 {
    #region Properties
-   /// <summary>The id of the type.</summary>
-   /// <remarks>This id is only used within the log.</remarks>
-   ulong Id { get; }
-
    /// <summary>The id of the assembly the type is defined in.</summary>
    /// <remarks>This id is only used within the log.</remarks>
    ulong AssemblyId { get; }

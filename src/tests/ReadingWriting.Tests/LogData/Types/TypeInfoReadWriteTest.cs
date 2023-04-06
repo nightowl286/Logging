@@ -1,8 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Writing.Serialisers.LogData;
+using TNO.Logging.Writing.Serialisers.LogData.Types;
 
-namespace TNO.ReadingWriting.Tests.LogData;
+namespace TNO.ReadingWriting.Tests.LogData.Types;
 
 [TestClass]
 public class TypeInfoReadWriteTest : ReadWriteTestBase<TypeInfoSerialiser, TypeInfoDeserialiserLatest, ITypeInfo>
@@ -11,7 +11,6 @@ public class TypeInfoReadWriteTest : ReadWriteTestBase<TypeInfoSerialiser, TypeI
    protected override ITypeInfo CreateData()
    {
       TypeInfo typeInfo = new TypeInfo(
-         0,
          1,
          3,
          2,
@@ -25,7 +24,6 @@ public class TypeInfoReadWriteTest : ReadWriteTestBase<TypeInfoSerialiser, TypeI
 
    protected override void Verify(ITypeInfo expected, ITypeInfo result)
    {
-      Assert.That.AreEqual(expected.Id, result.Id);
       Assert.That.AreEqual(expected.AssemblyId, result.AssemblyId);
       Assert.That.AreEqual(expected.BaseTypeId, result.BaseTypeId);
       Assert.That.AreEqual(expected.DeclaringTypeId, result.DeclaringTypeId);

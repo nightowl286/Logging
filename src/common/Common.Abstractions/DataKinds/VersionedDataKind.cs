@@ -28,11 +28,14 @@ public enum VersionedDataKind : ushort
    /// <summary>Represents the <see cref="IAssemblyInfo"/>.</summary>
    AssemblyInfo,
 
-   /// <summary>Represents the <see cref="LogData.AssemblyReference"/>.</summary>
+   /// <summary>Represents the <see cref="LogData.Assemblies.AssemblyReference"/>.</summary>
    AssemblyReference,
 
    /// <summary>Represents the <see cref="ITypeInfo"/>.</summary>
    TypeInfo,
+
+   /// <summary>Represents the <see cref="LogData.Types.TypeReference"/>.</summary>
+   TypeReference,
 
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,

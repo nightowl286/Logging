@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 
 namespace TNO.Logging.Writing.Abstractions.Collectors;
@@ -34,8 +35,8 @@ public interface ILogDataCollector
    /// <param name="assemblyReference">The assembly reference to deposit.</param>
    void Deposit(AssemblyReference assemblyReference);
 
-   /// <summary>Deposits <paramref name="typeInfo"/> data.</summary>
-   /// <param name="typeInfo">The type info to deposit.</param>
-   void Deposit(ITypeInfo typeInfo);
+   /// <summary>Deposits <paramref name="typeReference"/> data.</summary>
+   /// <param name="typeReference">The type reference to deposit.</param>
+   void Deposit(TypeReference typeReference);
    #endregion
 }

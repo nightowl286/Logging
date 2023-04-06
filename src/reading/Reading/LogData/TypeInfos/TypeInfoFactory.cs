@@ -11,7 +11,6 @@ internal static class TypeInfoFactory
 {
    #region Functions
    public static ITypeInfo Version0(
-      ulong id,
       ulong assemblyId,
       ulong baseTypeId,
       ulong declaringTypeId,
@@ -21,7 +20,6 @@ internal static class TypeInfoFactory
       IReadOnlyList<ulong> genericTypeIds)
    {
       return new TypeInfo(
-         id,
          assemblyId,
          declaringTypeId,
          baseTypeId,

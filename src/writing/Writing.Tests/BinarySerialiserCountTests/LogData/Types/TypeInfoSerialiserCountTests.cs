@@ -1,8 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Writing.Serialisers.LogData;
+using TNO.Logging.Writing.Serialisers.LogData.Types;
 
-namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData;
+namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Types;
 
 [TestClass]
 public class TypeInfoSerialiserCountTests : BinarySerialiserCountTestBase<TypeInfoSerialiser, ITypeInfo>
@@ -13,10 +13,9 @@ public class TypeInfoSerialiserCountTests : BinarySerialiserCountTestBase<TypeIn
    {
       // Arrange
       TypeInfo typeInfo = new TypeInfo(
-         0,
-         1,
-         3,
          2,
+         3,
+         4,
          "name",
          "full name",
          "name space",
