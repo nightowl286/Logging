@@ -1,5 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+﻿using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Assemblies;

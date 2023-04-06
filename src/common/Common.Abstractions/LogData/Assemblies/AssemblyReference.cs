@@ -1,6 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Assemblies;
-
-namespace TNO.Logging.Common.Abstractions.LogData;
+﻿namespace TNO.Logging.Common.Abstractions.LogData.Assemblies;
 
 /// <summary>
 /// Represents a link between an <see cref="AssemblyInfo"/> and it's <see cref="Id"/>.

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 
@@ -13,8 +13,8 @@ public class AssemblyReferenceSerialiserCountTests : BinarySerialiserCountTestBa
    #region Methods
    protected override AssemblyReferenceSerialiser Setup()
    {
-      AssemblyInfoSerialiser assemblyInfoSerialiser = new AssemblyInfoSerialiser();
-      return new AssemblyReferenceSerialiser(assemblyInfoSerialiser);
+      return new AssemblyReferenceSerialiser(
+         new AssemblyInfoSerialiser());
    }
    #endregion
 
