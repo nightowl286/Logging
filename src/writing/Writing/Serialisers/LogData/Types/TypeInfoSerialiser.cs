@@ -20,6 +20,8 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
       ulong assemblyId = data.AssemblyId;
       ulong declaringTypeId = data.DeclaringTypeId;
       ulong baseTypeId = data.BaseTypeId;
+      ulong elementTypeId = data.ElementTypeId;
+      ulong genericTypeDefinitionId = data.GenericTypeDefinitionId;
 
       string name = data.Name;
       string fullName = data.FullName;
@@ -30,6 +32,8 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
       writer.Write(assemblyId);
       writer.Write(declaringTypeId);
       writer.Write(baseTypeId);
+      writer.Write(elementTypeId);
+      writer.Write(genericTypeDefinitionId);
 
       writer.Write(name);
       writer.Write(fullName);
@@ -44,7 +48,7 @@ public class TypeInfoSerialiser : ITypeInfoSerialiser
    public ulong Count(ITypeInfo data)
    {
       int size =
-         sizeof(ulong) * 3;
+         sizeof(ulong) * 5;
 
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
       int fullNameSize = BinaryWriterSizeHelper.StringSize(data.FullName);

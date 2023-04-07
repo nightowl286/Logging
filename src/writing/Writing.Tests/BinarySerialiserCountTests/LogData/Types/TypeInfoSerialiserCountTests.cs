@@ -16,6 +16,8 @@ public class TypeInfoSerialiserCountTests : BinarySerialiserCountTestBase<TypeIn
          2,
          3,
          4,
+         5,
+         6,
          "name",
          "full name",
          "name space",

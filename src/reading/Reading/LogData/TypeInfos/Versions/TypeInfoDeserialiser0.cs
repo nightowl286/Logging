@@ -20,6 +20,8 @@ public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
       ulong assemblyId = reader.ReadUInt64();
       ulong declaringTypeId = reader.ReadUInt64();
       ulong baseTypeId = reader.ReadUInt64();
+      ulong elementTypeId = reader.ReadUInt64();
+      ulong genericTypeDefinitionId = reader.ReadUInt64();
 
       string name = reader.ReadString();
       string fullName = reader.ReadString();
@@ -37,6 +39,8 @@ public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
          assemblyId,
          baseTypeId,
          declaringTypeId,
+         elementTypeId,
+         genericTypeDefinitionId,
          name,
          fullName,
          @namespace,

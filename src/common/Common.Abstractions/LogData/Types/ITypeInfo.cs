@@ -28,6 +28,20 @@ public interface ITypeInfo
    /// </remarks>
    ulong BaseTypeId { get; }
 
+   /// <summary>The id of the <see cref="Type.GetElementType"/>.</summary>
+   /// <remarks>
+   /// An id of <c>0</c> means no element type.
+   /// This id is only used within the log.
+   /// </remarks>
+   ulong ElementTypeId { get; }
+
+   /// <summary>The id of the <see cref="Type.GetGenericTypeDefinition"/></summary>
+   /// <remarks>
+   /// An id of <c>0</c> means no generic type definition.
+   /// This id is only used within the log.
+   /// </remarks>
+   ulong GenericTypeDefinitionId { get; }
+
    /// <summary>The <see cref="MemberInfo.Name"/> of the <see cref="Type"/>.</summary>
    string Name { get; }
 

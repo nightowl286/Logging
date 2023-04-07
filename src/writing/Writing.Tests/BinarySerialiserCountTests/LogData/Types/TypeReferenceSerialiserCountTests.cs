@@ -24,6 +24,8 @@ public class TypeReferenceSerialiserCountTests : BinarySerialiserCountTestBase<T
          2,
          3,
          4,
+         5,
+         6,
          "name",
          "full name",
          "name space",

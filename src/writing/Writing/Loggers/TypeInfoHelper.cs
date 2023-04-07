@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.LogData;
@@ -28,6 +29,8 @@ public static class TypeInfoHelper
       ulong assemblyId = EnsureIdForAssembly(writeContext, dataCollector, type.Assembly);
       ulong baseTypeId = 0;
       ulong declaringTypeId = 0;
+      ulong elementTypeId = 0;
+      ulong genericTypeDefinitionId = 0;
 
       List<ulong> genericTypeIds = new List<ulong>();
 
@@ -36,6 +39,20 @@ public static class TypeInfoHelper
 
       if (type.DeclaringType is not null)
          declaringTypeId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, type.DeclaringType);
+
+      if (type.HasElementType)
+      {
+         Type? elementType = type.GetElementType();
+         Debug.Assert(elementType is not null);
+         elementTypeId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, elementType);
+      }
+
+      if (type.IsConstructedGenericType)
+      {
+         Type genericTypeDefinition = type.GetGenericTypeDefinition();
+         genericTypeDefinitionId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, genericTypeDefinition);
+      }
+
 
       if (type.IsGenericType)
       {
@@ -49,7 +66,7 @@ public static class TypeInfoHelper
       TypeIdentity identity = new TypeIdentity(type);
       if (writeContext.GetOrCreateTypeId(identity, out ulong typeId))
       {
-         ITypeInfo typeInfo = TypeInfo.FromType(assemblyId, declaringTypeId, baseTypeId, genericTypeIds, type);
+         ITypeInfo typeInfo = TypeInfo.FromType(assemblyId, declaringTypeId, baseTypeId, elementTypeId, genericTypeDefinitionId, genericTypeIds, type);
          TypeReference typeReference = new TypeReference(typeInfo, typeId);
 
          dataCollector.Deposit(typeReference);
