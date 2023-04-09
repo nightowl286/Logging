@@ -12,6 +12,7 @@ global using AssemblyInfoDeserialiserLatest = TNO.Logging.Reading.LogData.Assemb
 global using AssemblyReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.AssemblyReferences.Versions.AssemblyReferenceDeserialiser0;
 global using ContextInfoDeserialiserLatest = TNO.Logging.Reading.LogData.ContextInfos.Versions.ContextInfoDeserialiser0;
 global using FileReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.FileReferences.Versions.FileReferenceDeserialiser0;
+global using ParameterInfoDeserialiserLatest = TNO.Logging.Reading.LogData.ParameterInfos.Versions.ParameterInfoDeserialiser0;
 global using TableKeyReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.TableKeyReferences.Versions.TableKeyReferenceDeserialiser0;
 global using TagReferenceDeserialiserLatest = TNO.Logging.Reading.LogData.TagReferences.Versions.TagReferenceDeserialiser0;
 global using TypeInfoDeserialiserLatest = TNO.Logging.Reading.LogData.TypeInfos.Versions.TypeInfoDeserialiser0;
