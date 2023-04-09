@@ -1,7 +1,6 @@
 ﻿using TNO.Logging.Reading.Abstractions.Deserialisers;
-using TNO.Logging.Reading.Abstractions.LogData.ConstructorInfos;
 
-namespace TNO.Logging.Reading.Abstractions.LogData.ParameterInfos;
+namespace TNO.Logging.Reading.Abstractions.LogData.ConstructorInfos;
 
 /// <inheritdoc/>
 public interface IConstructorInfoDeserialiserSelector : IDeserialiserSelector<IConstructorInfoDeserialiser>
