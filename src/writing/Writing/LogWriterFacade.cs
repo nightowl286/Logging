@@ -10,12 +10,17 @@ using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Methods;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Serialisers;
 using TNO.Logging.Writing.Serialisers.LogData;
 using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
+using TNO.Logging.Writing.Serialisers.LogData.Constructors;
+using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.Types;
 
 namespace TNO.Logging.Writing;
@@ -93,6 +98,12 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(facade);
       VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(facade);
       VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(facade);
+
+      VersionedSingleton<IParameterInfoSerialiser, ParameterInfoSerialiser>(facade);
+      VersionedSingleton<IMethodInfoSerialiser, MethodInfoSerialiser>(facade);
+      VersionedSingleton<IConstructorInfoSerialiser, ConstructorInfoSerialiser>(facade);
+
+      facade.Singleton<IMethodBaseInfoSerialiserDispatcher, MethodBaseInfoSerialiserDispatcher>();
    }
    private static void RegisterComponentSerialisers(IServiceFacade facade)
    {
