@@ -66,9 +66,9 @@ public class TypeInfoHelperTests
 
       ulong noTypeId = 0;
       ulong expectedObjectId = 1;
-      ulong expectedGenericId = 2;
-      ulong expectedTestTypeId = 3;
-
+      ulong expectedGenericDefinitionId = 2;
+      ulong expectedGenericId = 3;
+      ulong expectedTestTypeId = 4;
 
       List<TypeReference> depositedTypeReferences = new List<TypeReference>();
 
@@ -80,7 +80,7 @@ public class TypeInfoHelperTests
       ulong result = TypeInfoHelper.EnsureIdsForAssociatedTypes(writeContext, collectorMock.Object, type);
 
       // Assert
-      CollectionAssert.That.IsOfSize(depositedTypeReferences, 3);
+      CollectionAssert.That.IsOfSize(depositedTypeReferences, 4);
 
       // Object Asserts
       TypeReference objectReference = depositedTypeReferences[0];
@@ -91,8 +91,17 @@ public class TypeInfoHelperTests
       Assert.That.AreEqual(noTypeId, objectInfo.BaseTypeId);
       Assert.That.AreEqual(noTypeId, objectInfo.DeclaringTypeId);
 
+      // Generic Definition Asserts
+      TypeReference genericDefinitionReference = depositedTypeReferences[1];
+      ITypeInfo genericDefinitionInfo = genericDefinitionReference.TypeInfo;
+
+      Assert.That.AreEqual(typeof(GenericTestType<>).Name, genericDefinitionInfo.Name);
+      Assert.That.AreEqual(expectedGenericDefinitionId, genericDefinitionReference.Id);
+      Assert.That.AreEqual(expectedObjectId, genericDefinitionInfo.BaseTypeId);
+      Assert.That.AreEqual(noTypeId, genericDefinitionInfo.DeclaringTypeId);
+
       // Generic Type Asserts
-      TypeReference genericTypeReference = depositedTypeReferences[1];
+      TypeReference genericTypeReference = depositedTypeReferences[2];
       ITypeInfo genericTypeInfo = genericTypeReference.TypeInfo;
 
       Assert.That.AreEqual(nameof(String), genericTypeInfo.Name);
@@ -101,7 +110,7 @@ public class TypeInfoHelperTests
       Assert.That.AreEqual(noTypeId, genericTypeInfo.DeclaringTypeId);
 
       // TestType Asserts
-      TypeReference testTypeReference = depositedTypeReferences[2];
+      TypeReference testTypeReference = depositedTypeReferences[3];
       ITypeInfo testTypeInfo = testTypeReference.TypeInfo;
 
       Assert.That.AreEqual(typeof(GenericTestType<string>).Name, testTypeInfo.Name);
