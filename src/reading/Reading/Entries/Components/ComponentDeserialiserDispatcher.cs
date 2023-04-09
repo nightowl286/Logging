@@ -13,7 +13,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 namespace TNO.Logging.Reading.Entries.Components;
 
 /// <summary>
-/// Denotes a <see cref="IDeserialiser{T}"/> dispatcher that 
+/// Represents a <see cref="IDeserialiser{T}"/> dispatcher that 
 /// will deserialise a <see cref="IComponent"/> based on a 
 /// given <see cref="ComponentKind"/>.
 /// </summary>
