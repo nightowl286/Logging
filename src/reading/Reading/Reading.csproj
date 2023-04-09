@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TNO.Common" Version="1.3.3" />
+    <PackageReference Include="TNO.Common" Version="1.4.1" />
     <PackageReference Include="TNO.DependencyInjection" Version="1.2.1" />
   </ItemGroup>
 
