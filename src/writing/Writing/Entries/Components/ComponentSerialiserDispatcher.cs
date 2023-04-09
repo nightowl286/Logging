@@ -7,7 +7,7 @@ using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 namespace TNO.Logging.Writing.Entries.Components;
 
 /// <summary>
-/// Denotes a <see cref="ISerialiser{T}"/> dispatcher that
+/// Represents a <see cref="ISerialiser{T}"/> dispatcher that
 /// will serialise a given <see cref="IComponent"/> based
 /// on its <see cref="IComponent.Kind"/>.
 /// </summary>
