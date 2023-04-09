@@ -1,8 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
-using TNO.Logging.Reading.Abstractions.LogData.MethodInfos;
-using TNO.Logging.Reading.Abstractions.LogData.ParameterInfos;
+using TNO.Logging.Reading.Abstractions.LogData.Methods.MethodInfos;
+using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
 
-namespace TNO.Logging.Reading.LogData.MethodInfos.Versions;
+namespace TNO.Logging.Reading.LogData.Methods.MethodInfos.Versions;
 
 /// <summary>
 /// A deserialiser for <see cref="IMethodInfo"/>, version #0.

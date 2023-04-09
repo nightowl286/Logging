@@ -1,8 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.LogData.Methods;
-using TNO.Logging.Reading.Abstractions.LogData.ParameterInfos;
+using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
 
-namespace TNO.Logging.Reading.LogData.ParameterInfos;
+namespace TNO.Logging.Reading.LogData.Methods.ParameterInfos;
 
 /// <summary>
 /// A factory that should be used in instances of the see <see cref="IParameterInfoDeserialiser"/>.
