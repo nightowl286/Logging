@@ -4,7 +4,7 @@ using TNO.Logging.Writing.Serialisers.LogData;
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class TagReferenceReadWriteTest : ReadWriteTestBase<TagReferenceSerialiser, TagReferenceDeserialiserLatest, TagReference>
+public class TagReferenceReadWriteTests : ReadWriteTestsBase<TagReferenceSerialiser, TagReferenceDeserialiserLatest, TagReference>
 {
    #region Methods
    protected override TagReference CreateData()

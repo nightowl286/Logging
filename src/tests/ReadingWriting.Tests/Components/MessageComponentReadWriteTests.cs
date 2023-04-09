@@ -6,7 +6,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class MessageComponentReadWriteTest : ReadWriteTestBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
+public class MessageComponentReadWriteTests : ReadWriteTestsBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
 {
    #region Methods
    protected override IMessageComponent CreateData()

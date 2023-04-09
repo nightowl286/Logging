@@ -7,7 +7,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class TableComponentReadWriteTest : ReadWriteTestBase<TableComponentSerialiser, TableComponentDeserialiserLatest, ITableComponent>
+public class TableComponentReadWriteTests : ReadWriteTestsBase<TableComponentSerialiser, TableComponentDeserialiserLatest, ITableComponent>
 {
    #region Properties
    private static object[] ValidValues => new object[]

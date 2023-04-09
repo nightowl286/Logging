@@ -6,7 +6,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class AssemblyComponentReadWriteTest : ReadWriteTestBase<AssemblyComponentSerialiser, AssemblyComponentDeserialiserLatest, IAssemblyComponent>
+public class AssemblyComponentReadWriteTests : ReadWriteTestsBase<AssemblyComponentSerialiser, AssemblyComponentDeserialiserLatest, IAssemblyComponent>
 {
    #region Methods
    protected override IAssemblyComponent CreateData()

@@ -5,7 +5,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Methods;
 namespace TNO.ReadingWriting.Tests.LogData.Methods;
 
 [TestClass]
-public class ParameterInfoReadWriteTest : ReadWriteTestBase<ParameterInfoSerialiser, ParameterInfoDeserialiserLatest, IParameterInfo>
+public class ParameterInfoReadWriteTests : ReadWriteTestsBase<ParameterInfoSerialiser, ParameterInfoDeserialiserLatest, IParameterInfo>
 {
    #region Methods
    protected override IParameterInfo CreateData()

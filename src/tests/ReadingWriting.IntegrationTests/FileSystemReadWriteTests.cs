@@ -19,7 +19,7 @@ namespace TNO.ReadingWriting.IntegrationTests;
 
 [TestClass]
 [TestCategory(Category.Serialisation)]
-public class FileSystemReadWriteTest : FileSystemIntegration
+public class FileSystemReadWriteTests : FileSystemIntegration
 {
    #region Fields
    private static TimeSpan ReadTimeout = TimeSpan.FromMilliseconds(500);

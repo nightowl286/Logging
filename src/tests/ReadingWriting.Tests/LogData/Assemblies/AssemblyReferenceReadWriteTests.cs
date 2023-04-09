@@ -7,7 +7,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 namespace TNO.ReadingWriting.Tests.LogData.Assemblies;
 
 [TestClass]
-public class AssemblyReferenceReadWriteTest : ReadWriteTestBase<AssemblyReferenceSerialiser, AssemblyReferenceDeserialiserLatest, AssemblyReference>
+public class AssemblyReferenceReadWriteTests : ReadWriteTestsBase<AssemblyReferenceSerialiser, AssemblyReferenceDeserialiserLatest, AssemblyReference>
 {
    #region Methods
    protected override void Setup(out AssemblyReferenceSerialiser writer, out AssemblyReferenceDeserialiserLatest reader)

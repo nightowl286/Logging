@@ -6,7 +6,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class EntryLinkComponentReadWriteTest : ReadWriteTestBase<EntryLinkComponentSerialiser, EntryLinkComponentDeserialiserLatest, IEntryLinkComponent>
+public class EntryLinkComponentReadWriteTests : ReadWriteTestsBase<EntryLinkComponentSerialiser, EntryLinkComponentDeserialiserLatest, IEntryLinkComponent>
 {
    #region Methods
    protected override IEntryLinkComponent CreateData()

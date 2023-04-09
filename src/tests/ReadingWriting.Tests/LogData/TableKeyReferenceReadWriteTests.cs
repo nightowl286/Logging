@@ -4,7 +4,7 @@ using TNO.Logging.Writing.Serialisers.LogData;
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class TableKeyReferenceReadWriteTest : ReadWriteTestBase<TableKeyReferenceSerialiser, TableKeyReferenceDeserialiserLatest, TableKeyReference>
+public class TableKeyReferenceReadWriteTests : ReadWriteTestsBase<TableKeyReferenceSerialiser, TableKeyReferenceDeserialiserLatest, TableKeyReference>
 {
    #region Methods
    protected override TableKeyReference CreateData()

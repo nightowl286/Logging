@@ -5,7 +5,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Types;
 namespace TNO.ReadingWriting.Tests.LogData.Types;
 
 [TestClass]
-public class TypeInfoReadWriteTest : ReadWriteTestBase<TypeInfoSerialiser, TypeInfoDeserialiserLatest, ITypeInfo>
+public class TypeInfoReadWriteTests : ReadWriteTestsBase<TypeInfoSerialiser, TypeInfoDeserialiserLatest, ITypeInfo>
 {
    #region Methods
    protected override ITypeInfo CreateData()

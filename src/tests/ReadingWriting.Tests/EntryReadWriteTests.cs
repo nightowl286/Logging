@@ -9,7 +9,7 @@ using TNO.Logging.Writing.Entries.Components;
 namespace TNO.ReadingWriting.Tests;
 
 [TestClass]
-public class EntryReadWriteTest : ReadWriteTestBase<EntrySerialiser, EntryDeserialiserLatest, IEntry>
+public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDeserialiserLatest, IEntry>
 {
    #region Methods
    protected override void Setup(out EntrySerialiser writer, out EntryDeserialiserLatest reader)

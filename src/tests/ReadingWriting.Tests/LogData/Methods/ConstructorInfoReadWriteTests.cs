@@ -6,7 +6,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Methods;
 namespace TNO.ReadingWriting.Tests.LogData.Methods;
 
 [TestClass]
-public class ConstructorInfoReadWriteTest : ReadWriteTestBase<ConstructorInfoSerialiser, ConstructorInfoDeserialiserLatest, IConstructorInfo>
+public class ConstructorInfoReadWriteTests : ReadWriteTestsBase<ConstructorInfoSerialiser, ConstructorInfoDeserialiserLatest, IConstructorInfo>
 {
    #region Methods
    protected override void Setup(out ConstructorInfoSerialiser writer, out ConstructorInfoDeserialiserLatest reader)

@@ -6,7 +6,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class SimpleStackTraceComponentReadWriteTest : ReadWriteTestBase<SimpleStackTraceComponentSerialiser, SimpleStackTraceComponentDeserialiserLatest, ISimpleStackTraceComponent>
+public class SimpleStackTraceComponentReadWriteTests : ReadWriteTestsBase<SimpleStackTraceComponentSerialiser, SimpleStackTraceComponentDeserialiserLatest, ISimpleStackTraceComponent>
 {
    #region Methods
    protected override ISimpleStackTraceComponent CreateData()

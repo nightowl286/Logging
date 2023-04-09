@@ -6,7 +6,7 @@ using TNO.Logging.Writing.Serialisers;
 namespace TNO.ReadingWriting.Tests;
 
 [TestClass]
-public class DataVersionMapReadWriteTest : ReadWriteTestBase<DataVersionMapSerialiser, DataVersionMapDeserialiser, DataVersionMap>
+public class DataVersionMapReadWriteTests : ReadWriteTestsBase<DataVersionMapSerialiser, DataVersionMapDeserialiser, DataVersionMap>
 {
    #region Methods
    protected override DataVersionMap CreateData()

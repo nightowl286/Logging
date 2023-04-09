@@ -6,7 +6,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class TagComponentReadWriteTest : ReadWriteTestBase<TagComponentSerialiser, TagComponentDeserialiserLatest, ITagComponent>
+public class TagComponentReadWriteTests : ReadWriteTestsBase<TagComponentSerialiser, TagComponentDeserialiserLatest, ITagComponent>
 {
    #region Methods
    protected override ITagComponent CreateData()

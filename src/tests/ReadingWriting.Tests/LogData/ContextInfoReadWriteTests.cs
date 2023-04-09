@@ -4,7 +4,7 @@ using TNO.Logging.Writing.Serialisers.LogData;
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class ContextInfoReadWriteTest : ReadWriteTestBase<ContextInfoSerialiser, ContextInfoDeserialiserLatest, ContextInfo>
+public class ContextInfoReadWriteTests : ReadWriteTestsBase<ContextInfoSerialiser, ContextInfoDeserialiserLatest, ContextInfo>
 {
    #region Methods
    protected override ContextInfo CreateData()
