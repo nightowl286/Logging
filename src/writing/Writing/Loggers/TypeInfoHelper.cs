@@ -53,7 +53,6 @@ public static class TypeInfoHelper
          genericTypeDefinitionId = EnsureIdsForAssociatedTypes(writeContext, dataCollector, genericTypeDefinition);
       }
 
-
       if (type.IsGenericType)
       {
          foreach (Type genericType in type.GenericTypeArguments)
