@@ -13,6 +13,7 @@ using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
@@ -21,6 +22,7 @@ using TNO.Logging.Writing.Serialisers.LogData;
 using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
+using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 using TNO.Logging.Writing.Serialisers.LogData.Types;
 
 namespace TNO.Logging.Writing;
@@ -90,20 +92,27 @@ public class LogWriterFacade : ILogWriterFacade
    }
    private static void RegisterLogDataSerialisers(IServiceFacade facade)
    {
-      VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(facade);
-      VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(facade);
-      VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(facade);
-      VersionedSingleton<ITableKeyReferenceSerialiser, TableKeyReferenceSerialiser>(facade);
-      VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(facade);
-      VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(facade);
-      VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(facade);
-      VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(facade);
-
+      // Methods
       VersionedSingleton<IParameterInfoSerialiser, ParameterInfoSerialiser>(facade);
       VersionedSingleton<IMethodInfoSerialiser, MethodInfoSerialiser>(facade);
       VersionedSingleton<IConstructorInfoSerialiser, ConstructorInfoSerialiser>(facade);
-
       facade.Singleton<IMethodBaseInfoSerialiserDispatcher, MethodBaseInfoSerialiserDispatcher>();
+
+      // Stack Traces
+      VersionedSingleton<IStackFrameInfoSerialiser, StackFrameInfoSerialiser>(facade);
+      VersionedSingleton<IStackTraceInfoSerialiser, StackTraceInfoSerialiser>(facade);
+
+      // Log Info
+      VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(facade);
+      VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(facade);
+      VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(facade);
+
+      // Log References
+      VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(facade);
+      VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(facade);
+      VersionedSingleton<ITableKeyReferenceSerialiser, TableKeyReferenceSerialiser>(facade);
+      VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(facade);
+      VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(facade);
    }
    private static void RegisterComponentSerialisers(IServiceFacade facade)
    {

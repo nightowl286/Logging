@@ -22,6 +22,8 @@ using TNO.Logging.Reading.Abstractions.LogData.Methods;
 using TNO.Logging.Reading.Abstractions.LogData.Methods.ConstructorInfos;
 using TNO.Logging.Reading.Abstractions.LogData.Methods.MethodInfos;
 using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
+using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackFrameInfos;
+using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackTraceInfos;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
@@ -44,6 +46,8 @@ using TNO.Logging.Reading.LogData.Methods;
 using TNO.Logging.Reading.LogData.Methods.ConstructorInfos;
 using TNO.Logging.Reading.LogData.Methods.MethodInfos;
 using TNO.Logging.Reading.LogData.Methods.ParameterInfos;
+using TNO.Logging.Reading.LogData.StackTraces.StackFrameInfos;
+using TNO.Logging.Reading.LogData.StackTraces.StackTraceInfos;
 using TNO.Logging.Reading.LogData.TableKeyReferences;
 using TNO.Logging.Reading.LogData.TagReferences;
 using TNO.Logging.Reading.LogData.TypeInfos;
@@ -79,7 +83,19 @@ public class LogReaderFacade : ILogReaderFacade
       providerFacade.RegisterSelf();
       RegisterSelectors(providerFacade);
 
-      // components
+      // Method Info
+      RegisterFromKinds(providerFacade, map,
+         VersionedDataKind.ParameterInfo,
+         VersionedDataKind.MethodInfo,
+         VersionedDataKind.ConstructorInfo);
+      providerFacade.Singleton<IMethodBaseInfoDeserialiserDispatcher, MethodBaseInfoDeserialiserDispatcher>();
+
+      // Stack Traces
+      RegisterFromKinds(providerFacade, map,
+         VersionedDataKind.StackFrameInfo,
+         VersionedDataKind.StackTraceInfo);
+
+      // Components
       RegisterFromKinds(providerFacade, map,
          VersionedDataKind.Message,
          VersionedDataKind.Tag,
@@ -88,23 +104,24 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.Table,
          VersionedDataKind.Assembly,
          VersionedDataKind.SimpleStackTrace);
-      providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
 
+      providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
+      RegisterFromKind(providerFacade, map, VersionedDataKind.Entry);
+
+      // Log Data Info
       RegisterFromKinds(providerFacade, map,
-         VersionedDataKind.Entry,
-         VersionedDataKind.FileReference,
          VersionedDataKind.ContextInfo,
+         VersionedDataKind.AssemblyInfo,
+         VersionedDataKind.TypeInfo);
+
+      // Log Data References
+      RegisterFromKinds(providerFacade, map,
+         VersionedDataKind.FileReference,
          VersionedDataKind.TagReference,
          VersionedDataKind.TableKeyReference,
-         VersionedDataKind.AssemblyInfo,
-         VersionedDataKind.TypeInfo,
          VersionedDataKind.AssemblyReference,
-         VersionedDataKind.TypeReference,
-         VersionedDataKind.ParameterInfo,
-         VersionedDataKind.MethodInfo,
-         VersionedDataKind.ConstructorInfo);
+         VersionedDataKind.TypeReference);
 
-      providerFacade.Singleton<IMethodBaseInfoDeserialiserDispatcher, MethodBaseInfoDeserialiserDispatcher>();
 
       DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
       return provider;
@@ -112,10 +129,13 @@ public class LogReaderFacade : ILogReaderFacade
    private static void RegisterFromKinds(IServiceFacade facade, DataVersionMap map, params VersionedDataKind[] kinds)
    {
       foreach (VersionedDataKind kind in kinds)
-      {
-         if (map.TryGetValue(kind, out uint version))
-            RegisterFromKind(facade, kind, version);
-      }
+         RegisterFromKind(facade, map, kind);
+   }
+
+   private static void RegisterFromKind(IServiceFacade facade, DataVersionMap map, VersionedDataKind kind)
+   {
+      if (map.TryGetValue(kind, out uint version))
+         RegisterFromKind(facade, kind, version);
    }
 
    /// <inheritdoc/>
@@ -150,7 +170,9 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<ITypeReferenceDeserialiserSelector, TypeReferenceDeserialiserSelector>()
          .Singleton<IParameterInfoDeserialiserSelector, ParameterInfoDeserialiserSelector>()
          .Singleton<IMethodInfoDeserialiserSelector, MethodInfoDeserialiserSelector>()
-         .Singleton<IConstructorInfoDeserialiserSelector, ConstructorInfoDeserialiserSelector>();
+         .Singleton<IConstructorInfoDeserialiserSelector, ConstructorInfoDeserialiserSelector>()
+         .Singleton<IStackFrameInfoDeserialiserSelector, StackFrameInfoDeserialiserSelector>()
+         .Singleton<IStackTraceInfoDeserialiserSelector, StackTraceInfoDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceFacade facade)
    {
@@ -203,6 +225,10 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IMethodInfoDeserialiserSelector, IMethodInfoDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.ConstructorInfo)
          RegisterWithProvider<IConstructorInfoDeserialiserSelector, IConstructorInfoDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.StackFrameInfo)
+         RegisterWithProvider<IStackFrameInfoDeserialiserSelector, IStackFrameInfoDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.StackTraceInfo)
+         RegisterWithProvider<IStackTraceInfoDeserialiserSelector, IStackTraceInfoDeserialiser>(facade, version);
    }
    private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>
