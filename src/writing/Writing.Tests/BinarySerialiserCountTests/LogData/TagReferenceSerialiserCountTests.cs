@@ -13,7 +13,7 @@ public class TagReferenceSerialiserCountTests : BinarySerialiserCountTestBase<Ta
       // Arrange
       TagReference reference = new TagReference("tag", 5);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(reference);
    }
    #endregion

@@ -13,7 +13,7 @@ public class FileReferenceSerialiserCountTests : BinarySerialiserCountTestBase<F
       // Arrange
       FileReference reference = new FileReference("file", 5);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(reference);
    }
    #endregion

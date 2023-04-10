@@ -23,7 +23,7 @@ public class TypeInfoSerialiserCountTests : BinarySerialiserCountTestBase<TypeIn
          "name space",
          new List<ulong> { 1, 2, 3 });
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(typeInfo);
    }
    #endregion

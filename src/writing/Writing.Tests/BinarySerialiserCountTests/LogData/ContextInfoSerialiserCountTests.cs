@@ -13,7 +13,7 @@ public class ContextInfoSerialiserCountTests : BinarySerialiserCountTestBase<Con
       // Arrange
       ContextInfo contextInfo = new ContextInfo("context", 5, 5, 5, 5);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(contextInfo);
    }
    #endregion

@@ -33,7 +33,7 @@ public class TypeReferenceSerialiserCountTests : BinarySerialiserCountTestBase<T
 
       TypeReference reference = new TypeReference(typeInfo, 1);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(reference);
    }
    #endregion

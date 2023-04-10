@@ -13,7 +13,7 @@ public class TableKeyReferenceSerialiserCountTests : BinarySerialiserCountTestBa
       // Arrange
       TableKeyReference reference = new TableKeyReference("key", 5);
 
-      // Act + Verify
+      // Act + Assert
       CountTestBase(reference);
    }
    #endregion
