@@ -2,6 +2,7 @@
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 
 namespace TNO.Logging.Common.Abstractions.DataKinds;
@@ -46,6 +47,12 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="IConstructorInfo"/>.</summary>
    ConstructorInfo,
+
+   /// <summary>Represents the <see cref="IStackFrameInfo"/>.</summary>
+   StackFrameInfo,
+
+   /// <summary>Represents the <see cref="StackTraceInfo"/>.</summary>
+   StackTraceInfo,
 
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,
