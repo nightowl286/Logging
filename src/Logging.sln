@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Abstractions.CodeTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingWriting.IntegrationTests", "tests\ReadingWriting.IntegrationTests\ReadingWriting.IntegrationTests.csproj", "{AEA78F42-34C1-435B-9F8C-FA660027927A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Writing.Tests", "writing\Writing.Tests\Writing.Tests.csproj", "{84CD1C29-571F-45E4-8277-CA227CACB9CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Writing.Tests", "writing\Writing.Tests\Writing.Tests.csproj", "{84CD1C29-571F-45E4-8277-CA227CACB9CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Shared", "common\Common.Shared\Common.Shared.csproj", "{DAE89E91-36CE-43CC-A0DC-8B88129701CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{84CD1C29-571F-45E4-8277-CA227CACB9CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84CD1C29-571F-45E4-8277-CA227CACB9CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84CD1C29-571F-45E4-8277-CA227CACB9CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{3F3F06B1-96D6-404A-A14E-660D14A22F34} = {1A1C7A66-8493-490D-AA80-73C9EA34CA1A}
 		{AEA78F42-34C1-435B-9F8C-FA660027927A} = {6A94BB75-D80D-4B4E-A659-EC582F5FAC3F}
 		{84CD1C29-571F-45E4-8277-CA227CACB9CA} = {B0930F63-222F-49D2-A1E7-600D7B119172}
+		{DAE89E91-36CE-43CC-A0DC-8B88129701CC} = {184EA3C5-3404-483C-BDF8-0FBE5A21A2A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4048B649-33D9-487E-807F-681CAD1D9F37}

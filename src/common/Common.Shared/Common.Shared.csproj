@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>11</LangVersion>
+    <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <AssemblyName>TNO.Logging.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>TNO.Logging.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Logging - Common - shared</Title>
+    <Company>TNO</Company>
+    <Authors>Nightowl</Authors>
+    <PackageTags>logging, common, shared</PackageTags>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>Contains the shared constants for the logging library.</Description>
+  </PropertyGroup>
+
+</Project>
