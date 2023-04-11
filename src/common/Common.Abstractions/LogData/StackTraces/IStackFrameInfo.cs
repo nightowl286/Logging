@@ -22,7 +22,7 @@ public interface IStackFrameInfo
    uint ColumnInLine { get; }
 
    /// <summary>The base info of the method where this frame is.</summary>
-   IMethodBaseInfo? MainMethod { get; }
+   IMethodBaseInfo MainMethod { get; }
 
    /// <summary>The secondary base info of the method where this frame is.</summary>
    /// <remarks>This is used in situations like async/enumerator methods.</remarks>

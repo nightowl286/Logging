@@ -29,11 +29,18 @@ public class StackTraceInfoSerialiserCountTests : BinarySerialiserCountTestBase<
    public void Count_WithMinimalData()
    {
       // Arrange
+      MethodInfo mainMethod = new MethodInfo(
+        1,
+        Array.Empty<IParameterInfo>(),
+        "main method",
+        1,
+        Array.Empty<ulong>());
+
       StackFrameInfo stackFrameInfo = new StackFrameInfo(
          1,
          2,
          3,
-         null,
+         mainMethod,
          null);
 
       StackTraceInfo stackTraceInfo = new StackTraceInfo(

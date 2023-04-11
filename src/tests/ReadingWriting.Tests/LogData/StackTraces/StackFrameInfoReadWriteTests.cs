@@ -61,7 +61,7 @@ public class StackFrameInfoReadWriteTests : ReadWriteTestsBase<StackFrameInfoSer
       Verify(expected.SecondaryMethod, result.SecondaryMethod);
    }
 
-   private void Verify(IMethodBaseInfo? expected, IMethodBaseInfo? result)
+   private static void Verify(IMethodBaseInfo? expected, IMethodBaseInfo? result)
    {
       bool isExpectedNull = expected is null;
       bool isResultNull = result is null;

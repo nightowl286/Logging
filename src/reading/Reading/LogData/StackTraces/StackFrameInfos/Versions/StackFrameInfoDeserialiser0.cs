@@ -40,7 +40,7 @@ public sealed class StackFrameInfoDeserialiser0 : IStackFrameInfoDeserialiser
       uint line = reader.ReadUInt32();
       uint column = reader.ReadUInt32();
 
-      IMethodBaseInfo? mainMethod = reader.TryReadNullable(ReadMethodBaseInfo);
+      IMethodBaseInfo mainMethod = ReadMethodBaseInfo();
       IMethodBaseInfo? secondaryMethod = reader.TryReadNullable(ReadMethodBaseInfo);
 
       return StackFrameInfoFactory.Version0(

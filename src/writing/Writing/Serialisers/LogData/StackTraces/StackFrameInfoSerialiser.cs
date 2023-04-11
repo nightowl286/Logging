@@ -35,15 +35,14 @@ public class StackFrameInfoSerialiser : IStackFrameInfoSerialiser
       ulong fileId = data.FileId;
       uint line = data.LineInFile;
       uint column = data.ColumnInLine;
-      IMethodBaseInfo? mainMethod = data.MainMethod;
+      IMethodBaseInfo mainMethod = data.MainMethod;
       IMethodBaseInfo? secondaryMethod = data.SecondaryMethod;
 
       writer.Write(fileId);
       writer.Write(line);
       writer.Write(column);
 
-      if (writer.TryWriteNullable(mainMethod))
-         _methodBaseInfoSerialiser.Serialise(writer, mainMethod);
+      _methodBaseInfoSerialiser.Serialise(writer, mainMethod);
 
       if (writer.TryWriteNullable(secondaryMethod))
          _methodBaseInfoSerialiser.Serialise(writer, secondaryMethod);
@@ -53,7 +52,7 @@ public class StackFrameInfoSerialiser : IStackFrameInfoSerialiser
    public ulong Count(IStackFrameInfo data)
    {
       int size =
-         (sizeof(bool) * 2) +
+         sizeof(bool) +
          (sizeof(uint) * 2) +
          sizeof(ulong);
 

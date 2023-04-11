@@ -27,12 +27,19 @@ public class StackFrameInfoSerialiserCountTests : BinarySerialiserCountTestBase<
    [TestMethod]
    public void Count_WithMinimalData()
    {
+      MethodInfo mainMethod = new MethodInfo(
+        1,
+        Array.Empty<IParameterInfo>(),
+        "main method",
+        1,
+        Array.Empty<ulong>());
+
       // Arrange
       StackFrameInfo stackFrameInfo = new StackFrameInfo(
          1,
          2,
          3,
-         null,
+         mainMethod,
          null);
 
       // Act + Assert

@@ -15,7 +15,7 @@ internal static class StackFrameInfoFactory
       ulong fileId,
       uint line,
       uint column,
-      IMethodBaseInfo? mainMethod,
+      IMethodBaseInfo mainMethod,
       IMethodBaseInfo? secondaryMethod)
    {
       return new StackFrameInfo(

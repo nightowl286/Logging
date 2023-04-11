@@ -16,5 +16,5 @@ public record class StackFrameInfo(
    ulong FileId,
    uint LineInFile,
    uint ColumnInLine,
-   IMethodBaseInfo? MainMethod,
+   IMethodBaseInfo MainMethod,
    IMethodBaseInfo? SecondaryMethod) : IStackFrameInfo;
