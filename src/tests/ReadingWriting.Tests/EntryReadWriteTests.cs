@@ -32,6 +32,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             new EntryLinkComponentSerialiser(),
             new TableComponentSerialiser(),
             new AssemblyComponentSerialiser(),
+            new TypeComponentSerialiser(),
             new StackTraceComponentSerialiser(
                new StackTraceInfoSerialiser(
                   new StackFrameInfoSerialiser(
@@ -51,6 +52,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             new EntryLinkComponentDeserialiserLatest(),
             new TableComponentDeserialiserLatest(),
             new AssemblyComponentDeserialiserLatest(),
+            new TypeComponentDeserialiserLatest(),
             new StackTraceComponentDeserialiserLatest(
                new StackTraceInfoDeserialiserLatest(
                   new StackFrameInfoDeserialiserLatest(

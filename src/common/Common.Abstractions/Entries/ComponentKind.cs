@@ -26,8 +26,11 @@ public enum ComponentKind : ushort
    /// <summary>Information gathered about a <see cref="System.Reflection.Assembly"/>.</summary>
    Assembly = 32,
 
+   /// <summary>Information gathered about a <see cref="System.Type"/>.</summary>
+   Type = 64,
+
    /// <summary>Information about a <see cref="StackTrace"/>.</summary>
-   StackTrace = 64,
+   StackTrace = 128,
 
    /// <summary>This entry is reserved for possible future expansion.</summary>
    ReservedForExpansion = 32_768,

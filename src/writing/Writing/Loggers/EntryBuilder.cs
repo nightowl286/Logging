@@ -105,6 +105,29 @@ internal class EntryBuilder : IEntryBuilder
    }
 
    /// <inheritdoc/>
+   public IEntryBuilder With(StackTrace stackTrace, int? threadId = null)
+   {
+      ThrowIfHasComponent(ComponentKind.StackTrace);
+
+      threadId ??= -1;
+
+      IStackTraceInfo stackTraceInfo = StackTraceInfoHelper.GetStackTraceInfo(_writeContext, _collector, stackTrace, threadId.Value);
+      StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
+
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
+   public IEntryBuilder With(Type type)
+   {
+      ThrowIfHasComponent(ComponentKind.Type);
+
+      ulong typeId = TypeInfoHelper.EnsureIdsForAssociatedTypes(_writeContext, _collector, type);
+      TypeComponent component = new TypeComponent(typeId);
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
    public ITableComponentBuilder<IEntryBuilder> WithTable()
    {
       ThrowIfHasComponent(ComponentKind.Table);
@@ -116,19 +139,6 @@ internal class EntryBuilder : IEntryBuilder
 
       TableComponentBuilder<IEntryBuilder> builder = new TableComponentBuilder<IEntryBuilder>(this, _writeContext, _collector, AddTable);
       return builder;
-   }
-
-   /// <inheritdoc/>
-   public IEntryBuilder With(StackTrace stackTrace, int? threadId = null)
-   {
-      ThrowIfHasComponent(ComponentKind.StackTrace);
-
-      threadId ??= -1;
-
-      IStackTraceInfo stackTraceInfo = StackTraceInfoHelper.GetStackTraceInfo(_writeContext, _collector, stackTrace, threadId.Value);
-      StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
-
-      return AddComponent(component);
    }
 
    /// <inheritdoc/>

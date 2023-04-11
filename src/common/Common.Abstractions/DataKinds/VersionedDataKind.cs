@@ -74,4 +74,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="IStackTraceComponent"/>.</summary>
    StackTrace,
+
+   /// <summary>Represents the <see cref="ITypeComponent"/>.</summary>
+   Type,
 }

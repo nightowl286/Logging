@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries;
@@ -63,13 +65,28 @@ public static class ILoggerExtensions
       return logger;
    }
 
-
    /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from an unknown thread.</remarks>
    /// <inheritdoc cref="ILogger.Log(Importance, StackTrace, int?, out ulong, string, uint)"/>
    public static ILogger Log(this ILogger logger, Importance importance, StackTrace stackTrace,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       logger.Log(importance, stackTrace, null, out _, file, line);
+      return logger;
+   }
+
+   /// <inheritdoc cref="ILogger.Log(Importance, Assembly, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, Importance importance, Assembly assembly,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.Log(importance, assembly, out _, file, line);
+      return logger;
+   }
+
+   /// <inheritdoc cref="ILogger.Log(Importance, Type, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, Importance importance, Type type,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.Log(importance, type, out _, file, line);
       return logger;
    }
 

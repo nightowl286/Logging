@@ -123,6 +123,7 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(facade);
       VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(facade);
       VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(facade);
+      VersionedSingleton<ITypeComponentSerialiser, TypeComponentSerialiser>(facade);
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }

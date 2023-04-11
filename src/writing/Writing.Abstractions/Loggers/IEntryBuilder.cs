@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -44,6 +46,15 @@ public interface IEntryBuilder
    /// <returns>The builder that was used.</returns>
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
    IEntryBuilder With(Assembly assembly);
+
+   /// <summary>
+   /// Adds the given <paramref name="type"/> as an <see cref="ITypeComponent"/>.
+   /// The assembly info will be saved as <see cref="ITypeInfo"/>.
+   /// </summary>
+   /// <param name="type">The type to add.</param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder With(Type type);
 
    /// <summary>Starts creating a table that will be added as an <see cref="ITableComponent"/>.</summary>
    /// <returns>The table component builder that can be used to customise the table.</returns>

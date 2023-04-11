@@ -127,6 +127,21 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
+   public ILogger Log(Importance importance, Type type, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      ulong typeId = TypeInfoHelper.EnsureIdsForAssociatedTypes(WriteContext, Collector, type);
+      TypeComponent component = new TypeComponent(typeId);
+
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
+      return this;
+   }
+
+   /// <inheritdoc/>
    public IEntryBuilder StartEntry(Importance importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
@@ -233,5 +248,6 @@ public class BaseLogger : ILogger
       Entry entry = new Entry(entryId, ContextId, _scope, importance, timestamp, fileId, line, componentsByKind);
       Collector.Deposit(entry);
    }
+
    #endregion
 }

@@ -9,6 +9,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Type;
 
 namespace TNO.Logging.Reading.Entries.Components;
 
@@ -27,6 +28,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    private readonly ITableComponentDeserialiser _tableDeserialiser;
    private readonly IAssemblyComponentDeserialiser _assemblyDeserialiser;
    private readonly IStackTraceComponentDeserialiser _stackTraceDeserialiser;
+   private readonly ITypeComponentDeserialiser _typeDeserialiser;
    #endregion
 
    #region Constructors
@@ -37,6 +39,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    /// <param name="entryLinkDeserialiser">The entry link deserialiser to use.</param>
    /// <param name="tableDeserialiser">The table deserialiser to use.</param>
    /// <param name="assemblyDeserialiser">The assembly deserialiser to use.</param>
+   /// <param name="typeDeserialiser">The type deserialiser to use.</param>
    /// <param name="stackTraceDeserialiser">The stack trace deserialiser to use.</param>
    public ComponentDeserialiserDispatcher(
       IMessageComponentDeserialiser messageDeserialiser,
@@ -45,6 +48,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
       IEntryLinkComponentDeserialiser entryLinkDeserialiser,
       ITableComponentDeserialiser tableDeserialiser,
       IAssemblyComponentDeserialiser assemblyDeserialiser,
+      ITypeComponentDeserialiser typeDeserialiser,
       IStackTraceComponentDeserialiser stackTraceDeserialiser)
    {
       _messageDeserialiser = messageDeserialiser;
@@ -54,6 +58,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
       _tableDeserialiser = tableDeserialiser;
       _assemblyDeserialiser = assemblyDeserialiser;
       _stackTraceDeserialiser = stackTraceDeserialiser;
+      _typeDeserialiser = typeDeserialiser;
    }
    #endregion
 
@@ -70,6 +75,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
          ComponentKind.Table => _tableDeserialiser.Deserialise(reader),
          ComponentKind.Assembly => _assemblyDeserialiser.Deserialise(reader),
          ComponentKind.StackTrace => _stackTraceDeserialiser.Deserialise(reader),
+         ComponentKind.Type => _typeDeserialiser.Deserialise(reader),
 
          _ => throw new ArgumentException($"Unknown component kind ({componentKind}).")
       };
