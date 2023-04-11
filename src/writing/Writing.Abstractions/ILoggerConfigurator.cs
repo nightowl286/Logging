@@ -12,10 +12,7 @@ public interface ILoggerConfigurator
    /// <summary>The facade that was used to create this configurator.</summary>
    ILogWriterFacade Facade { get; }
 
-   /// <summary>The logger that was built.</summary>
-   IContextLogger Logger { get; }
-
-   /// <summary>The distributor that the <see cref="Logger"/> will use.</summary>
+   /// <summary>The distributor that the created logger will use.</summary>
    ILogDataDistributor Distributor { get; }
    #endregion
 
@@ -24,5 +21,9 @@ public interface ILoggerConfigurator
    /// <param name="collector">The collector to add.</param>
    /// <returns>The current logger configurator.</returns>
    ILoggerConfigurator With(ILogDataCollector collector);
+
+   /// <summary>Created the final logger that should be used.</summary>
+   /// <returns>The logger that should be used.</returns>
+   IContextLogger Create();
    #endregion
 }

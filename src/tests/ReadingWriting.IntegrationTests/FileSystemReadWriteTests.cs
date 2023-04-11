@@ -62,7 +62,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
 
          ILogger logger = facade.CreateConfigurator()
             .WithFileSystem(logPath, out IFileSystemLogWriter writer)
-            .Logger
+            .Create()
             .CreateContext(expectedContext, expectedFile, expectedLine)
             .CreateScoped();
 
@@ -187,7 +187,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          LogWriterFacade facade = new LogWriterFacade();
          ILogger logger = facade.CreateConfigurator()
             .WithFileSystem(writerSettings, out IFileSystemLogWriter writer)
-            .Logger;
+            .Create();
 
          using (writer)
          {
@@ -226,7 +226,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       ILogger logger = new LogWriterFacade()
          .CreateConfigurator()
          .WithFileSystem(writerSettings, out IFileSystemLogWriter writer)
-         .Logger;
+         .Create();
 
       IFileSystemLogReader reader = new LogReaderFacade()
          .ReadFromFileSystem(logPath);

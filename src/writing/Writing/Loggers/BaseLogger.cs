@@ -15,7 +15,7 @@ using TNO.Logging.Writing.Abstractions.Loggers;
 namespace TNO.Logging.Writing.Loggers;
 
 /// <summary>
-/// Represents a scoped logger.
+/// Represents the very base logger.
 /// </summary>
 public class BaseLogger : ILogger
 {
@@ -40,7 +40,7 @@ public class BaseLogger : ILogger
    /// <param name="writeContext">The write context to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="scope">The scope (inside the given <paramref name="contextId"/> that this logger belongs to.</param>
-   public BaseLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ulong scope)
+   internal BaseLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ulong scope)
    {
       Collector = collector;
       WriteContext = writeContext;

@@ -10,7 +10,7 @@ namespace TNO.Logging.Writing.Loggers;
 /// <summary>
 /// Represents a logger bound to a context.
 /// </summary>
-public class ContextLogger : BaseLogger, IContextLogger
+public class ContextLogger : BasicLogger, IContextLogger
 {
    #region Fields
    private readonly SafeIdFactory _scopeFactory = new SafeIdFactory(1);
@@ -21,8 +21,9 @@ public class ContextLogger : BaseLogger, IContextLogger
    /// <param name="collector">The collector that this logger should deposit data in.</param>
    /// <param name="writeContext">The write context to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
-   public ContextLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId)
-      : base(collector, writeContext, contextId, 0)
+   /// <param name="internalLogger">The internal logger to use.</param>
+   internal ContextLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ILogger internalLogger)
+      : base(collector, writeContext, contextId, 0, internalLogger)
    {
    }
    #endregion
@@ -37,7 +38,7 @@ public class ContextLogger : BaseLogger, IContextLogger
       ContextInfo contextInfo = new ContextInfo(name, id, ContextId, fileId, line);
       Collector.Deposit(contextInfo);
 
-      return new ContextLogger(Collector, WriteContext, id);
+      return new ContextLogger(Collector, WriteContext, id, InternalLogger);
    }
 
    /// <inheritdoc/>
@@ -45,7 +46,7 @@ public class ContextLogger : BaseLogger, IContextLogger
    {
       ulong scope = _scopeFactory.GetNext();
 
-      return new BaseLogger(Collector, WriteContext, ContextId, scope);
+      return new BasicLogger(Collector, WriteContext, ContextId, scope, InternalLogger);
    }
    #endregion
 }
