@@ -1,10 +1,18 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
+using TNO.Logging.Common.LogData.Methods;
+using TNO.Logging.Common.LogData.StackTraces;
 using TNO.Logging.Reading.Entries.Components;
+using TNO.Logging.Reading.LogData.Methods;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
+using TNO.Logging.Writing.Serialisers.LogData.Constructors;
+using TNO.Logging.Writing.Serialisers.LogData.Methods;
+using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 
 namespace TNO.ReadingWriting.Tests;
 
@@ -14,6 +22,8 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
    #region Methods
    protected override void Setup(out EntrySerialiser writer, out EntryDeserialiserLatest reader)
    {
+      ParameterInfoSerialiser parameterInfoSerialiser = new ParameterInfoSerialiser();
+
       ComponentSerialiserDispatcher componentSerialiser =
          new ComponentSerialiserDispatcher(
             new MessageComponentSerialiser(),
@@ -22,9 +32,16 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             new EntryLinkComponentSerialiser(),
             new TableComponentSerialiser(),
             new AssemblyComponentSerialiser(),
-            new SimpleStackTraceComponentSerialiser());
+            new StackTraceComponentSerialiser(
+               new StackTraceInfoSerialiser(
+                  new StackFrameInfoSerialiser(
+                     new MethodBaseInfoSerialiserDispatcher(
+                        new MethodInfoSerialiser(parameterInfoSerialiser),
+                        new ConstructorInfoSerialiser(parameterInfoSerialiser))))));
 
       writer = new EntrySerialiser(componentSerialiser);
+
+      ParameterInfoDeserialiserLatest parameterInfoDeserialiser = new ParameterInfoDeserialiserLatest();
 
       ComponentDeserialiserDispatcher componentDeserialiser =
          new ComponentDeserialiserDispatcher(
@@ -34,7 +51,12 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             new EntryLinkComponentDeserialiserLatest(),
             new TableComponentDeserialiserLatest(),
             new AssemblyComponentDeserialiserLatest(),
-            new SimpleStackTraceComponentDeserialiserLatest());
+            new StackTraceComponentDeserialiserLatest(
+               new StackTraceInfoDeserialiserLatest(
+                  new StackFrameInfoDeserialiserLatest(
+                     new MethodBaseInfoDeserialiserDispatcher(
+                        new MethodInfoDeserialiserLatest(parameterInfoDeserialiser),
+                        new ConstructorInfoDeserialiserLatest(parameterInfoDeserialiser))))));
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }
@@ -48,7 +70,29 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
       Dictionary<uint, object> table = new Dictionary<uint, object>() { { 1, 5 } };
       TableComponent tableComponent = new TableComponent(table);
       AssemblyComponent assemblyComponent = new AssemblyComponent(0);
-      SimpleStackTraceComponent simpleStackTraceComponent = new SimpleStackTraceComponent("some stack trace", 6);
+
+      IStackTraceInfo stackTraceInfo;
+      {
+         // Arrange
+         MethodInfo mainMethod = new MethodInfo(
+           1,
+           Array.Empty<IParameterInfo>(),
+           "main method",
+           1,
+           Array.Empty<ulong>());
+
+         StackFrameInfo stackFrameInfo = new StackFrameInfo(
+            1,
+            2,
+            3,
+            mainMethod,
+            null);
+
+         stackTraceInfo = new StackTraceInfo(
+            6,
+            new[] { stackFrameInfo });
+      }
+      StackTraceComponent stackTraceComponent = new StackTraceComponent(stackTraceInfo);
 
       ulong id = 1;
       ulong contextId = 2;
@@ -65,7 +109,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
          { ComponentKind.Thread, threadComponent },
          { ComponentKind.Table, tableComponent },
          { ComponentKind.Assembly, assemblyComponent },
-         { ComponentKind.SimpleStackTrace, simpleStackTraceComponent }
+         { ComponentKind.StackTrace, stackTraceComponent }
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
@@ -150,19 +194,54 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
          Assert.That.AreEqual(expectedComponent.AssemblyId, resultComponent.AssemblyId);
       }
 
-      // Simple stack trace component
+      // Stack trace component
       {
-         GetComponents(ComponentKind.SimpleStackTrace,
-            out ISimpleStackTraceComponent expectedComponent,
-            out ISimpleStackTraceComponent resultComponent);
+         GetComponents(ComponentKind.StackTrace,
+            out IStackTraceComponent expectedComponent,
+            out IStackTraceComponent resultComponent);
 
-         Assert.That.AreEqual(expectedComponent.ThreadId, resultComponent.ThreadId);
-         Assert.That.AreEqual(expectedComponent.StackTrace, resultComponent.StackTrace);
+         IStackTraceInfo expectedInfo = expectedComponent.StackTrace;
+         IStackTraceInfo resultInfo = resultComponent.StackTrace;
+
+         Verify(expectedInfo, resultInfo);
       }
    }
    #endregion
 
    #region Helpers
+   private static void Verify(IStackTraceInfo expected, IStackTraceInfo result)
+   {
+      Assert.That.AreEqual(expected.ThreadId, result.ThreadId);
+      Assert.That.AreEqual(expected.Frames.Count, result.Frames.Count);
+
+      for (int i = 0; i < expected.Frames.Count; i++)
+         Verify(expected.Frames[i], result.Frames[i]);
+   }
+
+   private static void Verify(IStackFrameInfo expected, IStackFrameInfo result)
+   {
+      Assert.That.AreEqual(expected.FileId, result.FileId);
+      Assert.That.AreEqual(expected.LineInFile, result.LineInFile);
+      Assert.That.AreEqual(expected.ColumnInLine, result.ColumnInLine);
+      Verify(expected.MainMethod, result.MainMethod);
+      Verify(expected.SecondaryMethod, result.SecondaryMethod);
+   }
+
+   private static void Verify(IMethodBaseInfo? expected, IMethodBaseInfo? result)
+   {
+      bool isExpectedNull = expected is null;
+      bool isResultNull = result is null;
+
+      Assert.That.AreEqual(isExpectedNull, isResultNull);
+
+      if (expected is not null && result is not null)
+      {
+         Assert.That.AreEqual(expected.Name, result.Name);
+         Assert.That.AreEqual(expected.DeclaringTypeId, result.DeclaringTypeId);
+         Assert.That.AreEqual(expected.ParameterInfos.Count, result.ParameterInfos.Count);
+      }
+   }
+
    private static T AssertGetComponent<T>(IEntry entry, ComponentKind kind) where T : class, IComponent
    {
       Assert.IsTrue(entry.Components.TryGetValue(kind, out IComponent? component));

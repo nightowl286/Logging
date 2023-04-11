@@ -51,19 +51,18 @@ public interface IEntryBuilder
 
    /// <summary>
    /// Adds the given <paramref name="stackTrace"/> and the <paramref name="threadId"/>
-   /// as an <see cref="ISimpleStackTraceComponent"/>.
+   /// as an <see cref="IStackTraceComponent"/>.
    /// </summary>
    /// <param name="stackTrace">The stack trace to add.</param>
    /// <param name="threadId">
    /// The <see cref="Thread.ManagedThreadId"/> of the thread 
    /// that the <paramref name="stackTrace"/> is from.
-   /// 
-   /// If <see langword="null"/> is used, then the id of the
-   /// <see cref="Thread.CurrentThread"/> will be used instead.
+   /// If <see langword="null"/> is used, then a negative
+   /// id will be used to indicate that it is unknown.
    /// </param>
    /// <returns>The builder that was used.</returns>
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
-   IEntryBuilder WithSimple(StackTrace stackTrace, int? threadId = null);
+   IEntryBuilder With(StackTrace stackTrace, int? threadId = null);
 
    /// <summary>Builds the entry and logs it.</summary>
    /// <returns>The logger that was used.</returns>

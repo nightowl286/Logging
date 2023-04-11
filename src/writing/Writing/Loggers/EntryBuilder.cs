@@ -4,6 +4,7 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
@@ -118,14 +119,14 @@ internal class EntryBuilder : IEntryBuilder
    }
 
    /// <inheritdoc/>
-   public IEntryBuilder WithSimple(StackTrace stackTrace, int? threadId = null)
+   public IEntryBuilder With(StackTrace stackTrace, int? threadId = null)
    {
-      ThrowIfHasComponent(ComponentKind.SimpleStackTrace);
+      ThrowIfHasComponent(ComponentKind.StackTrace);
 
-      threadId ??= Environment.CurrentManagedThreadId;
-      string stackTraceStr = stackTrace.ToString();
+      threadId ??= -1;
 
-      SimpleStackTraceComponent component = new SimpleStackTraceComponent(stackTraceStr, threadId.Value);
+      IStackTraceInfo stackTraceInfo = StackTraceInfoHelper.GetStackTraceInfo(_writeContext, _collector, stackTrace, threadId.Value);
+      StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
 
       return AddComponent(component);
    }

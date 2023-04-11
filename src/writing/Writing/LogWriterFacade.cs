@@ -83,8 +83,8 @@ public class LogWriterFacade : ILogWriterFacade
    }
    private static void RegisterSerialisers(IServiceFacade facade)
    {
-      RegisterComponentSerialisers(facade);
       RegisterLogDataSerialisers(facade);
+      RegisterComponentSerialisers(facade);
 
       VersionedSingleton<IEntrySerialiser, EntrySerialiser>(facade);
 
@@ -122,7 +122,7 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<IEntryLinkComponentSerialiser, EntryLinkComponentSerialiser>(facade);
       VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(facade);
       VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(facade);
-      VersionedSingleton<ISimpleStackTraceComponentSerialiser, SimpleStackTraceComponentSerialiser>(facade);
+      VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(facade);
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }

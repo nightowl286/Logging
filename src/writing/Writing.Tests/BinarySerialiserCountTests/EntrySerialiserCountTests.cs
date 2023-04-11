@@ -4,6 +4,9 @@ using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
+using TNO.Logging.Writing.Serialisers.LogData.Constructors;
+using TNO.Logging.Writing.Serialisers.LogData.Methods;
+using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 
 namespace TNO.Writing.Tests.BinarySerialiserCountTests;
 
@@ -42,6 +45,8 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
    #region Methods
    protected override EntrySerialiser Setup()
    {
+      ParameterInfoSerialiser parameterInfoSerialiser = new ParameterInfoSerialiser();
+
       ComponentSerialiserDispatcher componentSerialiser =
          new ComponentSerialiserDispatcher(
             new MessageComponentSerialiser(),
@@ -50,7 +55,12 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
             new EntryLinkComponentSerialiser(),
             new TableComponentSerialiser(),
             new AssemblyComponentSerialiser(),
-            new SimpleStackTraceComponentSerialiser());
+            new StackTraceComponentSerialiser(
+               new StackTraceInfoSerialiser(
+                  new StackFrameInfoSerialiser(
+                     new MethodBaseInfoSerialiserDispatcher(
+                        new MethodInfoSerialiser(parameterInfoSerialiser),
+                        new ConstructorInfoSerialiser(parameterInfoSerialiser))))));
 
       return new EntrySerialiser(componentSerialiser);
    }

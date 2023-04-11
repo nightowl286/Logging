@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
@@ -55,10 +54,6 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       AssemblyInfo expectedAssemblyInfo = AssemblyInfo.FromAssembly(assembly);
       AssemblyReference expectedAssemblyReference = new AssemblyReference(expectedAssemblyInfo, expectedAssemblyId);
 
-      StackTrace stackTrace = new StackTrace(true);
-      string expectedStackTrace = stackTrace.ToString();
-      int expectedStackTraceThreadId = Environment.CurrentManagedThreadId;
-
       string logPath = GetSubFolder("Log");
 
       // Write
@@ -83,7 +78,6 @@ public class FileSystemReadWriteTests : FileSystemIntegration
                      .With(expectedTableKey, expectedTableValue)
                      .BuildTable()
                   .With(assembly)
-                  .WithSimple(stackTrace, expectedStackTraceThreadId)
                .FinishEntry();
          }
       }
@@ -101,7 +95,6 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       IEntryLinkComponent entryLink;
       ITableComponent table;
       IAssemblyComponent assemblyComponent;
-      ISimpleStackTraceComponent simpleStackTraceComponent;
 
       // Read
       {
@@ -121,7 +114,6 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          entryLink = AssertGetComponent<IEntryLinkComponent>(entry, ComponentKind.EntryLink);
          table = AssertGetComponent<ITableComponent>(entry, ComponentKind.Table);
          assemblyComponent = AssertGetComponent<IAssemblyComponent>(entry, ComponentKind.Assembly);
-         simpleStackTraceComponent = AssertGetComponent<ISimpleStackTraceComponent>(entry, ComponentKind.SimpleStackTrace);
       }
 
       // Assert
@@ -177,9 +169,6 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          Assert.That.AreEqual(expectedAssemblyInfo.Configuration, assemblyInfo.Configuration);
          Assert.That.AreEqual(expectedAssemblyInfo.PeKinds, assemblyInfo.PeKinds);
          Assert.That.AreEqual(expectedAssemblyInfo.TargetPlatform, assemblyInfo.TargetPlatform);
-
-         Assert.That.AreEqual(expectedStackTraceThreadId, simpleStackTraceComponent.ThreadId);
-         Assert.That.AreEqual(expectedStackTrace, simpleStackTraceComponent.StackTrace);
       }
    }
 

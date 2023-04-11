@@ -99,8 +99,8 @@ public interface ILogger
    /// The <see cref="Thread.ManagedThreadId"/> of the thread
    /// that the <paramref name="stackTrace"/> is from.
    /// 
-   /// If <see langword="null"/> is used, then the id of the
-   /// <see cref="Thread.CurrentThread"/> will be used instead.
+   /// If <see langword="null"/> is used, then a negative
+   /// id will be used to indicate that it is unknown.
    /// </param>
    /// <param name="entryId">The id of the entry that was created.</param>
    /// <param name="file">
@@ -112,7 +112,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger LogSimple(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
+   ILogger Log(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Starts building an entry that will have multiple components.</summary>

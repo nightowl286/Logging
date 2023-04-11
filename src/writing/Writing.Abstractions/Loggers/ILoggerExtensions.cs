@@ -46,30 +46,30 @@ public static class ILoggerExtensions
       return logger;
    }
 
-   /// <inheritdoc cref="ILogger.LogSimple(Importance, StackTrace, int?, out ulong, string, uint)"/>
-   public static ILogger LogSimple(this ILogger logger, Importance importance, StackTrace stackTrace, int? threadId,
+   /// <inheritdoc cref="ILogger.Log(Importance, StackTrace, int?, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, Importance importance, StackTrace stackTrace, int? threadId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
-      logger.LogSimple(importance, stackTrace, threadId, out _, file, line);
+      logger.Log(importance, stackTrace, threadId, out _, file, line);
       return logger;
    }
 
-   /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from the <see cref="Thread.CurrentThread"/>.</remarks>
-   /// <inheritdoc cref="ILogger.LogSimple(Importance, StackTrace, int?, out ulong, string, uint)"/>
-   public static ILogger LogSimple(this ILogger logger, Importance importance, StackTrace stackTrace, out ulong entryId,
+   /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from an unknown thread.</remarks>
+   /// <inheritdoc cref="ILogger.Log(Importance, StackTrace, int?, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, Importance importance, StackTrace stackTrace, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
-      logger.LogSimple(importance, stackTrace, null, out entryId, file, line);
+      logger.Log(importance, stackTrace, null, out entryId, file, line);
       return logger;
    }
 
 
-   /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from the <see cref="Thread.CurrentThread"/>.</remarks>
-   /// <inheritdoc cref="ILogger.LogSimple(Importance, StackTrace, int?, out ulong, string, uint)"/>
-   public static ILogger LogSimple(this ILogger logger, Importance importance, StackTrace stackTrace,
+   /// <remarks>This method assumes that the <paramref name="stackTrace"/> is from an unknown thread.</remarks>
+   /// <inheritdoc cref="ILogger.Log(Importance, StackTrace, int?, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, Importance importance, StackTrace stackTrace,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
-      logger.LogSimple(importance, stackTrace, null, out _, file, line);
+      logger.Log(importance, stackTrace, null, out _, file, line);
       return logger;
    }
 

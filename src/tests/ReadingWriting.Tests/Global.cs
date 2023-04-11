@@ -3,7 +3,7 @@ global using TNO.Tests.Common;
 global using AssemblyComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Assembly.Versions.AssemblyComponentDeserialiser0;
 global using EntryLinkComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.EntryLink.Versions.EntryLinkComponentDeserialiser0;
 global using MessageComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Message.Versions.MessageComponentDeserialiser0;
-global using SimpleStackTraceComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.SimpleStackTrace.Versions.SimpleStackTraceComponentDeserialiser0;
+global using StackTraceComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.StackTrace.Versions.StackTraceComponentDeserialiser0;
 global using TableComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Table.Versions.TableComponentDeserialiser0;
 global using TagComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Tag.Versions.TagComponentDeserialiser0;
 global using ThreadComponentDeserialiserLatest = TNO.Logging.Reading.Entries.Components.Thread.Versions.ThreadComponentDeserialiser0;

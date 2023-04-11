@@ -5,6 +5,7 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
@@ -109,16 +110,17 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ILogger LogSimple(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
+   public ILogger Log(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
       TimeSpan timestamp = WriteContext.GetTimestamp();
       ulong fileId = GetFileId(file);
 
-      threadId ??= Environment.CurrentManagedThreadId;
-      string stackTraceStr = stackTrace.ToString();
-      SimpleStackTraceComponent component = new SimpleStackTraceComponent(stackTraceStr, threadId.Value);
+      threadId ??= -1;
+
+      IStackTraceInfo stackTraceInfo = StackTraceInfoHelper.GetStackTraceInfo(WriteContext, Collector, stackTrace, threadId.Value);
+      StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
 
       Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
       return this;

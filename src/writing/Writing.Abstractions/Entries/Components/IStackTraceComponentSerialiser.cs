@@ -6,7 +6,7 @@ using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 namespace TNO.Logging.Writing.Abstractions.Entries.Components;
 
 /// <inheritdoc/>
-[VersionedDataKind(VersionedDataKind.SimpleStackTrace)]
-public interface ISimpleStackTraceComponentSerialiser : IBinarySerialiser<ISimpleStackTraceComponent>, IVersioned
+[VersionedDataKind(VersionedDataKind.StackTrace)]
+public interface IStackTraceComponentSerialiser : IBinarySerialiser<IStackTraceComponent>, IVersioned
 {
 }

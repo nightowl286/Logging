@@ -10,7 +10,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Assembly;
 using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
-using TNO.Logging.Reading.Abstractions.Entries.Components.SimpleStackTrace;
+using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
@@ -34,7 +34,7 @@ using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.Assembly;
 using TNO.Logging.Reading.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Entries.Components.Message;
-using TNO.Logging.Reading.Entries.Components.SimpleStackTrace;
+using TNO.Logging.Reading.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Entries.Components.Table;
 using TNO.Logging.Reading.Entries.Components.Tag;
 using TNO.Logging.Reading.Entries.Components.Thread;
@@ -103,7 +103,7 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.EntryLink,
          VersionedDataKind.Table,
          VersionedDataKind.Assembly,
-         VersionedDataKind.SimpleStackTrace);
+         VersionedDataKind.StackTrace);
 
       providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
       RegisterFromKind(providerFacade, map, VersionedDataKind.Entry);
@@ -183,7 +183,7 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IEntryLinkComponentDeserialiserSelector, EntryLinkComponentDeserialiserSelector>()
          .Singleton<ITableComponentDeserialiserSelector, TableComponentDeserialiserSelector>()
          .Singleton<IAssemblyComponentDeserialiserSelector, AssemblyComponentDeserialiserSelector>()
-         .Singleton<ISimpleStackTraceComponentDeserialiserSelector, SimpleStackTraceComponentDeserialiserSelector>();
+         .Singleton<IStackTraceComponentDeserialiserSelector, StackTraceComponentDeserialiserSelector>();
    }
    private static void RegisterFromKind(IServiceFacade facade, VersionedDataKind kind, uint version)
    {
@@ -201,8 +201,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<ITableComponentDeserialiserSelector, ITableComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.Assembly)
          RegisterWithProvider<IAssemblyComponentDeserialiserSelector, IAssemblyComponentDeserialiser>(facade, version);
-      else if (kind is VersionedDataKind.SimpleStackTrace)
-         RegisterWithProvider<ISimpleStackTraceComponentDeserialiserSelector, ISimpleStackTraceComponentDeserialiser>(facade, version);
+      else if (kind is VersionedDataKind.StackTrace)
+         RegisterWithProvider<IStackTraceComponentDeserialiserSelector, IStackTraceComponentDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.FileReference)
          RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
       else if (kind is VersionedDataKind.ContextInfo)
