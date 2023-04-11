@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using TNO.Logging.Common;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -54,43 +55,43 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
 
       // entries
       _entryDataWriter = new BinarySerialiserWriter<IEntry>(
-         GetWriterPath("entries"),
+         GetWriterPath(FileSystemConstants.EntryPath),
          facade.GetSerialiser<IEntrySerialiser>(),
          settings.EntryThreshold);
 
       // file references
       _fileReferenceDataWriter = new BinarySerialiserWriter<FileReference>(
-         GetWriterPath("files"),
+         GetWriterPath(FileSystemConstants.FilePath),
          facade.GetSerialiser<IFileReferenceSerialiser>(),
          settings.FileReferenceThreshold);
 
       // context infos
       _contextInfoDataWriter = new BinarySerialiserWriter<ContextInfo>(
-         GetWriterPath("contexts"),
+         GetWriterPath(FileSystemConstants.ContextInfoPath),
          facade.GetSerialiser<IContextInfoSerialiser>(),
          settings.ContextInfoThreshold);
 
       // tag references
       _tagReferenceDataWriter = new BinarySerialiserWriter<TagReference>(
-         GetWriterPath("tags"),
+         GetWriterPath(FileSystemConstants.TagPath),
          facade.GetSerialiser<ITagReferenceSerialiser>(),
          settings.TagReferenceThreshold);
 
       // table key references
       _tableKeyReferenceDataWriter = new BinarySerialiserWriter<TableKeyReference>(
-         GetWriterPath("table-keys"),
+         GetWriterPath(FileSystemConstants.TableKeyPath),
          facade.GetSerialiser<ITableKeyReferenceSerialiser>(),
          settings.TableKeyReferenceThreshold);
 
       // assembly infos
       _assemblyReferenceDataWriter = new BinarySerialiserWriter<AssemblyReference>(
-         GetWriterPath("assemblies"),
+         GetWriterPath(FileSystemConstants.AssemblyPath),
          facade.GetSerialiser<IAssemblyReferenceSerialiser>(),
          settings.AssemblyReferenceThreshold);
 
       // type infos
       _typeReferenceDataWriter = new BinarySerialiserWriter<TypeReference>(
-         GetWriterPath("types"),
+         GetWriterPath(FileSystemConstants.TypePath),
          facade.GetSerialiser<ITypeReferenceSerialiser>(),
          settings.TypeReferenceThreshold);
 
@@ -138,7 +139,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       IDataVersionMapSerialiser serialiser = _facade.GetSerialiser<IDataVersionMapSerialiser>();
       DataVersionMap map = _facade.GetVersionMap();
 
-      string path = GetWriterPath("versions");
+      string path = GetWriterPath(FileSystemConstants.VersionPath);
       using (BinaryWriter writer = CreateWriter(path))
          serialiser.Serialise(writer, map);
    }
@@ -164,7 +165,7 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    {
       string name = Path.GetFileName(logDirectory);
       string directory = Path.GetDirectoryName(logDirectory)!;
-      string path = Path.Combine(directory, name + ".zip");
+      string path = Path.Combine(directory, name + FileSystemConstants.DotArchiveExtension);
 
       ZipFile.CreateFromDirectory(logDirectory, path, CompressionLevel.SmallestSize, false);
       Directory.Delete(logDirectory, true);

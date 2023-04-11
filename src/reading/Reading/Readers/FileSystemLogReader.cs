@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using TNO.Common.Extensions;
+using TNO.Logging.Common;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -91,36 +92,36 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       IDeserialiserProvider deserialiserProvider = _facade.GenerateProvider(map);
 
       Entries = new BinaryDeserialiserReader<IEntry>(
-         GetReaderPath("entries"),
+         GetReaderPath(FileSystemConstants.EntryPath),
          deserialiserProvider.GetDeserialiser<IEntryDeserialiser>());
 
       FileReferences = new BinaryDeserialiserReader<FileReference>(
-         GetReaderPath("files"),
+         GetReaderPath(FileSystemConstants.FilePath),
          deserialiserProvider.GetDeserialiser<IFileReferenceDeserialiser>());
 
       ContextInfos = new BinaryDeserialiserReader<ContextInfo>(
-         GetReaderPath("contexts"),
+         GetReaderPath(FileSystemConstants.ContextInfoPath),
          deserialiserProvider.GetDeserialiser<IContextInfoDeserialiser>());
 
       TagReferences = new BinaryDeserialiserReader<TagReference>(
-         GetReaderPath("tags"),
+         GetReaderPath(FileSystemConstants.TagPath),
          deserialiserProvider.GetDeserialiser<ITagReferenceDeserialiser>());
 
       TableKeyReferences = new BinaryDeserialiserReader<TableKeyReference>(
-         GetReaderPath("table-keys"),
+         GetReaderPath(FileSystemConstants.TableKeyPath),
          deserialiserProvider.GetDeserialiser<ITableKeyReferenceDeserialiser>());
 
       AssemblyReferences = new BinaryDeserialiserReader<AssemblyReference>(
-         GetReaderPath("assemblies"),
+         GetReaderPath(FileSystemConstants.AssemblyPath),
          deserialiserProvider.GetDeserialiser<IAssemblyReferenceDeserialiser>());
 
       TypeReferences = new BinaryDeserialiserReader<TypeReference>(
-         GetReaderPath("types"),
+         GetReaderPath(FileSystemConstants.TypePath),
          deserialiserProvider.GetDeserialiser<ITypeReferenceDeserialiser>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
-      string path = Path.Combine(directory, "versions");
+      string path = Path.Combine(directory, FileSystemConstants.VersionPath);
       using BinaryReader reader = OpenReader(path);
       IDataVersionMapDeserialiser deserialiser = _facade.GetDeserialiser<IDataVersionMapDeserialiser>();
       DataVersionMap map = deserialiser.Deserialise(reader);
@@ -167,20 +168,20 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    }
    private static bool TryGetZipPath(string path, [NotNullWhen(true)] out string? zipPath)
    {
-      if (Path.GetExtension(path) == ".zip")
+      if (Path.GetExtension(path) == FileSystemConstants.DotArchiveExtension)
       {
          zipPath = path;
          return true;
       }
 
-      string possiblePath = path + ".zip";
+      string possiblePath = path + FileSystemConstants.DotArchiveExtension;
       if (Path.Exists(possiblePath))
       {
          zipPath = possiblePath;
          return true;
       }
 
-      string[] zipFiles = Directory.GetFiles(path, "*.zip", SearchOption.TopDirectoryOnly);
+      string[] zipFiles = Directory.GetFiles(path, $"*{FileSystemConstants.DotArchiveExtension}", SearchOption.TopDirectoryOnly);
       if (zipFiles.Length == 1)
       {
          zipPath = zipFiles[0];

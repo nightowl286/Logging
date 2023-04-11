@@ -1,15 +1,10 @@
 ﻿using System.IO.Compression;
+using TNO.Logging.Common;
 using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
 namespace TNO.Logging.Writing.Writers;
 internal sealed class BinarySerialiserWriter<T> : IDisposable where T : notnull
 {
-   #region Consts
-   // Todo(Nightowl): These should be in a shared constants class;
-   private const string UncompressedName = "data";
-   private const string CompressedName = "chunk";
-   #endregion
-
    #region Fields
    private readonly IBinarySerialiser<T> _serialiser;
    private readonly ThreadedQueue<T> _queue;
@@ -68,7 +63,7 @@ internal sealed class BinarySerialiserWriter<T> : IDisposable where T : notnull
    #endregion
 
    #region Helpers
-   private string GetCompressedPath() => Path.Combine(_directory, $"{CompressedName}.{_currentChunk}");
-   private string GetUncompressedPath() => Path.Combine(_directory, $"{UncompressedName}.{_currentChunk}");
+   private string GetCompressedPath() => Path.Combine(_directory, $"{FileSystemConstants.CompressedName}.{_currentChunk}");
+   private string GetUncompressedPath() => Path.Combine(_directory, $"{FileSystemConstants.UncompressedName}.{_currentChunk}");
    #endregion
 }

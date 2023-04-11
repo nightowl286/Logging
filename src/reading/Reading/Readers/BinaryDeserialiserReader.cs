@@ -5,12 +5,6 @@ using TNO.Logging.Reading.Abstractions.Readers;
 namespace TNO.Logging.Reading.Readers;
 internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
 {
-   #region Consts
-   // Todo(Nightowl): These should be in a shared constants class;
-   private const string UncompressedName = "data";
-   private const string CompressedName = "chunk";
-   #endregion
-
    #region Fields
    private readonly IBinaryDeserialiser<T> _deserialiser;
    private readonly string _directory;
@@ -99,7 +93,7 @@ internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
    #region Helpers
    private string? GetChunkPath(uint chunk, out bool isCompressed)
    {
-      string path = Path.Combine(_directory, $"{CompressedName}.{chunk}");
+      string path = Path.Combine(_directory, $"{FileSystemConstants.CompressedName}.{chunk}");
       if (File.Exists(path))
       {
          isCompressed = true;
@@ -107,7 +101,7 @@ internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
       }
 
       isCompressed = false;
-      path = Path.Combine(_directory, $"{UncompressedName}.{chunk}");
+      path = Path.Combine(_directory, $"{FileSystemConstants.UncompressedName}.{chunk}");
       if (File.Exists(path))
          return path;
 
