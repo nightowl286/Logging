@@ -22,6 +22,11 @@ public interface ILoggerConfigurator
    /// <returns>The current logger configurator.</returns>
    ILoggerConfigurator With(ILogDataCollector collector);
 
+   /// <summary>Voids any data logged to the internal logger.</summary>
+   /// <returns>The current logger configurator.</returns>
+   /// <remarks>Please only use this if you know what you are doing.</remarks>
+   ILoggerConfigurator DisableInternalLogger();
+
    /// <summary>Created the final logger that should be used.</summary>
    /// <returns>The logger that should be used.</returns>
    IContextLogger Create();

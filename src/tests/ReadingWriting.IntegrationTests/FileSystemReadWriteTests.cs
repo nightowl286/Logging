@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
@@ -61,6 +62,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          LogWriterFacade facade = new LogWriterFacade();
 
          ILogger logger = facade.CreateConfigurator()
+            .DisableInternalLogger()
             .WithFileSystem(logPath, out IFileSystemLogWriter writer)
             .Create()
             .CreateContext(expectedContext, expectedFile, expectedLine)
@@ -186,6 +188,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       {
          LogWriterFacade facade = new LogWriterFacade();
          ILogger logger = facade.CreateConfigurator()
+            .DisableInternalLogger()
             .WithFileSystem(writerSettings, out IFileSystemLogWriter writer)
             .Create();
 
@@ -225,6 +228,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
 
       ILogger logger = new LogWriterFacade()
          .CreateConfigurator()
+         .DisableInternalLogger()
          .WithFileSystem(writerSettings, out IFileSystemLogWriter writer)
          .Create();
 
@@ -270,7 +274,6 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       Assert.Inconclusive($"Could not cast the read component ({component.GetType()}) to the type {typeof(T)}. Something else is likely broken.");
       return default!; // won't ever happen because of the Assert.Inconclusive.
    }
-
    private static void AssertCanRead<T>(IReader<T> reader, TimeSpan timeout, [CallerArgumentExpression(nameof(reader))] string name = "<Reader>")
    {
       bool canRead = SpinWait.SpinUntil(reader.CanRead, (int)timeout.TotalMilliseconds);
@@ -288,7 +291,16 @@ public class FileSystemReadWriteTests : FileSystemIntegration
    private static void AssertCantRead<T>(IReader<T> reader, [CallerArgumentExpression(nameof(reader))] string name = "<Reader>")
    {
       if (reader.CanRead())
-         Assert.Fail($"[{name}] More data could be read, even though none was expected.");
+      {
+         StringBuilder loggedDataBuilder = new StringBuilder();
+         while (reader.CanRead())
+         {
+            T data = reader.Read();
+            loggedDataBuilder.AppendLine(data?.ToString());
+         }
+
+         Assert.Fail($"[{name}] More data could be read, even though none was expected.\nRemaining data:\n{loggedDataBuilder}");
+      }
    }
    private static T AssertReadSingle<T>(IReader<T> reader, [CallerArgumentExpression(nameof(reader))] string name = "<Reader>")
    {
