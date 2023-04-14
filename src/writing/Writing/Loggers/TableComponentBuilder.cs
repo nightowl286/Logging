@@ -1,6 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
-using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Entries.Components;
+using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -13,7 +14,7 @@ internal sealed class TableComponentBuilder<T> : ITableComponentBuilder<T>
 {
    #region Fields
    private readonly T _caller;
-   private readonly Dictionary<uint, object> _table = new Dictionary<uint, object>();
+   private readonly Dictionary<uint, object?> _table = new Dictionary<uint, object?>();
    private readonly ILogWriteContext _writeContext;
    private readonly ILogDataCollector _collector;
    private readonly Action<ITableComponent> _callback;
@@ -33,69 +34,70 @@ internal sealed class TableComponentBuilder<T> : ITableComponentBuilder<T>
    #region Numeric
    #region Unsigned
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, byte value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, byte? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, ushort value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, ushort? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, uint value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, uint? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, ulong value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, ulong? value) => Add(key, value);
    #endregion
    #region Signed
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, sbyte value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, sbyte? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, short value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, short? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, int value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, int? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, long value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, long? value) => Add(key, value);
    #endregion
    #region Floating
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, float value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, float? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, double value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, double? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, decimal value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, decimal? value) => Add(key, value);
    #endregion
    #endregion
 
    #region Date/Time/TimeZone
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, TimeSpan value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, TimeSpan? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, DateTime value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, DateTime? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, DateTimeOffset value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, DateTimeOffset? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, TimeZoneInfo value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, TimeZoneInfo? value) => Add(key, value);
    #endregion
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, bool value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, bool? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, char value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, char? value) => Add(key, value);
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<T> With(string key, string value) => Add(key, value);
+   public ITableComponentBuilder<T> With(string key, string? value) => Add(key, value);
 
    /// <inheritdoc/>
    public T BuildTable()
    {
-      TableComponent component = new TableComponent(_table);
+      TableInfo tableInfo = new TableInfo(_table);
+      TableComponent component = new TableComponent(tableInfo);
       _callback.Invoke(component);
 
       return _caller;
@@ -103,7 +105,7 @@ internal sealed class TableComponentBuilder<T> : ITableComponentBuilder<T>
    #endregion
 
    #region Helpers
-   private ITableComponentBuilder<T> Add<U>(string key, U value) where U : notnull
+   private ITableComponentBuilder<T> Add<U>(string key, U? value)
    {
       if (_writeContext.GetOrCreateTableKeyId(key, out uint keyId))
       {

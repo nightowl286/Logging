@@ -3,6 +3,7 @@ using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 
 namespace TNO.Logging.Common.Abstractions.DataKinds;
@@ -24,7 +25,7 @@ public enum VersionedDataKind : ushort
    /// <summary>Represents the <see cref="LogData.TagReference"/>.</summary>
    TagReference,
 
-   /// <summary>Represents the <see cref="LogData.TableKeyReference"/>.</summary>
+   /// <summary>Represents the <see cref="LogData.Tables.TableKeyReference"/>.</summary>
    TableKeyReference,
 
    /// <summary>Represents the <see cref="IAssemblyInfo"/>.</summary>
@@ -51,8 +52,11 @@ public enum VersionedDataKind : ushort
    /// <summary>Represents the <see cref="IStackFrameInfo"/>.</summary>
    StackFrameInfo,
 
-   /// <summary>Represents the <see cref="StackTraceInfo"/>.</summary>
+   /// <summary>Represents the <see cref="IStackTraceInfo"/>.</summary>
    StackTraceInfo,
+
+   /// <summary>Represents the <see cref="ITableInfo"/>.</summary>
+   TableInfo,
 
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,

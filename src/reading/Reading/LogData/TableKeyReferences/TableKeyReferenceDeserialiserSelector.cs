@@ -1,5 +1,5 @@
 ﻿using TNO.DependencyInjection.Abstractions.Components;
-using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 using TNO.Logging.Reading.Deserialisers;

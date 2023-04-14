@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.LogData;
+﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 
 namespace TNO.Logging.Reading.LogData.TableKeyReferences.Versions;

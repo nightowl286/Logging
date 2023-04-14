@@ -4,7 +4,7 @@ using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Deserialisers;
 using TNO.Logging.Reading.Entries.Components.Table.Versions;
 
-namespace TNO.Logging.Reading.Entries.Components.Table;
+namespace TNO.Logging.Reading.LogData.Tables;
 
 /// <summary>
 /// An <see cref="IDeserialiserSelector{T}"/> for versions of the <see cref="ITableComponentDeserialiser"/>.

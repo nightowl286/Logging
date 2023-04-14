@@ -6,6 +6,7 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
@@ -153,8 +154,8 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          Assert.That.AreEqual(expectedTableKeyId, tableKeyReference.Id);
          Assert.That.AreEqual(expectedTableKey, tableKeyReference.Key);
 
-         Assert.That.AreEqual(1, table.Table.Count);
-         object tableValue = table.Table[expectedTableKeyId];
+         Assert.That.AreEqual(1, table.Table.Table.Count);
+         object? tableValue = table.Table.Table[expectedTableKeyId];
          Assert.That.AreEqual(expectedTableValue, tableValue);
 
          Assert.That.AreEqual(expectedAssemblyId, assemblyComponent.AssemblyId);

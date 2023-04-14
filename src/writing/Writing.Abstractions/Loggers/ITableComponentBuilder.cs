@@ -19,7 +19,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="byte"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, byte value);
+   ITableComponentBuilder<T> With(string key, byte? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -29,7 +29,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="ushort"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, ushort value);
+   ITableComponentBuilder<T> With(string key, ushort? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -39,7 +39,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="uint"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, uint value);
+   ITableComponentBuilder<T> With(string key, uint? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -49,7 +49,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="ulong"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, ulong value);
+   ITableComponentBuilder<T> With(string key, ulong? value);
    #endregion
    #region Signed
    /// <summary>
@@ -60,7 +60,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="sbyte"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, sbyte value);
+   ITableComponentBuilder<T> With(string key, sbyte? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -70,7 +70,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="short"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, short value);
+   ITableComponentBuilder<T> With(string key, short? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -80,7 +80,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="int"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, int value);
+   ITableComponentBuilder<T> With(string key, int? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -90,7 +90,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="long"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, long value);
+   ITableComponentBuilder<T> With(string key, long? value);
    #endregion
    #region Floating
    /// <summary>
@@ -101,7 +101,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="float"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, float value);
+   ITableComponentBuilder<T> With(string key, float? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -111,7 +111,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="double"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, double value);
+   ITableComponentBuilder<T> With(string key, double? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -121,7 +121,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="decimal"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, decimal value);
+   ITableComponentBuilder<T> With(string key, decimal? value);
    #endregion
    #endregion
 
@@ -134,7 +134,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="TimeSpan"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, TimeSpan value);
+   ITableComponentBuilder<T> With(string key, TimeSpan? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -144,7 +144,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="DateTime"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, DateTime value);
+   ITableComponentBuilder<T> With(string key, DateTime? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -154,7 +154,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="DateTimeOffset"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, DateTimeOffset value);
+   ITableComponentBuilder<T> With(string key, DateTimeOffset? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -164,7 +164,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="TimeZoneInfo"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, TimeZoneInfo value);
+   ITableComponentBuilder<T> With(string key, TimeZoneInfo? value);
    #endregion
 
    /// <summary>
@@ -175,7 +175,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="bool"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, bool value);
+   ITableComponentBuilder<T> With(string key, bool? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -185,7 +185,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="char"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, char value);
+   ITableComponentBuilder<T> With(string key, char? value);
 
    /// <summary>
    /// Adds the given <paramref name="key"/> and associates it with
@@ -195,7 +195,7 @@ public interface ITableComponentBuilder<out T>
    /// <param name="value">The <see cref="string"/> value to add.</param>
    /// <returns>The table builder that was used.</returns>
    /// <remarks><see cref="BuildTable"/> must be called in order to finish the table.</remarks>
-   ITableComponentBuilder<T> With(string key, string value);
+   ITableComponentBuilder<T> With(string key, string? value);
 
    /// <summary>Finishes creating the table.</summary>
    T BuildTable();

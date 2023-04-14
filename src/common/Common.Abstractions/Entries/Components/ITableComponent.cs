@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
 
 namespace TNO.Logging.Common.Abstractions.Entries.Components;
 
@@ -9,6 +9,6 @@ public interface ITableComponent : IComponent
 {
    #region Properties
    /// <summary>The table that contains the stored data.</summary>
-   IReadOnlyDictionary<uint, object> Table { get; }
+   ITableInfo Table { get; }
    #endregion
 }

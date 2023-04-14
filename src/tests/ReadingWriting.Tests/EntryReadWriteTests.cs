@@ -2,10 +2,12 @@
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
+using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.LogData.Methods;
 using TNO.Logging.Writing.Entries;
@@ -13,6 +15,7 @@ using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Serialisers.LogData.Tables;
 
 namespace TNO.ReadingWriting.Tests;
 
@@ -30,7 +33,8 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             new TagComponentSerialiser(),
             new ThreadComponentSerialiser(),
             new EntryLinkComponentSerialiser(),
-            new TableComponentSerialiser(),
+            new TableComponentSerialiser(
+               new TableInfoSerialiser()),
             new AssemblyComponentSerialiser(),
             new TypeComponentSerialiser(),
             new StackTraceComponentSerialiser(
@@ -50,7 +54,8 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             new TagComponentDeserialiserLatest(),
             new ThreadComponentDeserialiserLatest(),
             new EntryLinkComponentDeserialiserLatest(),
-            new TableComponentDeserialiserLatest(),
+            new TableComponentDeserialiserLatest(
+               new TableInfoDeserialiserLatest()),
             new AssemblyComponentDeserialiserLatest(),
             new TypeComponentDeserialiserLatest(),
             new StackTraceComponentDeserialiserLatest(
@@ -69,8 +74,9 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
       TagComponent tagComponent = new TagComponent(7);
       ThreadComponent threadComponent = ThreadComponent.FromThread(Thread.CurrentThread);
 
-      Dictionary<uint, object> table = new Dictionary<uint, object>() { { 1, 5 } };
-      TableComponent tableComponent = new TableComponent(table);
+      Dictionary<uint, object?> table = new Dictionary<uint, object?>() { { 1, 5 } };
+      TableInfo tableInfo = new TableInfo(table);
+      TableComponent tableComponent = new TableComponent(tableInfo);
       AssemblyComponent assemblyComponent = new AssemblyComponent(0);
 
       IStackTraceInfo stackTraceInfo;
@@ -177,11 +183,14 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
             out ITableComponent expectedComponent,
             out ITableComponent resultComponent);
 
-         Assert.That.AreEqual(expectedComponent.Table.Count, resultComponent.Table.Count);
-         foreach (KeyValuePair<uint, object> expectedPair in expectedComponent.Table)
+         ITableInfo expectedTable = expectedComponent.Table;
+         ITableInfo resultTable = resultComponent.Table;
+
+         Assert.That.AreEqual(expectedTable.Table.Count, resultTable.Table.Count);
+         foreach (KeyValuePair<uint, object?> expectedPair in expectedTable.Table)
          {
-            object expectedTableValue = expectedPair.Value;
-            object resultTableValue = expectedComponent.Table[expectedPair.Key];
+            object? expectedTableValue = expectedPair.Value;
+            object? resultTableValue = resultTable.Table[expectedPair.Key];
 
             Assert.That.AreEqual(expectedTableValue, resultTableValue);
          }

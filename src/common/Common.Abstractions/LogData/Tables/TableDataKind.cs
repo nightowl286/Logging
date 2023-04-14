@@ -1,10 +1,18 @@
-﻿namespace TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+
+namespace TNO.Logging.Common.Abstractions.LogData.Tables;
 
 /// <summary>
 /// The different value types that a <see cref="ITableComponent"/> can contain.
 /// </summary>
 public enum TableDataKind : byte
 {
+   /// <summary>An <see cref="IUnknownTableValue"/> value.</summary>
+   Unknown,
+
+   /// <summary>A <see langword="null"/> value.</summary>
+   Null,
+
    #region Numeric
    /// <summary>A <see cref="byte"/> value.</summary>
    Byte,
@@ -40,6 +48,7 @@ public enum TableDataKind : byte
    Decimal,
    #endregion
 
+   #region Text
    /// <summary>A <see cref="char"/> value.</summary>
    Char,
 
@@ -48,7 +57,9 @@ public enum TableDataKind : byte
 
    /// <summary>A <see cref="bool"/> value.</summary>
    Bool,
+   #endregion
 
+   #region Time
    /// <summary>A <see cref="System.TimeSpan"/> value.</summary>
    TimeSpan,
 
@@ -60,4 +71,11 @@ public enum TableDataKind : byte
 
    /// <summary>A <see cref="System.TimeZoneInfo"/> value.</summary>
    TimeZoneInfo,
+   #endregion
+
+   /// <summary>A <see cref="ITableInfo"/> value.</summary>
+   Table,
+
+   /// <summary>A <see cref="ICollectionInfo"/> value.</summary>
+   Collection,
 }

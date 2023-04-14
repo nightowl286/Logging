@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 
-namespace TNO.Logging.Common.Abstractions.LogData;
+namespace TNO.Logging.Common.Abstractions.LogData.Tables;
 
 /// <summary>
 /// Represents a link between a key in a <see cref="ITableComponent"/> and it's <see cref="Id"/>.

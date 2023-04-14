@@ -14,6 +14,7 @@ using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
@@ -23,6 +24,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Serialisers.LogData.Tables;
 using TNO.Logging.Writing.Serialisers.LogData.Types;
 
 namespace TNO.Logging.Writing;
@@ -106,6 +108,7 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(facade);
       VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(facade);
       VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(facade);
+      VersionedSingleton<ITableInfoSerialiser, TableInfoSerialiser>(facade);
 
       // Log References
       VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(facade);
@@ -120,10 +123,10 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<ITagComponentSerialiser, TagComponentSerialiser>(facade);
       VersionedSingleton<IThreadComponentSerialiser, ThreadComponentSerialiser>(facade);
       VersionedSingleton<IEntryLinkComponentSerialiser, EntryLinkComponentSerialiser>(facade);
-      VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(facade);
       VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(facade);
       VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(facade);
       VersionedSingleton<ITypeComponentSerialiser, TypeComponentSerialiser>(facade);
+      VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(facade);
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }

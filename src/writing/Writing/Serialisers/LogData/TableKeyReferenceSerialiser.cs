@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.LogData;
+﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
 
 namespace TNO.Logging.Writing.Serialisers.LogData;

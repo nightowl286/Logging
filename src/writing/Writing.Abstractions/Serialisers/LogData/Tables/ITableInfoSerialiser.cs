@@ -3,10 +3,10 @@ using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
-namespace TNO.Logging.Writing.Abstractions.Serialisers.LogData;
+namespace TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
 
 /// <inheritdoc/>
-[VersionedDataKind(VersionedDataKind.TableKeyReference)]
-public interface ITableKeyReferenceSerialiser : IBinarySerialiser<TableKeyReference>, IVersioned
+[VersionedDataKind(VersionedDataKind.TableInfo)]
+public interface ITableInfoSerialiser : IBinarySerialiser<ITableInfo>, IVersioned
 {
 }

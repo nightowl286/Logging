@@ -7,6 +7,7 @@ using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Serialisers.LogData.Tables;
 
 namespace TNO.Writing.Tests.BinarySerialiserCountTests;
 
@@ -53,7 +54,9 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
             new TagComponentSerialiser(),
             new ThreadComponentSerialiser(),
             new EntryLinkComponentSerialiser(),
-            new TableComponentSerialiser(),
+            new TableComponentSerialiser(
+               new TableInfoSerialiser()
+               ),
             new AssemblyComponentSerialiser(),
             new TypeComponentSerialiser(),
             new StackTraceComponentSerialiser(
