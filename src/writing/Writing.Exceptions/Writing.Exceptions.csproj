@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>TNO.Logging.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>TNO.Logging.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Logging - Writing - Exceptions</Title>
+    <Company>TNO</Company>
+    <Authors>Nightowl</Authors>
+    <PackageTags>logging, writing, exceptions</PackageTags>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>Contains the implementations for exception serialisers and converters.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\exceptions\Common.Exceptions\Common.Exceptions.csproj" />
+    <ProjectReference Include="..\Writing\Writing.csproj" />
+  </ItemGroup>
+
+</Project>

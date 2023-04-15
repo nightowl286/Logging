@@ -2,13 +2,19 @@
 
 namespace TNO.Logging.Writing.Serialisers;
 
-internal static class BinaryWriterSizeHelper
+/// <summary>
+/// Contains useful functions for calculating the size of data that will be written by a <see cref="BinaryWriter"/>.
+/// </summary>
+public static class BinaryWriterSizeHelper
 {
    #region Fields
+   /// <summary>The assumed encoding.</summary>
    public static readonly Encoding Encoding = Encoding.UTF8;
    #endregion
 
    #region Functions
+   /// <summary>Calculates the length of a written <see cref="string"/> <paramref name="value"/>.</summary>
+   /// <remarks><see langword="null"/> values will return a value of <c>0</c>.</remarks>
    public static int StringSize(string? value)
    {
       if (value == null)
@@ -23,6 +29,8 @@ internal static class BinaryWriterSizeHelper
       return stringSize + stringSizeSize;
    }
 
+   /// <summary>Calculates the length of a written <see cref="char"/> <paramref name="value"/>.</summary>
+   /// <param name="value">The <see cref="char"/> value to check.</param>
    public static int CharSize(char value)
    {
       // Based on the internal implementations of:
@@ -38,6 +46,7 @@ internal static class BinaryWriterSizeHelper
       return 4; // should not be possible as the BinaryWriter cannot handle it.
    }
 
+   /// <summary>Calculates the length that the given <paramref name="value"/> will take encoded as a 7-bit integer.</summary>
    public static int Encoded7BitIntSize(int value)
    {
       // Based on the internal implementations of:
