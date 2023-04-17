@@ -4,6 +4,7 @@ using System.Text;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
@@ -31,7 +32,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
    public void Write_Read_Successful()
    {
       // Arrange
-      Importance expectedImportance = Severity.Negligible | Purpose.Telemetry;
+      ImportanceCombination expectedImportance = Severity.Negligible | Purpose.Telemetry;
       string expectedMessage = "message";
       string expectedFile = "file";
       ulong expectedFileId = 1;
@@ -196,8 +197,8 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          using (writer)
          {
             logger
-               .Log(Importance.Inherit, "test1")
-               .Log(Importance.Inherit, "test2");
+               .Log(ImportanceCombination.Inherit, "test1")
+               .Log(ImportanceCombination.Inherit, "test2");
          }
       }
 
@@ -242,7 +243,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       {
          AssertCantRead(reader.Entries);
          {
-            logger.Log(Importance.Inherit, expectedMessage1);
+            logger.Log(ImportanceCombination.Inherit, expectedMessage1);
             IEntry entry1 = AssertRead(reader.Entries);
 
             IMessageComponent message1 = AssertGetComponent<IMessageComponent>(entry1, ComponentKind.Message);
@@ -251,7 +252,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
 
          AssertCantRead(reader.Entries);
          {
-            logger.Log(Importance.Inherit, expectedMessage2);
+            logger.Log(ImportanceCombination.Inherit, expectedMessage2);
             IEntry entry2 = AssertRead(reader.Entries);
 
             IMessageComponent message2 = AssertGetComponent<IMessageComponent>(entry2, ComponentKind.Message);

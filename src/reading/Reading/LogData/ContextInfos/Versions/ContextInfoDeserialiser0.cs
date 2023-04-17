@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 
 namespace TNO.Logging.Reading.LogData.ContextInfos.Versions;
@@ -6,13 +7,9 @@ namespace TNO.Logging.Reading.LogData.ContextInfos.Versions;
 /// <summary>
 /// A deserialiser for <see cref="ContextInfo"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class ContextInfoDeserialiser0 : IContextInfoDeserialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public ContextInfo Deserialise(BinaryReader reader)

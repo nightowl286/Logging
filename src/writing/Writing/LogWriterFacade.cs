@@ -3,6 +3,7 @@ using TNO.DependencyInjection.Abstractions;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
@@ -36,7 +37,8 @@ public class LogWriterFacade : ILogWriterFacade
 {
    #region Fields
    private readonly ServiceFacade _serviceFacade = new ServiceFacade();
-   private readonly DataVersionMap _map;
+   private readonly DataVersionMap _map = new DataVersionMap();
+
    #endregion
 
    #region Constructors
@@ -45,8 +47,6 @@ public class LogWriterFacade : ILogWriterFacade
    {
       _serviceFacade.RegisterSelf();
       RegisterSerialisers(_serviceFacade);
-
-      _map = GenerateVersionMap();
    }
    #endregion
 
@@ -59,31 +59,7 @@ public class LogWriterFacade : ILogWriterFacade
    #endregion
 
    #region Helpers
-   private DataVersionMap GenerateVersionMap()
-   {
-      IEnumerable<IVersioned> versioned = GetAllVersioned();
-
-      DataVersionMap map = new DataVersionMap();
-      foreach (IVersioned version in versioned)
-      {
-         IEnumerable<VersionedDataKind> kinds = version
-            .GetType()
-            .GetDataKinds();
-
-         foreach (VersionedDataKind kind in kinds)
-            map.Add(kind, version.Version);
-      }
-
-      return map;
-   }
-   private IEnumerable<IVersioned> GetAllVersioned()
-   {
-      IEnumerable<IVersioned> collection = _serviceFacade.GetAll<IVersioned>()
-         .Where(v => v is ISerialiser);
-
-      return collection;
-   }
-   private static void RegisterSerialisers(IServiceFacade facade)
+   private void RegisterSerialisers(IServiceFacade facade)
    {
       RegisterLogDataSerialisers(facade);
       RegisterComponentSerialisers(facade);
@@ -92,7 +68,7 @@ public class LogWriterFacade : ILogWriterFacade
 
       facade.Singleton<IDataVersionMapSerialiser, DataVersionMapSerialiser>();
    }
-   private static void RegisterLogDataSerialisers(IServiceFacade facade)
+   private void RegisterLogDataSerialisers(IServiceFacade facade)
    {
       // Methods
       VersionedSingleton<IParameterInfoSerialiser, ParameterInfoSerialiser>(facade);
@@ -117,7 +93,7 @@ public class LogWriterFacade : ILogWriterFacade
       VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(facade);
       VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(facade);
    }
-   private static void RegisterComponentSerialisers(IServiceFacade facade)
+   private void RegisterComponentSerialisers(IServiceFacade facade)
    {
       VersionedSingleton<IMessageComponentSerialiser, MessageComponentSerialiser>(facade);
       VersionedSingleton<ITagComponentSerialiser, TagComponentSerialiser>(facade);
@@ -130,13 +106,18 @@ public class LogWriterFacade : ILogWriterFacade
 
       facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }
-   private static void VersionedSingleton<TService, TType>(IServiceFacade facade)
+   private void VersionedSingleton<TService, TType>(IServiceFacade facade)
       where TService : notnull
       where TType : notnull, TService, IVersioned
    {
-      TType instance = facade.Build<TType>();
-      facade.Instance<IVersioned>(instance, AppendValueMode.Append);
-      facade.Instance<TService>(instance);
+      Type type = typeof(TType);
+      if (typeof(TType).TryGetVersion(out uint version))
+      {
+         foreach (VersionedDataKind kind in type.GetDataKinds())
+            _map.Add(kind, version);
+      }
+
+      facade.Singleton<TService, TType>();
    }
    #endregion
 }

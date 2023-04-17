@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Assemblies;
@@ -9,13 +10,9 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 /// <summary>
 /// A serialiser for <see cref="IAssemblyInfo"/>.
 /// </summary>
+[Version(0)]
 public class AssemblyInfoSerialiser : IAssemblyInfoSerialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IAssemblyInfo data)

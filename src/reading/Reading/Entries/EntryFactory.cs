@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Reading.Abstractions.Entries;
 
@@ -15,7 +16,7 @@ internal static class EntryFactory
       ulong id,
       ulong contextId,
       ulong scope,
-      Importance Importance,
+      ImportanceCombination Importance,
       TimeSpan timestamp,
       ulong fileId,
       uint line,

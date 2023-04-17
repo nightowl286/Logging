@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace TNO.Logging.Common.Abstractions.Entries;
 
@@ -14,7 +16,7 @@ public interface IEntry
    ulong Id { get; }
 
    /// <summary>The severity, and purpose, of this entry.</summary>
-   Importance Importance { get; }
+   ImportanceCombination Importance { get; }
 
    /// <summary>The timestamp of when this entry was created (since the log was created).</summary>
    TimeSpan Timestamp { get; }

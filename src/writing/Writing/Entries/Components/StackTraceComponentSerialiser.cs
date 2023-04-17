@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
 
@@ -8,15 +9,11 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// <summary>
 /// A serialiser for <see cref="IStackTraceComponent"/>.
 /// </summary>
+[Version(0)]
 public sealed class StackTraceComponentSerialiser : IStackTraceComponentSerialiser
 {
    #region Fields
    private readonly IStackTraceInfoSerialiser _stackTraceInfoSerialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

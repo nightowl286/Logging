@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
 
@@ -7,15 +8,11 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// <summary>
 /// A serialiser for <see cref="ITableComponent"/>.
 /// </summary>
+[Version(0)]
 public sealed class TableComponentSerialiser : ITableComponentSerialiser
 {
    #region Fields
    private readonly ITableInfoSerialiser _tableInfoSerialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

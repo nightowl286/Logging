@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
-using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace TNO.Common.Abstractions.CodeTests.entries;
 
@@ -8,7 +8,7 @@ namespace TNO.Common.Abstractions.CodeTests.entries;
 public abstract class ImportanceTestsBase<T>
 {
    #region Tests
-   protected static void PropertiesWithReturnType_NoUnexpectedNames(IEnumerable<Importance> values)
+   protected static void PropertiesWithReturnType_NoUnexpectedNames(IEnumerable<ImportanceCombination> values)
    {
       // Arrange
       HashSet<string> validNames = values
@@ -21,7 +21,7 @@ public abstract class ImportanceTestsBase<T>
       StringBuilder output = new StringBuilder();
       output
          .AppendLine()
-         .AppendLine($"Properties with the type {nameof(Importance)} with unexpected names:");
+         .AppendLine($"Properties with the type {nameof(ImportanceCombination)} with unexpected names:");
 
       bool hadInvalid = false;
       foreach (PropertyInfo property in properties)
@@ -41,15 +41,15 @@ public abstract class ImportanceTestsBase<T>
          Assert.Fail(output.ToString());
    }
 
-   protected void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(IEnumerable<Importance> values)
+   protected void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(IEnumerable<ImportanceCombination> values)
    {
       // Arrange
-      HashSet<Importance> missing = new();
-      HashSet<Importance> wrongType = new();
-      HashSet<Importance> wrongValue = new();
+      HashSet<ImportanceCombination> missing = new();
+      HashSet<ImportanceCombination> wrongType = new();
+      HashSet<ImportanceCombination> wrongValue = new();
 
       // Check
-      foreach (Importance value in values)
+      foreach (ImportanceCombination value in values)
       {
          string name = value.ToString();
          PropertyInfo? property = GetPropertyWithName(typeof(T), name);
@@ -68,7 +68,7 @@ public abstract class ImportanceTestsBase<T>
 
          object? rawValue = property.GetValue(null);
          T propertyValue = (T)rawValue!;
-         Importance importanceValue = GetImportanceValue(propertyValue);
+         ImportanceCombination importanceValue = GetImportanceValue(propertyValue);
 
          if (importanceValue != value)
             wrongValue.Add(value);
@@ -99,11 +99,11 @@ public abstract class ImportanceTestsBase<T>
    #endregion
 
    #region Helpers
-   protected abstract Importance GetImportanceValue(T component);
-   private static void AddToOutput(string header, StringBuilder output, IEnumerable<Importance> values)
+   protected abstract ImportanceCombination GetImportanceValue(T component);
+   private static void AddToOutput(string header, StringBuilder output, IEnumerable<ImportanceCombination> values)
    {
       output.AppendLine(header);
-      foreach (Importance value in values)
+      foreach (ImportanceCombination value in values)
          output.AppendLine($" - {value}");
 
       output.AppendLine();

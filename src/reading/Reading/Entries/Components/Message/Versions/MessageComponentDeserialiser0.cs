@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 
 namespace TNO.Logging.Reading.Entries.Components.Message.Versions;
@@ -6,13 +7,9 @@ namespace TNO.Logging.Reading.Entries.Components.Message.Versions;
 /// <summary>
 /// A deserialiser for <see cref="IMessageComponent"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class MessageComponentDeserialiser0 : IMessageComponentDeserialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public IMessageComponent Deserialise(BinaryReader reader)

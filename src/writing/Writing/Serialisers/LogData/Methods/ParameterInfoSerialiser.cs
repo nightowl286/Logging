@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
@@ -6,13 +7,9 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 /// <summary>
 /// A serialiser for <see cref="IParameterInfo"/>.
 /// </summary>
+[Version(0)]
 public class ParameterInfoSerialiser : IParameterInfoSerialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IParameterInfo data)

@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Writing.Entries;
@@ -29,7 +30,7 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
       ulong fileId = 5;
       uint line = 6;
 
-      Importance Importance = Severity.Negligible | Purpose.Telemetry;
+      ImportanceCombination Importance = Severity.Negligible | Purpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
          { ComponentKind.Message, messageComponent },

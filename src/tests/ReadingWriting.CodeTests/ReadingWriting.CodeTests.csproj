@@ -21,9 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\common\Common.Abstractions\Common.Abstractions.csproj" />
+    <ProjectReference Include="..\..\common\Common.Shared\Common.Shared.csproj" />
+    <ProjectReference Include="..\..\common\Common\Common.csproj" />
+    <ProjectReference Include="..\..\common\exceptions\Common.Exceptions.Abstractions\Common.Exceptions.Abstractions.csproj" />
+    <ProjectReference Include="..\..\common\exceptions\Common.Exceptions\Common.Exceptions.csproj" />
     <ProjectReference Include="..\..\reading\Reading.Abstractions\Reading.Abstractions.csproj" />
     <ProjectReference Include="..\..\reading\Reading\Reading.csproj" />
     <ProjectReference Include="..\..\writing\Writing.Abstractions\Writing.Abstractions.csproj" />
+    <ProjectReference Include="..\..\writing\Writing.Exceptions\Writing.Exceptions.csproj" />
     <ProjectReference Include="..\..\writing\Writing\Writing.csproj" />
   </ItemGroup>
 

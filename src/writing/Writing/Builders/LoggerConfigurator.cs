@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Tables;

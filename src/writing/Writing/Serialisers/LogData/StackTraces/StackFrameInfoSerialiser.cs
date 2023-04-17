@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
 
@@ -8,15 +9,11 @@ namespace TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 /// <summary>
 /// A serialiser for <see cref="IStackFrameInfo"/>.
 /// </summary>
+[Version(0)]
 public class StackFrameInfoSerialiser : IStackFrameInfoSerialiser
 {
    #region Fields
    private readonly IMethodBaseInfoSerialiserDispatcher _methodBaseInfoSerialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

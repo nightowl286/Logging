@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
@@ -52,8 +52,8 @@ public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
 
       if (versionedWriter is not null && versionedReader is not null)
       {
-         Assert.That.IsInconclusiveIf(versionedWriter.Version != versionedReader.Version,
-            $"There is a mismatch between the reader ({versionedReader.Version}) / writer ({versionedWriter.Version}) versions.");
+         Assert.That.IsInconclusiveIf(versionedWriter.GetVersion() != versionedReader.GetVersion(),
+            $"There is a mismatch between the reader ({versionedReader.GetVersion()}) / writer ({versionedWriter.GetVersion()}) versions.");
       }
    }
 

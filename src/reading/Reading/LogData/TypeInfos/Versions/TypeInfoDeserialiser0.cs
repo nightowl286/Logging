@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
 
 namespace TNO.Logging.Reading.LogData.TypeInfos.Versions;
@@ -6,13 +7,9 @@ namespace TNO.Logging.Reading.LogData.TypeInfos.Versions;
 /// <summary>
 /// A deserialiser for <see cref="ITypeInfo"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public ITypeInfo Deserialise(BinaryReader reader)

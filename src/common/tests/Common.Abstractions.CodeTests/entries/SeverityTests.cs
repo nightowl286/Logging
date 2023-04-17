@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace TNO.Common.Abstractions.CodeTests.entries;
 
@@ -11,7 +11,7 @@ public sealed class SeverityTests : ImportanceTestsBase<Severity>
    public void PropertiesWithReturnType_NoUnexpectedNames()
    {
       // Arrange
-      IEnumerable<Importance> values = Severity.GetAll();
+      IEnumerable<ImportanceCombination> values = Severity.GetAll();
 
       // Act
       PropertiesWithReturnType_NoUnexpectedNames(values);
@@ -21,12 +21,12 @@ public sealed class SeverityTests : ImportanceTestsBase<Severity>
    public void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue()
    {
       // Arrange
-      IEnumerable<Importance> values = Severity.GetAll();
+      IEnumerable<ImportanceCombination> values = Severity.GetAll();
 
       // Act
       PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(values);
    }
 
-   protected override Importance GetImportanceValue(Severity component) => component.Value;
+   protected override ImportanceCombination GetImportanceValue(Severity component) => component.Value;
    #endregion
 }

@@ -1,19 +1,16 @@
 ﻿using System.Reflection;
 using System.Text;
-using TNO.Common.Extensions;
-using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
 
 namespace TNO.ReadingWriting.CodeTests;
 
 [TestClass]
 [TestCategory(Category.Versioning)]
-public class VersionedDataKindTests
+public class IVersionedTests
 {
-   #region Methods
+   #region Tests
    [TestMethod]
-   public void EnsureVersionedSerialisersHaveDataKindAttribute()
+   public void EnsureIVersionedHaveVersionAttribute()
    {
       // Arrange
       Assembly[] assemblies = TestAssemblies.GetAssemblies();
@@ -22,19 +19,15 @@ public class VersionedDataKindTests
       // Act
       foreach (Type type in assemblies.SelectMany(a => a.DefinedTypes))
       {
-         if (type.IsInterface == false)
-            continue;
-         bool isSerialiser = type.ImplementsOpenInterface(typeof(IBinarySerialiser<>));
+         if (type.IsInterface || type.IsAbstract) continue;
+
          bool isVersioned = type.GetInterfaces().Contains(typeof(IVersioned));
 
-         if (isSerialiser && isVersioned)
+         if (isVersioned)
          {
-            bool hasKinds =
-               type
-               .GetDataKinds()
-               .Any();
+            bool hasVersion = type.TryGetVersion(out _);
 
-            if (hasKinds == false)
+            if (hasVersion == false)
                missing.Add(type);
          }
       }
@@ -44,9 +37,9 @@ public class VersionedDataKindTests
       {
          StringBuilder messageBuilder = new StringBuilder();
          messageBuilder
-            .AppendLine($"Some versioned serialisers were missing the {nameof(VersionedDataKindAttribute)}.")
+            .AppendLine($"Some versioned types were missing the {nameof(VersionAttribute)}.")
             .AppendLine()
-            .AppendLine($"Interfaces without an {nameof(VersionedDataKindAttribute)}:");
+            .AppendLine($"Types without a {nameof(VersionAttribute)}:");
 
          foreach (Type type in missing)
             messageBuilder.AppendLine($"- {type.FullName}");

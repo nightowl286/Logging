@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 
 namespace TNO.Logging.Reading.LogData.TagReferences.Versions;
@@ -6,13 +7,9 @@ namespace TNO.Logging.Reading.LogData.TagReferences.Versions;
 /// <summary>
 /// A deserialiser for <see cref="TagReference"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class TagReferenceDeserialiser0 : ITagReferenceDeserialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public TagReference Deserialise(BinaryReader reader)

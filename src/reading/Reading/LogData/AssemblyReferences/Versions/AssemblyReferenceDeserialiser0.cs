@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
 
@@ -7,15 +8,11 @@ namespace TNO.Logging.Reading.LogData.AssemblyReferences.Versions;
 /// <summary>
 /// A deserialiser for <see cref="AssemblyReference"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class AssemblyReferenceDeserialiser0 : IAssemblyReferenceDeserialiser
 {
    #region Fields
    private readonly IAssemblyInfoDeserialiser _assemblyInfoDeserialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

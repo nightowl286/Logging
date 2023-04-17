@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.LogData.Methods.ConstructorInfos;
 using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
 
@@ -7,6 +8,7 @@ namespace TNO.Logging.Reading.LogData.Methods.ConstructorInfos.Versions;
 /// <summary>
 /// A deserialiser for <see cref="IConstructorInfo"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class ConstructorInfoDeserialiser0 : IConstructorInfoDeserialiser
 {
    #region Fields
@@ -20,11 +22,6 @@ public sealed class ConstructorInfoDeserialiser0 : IConstructorInfoDeserialiser
    {
       _parameterInfoDeserialiser = parameterInfoDeserialiser;
    }
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Methods

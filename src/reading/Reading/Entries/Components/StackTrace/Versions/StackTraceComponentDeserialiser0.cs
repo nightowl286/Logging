@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackTraceInfos;
 
@@ -8,15 +9,11 @@ namespace TNO.Logging.Reading.Entries.Components.StackTrace.Versions;
 /// <summary>
 /// A deserialiser for <see cref="IStackTraceComponent"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class StackTraceComponentDeserialiser0 : IStackTraceComponentDeserialiser
 {
    #region Fields
    private readonly IStackTraceInfoDeserialiser _stackTraceInfoDeserialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace TNO.Logging.Common.Entries;
 
@@ -21,7 +22,7 @@ public record class Entry(
    ulong Id,
    ulong ContextId,
    ulong Scope,
-   Importance Importance,
+   ImportanceCombination Importance,
    TimeSpan Timestamp,
    ulong FileId,
    uint LineInFile,

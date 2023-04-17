@@ -1,4 +1,5 @@
 ﻿global using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Reflection;
 
 #if DEBUG
 [assembly: Parallelize(Scope = ExecutionScope.ClassLevel, Workers = 1)]
@@ -9,4 +10,26 @@
 internal static class Category
 {
    public const string Versioning = nameof(Versioning);
+}
+
+public static class TestAssemblies
+{
+   public static Assembly[] GetAssemblies()
+   {
+      string[] names = new string[]
+      {
+         "TNO.Logging.Common",
+         "TNO.Logging.Common.Abstractions",
+         "TNO.Logging.Common.Shared",
+         "TNO.Logging.Common.Exceptions",
+         "TNO.Logging.Common.Exceptions.Abstractions",
+         "TNO.Logging.Reading",
+         "TNO.Logging.Reading.Abstractions",
+         "TNO.Logging.Writing",
+         "TNO.Logging.Writing.Abstractions",
+         "TNO.Logging.Writing.Exceptions"
+      };
+
+      return names.Select(Assembly.Load).ToArray();
+   }
 }

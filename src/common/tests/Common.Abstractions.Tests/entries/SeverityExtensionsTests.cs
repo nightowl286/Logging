@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace Common.Abstractions.Tests.entries;
 
@@ -9,14 +9,14 @@ public class SeverityExtensionsTests
 {
    #region Methods
    #region Is Severity Set
-   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
-   [DataRow(Importance.Negligible, DisplayName = "Severity")]
-   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
-   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
-   [DataRow(Importance.None, DisplayName = "None")]
+   [DataRow(ImportanceCombination.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(ImportanceCombination.Negligible, DisplayName = "Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, DisplayName = "Combined")]
+   [DataRow(ImportanceCombination.Inherit, DisplayName = "Inherit")]
+   [DataRow(ImportanceCombination.None, DisplayName = "None")]
    [TestMethod("Is Severity Set | With Severity")]
-   public void IsSeveritySet_WithSeverity_ReturnsTrue(Importance value)
+   public void IsSeveritySet_WithSeverity_ReturnsTrue(ImportanceCombination value)
    {
       // Act
       bool result = SeverityExtensions.IsSeveritySet(value);
@@ -25,12 +25,12 @@ public class SeverityExtensionsTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.Telemetry, DisplayName = "Purpose Only")]
-   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose Only")]
-   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose Only")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.Telemetry, DisplayName = "Purpose Only")]
+   [DataRow(ImportanceCombination.NoPurpose, DisplayName = "No Purpose Only")]
+   [DataRow(ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose Only")]
    [TestMethod("Is Severity Set | Without Severity")]
-   public void IsSeveritySet_WithoutSeverity_ReturnsFalse(Importance value)
+   public void IsSeveritySet_WithoutSeverity_ReturnsFalse(ImportanceCombination value)
    {
       // Act
       bool result = SeverityExtensions.IsSeveritySet(value);
@@ -41,68 +41,68 @@ public class SeverityExtensionsTests
    #endregion
 
    #region Get Set Severity
-   [DataRow(Importance.Negligible, Importance.Negligible, DisplayName = "Severity -> Severity")]
-   [DataRow(Importance.InheritSeverity, Importance.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
-   [DataRow(Importance.NoSeverity, Importance.NoSeverity, DisplayName = "No Severity -> No Severity")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Negligible, DisplayName = "Combined -> Severity")]
-   [DataRow(Importance.Inherit, Importance.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
-   [DataRow(Importance.None, Importance.NoSeverity, DisplayName = "None -> No Severity")]
+   [DataRow(ImportanceCombination.Negligible, ImportanceCombination.Negligible, DisplayName = "Severity -> Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
+   [DataRow(ImportanceCombination.NoSeverity, ImportanceCombination.NoSeverity, DisplayName = "No Severity -> No Severity")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, ImportanceCombination.Negligible, DisplayName = "Combined -> Severity")]
+   [DataRow(ImportanceCombination.Inherit, ImportanceCombination.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
+   [DataRow(ImportanceCombination.None, ImportanceCombination.NoSeverity, DisplayName = "None -> No Severity")]
    [TestMethod("Get Set Severity | With Severity")]
-   public void GetSetSeverity_WithSeverity_ReturnsExpectedSeverity(Importance value, Importance expected)
+   public void GetSetSeverity_WithSeverity_ReturnsExpectedSeverity(ImportanceCombination value, ImportanceCombination expected)
    {
       // Act
-      Importance result = SeverityExtensions.GetSetSeverity(value);
+      ImportanceCombination result = SeverityExtensions.GetSetSeverity(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.Telemetry, DisplayName = "Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(ImportanceCombination.NoPurpose, DisplayName = "No Purpose")]
    [TestMethod("Get Set Severity | Without Severity")]
-   public void GetSetSeverity_WithoutSeverity_ReturnsEmpty(Importance value)
+   public void GetSetSeverity_WithoutSeverity_ReturnsEmpty(ImportanceCombination value)
    {
       // Arrange
-      Importance expected = Importance.Empty;
+      ImportanceCombination expected = ImportanceCombination.Empty;
 
       // Act
-      Importance result = SeverityExtensions.GetSetSeverity(value);
+      ImportanceCombination result = SeverityExtensions.GetSetSeverity(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
    }
    #endregion
    #region Get Severity
-   [DataRow(Importance.Negligible, Importance.Negligible, DisplayName = "Severity -> Severity")]
-   [DataRow(Importance.InheritSeverity, Importance.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
-   [DataRow(Importance.NoSeverity, Importance.NoSeverity, DisplayName = "No Severity -> No Severity")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Negligible, DisplayName = "Combined -> Severity")]
-   [DataRow(Importance.Inherit, Importance.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
-   [DataRow(Importance.None, Importance.NoSeverity, DisplayName = "None -> No Severity")]
+   [DataRow(ImportanceCombination.Negligible, ImportanceCombination.Negligible, DisplayName = "Severity -> Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity -> Inherit Severity")]
+   [DataRow(ImportanceCombination.NoSeverity, ImportanceCombination.NoSeverity, DisplayName = "No Severity -> No Severity")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, ImportanceCombination.Negligible, DisplayName = "Combined -> Severity")]
+   [DataRow(ImportanceCombination.Inherit, ImportanceCombination.InheritSeverity, DisplayName = "Inherit -> Inherit Severity")]
+   [DataRow(ImportanceCombination.None, ImportanceCombination.NoSeverity, DisplayName = "None -> No Severity")]
    [TestMethod("Get Severity | With Severity")]
-   public void GetSeverity_WithSeverity_ReturnsExpectedSeverity(Importance value, Importance expected)
+   public void GetSeverity_WithSeverity_ReturnsExpectedSeverity(ImportanceCombination value, ImportanceCombination expected)
    {
       // Act
-      Importance result = SeverityExtensions.GetSeverity(value);
+      ImportanceCombination result = SeverityExtensions.GetSeverity(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.Telemetry, DisplayName = "Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(ImportanceCombination.NoPurpose, DisplayName = "No Purpose")]
    [TestMethod("Get Severity | Without Severity")]
-   public void GetSeverity_WithoutSeverity_ReturnsNoSeverity(Importance value)
+   public void GetSeverity_WithoutSeverity_ReturnsNoSeverity(ImportanceCombination value)
    {
       // Arrange
-      Importance expected = Importance.NoSeverity;
+      ImportanceCombination expected = ImportanceCombination.NoSeverity;
 
       // Act
-      Importance result = SeverityExtensions.GetSeverity(value);
+      ImportanceCombination result = SeverityExtensions.GetSeverity(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
@@ -110,12 +110,12 @@ public class SeverityExtensionsTests
    #endregion
 
    #region Has Severity
-   [DataRow(Importance.Negligible, DisplayName = "Severity")]
-   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
-   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
+   [DataRow(ImportanceCombination.Negligible, DisplayName = "Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, DisplayName = "Combined")]
+   [DataRow(ImportanceCombination.Inherit, DisplayName = "Inherit")]
    [TestMethod("Has Severity | With Severity")]
-   public void HasSeverity_WithSeverity_ReturnsTrue(Importance value)
+   public void HasSeverity_WithSeverity_ReturnsTrue(ImportanceCombination value)
    {
       // Act
       bool result = SeverityExtensions.HasSeverity(value);
@@ -124,14 +124,14 @@ public class SeverityExtensionsTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
-   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
-   [DataRow(Importance.None, DisplayName = "None")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(ImportanceCombination.Telemetry, DisplayName = "Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(ImportanceCombination.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(ImportanceCombination.None, DisplayName = "None")]
    [TestMethod("Has Severity | Without Severity")]
-   public void HasSeverity_WithoutSeverity_ReturnsFalse(Importance value)
+   public void HasSeverity_WithoutSeverity_ReturnsFalse(ImportanceCombination value)
    {
       // Act
       bool result = SeverityExtensions.HasSeverity(value);

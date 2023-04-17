@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace Common.Abstractions.Tests.entries;
 
@@ -9,14 +9,14 @@ public class PurposeExtensionsTests
 {
    #region Tests
    #region Is Purpose Set
-   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
-   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
-   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
-   [DataRow(Importance.None, DisplayName = "None")]
+   [DataRow(ImportanceCombination.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(ImportanceCombination.Telemetry, DisplayName = "Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, DisplayName = "Combined")]
+   [DataRow(ImportanceCombination.Inherit, DisplayName = "Inherit")]
+   [DataRow(ImportanceCombination.None, DisplayName = "None")]
    [TestMethod("Is Purpose Set | With Purpose")]
-   public void IsPurposeSet_WithPurpose_ReturnsTrue(Importance value)
+   public void IsPurposeSet_WithPurpose_ReturnsTrue(ImportanceCombination value)
    {
       // Act
       bool result = PurposeExtensions.IsPurposeSet(value);
@@ -25,12 +25,12 @@ public class PurposeExtensionsTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.Negligible, DisplayName = "Severity Only")]
-   [DataRow(Importance.NoSeverity, DisplayName = "No Severity Only")]
-   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity Only")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.Negligible, DisplayName = "Severity Only")]
+   [DataRow(ImportanceCombination.NoSeverity, DisplayName = "No Severity Only")]
+   [DataRow(ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity Only")]
    [TestMethod("Is Purpose Set | Without Purpose")]
-   public void IsPurposeSet_WithoutPurpose_ReturnsFalse(Importance value)
+   public void IsPurposeSet_WithoutPurpose_ReturnsFalse(ImportanceCombination value)
    {
       // Act
       bool result = PurposeExtensions.IsPurposeSet(value);
@@ -41,68 +41,68 @@ public class PurposeExtensionsTests
    #endregion
 
    #region Get Set Purpose
-   [DataRow(Importance.Telemetry, Importance.Telemetry, DisplayName = "Purpose -> Purpose")]
-   [DataRow(Importance.InheritPurpose, Importance.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
-   [DataRow(Importance.NoPurpose, Importance.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Telemetry, DisplayName = "Combined -> Purpose")]
-   [DataRow(Importance.Inherit, Importance.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
-   [DataRow(Importance.None, Importance.NoPurpose, DisplayName = "None -> No Purpose")]
+   [DataRow(ImportanceCombination.Telemetry, ImportanceCombination.Telemetry, DisplayName = "Purpose -> Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
+   [DataRow(ImportanceCombination.NoPurpose, ImportanceCombination.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, ImportanceCombination.Telemetry, DisplayName = "Combined -> Purpose")]
+   [DataRow(ImportanceCombination.Inherit, ImportanceCombination.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
+   [DataRow(ImportanceCombination.None, ImportanceCombination.NoPurpose, DisplayName = "None -> No Purpose")]
    [TestMethod("Get Set Purpose | With Purpose")]
-   public void GetSetPurpose_WithPurpose_ReturnsExpectedPurpose(Importance value, Importance expected)
+   public void GetSetPurpose_WithPurpose_ReturnsExpectedPurpose(ImportanceCombination value, ImportanceCombination expected)
    {
       // Act
-      Importance result = PurposeExtensions.GetSetPurpose(value);
+      ImportanceCombination result = PurposeExtensions.GetSetPurpose(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.Negligible, DisplayName = "Severity")]
-   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.Negligible, DisplayName = "Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(ImportanceCombination.NoSeverity, DisplayName = "No Severity")]
    [TestMethod("Get Set Purpose | Without Purpose")]
-   public void GetSetPurpose_WithoutPurpose_ReturnsEmpty(Importance value)
+   public void GetSetPurpose_WithoutPurpose_ReturnsEmpty(ImportanceCombination value)
    {
       // Arrange
-      Importance expected = Importance.Empty;
+      ImportanceCombination expected = ImportanceCombination.Empty;
 
       // Act
-      Importance result = PurposeExtensions.GetSetPurpose(value);
+      ImportanceCombination result = PurposeExtensions.GetSetPurpose(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
    }
    #endregion
    #region Get Purpose
-   [DataRow(Importance.Telemetry, Importance.Telemetry, DisplayName = "Purpose -> Purpose")]
-   [DataRow(Importance.InheritPurpose, Importance.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
-   [DataRow(Importance.NoPurpose, Importance.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, Importance.Telemetry, DisplayName = "Combined -> Purpose")]
-   [DataRow(Importance.Inherit, Importance.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
-   [DataRow(Importance.None, Importance.NoPurpose, DisplayName = "None -> No Purpose")]
+   [DataRow(ImportanceCombination.Telemetry, ImportanceCombination.Telemetry, DisplayName = "Purpose -> Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose -> Inherit Purpose")]
+   [DataRow(ImportanceCombination.NoPurpose, ImportanceCombination.NoPurpose, DisplayName = "No Purpose -> No Purpose")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, ImportanceCombination.Telemetry, DisplayName = "Combined -> Purpose")]
+   [DataRow(ImportanceCombination.Inherit, ImportanceCombination.InheritPurpose, DisplayName = "Inherit -> Inherit Purpose")]
+   [DataRow(ImportanceCombination.None, ImportanceCombination.NoPurpose, DisplayName = "None -> No Purpose")]
    [TestMethod("Get Purpose | With Purpose")]
-   public void GetPurpose_WithPurpose_ReturnsExpectedPurpose(Importance value, Importance expected)
+   public void GetPurpose_WithPurpose_ReturnsExpectedPurpose(ImportanceCombination value, ImportanceCombination expected)
    {
       // Act
-      Importance result = PurposeExtensions.GetPurpose(value);
+      ImportanceCombination result = PurposeExtensions.GetPurpose(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.Negligible, DisplayName = "Severity")]
-   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.Negligible, DisplayName = "Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(ImportanceCombination.NoSeverity, DisplayName = "No Severity")]
    [TestMethod("Get Purpose | Without Purpose")]
-   public void GetPurpose_WithoutPurpose_ReturnsNoPurpose(Importance value)
+   public void GetPurpose_WithoutPurpose_ReturnsNoPurpose(ImportanceCombination value)
    {
       // Arrange
-      Importance expected = Importance.NoPurpose;
+      ImportanceCombination expected = ImportanceCombination.NoPurpose;
 
       // Act
-      Importance result = PurposeExtensions.GetPurpose(value);
+      ImportanceCombination result = PurposeExtensions.GetPurpose(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
@@ -110,12 +110,12 @@ public class PurposeExtensionsTests
    #endregion
 
    #region Has Purpose
-   [DataRow(Importance.Telemetry, DisplayName = "Purpose")]
-   [DataRow(Importance.InheritPurpose, DisplayName = "Inherit Purpose")]
-   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
-   [DataRow(Importance.Inherit, DisplayName = "Inherit")]
+   [DataRow(ImportanceCombination.Telemetry, DisplayName = "Purpose")]
+   [DataRow(ImportanceCombination.InheritPurpose, DisplayName = "Inherit Purpose")]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, DisplayName = "Combined")]
+   [DataRow(ImportanceCombination.Inherit, DisplayName = "Inherit")]
    [TestMethod("Has Purpose | With Purpose")]
-   public void HasPurpose_WithPurpose_ReturnsTrue(Importance value)
+   public void HasPurpose_WithPurpose_ReturnsTrue(ImportanceCombination value)
    {
       // Act
       bool result = PurposeExtensions.HasPurpose(value);
@@ -124,14 +124,14 @@ public class PurposeExtensionsTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Importance.Empty, DisplayName = "Empty")]
-   [DataRow(Importance.NoPurpose, DisplayName = "No Purpose")]
-   [DataRow(Importance.Negligible, DisplayName = "Severity")]
-   [DataRow(Importance.InheritSeverity, DisplayName = "Inherit Severity")]
-   [DataRow(Importance.NoSeverity, DisplayName = "No Severity")]
-   [DataRow(Importance.None, DisplayName = "None")]
+   [DataRow(ImportanceCombination.Empty, DisplayName = "Empty")]
+   [DataRow(ImportanceCombination.NoPurpose, DisplayName = "No Purpose")]
+   [DataRow(ImportanceCombination.Negligible, DisplayName = "Severity")]
+   [DataRow(ImportanceCombination.InheritSeverity, DisplayName = "Inherit Severity")]
+   [DataRow(ImportanceCombination.NoSeverity, DisplayName = "No Severity")]
+   [DataRow(ImportanceCombination.None, DisplayName = "None")]
    [TestMethod("Has Purpose | Without Purpose")]
-   public void HasPurpose_WithoutPurpose_ReturnsFalse(Importance value)
+   public void HasPurpose_WithoutPurpose_ReturnsFalse(ImportanceCombination value)
    {
       // Act
       bool result = PurposeExtensions.HasPurpose(value);

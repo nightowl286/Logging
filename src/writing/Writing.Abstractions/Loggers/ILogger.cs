@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace TNO.Logging.Writing.Abstractions.Loggers;
 
@@ -30,7 +30,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(Importance importance, string message, out ulong entryId,
+   ILogger Log(ImportanceCombination importance, string message, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Writes the given <paramref name="tag"/> to the log.</summary>
@@ -49,7 +49,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger LogTag(Importance importance, string tag, out ulong entryId,
+   ILogger LogTag(ImportanceCombination importance, string tag, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Writes the given <paramref name="thread"/> to the log.</summary>
@@ -68,7 +68,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(Importance importance, Thread thread, out ulong entryId,
+   ILogger Log(ImportanceCombination importance, Thread thread, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Writes the given <paramref name="assembly"/> to the log.</summary>
@@ -87,7 +87,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(Importance importance, Assembly assembly, out ulong entryId,
+   ILogger Log(ImportanceCombination importance, Assembly assembly, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Writes the given <paramref name="stackTrace"/> and the <paramref name="threadId"/> to the log.</summary>
@@ -113,7 +113,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
+   ILogger Log(ImportanceCombination importance, StackTrace stackTrace, int? threadId, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Writes the given <paramref name="type"/> to the log.</summary>
@@ -132,7 +132,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   ILogger Log(Importance importance, Type type, out ulong entryId,
+   ILogger Log(ImportanceCombination importance, Type type, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Starts building an entry that will have multiple components.</summary>
@@ -150,7 +150,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The logger that was used.</returns>
-   IEntryBuilder StartEntry(Importance importance, out ulong entryId,
+   IEntryBuilder StartEntry(ImportanceCombination importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
    /// <summary>Starts creating a table that will be added as an <see cref="ITableComponent"/>.</summary>
@@ -168,7 +168,7 @@ public interface ILogger
    /// This should be provided by the compiler.
    /// </param>
    /// <returns>The table component builder that can be used to customise the table.</returns>
-   ITableComponentBuilder<ILogger> StartTable(Importance importance, out ulong entryId,
+   ITableComponentBuilder<ILogger> StartTable(ImportanceCombination importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
    #endregion
 }

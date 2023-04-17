@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Tests.Common;
 
 namespace Common.Abstractions.Tests.entries;
@@ -10,12 +11,12 @@ public class ImportanceExtensionsTests
 {
    #region Tests
    #region Is None
-   [DataRow(Importance.Empty)]
-   [DataRow(Importance.None)]
-   [DataRow(Importance.NoPurpose)]
-   [DataRow(Importance.NoSeverity)]
+   [DataRow(ImportanceCombination.Empty)]
+   [DataRow(ImportanceCombination.None)]
+   [DataRow(ImportanceCombination.NoPurpose)]
+   [DataRow(ImportanceCombination.NoSeverity)]
    [TestMethod]
-   public void IsNone_WithValueEquivalentToNone_ReturnsTrue(Importance value)
+   public void IsNone_WithValueEquivalentToNone_ReturnsTrue(ImportanceCombination value)
    {
       // Act
       bool result = ImportanceExtensions.IsNone(value);
@@ -24,12 +25,12 @@ public class ImportanceExtensionsTests
       Assert.IsTrue(result);
    }
 
-   [DataRow(Importance.Negligible)]
-   [DataRow(Importance.InheritSeverity)]
-   [DataRow(Importance.Telemetry)]
-   [DataRow(Importance.InheritPurpose)]
+   [DataRow(ImportanceCombination.Negligible)]
+   [DataRow(ImportanceCombination.InheritSeverity)]
+   [DataRow(ImportanceCombination.Telemetry)]
+   [DataRow(ImportanceCombination.InheritPurpose)]
    [TestMethod]
-   public void IsNone_WithNotNoneValue_ReturnsFalse(Importance value)
+   public void IsNone_WithNotNoneValue_ReturnsFalse(ImportanceCombination value)
    {
       // Act
       bool result = ImportanceExtensions.IsNone(value);
@@ -40,59 +41,59 @@ public class ImportanceExtensionsTests
    #endregion
 
    #region Normalised
-   [DataRow(Importance.NoPurpose)]
-   [DataRow(Importance.Telemetry)]
-   [DataRow(Importance.InheritPurpose)]
+   [DataRow(ImportanceCombination.NoPurpose)]
+   [DataRow(ImportanceCombination.Telemetry)]
+   [DataRow(ImportanceCombination.InheritPurpose)]
    [TestMethod]
-   public void Normalised_WithNoSeverity_AddsSeverity(Importance value)
+   public void Normalised_WithNoSeverity_AddsSeverity(ImportanceCombination value)
    {
       // Arrange Assert
       Assert.That.IsInconclusiveIf(value.IsSeveritySet(), $"The severity is already set on the given value ({value}).");
       Assert.That.IsInconclusiveIfNot(value.IsPurposeSet(), $"The purpose was never set on the given value ({value}).");
 
       // Act
-      Importance result = ImportanceExtensions.Normalised(value);
+      ImportanceCombination result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.IsTrue(result.IsSeveritySet(), $"No severity has been added.");
-      Assert.That.AreEqual(result.GetSetSeverity(), Importance.NoSeverity, $"The wrong severity has been set.");
+      Assert.That.AreEqual(result.GetSetSeverity(), ImportanceCombination.NoSeverity, $"The wrong severity has been set.");
       Assert.That.AreEqual(value.GetSetPurpose(), result.GetSetPurpose(), $"The purpose has changed when it shouldn't have.");
    }
 
-   [DataRow(Importance.NoSeverity)]
-   [DataRow(Importance.Negligible)]
-   [DataRow(Importance.InheritSeverity)]
+   [DataRow(ImportanceCombination.NoSeverity)]
+   [DataRow(ImportanceCombination.Negligible)]
+   [DataRow(ImportanceCombination.InheritSeverity)]
    [TestMethod]
-   public void Normalised_WithNoPurpose_AddsPurpose(Importance value)
+   public void Normalised_WithNoPurpose_AddsPurpose(ImportanceCombination value)
    {
       // Arrange Assert
       Assert.That.IsInconclusiveIf(value.IsPurposeSet(), $"The purpose is already set on the given value ({value}).");
       Assert.That.IsInconclusiveIfNot(value.IsSeveritySet(), $"The severity was never set on the given value ({value}).");
 
       // Act
-      Importance result = ImportanceExtensions.Normalised(value);
+      ImportanceCombination result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.IsTrue(result.IsPurposeSet(), $"No purpose has been added.");
-      Assert.That.AreEqual(result.GetSetPurpose(), Importance.NoPurpose, $"The wrong purpose has been set.");
+      Assert.That.AreEqual(result.GetSetPurpose(), ImportanceCombination.NoPurpose, $"The wrong purpose has been set.");
       Assert.That.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
    }
 
-   [DataRow(Importance.None,
+   [DataRow(ImportanceCombination.None,
       DisplayName = "Normalised_AlreadyNormalisedValue_NoChanges (None)")]
-   [DataRow(Importance.Negligible | Importance.Telemetry,
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry,
       DisplayName = "Normalised_AlreadyNormalisedValue_NoChanges (Combined)")]
-   [DataRow(Importance.Inherit,
+   [DataRow(ImportanceCombination.Inherit,
       DisplayName = "Normalised_AlreadyNormalisedValue_NoChanges (Inherit)")]
    [TestMethod]
-   public void Normalised_AlreadyNormalisedValue_NoChanges(Importance value)
+   public void Normalised_AlreadyNormalisedValue_NoChanges(ImportanceCombination value)
    {
       // Arrange Assert
       Assert.That.IsInconclusiveIfNot(value.IsSeveritySet(), $"No severity is set on the value ({value}).");
       Assert.That.IsInconclusiveIfNot(value.IsPurposeSet(), $"No purpose is set on the value ({value}).");
 
       // Act
-      Importance result = ImportanceExtensions.Normalised(value);
+      ImportanceCombination result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.That.AreEqual(value.GetSetSeverity(), result.GetSetSeverity(), $"The severity has changed when it shouldn't have.");
@@ -103,11 +104,11 @@ public class ImportanceExtensionsTests
    public void Normalised_WithoutSeverityOrPurpose_AddsImportance()
    {
       // Arrange
-      Importance value = Importance.Empty;
-      Importance expected = Importance.None;
+      ImportanceCombination value = ImportanceCombination.Empty;
+      ImportanceCombination expected = ImportanceCombination.None;
 
       // Act
-      Importance result = ImportanceExtensions.Normalised(value);
+      ImportanceCombination result = ImportanceExtensions.Normalised(value);
 
       // Assert
       Assert.That.AreEqual(expected, result);
@@ -115,21 +116,21 @@ public class ImportanceExtensionsTests
    #endregion
 
    #region Normalise
-   [DataRow(Importance.Empty)]
-   [DataRow(Importance.None)]
-   [DataRow(Importance.Negligible | Importance.Telemetry, DisplayName = "Combined")]
-   [DataRow(Importance.Inherit)]
-   [DataRow(Importance.NoSeverity)]
-   [DataRow(Importance.Negligible)]
-   [DataRow(Importance.InheritSeverity)]
-   [DataRow(Importance.NoPurpose)]
-   [DataRow(Importance.Telemetry)]
-   [DataRow(Importance.InheritPurpose)]
+   [DataRow(ImportanceCombination.Empty)]
+   [DataRow(ImportanceCombination.None)]
+   [DataRow(ImportanceCombination.Negligible | ImportanceCombination.Telemetry, DisplayName = "Combined")]
+   [DataRow(ImportanceCombination.Inherit)]
+   [DataRow(ImportanceCombination.NoSeverity)]
+   [DataRow(ImportanceCombination.Negligible)]
+   [DataRow(ImportanceCombination.InheritSeverity)]
+   [DataRow(ImportanceCombination.NoPurpose)]
+   [DataRow(ImportanceCombination.Telemetry)]
+   [DataRow(ImportanceCombination.InheritPurpose)]
    [TestMethod]
-   public void Normalise_SetsCorrectValue(Importance value)
+   public void Normalise_SetsCorrectValue(ImportanceCombination value)
    {
       // Arrange
-      Importance expected = ImportanceExtensions.Normalised(value);
+      ImportanceCombination expected = ImportanceExtensions.Normalised(value);
 
       // Act
       value.Normalise();

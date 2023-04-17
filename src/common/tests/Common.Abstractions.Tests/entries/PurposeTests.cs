@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Tests.Common;
 
 namespace Common.Abstractions.Tests.entries;
@@ -18,7 +18,7 @@ public sealed class PurposeTests
          .Length;
 
       // Act
-      Importance[] values = Purpose.GetAll().ToArray();
+      ImportanceCombination[] values = Purpose.GetAll().ToArray();
 
       // Assert
       Assert.That.IsInconclusiveIf(values.Length != expected,

@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Types;
@@ -6,15 +7,11 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Types;
 /// <summary>
 /// A serialiser for <see cref="TypeReference"/>.
 /// </summary>
+[Version(0)]
 public class TypeReferenceSerialiser : ITypeReferenceSerialiser
 {
    #region Fields
    private readonly ITypeInfoSerialiser _typeInfoSerialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
@@ -52,7 +53,7 @@ public class BaseLogger : ILogger
 
    #region Methods
    /// <inheritdoc/>
-   public ILogger Log(Importance importance, string message, out ulong entryId,
+   public ILogger Log(ImportanceCombination importance, string message, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -66,7 +67,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ILogger LogTag(Importance importance, string tag, out ulong entryId,
+   public ILogger LogTag(ImportanceCombination importance, string tag, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -81,7 +82,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ILogger Log(Importance importance, Thread thread, out ulong entryId,
+   public ILogger Log(ImportanceCombination importance, Thread thread, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -95,7 +96,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ILogger Log(Importance importance, Assembly assembly, out ulong entryId,
+   public ILogger Log(ImportanceCombination importance, Assembly assembly, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -110,7 +111,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ILogger Log(Importance importance, StackTrace stackTrace, int? threadId, out ulong entryId,
+   public ILogger Log(ImportanceCombination importance, StackTrace stackTrace, int? threadId, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -127,7 +128,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ILogger Log(Importance importance, Type type, out ulong entryId,
+   public ILogger Log(ImportanceCombination importance, Type type, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       entryId = WriteContext.NewEntryId();
@@ -142,7 +143,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public IEntryBuilder StartEntry(Importance importance, out ulong entryId,
+   public IEntryBuilder StartEntry(ImportanceCombination importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       ulong id = WriteContext.NewEntryId();
@@ -164,7 +165,7 @@ public class BaseLogger : ILogger
    }
 
    /// <inheritdoc/>
-   public ITableComponentBuilder<ILogger> StartTable(Importance importance, out ulong entryId,
+   public ITableComponentBuilder<ILogger> StartTable(ImportanceCombination importance, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
    {
       ulong id = WriteContext.NewEntryId();
@@ -238,7 +239,7 @@ public class BaseLogger : ILogger
       return assemblyId;
    }
 
-   private void Save(ulong entryId, Importance importance, TimeSpan timestamp, ulong fileId, uint line, IComponent component)
+   private void Save(ulong entryId, ImportanceCombination importance, TimeSpan timestamp, ulong fileId, uint line, IComponent component)
    {
       Dictionary<ComponentKind, IComponent> componentsByKind = new Dictionary<ComponentKind, IComponent>
       {

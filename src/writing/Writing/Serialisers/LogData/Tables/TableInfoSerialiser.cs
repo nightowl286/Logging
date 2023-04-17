@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Tables;
@@ -6,6 +7,7 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Tables;
 /// <summary>
 /// A serialiser for <see cref="ITableInfo"/>.
 /// </summary>
+[Version(0)]
 public sealed class TableInfoSerialiser : ITableInfoSerialiser
 {
    #region Fields
@@ -54,11 +56,6 @@ public sealed class TableInfoSerialiser : ITableInfoSerialiser
       { TableDataKind.DateTime, sizeof(long) },
       { TableDataKind.DateTimeOffset, sizeof(long) * 2 },
    };
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Methods

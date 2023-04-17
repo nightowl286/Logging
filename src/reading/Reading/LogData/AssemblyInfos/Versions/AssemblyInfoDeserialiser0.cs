@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
 using TNO.Logging.Reading.Deserialisers;
 
@@ -10,13 +11,9 @@ namespace TNO.Logging.Reading.LogData.AssemblyInfos.Versions;
 /// <summary>
 /// A deserialiser for <see cref="IAssemblyInfo"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class AssemblyInfoDeserialiser0 : IAssemblyInfoDeserialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public IAssemblyInfo Deserialise(BinaryReader reader)

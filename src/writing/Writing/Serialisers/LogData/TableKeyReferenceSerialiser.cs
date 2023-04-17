@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
 
 namespace TNO.Logging.Writing.Serialisers.LogData;
@@ -6,14 +7,9 @@ namespace TNO.Logging.Writing.Serialisers.LogData;
 /// <summary>
 /// A serialiser for <see cref="TableKeyReference"/>.
 /// </summary>
+[Version(0)]
 public class TableKeyReferenceSerialiser : ITableKeyReferenceSerialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, TableKeyReference data)

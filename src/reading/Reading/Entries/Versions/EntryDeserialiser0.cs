@@ -1,6 +1,8 @@
 ﻿using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 
@@ -9,15 +11,11 @@ namespace TNO.Logging.Reading.Entries.Versions;
 /// <summary>
 /// A deserialiser for <see cref="IEntry"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class EntryDeserialiser0 : IEntryDeserialiser
 {
    #region Fields
    private IComponentDeserialiserDispatcher _componentDeserialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors
@@ -43,7 +41,7 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
 
       ushort rawKinds = reader.ReadUInt16();
 
-      Importance Importance = (Importance)rawImportance;
+      ImportanceCombination Importance = (ImportanceCombination)rawImportance;
       TimeSpan timestamp = new TimeSpan(rawTimestamp);
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>();
 

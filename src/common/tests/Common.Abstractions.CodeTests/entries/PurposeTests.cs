@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries.Importance;
 
 namespace TNO.Common.Abstractions.CodeTests.entries;
 
@@ -11,7 +11,7 @@ public sealed class PurposeTests : ImportanceTestsBase<Purpose>
    public void PropertiesWithReturnType_NoUnexpectedNames()
    {
       // Arrange
-      IEnumerable<Importance> values = Purpose.GetAll();
+      IEnumerable<ImportanceCombination> values = Purpose.GetAll();
 
       // Act
       PropertiesWithReturnType_NoUnexpectedNames(values);
@@ -21,7 +21,7 @@ public sealed class PurposeTests : ImportanceTestsBase<Purpose>
    public void PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue()
    {
       // Arrange
-      IEnumerable<Importance> values = Purpose.GetAll();
+      IEnumerable<ImportanceCombination> values = Purpose.GetAll();
 
       // Act
       PropertiesWithExpectedName_HaveExpectedReturnTypeAndValue(values);
@@ -29,6 +29,6 @@ public sealed class PurposeTests : ImportanceTestsBase<Purpose>
    #endregion
 
    #region Helpers
-   protected override Importance GetImportanceValue(Purpose component) => component.Value;
+   protected override ImportanceCombination GetImportanceValue(Purpose component) => component.Value;
    #endregion
 }

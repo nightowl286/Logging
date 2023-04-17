@@ -1,5 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
@@ -109,7 +110,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
       ulong fileId = 5;
       uint line = 6;
 
-      Importance Importance = Severity.Negligible | Purpose.Telemetry;
+      ImportanceCombination Importance = Severity.Negligible | Purpose.Telemetry;
       Dictionary<ComponentKind, IComponent> components = new Dictionary<ComponentKind, IComponent>
       {
          { ComponentKind.Message, messageComponent },

@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Reading.Abstractions.LogData.Tables;
 
@@ -7,13 +8,9 @@ namespace TNO.Logging.Reading.LogData.Tables.Versions;
 /// <summary>
 /// A deserialiser for <see cref="ITableInfo"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class TableInfoDeserialiser0 : ITableInfoDeserialiser
 {
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
-   #endregion
-
    #region Methods
    /// <inheritdoc/>
    public ITableInfo Deserialise(BinaryReader reader)

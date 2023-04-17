@@ -1,6 +1,7 @@
 ﻿using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Entries;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
 
@@ -9,15 +10,11 @@ namespace TNO.Logging.Writing.Entries;
 /// <summary>
 /// A serialiser for <see cref="IEntry"/>.
 /// </summary>
+[Version(0)]
 public class EntrySerialiser : IEntrySerialiser
 {
    #region Fields
    private readonly IComponentSerialiserDispatcher _componentSerialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors
