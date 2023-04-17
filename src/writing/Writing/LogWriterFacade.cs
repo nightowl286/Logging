@@ -1,5 +1,4 @@
 ﻿using TNO.DependencyInjection;
-using TNO.DependencyInjection.Abstractions;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
@@ -36,7 +35,7 @@ namespace TNO.Logging.Writing;
 public class LogWriterFacade : ILogWriterFacade
 {
    #region Fields
-   private readonly ServiceFacade _serviceFacade = new ServiceFacade();
+   private readonly IServiceScope _serviceScope = new ServiceFacade().CreateNew();
    private readonly DataVersionMap _map = new DataVersionMap();
 
    #endregion
@@ -45,68 +44,68 @@ public class LogWriterFacade : ILogWriterFacade
    /// <summary>Creates a new instance of the <see cref="LogWriterFacade"/>.</summary>
    public LogWriterFacade()
    {
-      _serviceFacade.RegisterSelf();
-      RegisterSerialisers(_serviceFacade);
+      _serviceScope.Registrar.RegisterComponents();
+      RegisterSerialisers(_serviceScope.Registrar);
    }
    #endregion
 
    #region Methods
    /// <inheritdoc/>
-   public T GetSerialiser<T>() where T : notnull, ISerialiser => _serviceFacade.Get<T>();
+   public T GetSerialiser<T>() where T : notnull, ISerialiser => _serviceScope.Requester.Get<T>();
 
    /// <inheritdoc/>
    public DataVersionMap GetVersionMap() => _map;
    #endregion
 
    #region Helpers
-   private void RegisterSerialisers(IServiceFacade facade)
+   private void RegisterSerialisers(IServiceRegistrar registrar)
    {
-      RegisterLogDataSerialisers(facade);
-      RegisterComponentSerialisers(facade);
+      RegisterLogDataSerialisers(registrar);
+      RegisterComponentSerialisers(registrar);
 
-      VersionedSingleton<IEntrySerialiser, EntrySerialiser>(facade);
+      VersionedSingleton<IEntrySerialiser, EntrySerialiser>(registrar);
 
-      facade.Singleton<IDataVersionMapSerialiser, DataVersionMapSerialiser>();
+      registrar.Singleton<IDataVersionMapSerialiser, DataVersionMapSerialiser>();
    }
-   private void RegisterLogDataSerialisers(IServiceFacade facade)
+   private void RegisterLogDataSerialisers(IServiceRegistrar registrar)
    {
       // Methods
-      VersionedSingleton<IParameterInfoSerialiser, ParameterInfoSerialiser>(facade);
-      VersionedSingleton<IMethodInfoSerialiser, MethodInfoSerialiser>(facade);
-      VersionedSingleton<IConstructorInfoSerialiser, ConstructorInfoSerialiser>(facade);
-      facade.Singleton<IMethodBaseInfoSerialiserDispatcher, MethodBaseInfoSerialiserDispatcher>();
+      VersionedSingleton<IParameterInfoSerialiser, ParameterInfoSerialiser>(registrar);
+      VersionedSingleton<IMethodInfoSerialiser, MethodInfoSerialiser>(registrar);
+      VersionedSingleton<IConstructorInfoSerialiser, ConstructorInfoSerialiser>(registrar);
+      registrar.Singleton<IMethodBaseInfoSerialiserDispatcher, MethodBaseInfoSerialiserDispatcher>();
 
       // Stack Traces
-      VersionedSingleton<IStackFrameInfoSerialiser, StackFrameInfoSerialiser>(facade);
-      VersionedSingleton<IStackTraceInfoSerialiser, StackTraceInfoSerialiser>(facade);
+      VersionedSingleton<IStackFrameInfoSerialiser, StackFrameInfoSerialiser>(registrar);
+      VersionedSingleton<IStackTraceInfoSerialiser, StackTraceInfoSerialiser>(registrar);
 
       // Log Info
-      VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(facade);
-      VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(facade);
-      VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(facade);
-      VersionedSingleton<ITableInfoSerialiser, TableInfoSerialiser>(facade);
+      VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(registrar);
+      VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(registrar);
+      VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(registrar);
+      VersionedSingleton<ITableInfoSerialiser, TableInfoSerialiser>(registrar);
 
       // Log References
-      VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(facade);
-      VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(facade);
-      VersionedSingleton<ITableKeyReferenceSerialiser, TableKeyReferenceSerialiser>(facade);
-      VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(facade);
-      VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(facade);
+      VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(registrar);
+      VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(registrar);
+      VersionedSingleton<ITableKeyReferenceSerialiser, TableKeyReferenceSerialiser>(registrar);
+      VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(registrar);
+      VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(registrar);
    }
-   private void RegisterComponentSerialisers(IServiceFacade facade)
+   private void RegisterComponentSerialisers(IServiceRegistrar registrar)
    {
-      VersionedSingleton<IMessageComponentSerialiser, MessageComponentSerialiser>(facade);
-      VersionedSingleton<ITagComponentSerialiser, TagComponentSerialiser>(facade);
-      VersionedSingleton<IThreadComponentSerialiser, ThreadComponentSerialiser>(facade);
-      VersionedSingleton<IEntryLinkComponentSerialiser, EntryLinkComponentSerialiser>(facade);
-      VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(facade);
-      VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(facade);
-      VersionedSingleton<ITypeComponentSerialiser, TypeComponentSerialiser>(facade);
-      VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(facade);
+      VersionedSingleton<IMessageComponentSerialiser, MessageComponentSerialiser>(registrar);
+      VersionedSingleton<ITagComponentSerialiser, TagComponentSerialiser>(registrar);
+      VersionedSingleton<IThreadComponentSerialiser, ThreadComponentSerialiser>(registrar);
+      VersionedSingleton<IEntryLinkComponentSerialiser, EntryLinkComponentSerialiser>(registrar);
+      VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(registrar);
+      VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(registrar);
+      VersionedSingleton<ITypeComponentSerialiser, TypeComponentSerialiser>(registrar);
+      VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(registrar);
 
-      facade.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
+      registrar.Singleton<IComponentSerialiserDispatcher, ComponentSerialiserDispatcher>();
    }
-   private void VersionedSingleton<TService, TType>(IServiceFacade facade)
+   private void VersionedSingleton<TService, TType>(IServiceRegistrar registrar)
       where TService : notnull
       where TType : notnull, TService, IVersioned
    {
@@ -117,7 +116,7 @@ public class LogWriterFacade : ILogWriterFacade
             _map.Add(kind, version);
       }
 
-      facade.Singleton<TService, TType>();
+      registrar.Singleton<TService, TType>();
    }
    #endregion
 }

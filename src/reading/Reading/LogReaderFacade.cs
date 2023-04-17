@@ -1,5 +1,4 @@
 ﻿using TNO.DependencyInjection;
-using TNO.DependencyInjection.Abstractions;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
@@ -65,16 +64,14 @@ namespace TNO.Logging.Reading;
 public class LogReaderFacade : ILogReaderFacade
 {
    #region Fields
-   private readonly ServiceFacade _serviceFacade = new ServiceFacade();
+   private readonly IServiceScope _serviceScope = new ServiceFacade().CreateNew();
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="LogReaderFacade"/>.</summary>
    public LogReaderFacade()
    {
-      _serviceFacade.RegisterSelf();
-
-      RegisterNonVersioned(_serviceFacade);
+      RegisterNonVersioned(_serviceScope.Registrar);
    }
    #endregion
 
@@ -82,39 +79,41 @@ public class LogReaderFacade : ILogReaderFacade
    /// <inheritdoc/>
    public IDeserialiserProvider GenerateProvider(DataVersionMap map)
    {
-      ServiceFacade providerFacade = new ServiceFacade();
-      providerFacade.RegisterSelf();
-      RegisterSelectors(providerFacade);
+      IServiceScope scope = new ServiceFacade().CreateNew();
 
-      // Method Info
-      RegisterFromKinds(providerFacade, map,
+      IServiceRegistrar registrar = scope.Registrar;
+      registrar.RegisterComponents();
+      RegisterSelectors(registrar);
+
+      registrar
+         .Singleton<IMethodBaseInfoDeserialiserDispatcher, MethodBaseInfoDeserialiserDispatcher>()
+         .Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
+
+      VersionedDataKind[] kinds = new VersionedDataKind[]
+      {
+         // Method Info
          VersionedDataKind.ParameterInfo,
          VersionedDataKind.MethodInfo,
-         VersionedDataKind.ConstructorInfo);
-      providerFacade.Singleton<IMethodBaseInfoDeserialiserDispatcher, MethodBaseInfoDeserialiserDispatcher>();
+         VersionedDataKind.ConstructorInfo,
 
-      // Stack Traces
-      RegisterFromKinds(providerFacade, map,
+         // Stack Traces
          VersionedDataKind.StackFrameInfo,
-         VersionedDataKind.StackTraceInfo);
+         VersionedDataKind.StackTraceInfo,
 
-      // Log Data Info
-      RegisterFromKinds(providerFacade, map,
+         // Log Data Info
          VersionedDataKind.ContextInfo,
          VersionedDataKind.AssemblyInfo,
          VersionedDataKind.TypeInfo,
-         VersionedDataKind.TableInfo);
+         VersionedDataKind.TableInfo,
 
-      // Log Data References
-      RegisterFromKinds(providerFacade, map,
+         // Log Data References
          VersionedDataKind.FileReference,
          VersionedDataKind.TagReference,
          VersionedDataKind.TableKeyReference,
          VersionedDataKind.AssemblyReference,
-         VersionedDataKind.TypeReference);
+         VersionedDataKind.TypeReference,
 
-      // Components
-      RegisterFromKinds(providerFacade, map,
+         // Components
          VersionedDataKind.Message,
          VersionedDataKind.Tag,
          VersionedDataKind.Thread,
@@ -122,28 +121,31 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.Table,
          VersionedDataKind.Assembly,
          VersionedDataKind.StackTrace,
-         VersionedDataKind.Type);
+         VersionedDataKind.Type,
 
-      providerFacade.Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
-      RegisterFromKind(providerFacade, map, VersionedDataKind.Entry);
+         // Entry
+         VersionedDataKind.Entry,
+      };
 
-      DeserialiserProvider provider = new DeserialiserProvider(providerFacade);
+      RegisterFromKinds(scope, map, kinds);
+
+      DeserialiserProvider provider = new DeserialiserProvider(scope.Requester);
       return provider;
    }
-   private static void RegisterFromKinds(IServiceFacade facade, DataVersionMap map, params VersionedDataKind[] kinds)
+   private static void RegisterFromKinds(IServiceScope scope, DataVersionMap map, params VersionedDataKind[] kinds)
    {
       foreach (VersionedDataKind kind in kinds)
-         RegisterFromKind(facade, map, kind);
+         RegisterFromKind(scope, map, kind);
    }
 
-   private static void RegisterFromKind(IServiceFacade facade, DataVersionMap map, VersionedDataKind kind)
+   private static void RegisterFromKind(IServiceScope scope, DataVersionMap map, VersionedDataKind kind)
    {
       if (map.TryGetValue(kind, out uint version))
-         RegisterFromKind(facade, kind, version);
+         RegisterFromKind(scope, kind, version);
    }
 
    /// <inheritdoc/>
-   public T GetDeserialiser<T>() where T : notnull, IDeserialiser => _serviceFacade.Get<T>();
+   public T GetDeserialiser<T>() where T : notnull, IDeserialiser => _serviceScope.Requester.Get<T>();
 
    /// <inheritdoc/>
    public IFileSystemLogReader ReadFromFileSystem(string path)
@@ -155,14 +157,14 @@ public class LogReaderFacade : ILogReaderFacade
    #endregion
 
    #region Helpers
-   private static void RegisterSelectors(IServiceFacade facade)
+   private static void RegisterSelectors(IServiceRegistrar registrar)
    {
-      RegisterComponentSelectors(facade);
-      RegisterLogDataSelectors(facade);
+      RegisterComponentSelectors(registrar);
+      RegisterLogDataSelectors(registrar);
    }
-   private static void RegisterLogDataSelectors(IServiceFacade facade)
+   private static void RegisterLogDataSelectors(IServiceRegistrar registrar)
    {
-      facade
+      registrar
          .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>()
          .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>()
          .Singleton<IContextInfoDeserialiserSelector, ContextInfoDeserialiserSelector>()
@@ -179,9 +181,9 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IStackTraceInfoDeserialiserSelector, StackTraceInfoDeserialiserSelector>()
          .Singleton<ITableInfoDeserialiserSelector, TableInfoDeserialiserSelector>();
    }
-   private static void RegisterComponentSelectors(IServiceFacade facade)
+   private static void RegisterComponentSelectors(IServiceRegistrar registrar)
    {
-      facade
+      registrar
          .Singleton<IMessageComponentDeserialiserSelector, MessageComponentDeserialiserSelector>()
          .Singleton<ITagComponentDeserialiserSelector, TagComponentDeserialiserSelector>()
          .Singleton<IThreadComponentDeserialiserSelector, ThreadComponentDeserialiserSelector>()
@@ -191,68 +193,68 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IStackTraceComponentDeserialiserSelector, StackTraceComponentDeserialiserSelector>()
          .Singleton<ITypeComponentDeserialiserSelector, TypeComponentDeserialiserSelector>();
    }
-   private static void RegisterFromKind(IServiceFacade facade, VersionedDataKind kind, uint version)
+   private static void RegisterFromKind(IServiceScope scope, VersionedDataKind kind, uint version)
    {
       if (kind is VersionedDataKind.Entry)
-         RegisterWithProvider<IEntryDeserialiserSelector, IEntryDeserialiser>(facade, version);
+         RegisterWithProvider<IEntryDeserialiserSelector, IEntryDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Message)
-         RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(facade, version);
+         RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Tag)
-         RegisterWithProvider<ITagComponentDeserialiserSelector, ITagComponentDeserialiser>(facade, version);
+         RegisterWithProvider<ITagComponentDeserialiserSelector, ITagComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Thread)
-         RegisterWithProvider<IThreadComponentDeserialiserSelector, IThreadComponentDeserialiser>(facade, version);
+         RegisterWithProvider<IThreadComponentDeserialiserSelector, IThreadComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.EntryLink)
-         RegisterWithProvider<IEntryLinkComponentDeserialiserSelector, IEntryLinkComponentDeserialiser>(facade, version);
+         RegisterWithProvider<IEntryLinkComponentDeserialiserSelector, IEntryLinkComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.TableInfo)
-         RegisterWithProvider<ITableInfoDeserialiserSelector, ITableInfoDeserialiser>(facade, version);
+         RegisterWithProvider<ITableInfoDeserialiserSelector, ITableInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Assembly)
-         RegisterWithProvider<IAssemblyComponentDeserialiserSelector, IAssemblyComponentDeserialiser>(facade, version);
+         RegisterWithProvider<IAssemblyComponentDeserialiserSelector, IAssemblyComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.StackTrace)
-         RegisterWithProvider<IStackTraceComponentDeserialiserSelector, IStackTraceComponentDeserialiser>(facade, version);
+         RegisterWithProvider<IStackTraceComponentDeserialiserSelector, IStackTraceComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.FileReference)
-         RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(facade, version);
+         RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.ContextInfo)
-         RegisterWithProvider<IContextInfoDeserialiserSelector, IContextInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IContextInfoDeserialiserSelector, IContextInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.TagReference)
-         RegisterWithProvider<ITagReferenceDeserialiserSelector, ITagReferenceDeserialiser>(facade, version);
+         RegisterWithProvider<ITagReferenceDeserialiserSelector, ITagReferenceDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.TableKeyReference)
-         RegisterWithProvider<ITableKeyReferenceDeserialiserSelector, ITableKeyReferenceDeserialiser>(facade, version);
+         RegisterWithProvider<ITableKeyReferenceDeserialiserSelector, ITableKeyReferenceDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.AssemblyInfo)
-         RegisterWithProvider<IAssemblyInfoDeserialiserSelector, IAssemblyInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IAssemblyInfoDeserialiserSelector, IAssemblyInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.AssemblyReference)
-         RegisterWithProvider<IAssemblyReferenceDeserialiserSelector, IAssemblyReferenceDeserialiser>(facade, version);
+         RegisterWithProvider<IAssemblyReferenceDeserialiserSelector, IAssemblyReferenceDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.TypeInfo)
-         RegisterWithProvider<ITypeInfoDeserialiserSelector, ITypeInfoDeserialiser>(facade, version);
+         RegisterWithProvider<ITypeInfoDeserialiserSelector, ITypeInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.TypeReference)
-         RegisterWithProvider<ITypeReferenceDeserialiserSelector, ITypeReferenceDeserialiser>(facade, version);
+         RegisterWithProvider<ITypeReferenceDeserialiserSelector, ITypeReferenceDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.ParameterInfo)
-         RegisterWithProvider<IParameterInfoDeserialiserSelector, IParameterInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IParameterInfoDeserialiserSelector, IParameterInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.MethodInfo)
-         RegisterWithProvider<IMethodInfoDeserialiserSelector, IMethodInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IMethodInfoDeserialiserSelector, IMethodInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.ConstructorInfo)
-         RegisterWithProvider<IConstructorInfoDeserialiserSelector, IConstructorInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IConstructorInfoDeserialiserSelector, IConstructorInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.StackFrameInfo)
-         RegisterWithProvider<IStackFrameInfoDeserialiserSelector, IStackFrameInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IStackFrameInfoDeserialiserSelector, IStackFrameInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.StackTraceInfo)
-         RegisterWithProvider<IStackTraceInfoDeserialiserSelector, IStackTraceInfoDeserialiser>(facade, version);
+         RegisterWithProvider<IStackTraceInfoDeserialiserSelector, IStackTraceInfoDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Type)
-         RegisterWithProvider<ITypeComponentDeserialiserSelector, ITypeComponentDeserialiser>(facade, version);
+         RegisterWithProvider<ITypeComponentDeserialiserSelector, ITypeComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Table)
-         RegisterWithProvider<ITableComponentDeserialiserSelector, ITableComponentDeserialiser>(facade, version);
+         RegisterWithProvider<ITableComponentDeserialiserSelector, ITableComponentDeserialiser>(scope, version);
    }
-   private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceFacade facade, uint version)
+   private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceScope scope, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>
       where TDeserialiser : notnull, IDeserialiser
    {
-      TSelector selector = facade.Get<TSelector>();
+      TSelector selector = scope.Requester.Get<TSelector>();
       if (selector.TrySelect(version, out TDeserialiser? deserialiser))
-         facade.Instance(deserialiser);
+         scope.Registrar.Instance(deserialiser);
       else
          throw new ArgumentException($"No deserialiser of the required type ({typeof(TDeserialiser)}) could be selected for the version #{version:n0}.", nameof(version));
    }
-   private static void RegisterNonVersioned(IServiceFacade facade)
+   private static void RegisterNonVersioned(IServiceRegistrar registrar)
    {
-      facade
+      registrar
          .Singleton<IDataVersionMapDeserialiser, DataVersionMapDeserialiser>();
    }
    #endregion
