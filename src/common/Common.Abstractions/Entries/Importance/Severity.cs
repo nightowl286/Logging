@@ -1,15 +1,5 @@
 ﻿using System;
-
-/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
 using System.Collections.Generic;
-After:
-using System.Collections.Generic;
-using TNO.Logging.Common.Abstractions.Entries.Importance;
-using TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-*/
-using System.Collections.Generic;
-using TNO.Logging.Common.Abstractions.Entries;
 
 namespace TNO.Logging.Common.Abstractions.Entries.Importance;
 

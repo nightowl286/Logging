@@ -1,37 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 
-/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
-using System.Collections.Generic;
-After:
-using System.Collections.Generic;
-using TNO.Logging.Common.Abstractions.Entries.Importance;
-using TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-*/
-
-/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
-using System.Collections.Generic;
-After:
-using System.Collections.Generic;
-using TNO;
-using TNO.Logging;
-using TNO.Logging.Common;
-using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Common.Abstractions.Entries;
-using TNO.Logging.Common.Abstractions.Entries.Importance;
-using TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-*/
-using System.Collections.Generic;
-using TNO.Logging.Common.Abstractions.Entries;
-
-
-/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
-namespace TNO.Logging.Common.Abstractions.Entries.Importance;
-After:
-namespace TNO.Logging.Common.Abstractions.Entries.Importance.Importance.Importance;
-*/
 namespace TNO.Logging.Common.Abstractions.Entries.Importance;
 
 /// <summary>

@@ -1,28 +1,4 @@
-﻿/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
-namespace TNO.Logging.Common.Abstractions.Entries.Importance;
-After:
-using TNO.Logging.Common.Abstractions.Entries.Importance;
-using TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-
-namespace TNO.Logging.Common.Abstractions.Entries.Importance.Importance.Importance;
-*/
-
-
-/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
-namespace TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-After:
-using TNO;
-using TNO.Logging;
-using TNO.Logging.Common;
-using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Common.Abstractions.Entries;
-using TNO.Logging.Common.Abstractions.Entries.Importance;
-using TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-*/
-
-namespace TNO.Logging.Common.Abstractions.Entries.Importance;
+﻿namespace TNO.Logging.Common.Abstractions.Entries.Importance;
 
 /// <summary>
 /// Contains useful extension methods related to the <see cref="ImportanceCombination"/>.

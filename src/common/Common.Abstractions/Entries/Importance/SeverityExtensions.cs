@@ -1,14 +1,4 @@
-﻿/* Unmerged change from project 'Common.Abstractions (netstandard2.1)'
-Before:
-namespace TNO.Logging.Common.Abstractions.Entries;
-After:
-using TNO.Logging.Common.Abstractions.Entries.Importance;
-using TNO.Logging.Common.Abstractions.Entries.Importance.Importance;
-
-namespace TNO.Logging.Common.Abstractions.Entries;
-*/
-
-namespace TNO.Logging.Common.Abstractions.Entries.Importance;
+﻿namespace TNO.Logging.Common.Abstractions.Entries.Importance;
 
 /// <summary>
 /// Contains helpful extension methods related to <see cref="Severity"/>.
