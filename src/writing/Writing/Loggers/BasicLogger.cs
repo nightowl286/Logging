@@ -1,4 +1,5 @@
 ﻿using TNO.Logging.Writing.Abstractions.Collectors;
+using TNO.Logging.Writing.Abstractions.Exceptions;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
 namespace TNO.Logging.Writing.Loggers;
@@ -13,8 +14,14 @@ public class BasicLogger : BaseLogger
    #endregion
 
    #region Constructors
-   internal BasicLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ulong scope, ILogger internalLogger)
-      : base(collector, writeContext, contextId, scope)
+   internal BasicLogger(
+      ILogDataCollector collector,
+      ILogWriteContext writeContext,
+      IExceptionInfoConverter exceptionInfoConverter,
+      ulong contextId,
+      ulong scope,
+      ILogger internalLogger)
+      : base(collector, writeContext, exceptionInfoConverter, contextId, scope)
    {
       InternalLogger = internalLogger;
    }

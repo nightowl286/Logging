@@ -16,7 +16,6 @@ using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Serialisers.LogData;
 using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
-using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 using TNO.Logging.Writing.Serialisers.LogData.Tables;
@@ -68,6 +67,7 @@ internal class VersionedSerialiserProvider : SerialiserProviderWrapperBase
       VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(registrar);
       VersionedSingleton<ITypeComponentSerialiser, TypeComponentSerialiser>(registrar);
       VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(registrar);
+      VersionedSingleton<IExceptionComponentSerialiser, ExceptionComponentSerialiser>(registrar);
    }
    private void VersionedSingleton<TService, TType>(IServiceRegistrar registrar)
      where TService : notnull

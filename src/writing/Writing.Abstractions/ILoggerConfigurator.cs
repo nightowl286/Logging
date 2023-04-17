@@ -27,6 +27,10 @@ public interface ILoggerConfigurator
    /// <remarks>Please only use this if you know what you are doing.</remarks>
    ILoggerConfigurator DisableInternalLogger();
 
+   /// <summary>Registers the available exception serialisers and converters.</summary>
+   /// <returns>The current logger configurator.</returns>
+   ILoggerConfigurator WithExceptions();
+
    /// <summary>Created the final logger that should be used.</summary>
    /// <returns>The logger that should be used.</returns>
    IContextLogger Create();

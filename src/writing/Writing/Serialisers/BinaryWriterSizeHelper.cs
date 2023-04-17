@@ -7,6 +7,11 @@ namespace TNO.Logging.Writing.Serialisers;
 /// </summary>
 public static class BinaryWriterSizeHelper
 {
+   #region Constants
+   /// <summary>The size (in bytes) of a <see cref="Guid"/>.</summary>
+   public const ulong GuidSize = 16;
+   #endregion
+
    #region Fields
    /// <summary>The assumed encoding.</summary>
    public static readonly Encoding Encoding = Encoding.UTF8;

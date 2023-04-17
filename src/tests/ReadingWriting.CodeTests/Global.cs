@@ -27,7 +27,6 @@ public static class TestAssemblies
          "TNO.Logging.Reading.Abstractions",
          "TNO.Logging.Writing",
          "TNO.Logging.Writing.Abstractions",
-         "TNO.Logging.Writing.Exceptions"
       };
 
       return names.Select(Assembly.Load).ToArray();

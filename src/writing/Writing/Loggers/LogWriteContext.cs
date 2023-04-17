@@ -19,6 +19,7 @@ public class LogWriteContext : ILogWriteContext
    private readonly SafeIdFactory<string> _tableKeyIdFactory = new SafeIdFactory<string>(1);
    private readonly SafeIdFactory<AssemblyIdentity> _assemblyIdFactory = new SafeIdFactory<AssemblyIdentity>(1);
    private readonly SafeIdFactory<TypeIdentity> _typeIdFactory = new SafeIdFactory<TypeIdentity>(1);
+   private readonly HashSet<TypeIdentity> _reportedUnknownExceptions = new HashSet<TypeIdentity>();
    private readonly Stopwatch _timestampWatch = Stopwatch.StartNew();
    #endregion
 
@@ -51,6 +52,18 @@ public class LogWriteContext : ILogWriteContext
       tableKeyId = (uint)keyId;
 
       return isNewId;
+   }
+
+   /// <inheritdoc/>
+   public bool ShouldLogUnknownException(Type exceptionType)
+   {
+      if (exceptionType.IsAssignableTo(typeof(Exception)))
+      {
+         TypeIdentity identity = new TypeIdentity(exceptionType);
+         return _reportedUnknownExceptions.Add(identity);
+      }
+
+      return false;
    }
    #endregion
 }

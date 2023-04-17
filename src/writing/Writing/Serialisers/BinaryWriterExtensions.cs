@@ -30,5 +30,14 @@ public static class BinaryWriterExtensions
       writer.Write(true);
       return true;
    }
+
+   /// <summary>Writes the given <paramref name="guid"/> to the underlying stream.</summary>
+   /// <param name="writer">The writer to use.</param>
+   /// <param name="guid">The guid to write.</param>
+   public static void Write(this BinaryWriter writer, Guid guid)
+   {
+      byte[] guidBytes = guid.ToByteArray();
+      writer.Write(guidBytes);
+   }
    #endregion
 }

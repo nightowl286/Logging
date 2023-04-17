@@ -3,7 +3,7 @@ using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
 
-namespace TNO.Logging.Writing.Serialisers.LogData.Constructors;
+namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 
 /// <summary>
 /// A serialiser for <see cref="IConstructorInfo"/>.

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace TNO.Logging.Common.Shared;
 
@@ -13,6 +14,11 @@ public static class CommonTags
    /// <summary>Tag associated with information about the <see cref="Assembly"/> of the current writer.</summary>
    public const string WriterAssembly = "(Internal)_Writer-Assembly";
 
+
+   /// <summary>Tag associated with information about an unknown <see cref="Exception"/>.</summary>
+   public const string UnknownExceptionType = "(Internal)_Unknown-Exception-Type";
+
    /// <summary>Tag associated with the time that the log was created at.</summary>
    public const string LogStartTime = "(Common)_Log-Start-Time";
+
 }

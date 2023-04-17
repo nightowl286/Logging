@@ -22,6 +22,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
    private readonly IAssemblyComponentSerialiser _assemblySerialiser;
    private readonly ITypeComponentSerialiser _typeSerialiser;
    private readonly IStackTraceComponentSerialiser _stackTraceSerialiser;
+   private readonly IExceptionComponentSerialiser _exceptionSerialiser;
    #endregion
 
    #region Constructors
@@ -42,7 +43,8 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
       ITableComponentSerialiser tableSerialiser,
       IAssemblyComponentSerialiser assemblySerialiser,
       ITypeComponentSerialiser typeSerialiser,
-      IStackTraceComponentSerialiser stackTraceSerialiser)
+      IStackTraceComponentSerialiser stackTraceSerialiser,
+      IExceptionComponentSerialiser exceptionSerialiser)
    {
       _messageSerialiser = messageSerialiser;
       _tagSerialiser = tagSerialiser;
@@ -52,6 +54,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
       _assemblySerialiser = assemblySerialiser;
       _stackTraceSerialiser = stackTraceSerialiser;
       _typeSerialiser = typeSerialiser;
+      _exceptionSerialiser = exceptionSerialiser;
    }
 
    #endregion
@@ -100,6 +103,11 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
          Debug.Assert(type.Kind is ComponentKind.Type);
          _typeSerialiser.Serialise(writer, type);
       }
+      else if (data is IExceptionComponent exception)
+      {
+         Debug.Assert(exception.Kind is ComponentKind.Exception);
+         _exceptionSerialiser.Serialise(writer, exception);
+      }
       else
          throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data));
    }
@@ -117,6 +125,7 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
          IAssemblyComponent assembly => _assemblySerialiser.Count(assembly),
          IStackTraceComponent stackTrace => _stackTraceSerialiser.Count(stackTrace),
          ITypeComponent type => _typeSerialiser.Count(type),
+         IExceptionComponent exception => _exceptionSerialiser.Count(exception),
 
          _ => throw new ArgumentException($"Unknown component type ({data.GetType()}). Kind: {data.Kind}.", nameof(data))
       };

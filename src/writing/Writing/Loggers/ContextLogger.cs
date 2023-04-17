@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
+using TNO.Logging.Writing.Abstractions.Exceptions;
 using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Loggers.Scopes;
 using TNO.Logging.Writing.IdFactories;
@@ -22,8 +23,13 @@ public class ContextLogger : BasicLogger, IContextLogger
    /// <param name="writeContext">The write context to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="internalLogger">The internal logger to use.</param>
-   internal ContextLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ILogger internalLogger)
-      : base(collector, writeContext, contextId, 0, internalLogger)
+   internal ContextLogger(
+      ILogDataCollector collector,
+      ILogWriteContext writeContext,
+      IExceptionInfoConverter exceptionInfoConverter,
+      ulong contextId,
+      ILogger internalLogger)
+      : base(collector, writeContext, exceptionInfoConverter, contextId, 0, internalLogger)
    {
    }
    #endregion
@@ -38,7 +44,7 @@ public class ContextLogger : BasicLogger, IContextLogger
       ContextInfo contextInfo = new ContextInfo(name, id, ContextId, fileId, line);
       Collector.Deposit(contextInfo);
 
-      return new ContextLogger(Collector, WriteContext, id, InternalLogger);
+      return new ContextLogger(Collector, WriteContext, ExceptionInfoConverter, id, InternalLogger);
    }
 
    /// <inheritdoc/>
@@ -46,7 +52,7 @@ public class ContextLogger : BasicLogger, IContextLogger
    {
       ulong scope = _scopeFactory.GetNext();
 
-      return new BasicLogger(Collector, WriteContext, ContextId, scope, InternalLogger);
+      return new BasicLogger(Collector, WriteContext, ExceptionInfoConverter, ContextId, scope, InternalLogger);
    }
    #endregion
 }

@@ -12,4 +12,14 @@ public static class BinaryReaderExtensions
 
       return default;
    }
+
+   public static Guid ReadGuid(this BinaryReader reader)
+   {
+      const int guidSize = 16;
+
+      Span<byte> bytes = stackalloc byte[guidSize];
+      reader.Read(bytes);
+
+      return new Guid(bytes);
+   }
 }

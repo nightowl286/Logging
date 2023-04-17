@@ -32,6 +32,9 @@ public enum ComponentKind : ushort
    /// <summary>Information about a <see cref="StackTrace"/>.</summary>
    StackTrace = 128,
 
+   /// <summary>Information about an <see cref="System.Exception"/>.</summary>
+   Exception = 256,
+
    /// <summary>This entry is reserved for possible future expansion.</summary>
    ReservedForExpansion = 32_768,
 }

@@ -64,6 +64,14 @@ public interface ILogWriteContext
    /// </returns>
    bool GetOrCreateTypeId(TypeIdentity typeIdentity, out ulong typeId);
 
+   /// <summary>Checks whether the given <paramref name="exceptionType"/> has already been logged as being unknown.</summary>
+   /// <param name="exceptionType">The type of the <see cref="Exception"/> to check.</param>
+   /// <returns>
+   /// <see langword="true"/> if the given <paramref name="exceptionType"/> has not been logged yet,
+   /// <see langword="false"/> otherwise, or if the <paramref name="exceptionType"/> was not a type of <see cref="Exception"/>.
+   /// </returns>
+   bool ShouldLogUnknownException(Type exceptionType);
+
    /// <summary>Creates a new id for a context.</summary>
    /// <returns>The id of the newly created context.</returns>
    ulong CreateContextId();

@@ -6,11 +6,13 @@ using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Writing.Abstractions.Collectors;
+using TNO.Logging.Writing.Abstractions.Exceptions;
 using TNO.Logging.Writing.Abstractions.Loggers;
 
 namespace TNO.Logging.Writing.Loggers;
@@ -31,6 +33,8 @@ public class BaseLogger : ILogger
    /// <summary>The write context used by this logger.</summary>
    protected ILogWriteContext WriteContext { get; }
 
+   protected IExceptionInfoConverter ExceptionInfoConverter { get; }
+
    /// <summary>The id of the context that this logger belongs to.</summary>
    protected ulong ContextId { get; }
    #endregion
@@ -41,10 +45,16 @@ public class BaseLogger : ILogger
    /// <param name="writeContext">The write context to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="scope">The scope (inside the given <paramref name="contextId"/> that this logger belongs to.</param>
-   internal BaseLogger(ILogDataCollector collector, ILogWriteContext writeContext, ulong contextId, ulong scope)
+   internal BaseLogger(
+      ILogDataCollector collector,
+      ILogWriteContext writeContext,
+      IExceptionInfoConverter exceptionInfoConverter,
+      ulong contextId,
+      ulong scope)
    {
       Collector = collector;
       WriteContext = writeContext;
+      ExceptionInfoConverter = exceptionInfoConverter;
 
       ContextId = contextId;
       _scope = scope;
@@ -137,6 +147,22 @@ public class BaseLogger : ILogger
 
       ulong typeId = TypeInfoHelper.EnsureIdsForAssociatedTypes(WriteContext, Collector, type);
       TypeComponent component = new TypeComponent(typeId);
+
+      Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
+      return this;
+   }
+
+   /// <inheritdoc/>
+   public ILogger Log(ImportanceCombination importance, Exception exception, int? threadId, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      entryId = WriteContext.NewEntryId();
+      TimeSpan timestamp = WriteContext.GetTimestamp();
+      ulong fileId = GetFileId(file);
+
+      IExceptionInfo exceptionInfo = ExceptionInfoConverter.Convert(exception, threadId);
+
+      ExceptionComponent component = new ExceptionComponent(exceptionInfo);
 
       Save(entryId, importance.Normalised(), timestamp, fileId, line, component);
       return this;
@@ -249,6 +275,5 @@ public class BaseLogger : ILogger
       Entry entry = new Entry(entryId, ContextId, _scope, importance, timestamp, fileId, line, componentsByKind);
       Collector.Deposit(entry);
    }
-
    #endregion
 }

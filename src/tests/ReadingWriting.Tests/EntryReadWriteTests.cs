@@ -13,7 +13,6 @@ using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.LogData.Methods;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
-using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 using TNO.Logging.Writing.Serialisers.LogData.Tables;

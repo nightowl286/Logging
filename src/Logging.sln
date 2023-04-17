@@ -43,13 +43,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Writing.Tests", "writing\Wr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Shared", "common\Common.Shared\Common.Shared.csproj", "{DAE89E91-36CE-43CC-A0DC-8B88129701CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Writing.Exceptions", "writing\Writing.Exceptions\Writing.Exceptions.csproj", "{7199819B-CB36-4C1C-A2F7-A9C9FCCA2857}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exceptions", "exceptions", "{D24DD1C8-6F45-4058-A45D-4E8E9146E1EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Exceptions.Abstractions", "common\exceptions\Common.Exceptions.Abstractions\Common.Exceptions.Abstractions.csproj", "{89D61C4C-0810-4B5D-A2CA-78136BF8477F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Exceptions.Abstractions", "common\exceptions\Common.Exceptions.Abstractions\Common.Exceptions.Abstractions.csproj", "{89D61C4C-0810-4B5D-A2CA-78136BF8477F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Exceptions", "common\exceptions\Common.Exceptions\Common.Exceptions.csproj", "{DF02A880-74E9-4C95-A2D2-F98EB8255952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Exceptions", "common\exceptions\Common.Exceptions\Common.Exceptions.csproj", "{DF02A880-74E9-4C95-A2D2-F98EB8255952}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,10 +111,6 @@ Global
 		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAE89E91-36CE-43CC-A0DC-8B88129701CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7199819B-CB36-4C1C-A2F7-A9C9FCCA2857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7199819B-CB36-4C1C-A2F7-A9C9FCCA2857}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7199819B-CB36-4C1C-A2F7-A9C9FCCA2857}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7199819B-CB36-4C1C-A2F7-A9C9FCCA2857}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89D61C4C-0810-4B5D-A2CA-78136BF8477F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89D61C4C-0810-4B5D-A2CA-78136BF8477F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89D61C4C-0810-4B5D-A2CA-78136BF8477F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -145,7 +139,6 @@ Global
 		{AEA78F42-34C1-435B-9F8C-FA660027927A} = {6A94BB75-D80D-4B4E-A659-EC582F5FAC3F}
 		{84CD1C29-571F-45E4-8277-CA227CACB9CA} = {B0930F63-222F-49D2-A1E7-600D7B119172}
 		{DAE89E91-36CE-43CC-A0DC-8B88129701CC} = {184EA3C5-3404-483C-BDF8-0FBE5A21A2A2}
-		{7199819B-CB36-4C1C-A2F7-A9C9FCCA2857} = {B0930F63-222F-49D2-A1E7-600D7B119172}
 		{D24DD1C8-6F45-4058-A45D-4E8E9146E1EF} = {184EA3C5-3404-483C-BDF8-0FBE5A21A2A2}
 		{89D61C4C-0810-4B5D-A2CA-78136BF8477F} = {D24DD1C8-6F45-4058-A45D-4E8E9146E1EF}
 		{DF02A880-74E9-4C95-A2D2-F98EB8255952} = {D24DD1C8-6F45-4058-A45D-4E8E9146E1EF}

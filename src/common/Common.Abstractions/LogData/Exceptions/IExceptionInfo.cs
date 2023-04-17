@@ -13,6 +13,12 @@ public interface IExceptionInfo
    /// <summary>The type id of the <see cref="Exception"/>.</summary>
    ulong ExceptionTypeId { get; }
 
+   /// <summary>The type id of the <see cref="Exception"/> that was recognised by the <see cref="ExceptionGroup"/>.</summary>
+   ulong ExceptionDataTypeId { get; }
+
+   /// <summary>The id of the exception group.</summary>
+   Guid ExceptionGroup { get; }
+
    /// <summary>The <see cref="Exception.Message"/>.</summary>
    string Message { get; }
 

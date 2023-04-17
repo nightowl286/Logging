@@ -1,6 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.LogData.Methods;
-using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 
 namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Methods;

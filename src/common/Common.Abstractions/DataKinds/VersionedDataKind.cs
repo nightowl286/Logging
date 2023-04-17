@@ -1,6 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
@@ -58,6 +59,9 @@ public enum VersionedDataKind : ushort
    /// <summary>Represents the <see cref="ITableInfo"/>.</summary>
    TableInfo,
 
+   /// <summary>Represents the <see cref="IExceptionInfo"/>.</summary>
+   ExceptionInfo,
+
    /// <summary>Represents the <see cref="IMessageComponent"/>.</summary>
    Message,
 
@@ -81,4 +85,7 @@ public enum VersionedDataKind : ushort
 
    /// <summary>Represents the <see cref="ITypeComponent"/>.</summary>
    Type,
+
+   /// <summary>Represents the <see cref="IExceptionComponent"/>.</summary>
+   Exception,
 }

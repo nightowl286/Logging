@@ -4,19 +4,16 @@ using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 namespace TNO.Logging.Writing.Abstractions.Exceptions;
 
 /// <summary>
-/// Denotes an exception data converter, that converts exceptions
-/// of the type <typeparamref name="TException"/> to <typeparamref name="TExceptionData"/>.
+/// Denotes an general <see cref="IExceptionData"/> converter.
 /// </summary>
-/// <typeparam name="TException">The type of the <see cref="Exception"/>.</typeparam>
-/// <typeparam name="TExceptionData">The type of the <see cref="IExceptionData"/>.</typeparam>
-public interface IExceptionDataConverter<in TException, out TExceptionData>
-   where TException : Exception
-   where TExceptionData : IExceptionData
+public interface IExceptionDataConverter
 {
    #region Methods
-   /// <summary>Converts the given <paramref name="exception"/> to the corresponding <typeparamref name="TExceptionData"/>.</summary>
-   /// <param name="exception">The <typeparamref name="TException"/> to convert.</param>
-   /// <returns>The converted <typeparamref name="TExceptionData"/>.</returns>
-   TExceptionData Convert(TException exception);
+   /// <summary>Converts the given <paramref name="exception"/> to a corresponding <see cref="IExceptionData"/>.</summary>
+   /// <param name="exception">The exception to convert.</param>
+   /// <param name="exceptionDataTypeId">The type id of the exception that was recognised by the <paramref name="exceptionGroup"/>.</param>
+   /// <param name="exceptionGroup">The exception group that converted the <paramref name="exception"/>.</param>
+   /// <returns>The converted <see cref="IExceptionData"/>.</returns>
+   IExceptionData Convert(Exception exception, out ulong exceptionDataTypeId, out Guid exceptionGroup);
    #endregion
 }

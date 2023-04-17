@@ -3,7 +3,6 @@ using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
 using TNO.Logging.Reading.LogData.Methods;
-using TNO.Logging.Writing.Serialisers.LogData.Constructors;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 

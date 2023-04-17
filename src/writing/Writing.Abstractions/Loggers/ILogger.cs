@@ -135,6 +135,9 @@ public interface ILogger
    ILogger Log(ImportanceCombination importance, Type type, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
+   ILogger Log(ImportanceCombination importance, Exception exception, int? threadId, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
+
    /// <summary>Starts building an entry that will have multiple components.</summary>
    /// <param name="importance">
    /// The severity and purpose of the entry that will be created.
