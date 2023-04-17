@@ -1,5 +1,4 @@
 ﻿using System.IO.Compression;
-using TNO.Logging.Common;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -22,7 +21,7 @@ namespace TNO.Logging.Writing.Writers;
 public sealed class FileSystemLogWriter : IFileSystemLogWriter
 {
    #region Fields
-   private readonly ILogWriterFacade _facade;
+   private readonly ISerialiserProvider _provider;
 
    private readonly BinarySerialiserWriter<IEntry> _entryDataWriter;
    private readonly BinarySerialiserWriter<FileReference> _fileReferenceDataWriter;
@@ -40,60 +39,60 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
 
    #region Constructor
    /// <summary>Creates a new file system log writer.</summary>
-   /// <param name="facade">The writer facade to use.</param>
+   /// <param name="provider">The writer facade to use.</param>
    /// <param name="directory">The directory in which to save the log to</param>
-   public FileSystemLogWriter(ILogWriterFacade facade, string directory) :
-      this(facade, new FileSystemLogWriterSettings(directory))
+   public FileSystemLogWriter(ISerialiserProvider provider, string directory) :
+      this(provider, new FileSystemLogWriterSettings(directory))
    { }
 
    /// <summary>Creates a new file system log writer.</summary>
-   /// <param name="facade">The writer facade to use.</param>
+   /// <param name="provider">The writer facade to use.</param>
    /// <param name="settings">The settings to use when setting up this writer.</param>
-   public FileSystemLogWriter(ILogWriterFacade facade, FileSystemLogWriterSettings settings)
+   public FileSystemLogWriter(ISerialiserProvider provider, FileSystemLogWriterSettings settings)
    {
-      _facade = facade;
+      _provider = provider;
       LogPath = settings.LogPath;
 
       // entries
       _entryDataWriter = new BinarySerialiserWriter<IEntry>(
          GetWriterPath(FileSystemConstants.EntryPath),
-         facade.GetSerialiser<IEntrySerialiser>(),
+         provider.GetSerialiser<IEntrySerialiser>(),
          settings.EntryThreshold);
 
       // file references
       _fileReferenceDataWriter = new BinarySerialiserWriter<FileReference>(
          GetWriterPath(FileSystemConstants.FilePath),
-         facade.GetSerialiser<IFileReferenceSerialiser>(),
+         provider.GetSerialiser<IFileReferenceSerialiser>(),
          settings.FileReferenceThreshold);
 
       // context infos
       _contextInfoDataWriter = new BinarySerialiserWriter<ContextInfo>(
          GetWriterPath(FileSystemConstants.ContextInfoPath),
-         facade.GetSerialiser<IContextInfoSerialiser>(),
+         provider.GetSerialiser<IContextInfoSerialiser>(),
          settings.ContextInfoThreshold);
 
       // tag references
       _tagReferenceDataWriter = new BinarySerialiserWriter<TagReference>(
          GetWriterPath(FileSystemConstants.TagPath),
-         facade.GetSerialiser<ITagReferenceSerialiser>(),
+         provider.GetSerialiser<ITagReferenceSerialiser>(),
          settings.TagReferenceThreshold);
 
       // table key references
       _tableKeyReferenceDataWriter = new BinarySerialiserWriter<TableKeyReference>(
          GetWriterPath(FileSystemConstants.TableKeyPath),
-         facade.GetSerialiser<ITableKeyReferenceSerialiser>(),
+         provider.GetSerialiser<ITableKeyReferenceSerialiser>(),
          settings.TableKeyReferenceThreshold);
 
       // assembly infos
       _assemblyReferenceDataWriter = new BinarySerialiserWriter<AssemblyReference>(
          GetWriterPath(FileSystemConstants.AssemblyPath),
-         facade.GetSerialiser<IAssemblyReferenceSerialiser>(),
+         provider.GetSerialiser<IAssemblyReferenceSerialiser>(),
          settings.AssemblyReferenceThreshold);
 
       // type infos
       _typeReferenceDataWriter = new BinarySerialiserWriter<TypeReference>(
          GetWriterPath(FileSystemConstants.TypePath),
-         facade.GetSerialiser<ITypeReferenceSerialiser>(),
+         provider.GetSerialiser<ITypeReferenceSerialiser>(),
          settings.TypeReferenceThreshold);
 
       WriteVersions();
@@ -137,8 +136,8 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
    }
    private void WriteVersions()
    {
-      IDataVersionMapSerialiser serialiser = _facade.GetSerialiser<IDataVersionMapSerialiser>();
-      DataVersionMap map = _facade.GetVersionMap();
+      IDataVersionMapSerialiser serialiser = _provider.GetSerialiser<IDataVersionMapSerialiser>();
+      DataVersionMap map = _provider.GetVersionMap();
 
       string path = GetWriterPath(FileSystemConstants.VersionPath);
       using (BinaryWriter writer = CreateWriter(path))

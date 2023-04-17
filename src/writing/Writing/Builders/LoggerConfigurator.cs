@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -29,7 +30,7 @@ internal sealed class LoggerConfigurator : ILoggerConfigurator
    /// <inheritdoc/>
    public ILogDataDistributor Distributor { get; }
    #endregion
-   public LoggerConfigurator(ILogWriterFacade facade)
+   public LoggerConfigurator(ILogWriterFacade facade, IServiceScope scope)
    {
       Facade = facade;
       Distributor = new LogDataDistributor();
