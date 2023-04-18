@@ -3,24 +3,24 @@ using TNO.Logging.Common.Exceptions.Abstractions;
 using TNO.Logging.Common.Exceptions.Abstractions.System;
 using TNO.Logging.Writing.Abstractions.Exceptions;
 using TNO.Logging.Writing.Serialisers;
-using Data = TNO.Logging.Common.Exceptions.System.ArgumentExceptionData;
+using Data = TNO.Logging.Common.Exceptions.System.ArgumentNullExceptionData;
 
 namespace TNO.Logging.Writing.Exceptions.System;
 
 /// <summary>
-/// Converts and serialises exceptions of the <see cref="ArgumentException"/> type.
+/// Converts and serialises exceptions of the <see cref="ArgumentNullException"/> type.
 /// </summary>
-[Guid(ExceptionGroups.System.ArgumentException)]
-public sealed class ArgumentExceptionData :
-   IExceptionDataConverter<ArgumentException, IArgumentExceptionData>,
-   IExceptionDataSerialiser<IArgumentExceptionData>
+[Guid(ExceptionGroups.System.ArgumentNullException)]
+public sealed class ArgumentNullExceptionDataSerialiser :
+   IExceptionDataConverter<ArgumentNullException, IArgumentNullExceptionData>,
+   IExceptionDataSerialiser<IArgumentNullExceptionData>
 {
    #region Methods
    /// <inheritdoc/>
-   public IArgumentExceptionData Convert(ArgumentException exception) => new Data(exception.ParamName);
+   public IArgumentNullExceptionData Convert(ArgumentNullException exception) => new Data(exception.ParamName);
 
    /// <inheritdoc/>
-   public void Serialise(BinaryWriter writer, IArgumentExceptionData data)
+   public void Serialise(BinaryWriter writer, IArgumentNullExceptionData data)
    {
       string? parameterName = data.ParameterName;
 
@@ -29,7 +29,7 @@ public sealed class ArgumentExceptionData :
    }
 
    /// <inheritdoc/>
-   public ulong Count(IArgumentExceptionData data)
+   public ulong Count(IArgumentNullExceptionData data)
    {
       return (ulong)(BinaryWriterSizeHelper.StringSize(data.ParameterName) + sizeof(bool));
    }

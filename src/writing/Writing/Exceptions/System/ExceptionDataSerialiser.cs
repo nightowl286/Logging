@@ -10,7 +10,7 @@ namespace TNO.Logging.Writing.Exceptions.System;
 /// Converts and serialises exceptions of the <see cref="Exception"/> type.
 /// </summary>
 [Guid(ExceptionGroups.System.Exception)]
-public sealed class ExceptionData :
+public sealed class ExceptionDataSerialiser :
    IExceptionDataConverter<Exception, IExceptionData>,
    IExceptionDataSerialiser<IExceptionData>
 {
