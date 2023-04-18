@@ -15,7 +15,7 @@ internal static class ExceptionInfoFactory
    public static IExceptionInfo Version0(
       ulong exceptionTypeId,
       ulong exceptionDataTypeId,
-      Guid exceptionGroup,
+      Guid exceptionGroupId,
       string message,
       IStackTraceInfo stackTrace,
       ITableInfo additionalData,
@@ -25,7 +25,7 @@ internal static class ExceptionInfoFactory
       return new ExceptionInfo(
          exceptionTypeId,
          exceptionDataTypeId,
-         exceptionGroup,
+         exceptionGroupId,
          message,
          stackTrace,
          additionalData,

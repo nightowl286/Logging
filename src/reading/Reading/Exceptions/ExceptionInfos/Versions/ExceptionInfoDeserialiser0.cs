@@ -44,20 +44,20 @@ public sealed class ExceptionInfoDeserialiser0 : IExceptionInfoDeserialiser
    {
       ulong exceptionTypeId = reader.ReadUInt64();
       ulong exceptionDataTypeId = reader.ReadUInt64();
-      Guid exceptionGroup = reader.ReadGuid();
+      Guid exceptionGroupId = reader.ReadGuid();
 
       string message = reader.ReadString();
       IStackTraceInfo stackTrace = _stackTraceInfoDeserialiser.Deserialise(reader);
       ITableInfo additionalData = _tableInfoDeserialiser.Deserialise(reader);
 
-      IExceptionData data = _exceptionDataDeserialiser.Deserialise(reader, exceptionGroup);
+      IExceptionData data = _exceptionDataDeserialiser.Deserialise(reader, exceptionGroupId);
 
       IExceptionInfo? innerException = reader.TryReadNullable(() => Deserialise(reader));
 
       return ExceptionInfoFactory.Version0(
          exceptionTypeId,
          exceptionDataTypeId,
-         exceptionGroup,
+         exceptionGroupId,
          message,
          stackTrace,
          additionalData,

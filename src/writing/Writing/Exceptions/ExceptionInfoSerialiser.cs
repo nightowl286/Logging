@@ -43,7 +43,7 @@ public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
    {
       ulong exceptionTypeId = data.ExceptionTypeId;
       ulong exceptionDataTypeId = data.ExceptionDataTypeId;
-      Guid exceptionGroup = data.ExceptionGroup;
+      Guid exceptionGroupId = data.ExceptionGroupId;
 
       string message = data.Message;
       IStackTraceInfo stackTraceInfo = data.StackTrace;
@@ -53,14 +53,14 @@ public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
 
       writer.Write(exceptionTypeId);
       writer.Write(exceptionDataTypeId);
-      writer.Write(exceptionGroup);
+      writer.Write(exceptionGroupId);
 
       writer.Write(message);
 
       _stackTraceInfoSerialiser.Serialise(writer, stackTraceInfo);
       _tableInfoSerialiser.Serialise(writer, additionalData);
 
-      _exceptionDataSerialiser.Serialise(writer, exceptionData, data.ExceptionGroup);
+      _exceptionDataSerialiser.Serialise(writer, exceptionData, data.ExceptionGroupId);
 
       if (writer.TryWriteNullable(innerException))
          Serialise(writer, innerException);
@@ -77,7 +77,7 @@ public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
       int messageSize = BinaryWriterSizeHelper.StringSize(data.Message);
       ulong stackTraceSize = _stackTraceInfoSerialiser.Count(data.StackTrace);
       ulong tableSize = _tableInfoSerialiser.Count(data.AdditionalData);
-      ulong exceptionDataSize = _exceptionDataSerialiser.Count(data.Data, data.ExceptionGroup);
+      ulong exceptionDataSize = _exceptionDataSerialiser.Count(data.Data, data.ExceptionGroupId);
       ulong innerExceptionSize = data.InnerException is null ? 0 : Count(data.InnerException);
 
       return size + (ulong)messageSize + stackTraceSize + tableSize + exceptionDataSize + innerExceptionSize;

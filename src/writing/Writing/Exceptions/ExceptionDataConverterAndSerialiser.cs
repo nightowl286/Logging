@@ -9,6 +9,9 @@ using TNO.Logging.Writing.Loggers;
 
 namespace TNO.Logging.Writing.Exceptions;
 
+/// <summary>
+/// Represents an <see cref="IExceptionDataConverter"/> and an <see cref="IExceptionDataSerialiser"/>.
+/// </summary>
 public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExceptionDataSerialiser
 {
    private delegate IExceptionData ConversionDelegate(object converter, Exception exception);
@@ -30,6 +33,11 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
    #endregion
 
    #region Constructors
+   /// <summary>Creates a new instance of the <see cref="ExceptionDataConverterAndSerialiser"/>.</summary>
+   /// <param name="exceptionGroupStore">The <see cref="ExceptionGroupStore"/> to use.</param>
+   /// <param name="writeContext">The <see cref="ILogWriteContext"/> to use.</param>
+   /// <param name="dataCollector">The <see cref="ILogDataCollector"/> to use.</param>
+   /// <param name="internalLogger">The <see cref="ILogger"/> to use as the internal logger.</param>
    public ExceptionDataConverterAndSerialiser(
       ExceptionGroupStore exceptionGroupStore,
       ILogWriteContext writeContext,
@@ -45,11 +53,11 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
 
    #region Methods
    /// <inheritdoc/>
-   public IExceptionData Convert(Exception exception, out ulong exceptionDataTypeId, out Guid exceptionGroup)
+   public IExceptionData Convert(Exception exception, out ulong exceptionDataTypeId, out Guid exceptionGroupId)
    {
       Type exceptionType = exception.GetType();
 
-      GetDataConverter(exceptionType, out Type dataExceptionType, out Type converterType, out exceptionGroup);
+      GetDataConverter(exceptionType, out Type dataExceptionType, out Type converterType, out exceptionGroupId);
       if (exceptionType != dataExceptionType && _writeContext.ShouldLogUnknownException(exceptionType))
       {
          _internalLogger
@@ -66,9 +74,9 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
    }
 
    /// <inheritdoc/>
-   public void Serialise(BinaryWriter writer, IExceptionData data, Guid exceptionGroup)
+   public void Serialise(BinaryWriter writer, IExceptionData data, Guid exceptionGroupId)
    {
-      bool hasGroup = _exceptionGroupStore.TryGet(exceptionGroup, out ExceptionGroup? group);
+      bool hasGroup = _exceptionGroupStore.TryGet(exceptionGroupId, out ExceptionGroup? group);
       Debug.Assert(hasGroup && group is not null);
 
       SerialiseDelegate serialiseDelegate = GetSerialiseDelegate(group.SerialiserType, group.ExceptionDataType);
@@ -78,9 +86,9 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
    }
 
    /// <inheritdoc/>
-   public ulong Count(IExceptionData data, Guid exceptionGroup)
+   public ulong Count(IExceptionData data, Guid exceptionGroupId)
    {
-      bool hasGroup = _exceptionGroupStore.TryGet(exceptionGroup, out ExceptionGroup? group);
+      bool hasGroup = _exceptionGroupStore.TryGet(exceptionGroupId, out ExceptionGroup? group);
       Debug.Assert(hasGroup && group is not null);
 
       CountDelegate countDelegate = GetCountDelegate(group.SerialiserType, group.ExceptionDataType);
@@ -180,7 +188,7 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
       Expression<SerialiseDelegate> expression = Expression.Lambda<SerialiseDelegate>(serialiseCall, serialiserParam, writerParam, exceptionDataParam);
       return expression.Compile();
    }
-   private void GetDataConverter(Type exceptionType, out Type dataExceptionType, out Type converterType, out Guid exceptionGroup)
+   private void GetDataConverter(Type exceptionType, out Type dataExceptionType, out Type converterType, out Guid exceptionGroupId)
    {
       Type originalExceptionType = exceptionType;
       while (true)
@@ -188,7 +196,7 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
          if (_exceptionGroupStore.TryGet(exceptionType, out ExceptionGroup? group))
          {
             converterType = group.ConverterType;
-            exceptionGroup = group.GroupId;
+            exceptionGroupId = group.GroupId;
             dataExceptionType = exceptionType;
             return;
          }

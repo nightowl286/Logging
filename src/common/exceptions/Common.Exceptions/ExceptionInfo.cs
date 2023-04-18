@@ -8,8 +8,8 @@ namespace TNO.Logging.Common.Exceptions;
 /// Represents info about an <see cref="Exception"/>.
 /// </summary>
 /// <param name="ExceptionTypeId">The type id of the <see cref="Exception"/>.</param>
-/// <param name="ExceptionDataTypeId">The type id of the <see cref="Exception"/> that was recognised by the <see cref="ExceptionGroup"/>.</param>
-/// <param name="ExceptionGroup">The id of the exception group.</param>
+/// <param name="ExceptionDataTypeId">The type id of the <see cref="Exception"/> that was recognised by the <see cref="ExceptionGroupId"/>.</param>
+/// <param name="ExceptionGroupId">The id of the exception group.</param>
 /// <param name="Message">The <see cref="Exception.Message"/>.</param>
 /// <param name="StackTrace">The stack trace info about the <see cref="Exception"/>.</param>
 /// <param name="AdditionalData">The additional data contained in the <see cref="Exception.Data"/>.</param>
@@ -18,7 +18,7 @@ namespace TNO.Logging.Common.Exceptions;
 public record class ExceptionInfo(
    ulong ExceptionTypeId,
    ulong ExceptionDataTypeId,
-   Guid ExceptionGroup,
+   Guid ExceptionGroupId,
    string Message,
    IStackTraceInfo StackTrace,
    ITableInfo AdditionalData,

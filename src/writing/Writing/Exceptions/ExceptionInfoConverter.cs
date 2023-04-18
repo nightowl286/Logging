@@ -48,7 +48,7 @@ public class ExceptionInfoConverter : IExceptionInfoConverter
       IStackTraceInfo stackTraceInfo = StackTraceInfoHelper.GetStackTraceInfo(_writeContext, _dataCollector, stackTrace, threadId ?? -1);
 
       ITableInfo additionalData = TableInfoHelper.Convert(_writeContext, _dataCollector, exception.Data);
-      IExceptionData exceptionData = _exceptionDataConverter.Convert(exception, out ulong exceptionDataTypeId, out Guid exceptionGroup);
+      IExceptionData exceptionData = _exceptionDataConverter.Convert(exception, out ulong exceptionDataTypeId, out Guid exceptionGroupId);
 
       IExceptionInfo? innerExceptionInfo =
          exception.InnerException is null ?
@@ -58,7 +58,7 @@ public class ExceptionInfoConverter : IExceptionInfoConverter
       return new ExceptionInfo(
          exceptionTypeId,
          exceptionDataTypeId,
-         exceptionGroup,
+         exceptionGroupId,
          message,
          stackTraceInfo,
          additionalData,

@@ -16,6 +16,8 @@ public sealed class ExceptionComponentSerialiser : IExceptionComponentSerialiser
    #endregion
 
    #region Constructors
+   /// <summary>Creates a new instance of the <see cref="ExceptionComponentSerialiser"/>.</summary>
+   /// <param name="exceptionInfoSerialiser">The <see cref="IExceptionInfoSerialiser"/> to use.</param>
    public ExceptionComponentSerialiser(IExceptionInfoSerialiser exceptionInfoSerialiser)
    {
       _exceptionInfoSerialiser = exceptionInfoSerialiser;

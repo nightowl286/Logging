@@ -97,11 +97,14 @@ public interface ILogger
    /// </param>
    /// <param name="stackTrace">The <see cref="StackTrace"/> to write.</param>
    /// <param name="threadId">
-   /// The <see cref="Thread.ManagedThreadId"/> of the thread
-   /// that the <paramref name="stackTrace"/> is from.
-   /// 
-   /// If <see langword="null"/> is used, then a negative
-   /// id will be used to indicate that it is unknown.
+   ///<para>
+   ///   The <see cref="Thread.ManagedThreadId"/> of the thread
+   ///   that the <paramref name="stackTrace"/> is from.
+   /// </para>
+   /// <para>
+   ///   If <see langword="null"/> is used, then a negative
+   ///   id will be used to indicate that it is unknown.
+   /// </para>
    /// </param>
    /// <param name="entryId">The id of the entry that was created.</param>
    /// <param name="file">
@@ -135,6 +138,32 @@ public interface ILogger
    ILogger Log(ImportanceCombination importance, Type type, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 
+   /// <summary>Writes the given <paramref name="exception"/> and the <paramref name="threadId"/> to the log.</summary>
+   /// <param name="importance">
+   /// The severity and purpose of the entry that will be created.
+   /// This value should be normalised.
+   /// </param>
+   /// <param name="exception">The <see cref="Exception"/> to write.</param>
+   /// <param name="threadId">
+   /// <para>
+   ///   The <see cref="Thread.ManagedThreadId"/> of the thread
+   ///   that the <paramref name="exception"/> is from.
+   /// </para>
+   /// <para>
+   ///   If <see langword="null"/> is used, then a negative
+   ///   id will be used to indicate that it is unknown.
+   /// </para>
+   /// </param>
+   /// <param name="entryId">The id of the entry that was created.</param>
+   /// <param name="file">
+   /// The file from which this method was called. 
+   /// This should be provided by the compiler.
+   /// </param>
+   /// <param name="line">
+   /// The line number in the <paramref name="file"/> where this method was called from.
+   /// This should be provided by the compiler.
+   /// </param>
+   /// <returns>The logger that was used.</returns>
    ILogger Log(ImportanceCombination importance, Exception exception, int? threadId, out ulong entryId,
       [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0);
 

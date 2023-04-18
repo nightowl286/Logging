@@ -90,6 +90,32 @@ public static class ILoggerExtensions
       return logger;
    }
 
+   /// <inheritdoc cref="ILogger.Log(ImportanceCombination, Exception, int?, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, ImportanceCombination importance, Exception exception, int? threadId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.Log(importance, exception, threadId, out _, file, line);
+      return logger;
+   }
+
+   /// <remarks>This method assumes that the <paramref name="exception"/> is from an unknown thread.</remarks>
+   /// <inheritdoc cref="ILogger.Log(ImportanceCombination, Exception, int?, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, ImportanceCombination importance, Exception exception, out ulong entryId,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.Log(importance, exception, null, out entryId, file, line);
+      return logger;
+   }
+
+   /// <remarks>This method assumes that the <paramref name="exception"/> is from an unknown thread.</remarks>
+   /// <inheritdoc cref="ILogger.Log(ImportanceCombination, Exception, int?, out ulong, string, uint)"/>
+   public static ILogger Log(this ILogger logger, ImportanceCombination importance, Exception exception,
+      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)
+   {
+      logger.Log(importance, exception, null, out _, file, line);
+      return logger;
+   }
+
    /// <inheritdoc cref="ILogger.StartEntry(ImportanceCombination, out ulong, string, uint)"/>
    public static IEntryBuilder StartEntry(this ILogger logger, ImportanceCombination importance,
      [CallerFilePath] string file = "", [CallerLineNumber] uint line = 0)

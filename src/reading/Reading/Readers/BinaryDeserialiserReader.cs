@@ -48,8 +48,8 @@ internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
       if (_reader?.BaseStream.Position < _reader?.BaseStream.Length)
          return _deserialiser.Deserialise(_reader);
 
-      string? chunkPath = GetChunkPath(_currentChunk + 1, out bool isCompressed);
-      if (chunkPath is null)
+      string? chunkPath =
+         GetChunkPath(_currentChunk + 1, out bool isCompressed) ??
          throw new InvalidOperationException($"This reader was not able to read any more data.");
 
       _currentChunk++;
@@ -66,7 +66,7 @@ internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
 
       _reader = GetNextReader(chunkPath, isCompressed);
    }
-   private BinaryReader? GetNextReader(string? chunkPath, bool isCompressed)
+   private static BinaryReader? GetNextReader(string? chunkPath, bool isCompressed)
    {
       if (chunkPath is null)
          return null;
@@ -76,7 +76,7 @@ internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
 
       return FileSystemLogReader.OpenReader(chunkPath);
    }
-   private BinaryReader OpenCompressedReader(string path)
+   private static BinaryReader OpenCompressedReader(string path)
    {
       MemoryStream memStream = new MemoryStream();
       using (FileStream fs = FileSystemLogReader.OpenStream(path))

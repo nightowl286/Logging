@@ -27,14 +27,15 @@ public class ComponentSerialiserDispatcher : IComponentSerialiserDispatcher
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ComponentSerialiserDispatcher"/>.</summary>
-   /// <param name="messageSerialiser">The message serialiser to use.</param>
-   /// <param name="tagSerialiser">The tag serialiser to use.</param>
-   /// <param name="threadSerialiser">The thread serialiser to use.</param>
-   /// <param name="entryLinkSerialiser">The entry link serialiser to use.</param>
-   /// <param name="tableSerialiser">The table serialiser to use.</param>
-   /// <param name="assemblySerialiser">The assembly serialiser to use.</param>
-   /// <param name="typeSerialiser">The type serialiser to use.</param>
-   /// <param name="stackTraceSerialiser">The stack trace serialiser to use.</param>
+   /// <param name="messageSerialiser">The <see cref="IMessageComponentSerialiser"/> to use.</param>
+   /// <param name="tagSerialiser">The <see cref="ITagComponentSerialiser"/> to use.</param>
+   /// <param name="threadSerialiser">The <see cref="IThreadComponentSerialiser"/> to use.</param>
+   /// <param name="entryLinkSerialiser">The <see cref="IEntryLinkComponentSerialiser"/> to use.</param>
+   /// <param name="tableSerialiser">The <see cref="ITableComponentSerialiser"/> to use.</param>
+   /// <param name="assemblySerialiser">The <see cref="IAssemblyComponentSerialiser"/> to use.</param>
+   /// <param name="typeSerialiser">The <see cref="ITypeComponentSerialiser"/> to use.</param>
+   /// <param name="stackTraceSerialiser">The <see cref="IStackTraceComponentSerialiser"/> to use.</param>
+   /// <param name="exceptionSerialiser">The <see cref="IExceptionComponentSerialiser"/> to use.</param>
    public ComponentSerialiserDispatcher(
       IMessageComponentSerialiser messageSerialiser,
       ITagComponentSerialiser tagSerialiser,

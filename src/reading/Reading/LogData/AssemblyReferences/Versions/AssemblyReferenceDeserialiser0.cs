@@ -16,6 +16,8 @@ public sealed class AssemblyReferenceDeserialiser0 : IAssemblyReferenceDeseriali
    #endregion
 
    #region Constructors
+   /// <summary>Creates a new instance of the <see cref="AssemblyReferenceDeserialiser0"/>.</summary>
+   /// <param name="assemblyInfoDeserialiser">The <see cref="IAssemblyInfoDeserialiser"/> to use.</param>
    public AssemblyReferenceDeserialiser0(IAssemblyInfoDeserialiser assemblyInfoDeserialiser) => _assemblyInfoDeserialiser = assemblyInfoDeserialiser;
    #endregion
 

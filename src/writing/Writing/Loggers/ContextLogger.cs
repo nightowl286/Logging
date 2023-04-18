@@ -19,8 +19,9 @@ public class ContextLogger : BasicLogger, IContextLogger
 
    #region Constructors
    /// <summary>Creates a new logger that belongs to a specific context.</summary>
-   /// <param name="collector">The collector that this logger should deposit data in.</param>
-   /// <param name="writeContext">The write context to use.</param>
+   /// <param name="collector">The <see cref="ILogDataCollector"/> that this logger should deposit data in.</param>
+   /// <param name="writeContext">The <see cref="ILogWriteContext"/> to use.</param>
+   /// <param name="exceptionInfoConverter">The <see cref="IExceptionInfoConverter"/> to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="internalLogger">The internal logger to use.</param>
    internal ContextLogger(

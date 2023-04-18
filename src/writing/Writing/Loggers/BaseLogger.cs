@@ -33,6 +33,7 @@ public class BaseLogger : ILogger
    /// <summary>The write context used by this logger.</summary>
    protected ILogWriteContext WriteContext { get; }
 
+   /// <summary>The exception info converter used by this logger.</summary>
    protected IExceptionInfoConverter ExceptionInfoConverter { get; }
 
    /// <summary>The id of the context that this logger belongs to.</summary>
@@ -41,8 +42,9 @@ public class BaseLogger : ILogger
 
    #region Constructors
    /// <summary>Creates an instance of a new <see cref="BaseLogger"/>.</summary>
-   /// <param name="collector">The collector to use.</param>
-   /// <param name="writeContext">The write context to use.</param>
+   /// <param name="collector">The <see cref="ILogDataCollector"/> to use.</param>
+   /// <param name="writeContext">The <see cref="ILogWriteContext"/> to use.</param>
+   /// <param name="exceptionInfoConverter">The <see cref="IExceptionInfoConverter"/> to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="scope">The scope (inside the given <paramref name="contextId"/> that this logger belongs to.</param>
    internal BaseLogger(

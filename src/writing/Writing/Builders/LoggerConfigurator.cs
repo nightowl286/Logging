@@ -115,7 +115,8 @@ internal sealed class LoggerConfigurator : ILoggerConfigurator
          throw new ArgumentException($"The exception data type ({serialiserDataType}) on the given serialiser type ({serialiserType})" +
             $" did not match the exception data type ({converterDataType}) on the given converter type ({converterType}).", nameof(serialiserType));
 
-      _exceptionGroupStore.Add(serialiserType, converterType, exceptionType, converterDataType, serialiserGuid);
+      ExceptionGroup group = new ExceptionGroup(serialiserType, converterType, exceptionType, converterDataType, serialiserGuid);
+      _exceptionGroupStore.Add(group);
    }
 
    private void RegisterBaseExceptionSerialisers(ILogger internalLogger)

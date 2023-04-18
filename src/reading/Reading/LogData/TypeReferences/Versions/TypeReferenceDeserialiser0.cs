@@ -12,11 +12,13 @@ namespace TNO.Logging.Reading.LogData.TypeReferences.Versions;
 public sealed class TypeReferenceDeserialiser0 : ITypeReferenceDeserialiser
 {
    #region Fields
-   private readonly ITypeInfoDeserialiser _assemblyInfoDeserialiser;
+   private readonly ITypeInfoDeserialiser _typeInfoDeserialiser;
    #endregion
 
    #region Constructors
-   public TypeReferenceDeserialiser0(ITypeInfoDeserialiser assemblyInfoDeserialiser) => _assemblyInfoDeserialiser = assemblyInfoDeserialiser;
+   /// <summary>Creates a new instance of the <see cref="TypeReferenceDeserialiser0"/>.</summary>
+   /// <param name="typeInfoDeserialiser">The <see cref="ITypeInfoDeserialiser"/> to use.</param>
+   public TypeReferenceDeserialiser0(ITypeInfoDeserialiser typeInfoDeserialiser) => _typeInfoDeserialiser = typeInfoDeserialiser;
    #endregion
 
    #region Methods
@@ -24,9 +26,9 @@ public sealed class TypeReferenceDeserialiser0 : ITypeReferenceDeserialiser
    public TypeReference Deserialise(BinaryReader reader)
    {
       ulong id = reader.ReadUInt64();
-      ITypeInfo assemblyInfo = _assemblyInfoDeserialiser.Deserialise(reader);
+      ITypeInfo typeInfo = _typeInfoDeserialiser.Deserialise(reader);
 
-      return TypeReferenceFactory.Version0(id, assemblyInfo);
+      return TypeReferenceFactory.Version0(id, typeInfo);
    }
    #endregion
 }
