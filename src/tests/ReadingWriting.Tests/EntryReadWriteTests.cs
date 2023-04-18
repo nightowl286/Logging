@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries;
+﻿using Moq;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
@@ -11,6 +12,7 @@ using TNO.Logging.Common.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.LogData.Methods;
+using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
@@ -42,7 +44,8 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
                   new StackFrameInfoSerialiser(
                      new MethodBaseInfoSerialiserDispatcher(
                         new MethodInfoSerialiser(parameterInfoSerialiser),
-                        new ConstructorInfoSerialiser(parameterInfoSerialiser))))));
+                        new ConstructorInfoSerialiser(parameterInfoSerialiser))))),
+            Mock.Of<IExceptionComponentSerialiser>());
 
       writer = new EntrySerialiser(componentSerialiser);
 

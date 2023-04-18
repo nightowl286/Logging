@@ -1,6 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Exceptions;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
@@ -11,17 +12,13 @@ namespace TNO.Logging.Writing.Exceptions;
 /// <summary>
 /// Represents a serialiser for <see cref="IExceptionInfo"/>.
 /// </summary>
+[Version(0)]
 public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
 {
    #region Fields
    private readonly IExceptionDataSerialiser _exceptionDataSerialiser;
    private readonly IStackTraceInfoSerialiser _stackTraceInfoSerialiser;
    private readonly ITableInfoSerialiser _tableInfoSerialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors

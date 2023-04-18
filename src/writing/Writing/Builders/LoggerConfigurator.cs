@@ -253,13 +253,10 @@ internal sealed class LoggerConfigurator : ILoggerConfigurator
          IExceptionInfoConverter converter;
          lock (_lock)
          {
-            if (_converter is null)
-            {
-               _converter = new ExceptionInfoConverter(
+            _converter ??= new ExceptionInfoConverter(
                   _writeContext,
                   _dataCollector,
                   _requester.Get<IExceptionDataConverter>());
-            }
 
             converter = _converter;
          }

@@ -1,6 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Exceptions;
 using TNO.Logging.Reading.Abstractions.Exceptions.ExceptionInfos;
 using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackTraceInfos;
@@ -12,17 +13,13 @@ namespace TNO.Logging.Reading.Exceptions.ExceptionInfos.Versions;
 /// <summary>
 /// A deserialiser for <see cref="IExceptionInfo"/>, version #0.
 /// </summary>
+[Version(0)]
 public sealed class ExceptionInfoDeserialiser0 : IExceptionInfoDeserialiser
 {
    #region Fields
    private readonly IExceptionDataDeserialiser _exceptionDataDeserialiser;
    private readonly IStackTraceInfoDeserialiser _stackTraceInfoDeserialiser;
    private readonly ITableInfoDeserialiser _tableInfoDeserialiser;
-   #endregion
-
-   #region Properties
-   /// <inheritdoc/>
-   public uint Version => 0;
    #endregion
 
    #region Constructors
