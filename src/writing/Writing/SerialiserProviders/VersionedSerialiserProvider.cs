@@ -1,4 +1,5 @@
-﻿using TNO.DependencyInjection.Abstractions.Components;
+﻿using System.Reflection;
+using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions;
@@ -14,6 +15,7 @@ using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
 using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
+using TNO.Logging.Writing.Exceptions;
 using TNO.Logging.Writing.Serialisers.LogData;
 using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 using TNO.Logging.Writing.Serialisers.LogData.Methods;
@@ -30,9 +32,19 @@ internal class VersionedSerialiserProvider : SerialiserProviderWrapperBase
       RegisterComponentSerialisers(Scope.Registrar);
 
       VersionedSingleton<IEntrySerialiser, EntrySerialiser>(Scope.Registrar);
+      AccountForExceptionInfo();
    }
 
    #region Methods
+   // Hack(Nightowl): This is most definitely a hack, I need a better separation / setup;
+   private void AccountForExceptionInfo()
+   {
+      VersionAttribute attr = typeof(ExceptionInfoSerialiser)
+         .GetCustomAttribute<VersionAttribute>() ??
+         throw new NotSupportedException($"This should never happen");
+
+      Map.Add(VersionedDataKind.ExceptionInfo, attr.Version);
+   }
    private void RegisterLogDataSerialisers(IServiceRegistrar registrar)
    {
       // Methods

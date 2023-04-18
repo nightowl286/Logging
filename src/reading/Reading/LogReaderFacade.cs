@@ -1,4 +1,6 @@
-﻿using TNO.DependencyInjection;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
+using TNO.DependencyInjection;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
@@ -8,12 +10,15 @@ using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Assembly;
 using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Type;
+using TNO.Logging.Reading.Abstractions.Exceptions;
+using TNO.Logging.Reading.Abstractions.Exceptions.ExceptionInfos;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
 using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
 using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
@@ -34,11 +39,14 @@ using TNO.Logging.Reading.Entries;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.Assembly;
 using TNO.Logging.Reading.Entries.Components.EntryLink;
+using TNO.Logging.Reading.Entries.Components.Exception;
 using TNO.Logging.Reading.Entries.Components.Message;
 using TNO.Logging.Reading.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Entries.Components.Tag;
 using TNO.Logging.Reading.Entries.Components.Thread;
 using TNO.Logging.Reading.Entries.Components.Type;
+using TNO.Logging.Reading.Exceptions;
+using TNO.Logging.Reading.Exceptions.ExceptionInfos;
 using TNO.Logging.Reading.LogData.AssemblyInfos;
 using TNO.Logging.Reading.LogData.AssemblyReferences;
 using TNO.Logging.Reading.LogData.ContextInfos;
@@ -89,6 +97,8 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IMethodBaseInfoDeserialiserDispatcher, MethodBaseInfoDeserialiserDispatcher>()
          .Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
 
+      RegisterExceptions(registrar);
+
       VersionedDataKind[] kinds = new VersionedDataKind[]
       {
          // Method Info
@@ -105,6 +115,7 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.AssemblyInfo,
          VersionedDataKind.TypeInfo,
          VersionedDataKind.TableInfo,
+         VersionedDataKind.ExceptionInfo,
 
          // Log Data References
          VersionedDataKind.FileReference,
@@ -122,8 +133,8 @@ public class LogReaderFacade : ILogReaderFacade
          VersionedDataKind.Assembly,
          VersionedDataKind.StackTrace,
          VersionedDataKind.Type,
+         VersionedDataKind.Exception,
 
-         // Entry
          VersionedDataKind.Entry,
       };
 
@@ -179,7 +190,8 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<IConstructorInfoDeserialiserSelector, ConstructorInfoDeserialiserSelector>()
          .Singleton<IStackFrameInfoDeserialiserSelector, StackFrameInfoDeserialiserSelector>()
          .Singleton<IStackTraceInfoDeserialiserSelector, StackTraceInfoDeserialiserSelector>()
-         .Singleton<ITableInfoDeserialiserSelector, TableInfoDeserialiserSelector>();
+         .Singleton<ITableInfoDeserialiserSelector, TableInfoDeserialiserSelector>()
+         .Singleton<IExceptionInfoDeserialiserSelector, ExceptionInfoDeserialiserSelector>();
    }
    private static void RegisterComponentSelectors(IServiceRegistrar registrar)
    {
@@ -191,7 +203,8 @@ public class LogReaderFacade : ILogReaderFacade
          .Singleton<ITableComponentDeserialiserSelector, TableComponentDeserialiserSelector>()
          .Singleton<IAssemblyComponentDeserialiserSelector, AssemblyComponentDeserialiserSelector>()
          .Singleton<IStackTraceComponentDeserialiserSelector, StackTraceComponentDeserialiserSelector>()
-         .Singleton<ITypeComponentDeserialiserSelector, TypeComponentDeserialiserSelector>();
+         .Singleton<ITypeComponentDeserialiserSelector, TypeComponentDeserialiserSelector>()
+         .Singleton<IExceptionComponentDeserialiserSelector, ExceptionComponentDeserialiserSelector>();
    }
    private static void RegisterFromKind(IServiceScope scope, VersionedDataKind kind, uint version)
    {
@@ -211,6 +224,8 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<IAssemblyComponentDeserialiserSelector, IAssemblyComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.StackTrace)
          RegisterWithProvider<IStackTraceComponentDeserialiserSelector, IStackTraceComponentDeserialiser>(scope, version);
+      else if (kind is VersionedDataKind.Exception)
+         RegisterWithProvider<IExceptionComponentDeserialiserSelector, IExceptionComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.FileReference)
          RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.ContextInfo)
@@ -241,6 +256,10 @@ public class LogReaderFacade : ILogReaderFacade
          RegisterWithProvider<ITypeComponentDeserialiserSelector, ITypeComponentDeserialiser>(scope, version);
       else if (kind is VersionedDataKind.Table)
          RegisterWithProvider<ITableComponentDeserialiserSelector, ITableComponentDeserialiser>(scope, version);
+      else if (kind is VersionedDataKind.ExceptionInfo)
+         RegisterWithProvider<IExceptionInfoDeserialiserSelector, IExceptionInfoDeserialiser>(scope, version);
+      else
+         throw new ArgumentException($"Unknown kind ({kind}).", nameof(kind));
    }
    private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceScope scope, uint version)
       where TSelector : notnull, IDeserialiserSelector<TDeserialiser>
@@ -256,6 +275,31 @@ public class LogReaderFacade : ILogReaderFacade
    {
       registrar
          .Singleton<IDataVersionMapDeserialiser, DataVersionMapDeserialiser>();
+   }
+   private static void RegisterExceptions(IServiceRegistrar registrar)
+   {
+      Dictionary<Guid, Type> deserialiserTypes = new Dictionary<Guid, Type>();
+
+      Assembly currentAssembly = Assembly.GetExecutingAssembly();
+      foreach (Type type in currentAssembly.GetTypes())
+      {
+         const string namespacePrefix = "TNO.Logging.Reading.Exceptions";
+         bool isExceptionDeserialiserType =
+            type.IsClass &&
+            !type.IsInterface &&
+            type.Namespace?.StartsWith(namespacePrefix) == true;
+
+         GuidAttribute? attr = type.GetCustomAttribute<GuidAttribute>(false);
+         if (isExceptionDeserialiserType && attr is not null)
+         {
+            Guid guid = new Guid(attr.Value);
+            deserialiserTypes.Add(guid, type);
+         }
+      }
+
+      ExceptionDataDeserialiser exceptionDataDeserialiser = new ExceptionDataDeserialiser(deserialiserTypes);
+
+      registrar.Instance<IExceptionDataDeserialiser>(exceptionDataDeserialiser);
    }
    #endregion
 }

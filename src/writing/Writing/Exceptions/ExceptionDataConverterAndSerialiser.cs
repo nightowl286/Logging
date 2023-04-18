@@ -79,9 +79,13 @@ public class ExceptionDataConverterAndSerialiser : IExceptionDataConverter, IExc
       bool hasGroup = _exceptionGroupStore.TryGet(exceptionGroupId, out ExceptionGroup? group);
       Debug.Assert(hasGroup && group is not null);
 
-      SerialiseDelegate serialiseDelegate = GetSerialiseDelegate(group.SerialiserType, group.ExceptionDataType);
+      CountDelegate countDelegate = GetCountDelegate(group.SerialiserType, group.ExceptionDataType);
       object serialiser = _serialisersCache[group.SerialiserType];
 
+      ulong count = countDelegate.Invoke(serialiser, data);
+      writer.Write(count);
+
+      SerialiseDelegate serialiseDelegate = GetSerialiseDelegate(group.SerialiserType, group.ExceptionDataType);
       serialiseDelegate.Invoke(serialiser, writer, data);
    }
 

@@ -4,6 +4,7 @@ using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Assembly;
 using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
 using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
@@ -29,6 +30,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    private readonly IAssemblyComponentDeserialiser _assemblyDeserialiser;
    private readonly IStackTraceComponentDeserialiser _stackTraceDeserialiser;
    private readonly ITypeComponentDeserialiser _typeDeserialiser;
+   private readonly IExceptionComponentDeserialiser _exceptionDeserialiser;
    #endregion
 
    #region Constructors
@@ -41,6 +43,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
    /// <param name="assemblyDeserialiser">The assembly deserialiser to use.</param>
    /// <param name="typeDeserialiser">The type deserialiser to use.</param>
    /// <param name="stackTraceDeserialiser">The stack trace deserialiser to use.</param>
+   /// <param name="exceptionDeserialiser">The exception deserialiser to use.</param>
    public ComponentDeserialiserDispatcher(
       IMessageComponentDeserialiser messageDeserialiser,
       ITagComponentDeserialiser tagDeserialiser,
@@ -49,7 +52,8 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
       ITableComponentDeserialiser tableDeserialiser,
       IAssemblyComponentDeserialiser assemblyDeserialiser,
       ITypeComponentDeserialiser typeDeserialiser,
-      IStackTraceComponentDeserialiser stackTraceDeserialiser)
+      IStackTraceComponentDeserialiser stackTraceDeserialiser,
+      IExceptionComponentDeserialiser exceptionDeserialiser)
    {
       _messageDeserialiser = messageDeserialiser;
       _tagDeserialiser = tagDeserialiser;
@@ -59,6 +63,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
       _assemblyDeserialiser = assemblyDeserialiser;
       _stackTraceDeserialiser = stackTraceDeserialiser;
       _typeDeserialiser = typeDeserialiser;
+      _exceptionDeserialiser = exceptionDeserialiser;
    }
    #endregion
 
@@ -76,6 +81,7 @@ public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
          ComponentKind.Assembly => _assemblyDeserialiser.Deserialise(reader),
          ComponentKind.StackTrace => _stackTraceDeserialiser.Deserialise(reader),
          ComponentKind.Type => _typeDeserialiser.Deserialise(reader),
+         ComponentKind.Exception => _exceptionDeserialiser.Deserialise(reader),
 
          _ => throw new ArgumentException($"Unknown component kind ({componentKind}).")
       };

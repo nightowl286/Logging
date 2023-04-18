@@ -10,6 +10,7 @@ using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Tables;
+using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.LogData.Methods;
 using TNO.Logging.Writing.Abstractions.Entries.Components;
@@ -66,7 +67,8 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
                   new StackFrameInfoDeserialiserLatest(
                      new MethodBaseInfoDeserialiserDispatcher(
                         new MethodInfoDeserialiserLatest(parameterInfoDeserialiser),
-                        new ConstructorInfoDeserialiserLatest(parameterInfoDeserialiser))))));
+                        new ConstructorInfoDeserialiserLatest(parameterInfoDeserialiser))))),
+            Mock.Of<IExceptionComponentDeserialiser>());
 
       reader = new EntryDeserialiserLatest(componentDeserialiser);
    }
