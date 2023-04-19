@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Types;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Types;
 
@@ -8,18 +9,19 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Types;
 /// A serialiser for <see cref="TypeReference"/>.
 /// </summary>
 [Version(0)]
-public class TypeReferenceSerialiser : ITypeReferenceSerialiser
+[VersionedDataKind(VersionedDataKind.TypeReference)]
+public class TypeReferenceSerialiser : ISerialiser<TypeReference>
 {
    #region Fields
-   private readonly ITypeInfoSerialiser _typeInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="TypeReferenceSerialiser"/>.</summary>
-   /// <param name="typeInfoSerialiser">The <see cref="ITypeInfoSerialiser"/> to use.</param>
-   public TypeReferenceSerialiser(ITypeInfoSerialiser typeInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public TypeReferenceSerialiser(ISerialiser serialiser)
    {
-      _typeInfoSerialiser = typeInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -31,13 +33,13 @@ public class TypeReferenceSerialiser : ITypeReferenceSerialiser
       ITypeInfo typeInfo = data.TypeInfo;
 
       writer.Write(id);
-      _typeInfoSerialiser.Serialise(writer, typeInfo);
+      _serialiser.Serialise(writer, typeInfo);
    }
 
    /// <inheritdoc/>
    public ulong Count(TypeReference data)
    {
-      ulong infoSize = _typeInfoSerialiser.Count(data.TypeInfo);
+      ulong infoSize = _serialiser.Count(data.TypeInfo);
 
       return sizeof(ulong) + infoSize;
    }

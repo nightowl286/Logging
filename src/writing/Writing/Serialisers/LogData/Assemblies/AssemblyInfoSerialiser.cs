@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 
@@ -11,7 +12,8 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 /// A serialiser for <see cref="IAssemblyInfo"/>.
 /// </summary>
 [Version(0)]
-public class AssemblyInfoSerialiser : IAssemblyInfoSerialiser
+[VersionedDataKind(VersionedDataKind.AssemblyInfo)]
+public class AssemblyInfoSerialiser : ISerialiser<IAssemblyInfo>
 {
    #region Methods
    /// <inheritdoc/>

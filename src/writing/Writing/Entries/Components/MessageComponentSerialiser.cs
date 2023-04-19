@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Serialisers;
 
 namespace TNO.Logging.Writing.Entries.Components;
@@ -9,7 +10,8 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// A serialiser for <see cref="IMessageComponent"/>.
 /// </summary>
 [Version(0)]
-public sealed class MessageComponentSerialiser : IMessageComponentSerialiser
+[VersionedDataKind(VersionedDataKind.Message)]
+public sealed class MessageComponentSerialiser : ISerialiser<IMessageComponent>
 {
    #region Methods
    /// <inheritdoc/>

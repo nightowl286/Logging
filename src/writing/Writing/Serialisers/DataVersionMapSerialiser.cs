@@ -7,7 +7,7 @@ namespace TNO.Logging.Writing.Serialisers;
 /// <summary>
 /// A serialiser for <see cref="DataVersionMap"/>.
 /// </summary>
-public class DataVersionMapSerialiser : IDataVersionMapSerialiser
+public class DataVersionMapSerialiser : ISerialiser<DataVersionMap>
 {
    #region Methods
    /// <inheritdoc/>
@@ -31,8 +31,8 @@ public class DataVersionMapSerialiser : IDataVersionMapSerialiser
       int count = data.Count;
       int size =
          sizeof(int) +
-         sizeof(ushort) * count +
-         sizeof(int) * count;
+         (sizeof(ushort) * count) +
+         (sizeof(int) * count);
 
       return (ulong)size;
    }

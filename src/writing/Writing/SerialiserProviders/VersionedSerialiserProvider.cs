@@ -1,18 +1,17 @@
 ﻿using System.Reflection;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions;
-using TNO.Logging.Writing.Abstractions.Entries;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Assemblies;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Methods;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Entries;
 using TNO.Logging.Writing.Entries.Components;
 using TNO.Logging.Writing.Exceptions;
@@ -31,7 +30,7 @@ internal class VersionedSerialiserProvider : SerialiserProviderWrapperBase
       RegisterLogDataSerialisers(Scope.Registrar);
       RegisterComponentSerialisers(Scope.Registrar);
 
-      VersionedSingleton<IEntrySerialiser, EntrySerialiser>(Scope.Registrar);
+      Serialiser<IEntry, EntrySerialiser>(Scope.Registrar);
       AccountForExceptionInfo();
    }
 
@@ -48,42 +47,52 @@ internal class VersionedSerialiserProvider : SerialiserProviderWrapperBase
    private void RegisterLogDataSerialisers(IServiceRegistrar registrar)
    {
       // Methods
-      VersionedSingleton<IParameterInfoSerialiser, ParameterInfoSerialiser>(registrar);
-      VersionedSingleton<IMethodInfoSerialiser, MethodInfoSerialiser>(registrar);
-      VersionedSingleton<IConstructorInfoSerialiser, ConstructorInfoSerialiser>(registrar);
+      Serialiser<IParameterInfo, ParameterInfoSerialiser>(registrar);
+      Serialiser<IMethodInfo, MethodInfoSerialiser>(registrar);
+      Serialiser<IConstructorInfo, ConstructorInfoSerialiser>(registrar);
+
+      Serialiser<IMethodBaseInfo, MethodBaseInfoSerialiserDispatcher>(registrar);
 
       // Stack Traces
-      VersionedSingleton<IStackFrameInfoSerialiser, StackFrameInfoSerialiser>(registrar);
-      VersionedSingleton<IStackTraceInfoSerialiser, StackTraceInfoSerialiser>(registrar);
+      Serialiser<IStackFrameInfo, StackFrameInfoSerialiser>(registrar);
+      Serialiser<IStackTraceInfo, StackTraceInfoSerialiser>(registrar);
 
       // Log Info
-      VersionedSingleton<IContextInfoSerialiser, ContextInfoSerialiser>(registrar);
-      VersionedSingleton<IAssemblyInfoSerialiser, AssemblyInfoSerialiser>(registrar);
-      VersionedSingleton<ITypeInfoSerialiser, TypeInfoSerialiser>(registrar);
-      VersionedSingleton<ITableInfoSerialiser, TableInfoSerialiser>(registrar);
+      Serialiser<ContextInfo, ContextInfoSerialiser>(registrar);
+      Serialiser<IAssemblyInfo, AssemblyInfoSerialiser>(registrar);
+      Serialiser<ITypeInfo, TypeInfoSerialiser>(registrar);
+      Serialiser<ITableInfo, TableInfoSerialiser>(registrar);
 
       // Log References
-      VersionedSingleton<IFileReferenceSerialiser, FileReferenceSerialiser>(registrar);
-      VersionedSingleton<ITagReferenceSerialiser, TagReferenceSerialiser>(registrar);
-      VersionedSingleton<ITableKeyReferenceSerialiser, TableKeyReferenceSerialiser>(registrar);
-      VersionedSingleton<IAssemblyReferenceSerialiser, AssemblyReferenceSerialiser>(registrar);
-      VersionedSingleton<ITypeReferenceSerialiser, TypeReferenceSerialiser>(registrar);
+      Serialiser<FileReference, FileReferenceSerialiser>(registrar);
+      Serialiser<TagReference, TagReferenceSerialiser>(registrar);
+      Serialiser<TableKeyReference, TableKeyReferenceSerialiser>(registrar);
+      Serialiser<AssemblyReference, AssemblyReferenceSerialiser>(registrar);
+      Serialiser<TypeReference, TypeReferenceSerialiser>(registrar);
    }
    private void RegisterComponentSerialisers(IServiceRegistrar registrar)
    {
-      VersionedSingleton<IMessageComponentSerialiser, MessageComponentSerialiser>(registrar);
-      VersionedSingleton<ITagComponentSerialiser, TagComponentSerialiser>(registrar);
-      VersionedSingleton<IThreadComponentSerialiser, ThreadComponentSerialiser>(registrar);
-      VersionedSingleton<IEntryLinkComponentSerialiser, EntryLinkComponentSerialiser>(registrar);
-      VersionedSingleton<IAssemblyComponentSerialiser, AssemblyComponentSerialiser>(registrar);
-      VersionedSingleton<IStackTraceComponentSerialiser, StackTraceComponentSerialiser>(registrar);
-      VersionedSingleton<ITypeComponentSerialiser, TypeComponentSerialiser>(registrar);
-      VersionedSingleton<ITableComponentSerialiser, TableComponentSerialiser>(registrar);
-      VersionedSingleton<IExceptionComponentSerialiser, ExceptionComponentSerialiser>(registrar);
+      Serialiser<IMessageComponent, MessageComponentSerialiser>(registrar);
+      Serialiser<ITagComponent, TagComponentSerialiser>(registrar);
+      Serialiser<IThreadComponent, ThreadComponentSerialiser>(registrar);
+      Serialiser<IEntryLinkComponent, EntryLinkComponentSerialiser>(registrar);
+      Serialiser<IAssemblyComponent, AssemblyComponentSerialiser>(registrar);
+      Serialiser<IStackTraceComponent, StackTraceComponentSerialiser>(registrar);
+      Serialiser<ITypeComponent, TypeComponentSerialiser>(registrar);
+      Serialiser<ITableComponent, TableComponentSerialiser>(registrar);
+      Serialiser<IExceptionComponent, ExceptionComponentSerialiser>(registrar);
+
+      Serialiser<IComponent, ComponentSerialiserDispatcher>(registrar);
+   }
+
+   private void Serialiser<TType, TSerialiser>(IServiceRegistrar registrar)
+      where TSerialiser : notnull, ISerialiser<TType>
+   {
+      VersionedSingleton<ISerialiser<TType>, TSerialiser>(registrar);
    }
    private void VersionedSingleton<TService, TType>(IServiceRegistrar registrar)
      where TService : notnull
-     where TType : notnull, TService, IVersioned
+     where TType : notnull, TService
    {
       Type type = typeof(TType);
       if (typeof(TType).TryGetVersion(out uint version))

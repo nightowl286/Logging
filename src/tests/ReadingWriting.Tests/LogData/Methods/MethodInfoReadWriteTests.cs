@@ -10,8 +10,7 @@ public class MethodInfoReadWriteTests : ReadWriteTestsBase<MethodInfoSerialiser,
    #region Methods
    protected override void Setup(out MethodInfoSerialiser writer, out MethodInfoDeserialiserLatest reader)
    {
-      writer = new MethodInfoSerialiser(
-         new ParameterInfoSerialiser());
+      writer = new MethodInfoSerialiser(GeneralSerialiser.Instance);
 
       reader = new MethodInfoDeserialiserLatest(
          new ParameterInfoDeserialiserLatest());

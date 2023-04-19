@@ -1,7 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Methods;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 
@@ -9,18 +9,19 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 /// A serialiser for <see cref="IMethodInfo"/>.
 /// </summary>
 [Version(0)]
-public class MethodInfoSerialiser : IMethodInfoSerialiser
+[VersionedDataKind(VersionedDataKind.MethodInfo)]
+public class MethodInfoSerialiser : ISerialiser<IMethodInfo>
 {
    #region Fields
-   private readonly IParameterInfoSerialiser _parameterInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="MethodInfoSerialiser"/>.</summary>
-   /// <param name="parameterInfoSerialiser">The <see cref="IParameterInfoSerialiser"/> to use.</param>
-   public MethodInfoSerialiser(IParameterInfoSerialiser parameterInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public MethodInfoSerialiser(ISerialiser serialiser)
    {
-      _parameterInfoSerialiser = parameterInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -44,7 +45,7 @@ public class MethodInfoSerialiser : IMethodInfoSerialiser
 
       writer.Write7BitEncodedInt(parameterInfos.Count);
       foreach (IParameterInfo parameterInfo in parameterInfos)
-         _parameterInfoSerialiser.Serialise(writer, parameterInfo);
+         _serialiser.Serialise(writer, parameterInfo);
    }
 
    /// <inheritdoc/>
@@ -60,7 +61,7 @@ public class MethodInfoSerialiser : IMethodInfoSerialiser
 
       ulong parameterInfosSize = 0;
       foreach (IParameterInfo parameterInfo in data.ParameterInfos)
-         parameterInfosSize += _parameterInfoSerialiser.Count(parameterInfo);
+         parameterInfosSize += _serialiser.Count(parameterInfo);
 
       return (ulong)(nameSize + size + genericTypeIdsCountSize + parameterInfosCountSize) + parameterInfosSize;
    }

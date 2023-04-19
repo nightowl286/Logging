@@ -7,14 +7,6 @@ namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Constructors;
 [TestClass]
 public class ConstructorInfoSerialiserCountTests : BinarySerialiserCountTestBase<ConstructorInfoSerialiser, IConstructorInfo>
 {
-   #region Constructors
-   protected override ConstructorInfoSerialiser Setup()
-   {
-      return new ConstructorInfoSerialiser(
-         new ParameterInfoSerialiser());
-   }
-   #endregion
-
    #region Tests
    [TestMethod]
    public void Count_WithMinimalData()

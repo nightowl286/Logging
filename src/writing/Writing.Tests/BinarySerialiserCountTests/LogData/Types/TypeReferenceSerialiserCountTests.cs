@@ -7,14 +7,6 @@ namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Types;
 [TestClass]
 public class TypeReferenceSerialiserCountTests : BinarySerialiserCountTestBase<TypeReferenceSerialiser, TypeReference>
 {
-   #region Methods
-   protected override TypeReferenceSerialiser Setup()
-   {
-      return new TypeReferenceSerialiser(
-         new TypeInfoSerialiser());
-   }
-   #endregion
-
    #region Tests
    [TestMethod]
    public void Count()

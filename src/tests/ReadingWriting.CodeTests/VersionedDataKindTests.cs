@@ -3,7 +3,7 @@ using System.Text;
 using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.ReadingWriting.CodeTests;
 
@@ -24,7 +24,7 @@ public class VersionedDataKindTests
       {
          if (type.IsInterface == false)
             continue;
-         bool isSerialiser = type.ImplementsOpenInterface(typeof(IBinarySerialiser<>));
+         bool isSerialiser = type.ImplementsOpenInterface(typeof(ISerialiser<>));
          bool isVersioned = type.GetInterfaces().Contains(typeof(IVersioned));
 
          if (isSerialiser && isVersioned)

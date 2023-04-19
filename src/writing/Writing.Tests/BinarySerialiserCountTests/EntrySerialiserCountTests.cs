@@ -3,12 +3,7 @@ using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Entries;
-using TNO.Logging.Writing.Entries.Components;
-using TNO.Logging.Writing.Serialisers.LogData.Methods;
-using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
-using TNO.Logging.Writing.Serialisers.LogData.Tables;
 
 namespace TNO.Writing.Tests.BinarySerialiserCountTests;
 
@@ -41,33 +36,6 @@ public class EntrySerialiserCountTests : BinarySerialiserCountTestBase<EntrySeri
 
       // Act + Assert
       CountTestBase(entry);
-   }
-   #endregion
-
-   #region Methods
-   protected override EntrySerialiser Setup()
-   {
-      ParameterInfoSerialiser parameterInfoSerialiser = new ParameterInfoSerialiser();
-
-      ComponentSerialiserDispatcher componentSerialiser =
-         new ComponentSerialiserDispatcher(
-            new MessageComponentSerialiser(),
-            new TagComponentSerialiser(),
-            new ThreadComponentSerialiser(),
-            new EntryLinkComponentSerialiser(),
-            new TableComponentSerialiser(
-               new TableInfoSerialiser()),
-            new AssemblyComponentSerialiser(),
-            new TypeComponentSerialiser(),
-            new StackTraceComponentSerialiser(
-               new StackTraceInfoSerialiser(
-                  new StackFrameInfoSerialiser(
-                     new MethodBaseInfoSerialiserDispatcher(
-                        new MethodInfoSerialiser(parameterInfoSerialiser),
-                        new ConstructorInfoSerialiser(parameterInfoSerialiser))))),
-            Mock.Of<IExceptionComponentSerialiser>());
-
-      return new EntrySerialiser(componentSerialiser);
    }
    #endregion
 }

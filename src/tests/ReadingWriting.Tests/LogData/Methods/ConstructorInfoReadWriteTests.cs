@@ -10,8 +10,7 @@ public class ConstructorInfoReadWriteTests : ReadWriteTestsBase<ConstructorInfoS
    #region Methods
    protected override void Setup(out ConstructorInfoSerialiser writer, out ConstructorInfoDeserialiserLatest reader)
    {
-      writer = new ConstructorInfoSerialiser(
-         new ParameterInfoSerialiser());
+      writer = new ConstructorInfoSerialiser(GeneralSerialiser.Instance);
 
       reader = new ConstructorInfoDeserialiserLatest(
          new ParameterInfoDeserialiserLatest());

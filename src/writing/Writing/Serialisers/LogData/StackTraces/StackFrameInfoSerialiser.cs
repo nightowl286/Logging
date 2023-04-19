@@ -1,8 +1,8 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 
@@ -10,18 +10,19 @@ namespace TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 /// A serialiser for <see cref="IStackFrameInfo"/>.
 /// </summary>
 [Version(0)]
-public class StackFrameInfoSerialiser : IStackFrameInfoSerialiser
+[VersionedDataKind(VersionedDataKind.StackFrameInfo)]
+public class StackFrameInfoSerialiser : ISerialiser<IStackFrameInfo>
 {
    #region Fields
-   private readonly IMethodBaseInfoSerialiserDispatcher _methodBaseInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="StackFrameInfoSerialiser"/>.</summary>
-   /// <param name="methodBaseInfoSerialiser">The <see cref="IMethodBaseInfoSerialiserDispatcher"/> to use.</param>
-   public StackFrameInfoSerialiser(IMethodBaseInfoSerialiserDispatcher methodBaseInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public StackFrameInfoSerialiser(ISerialiser serialiser)
    {
-      _methodBaseInfoSerialiser = methodBaseInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -39,10 +40,10 @@ public class StackFrameInfoSerialiser : IStackFrameInfoSerialiser
       writer.Write(line);
       writer.Write(column);
 
-      _methodBaseInfoSerialiser.Serialise(writer, mainMethod);
+      _serialiser.Serialise(writer, mainMethod);
 
       if (writer.TryWriteNullable(secondaryMethod))
-         _methodBaseInfoSerialiser.Serialise(writer, secondaryMethod);
+         _serialiser.Serialise(writer, secondaryMethod);
    }
 
    /// <inheritdoc/>
@@ -53,8 +54,8 @@ public class StackFrameInfoSerialiser : IStackFrameInfoSerialiser
          (sizeof(uint) * 2) +
          sizeof(ulong);
 
-      ulong mainMethodSize = data.MainMethod is null ? 0 : _methodBaseInfoSerialiser.Count(data.MainMethod);
-      ulong secondaryMethodSize = data.SecondaryMethod is null ? 0 : _methodBaseInfoSerialiser.Count(data.SecondaryMethod);
+      ulong mainMethodSize = data.MainMethod is null ? 0 : _serialiser.Count(data.MainMethod);
+      ulong secondaryMethodSize = data.SecondaryMethod is null ? 0 : _serialiser.Count(data.SecondaryMethod);
 
       return mainMethodSize + secondaryMethodSize + (ulong)size;
    }

@@ -7,14 +7,6 @@ namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Methods;
 [TestClass]
 public class MethodInfoSerialiserCountTests : BinarySerialiserCountTestBase<MethodInfoSerialiser, IMethodInfo>
 {
-   #region Methods
-   protected override MethodInfoSerialiser Setup()
-   {
-      return new MethodInfoSerialiser(
-         new ParameterInfoSerialiser());
-   }
-   #endregion
-
    #region Tests
    [TestMethod]
    public void Count_WithMinimalData()

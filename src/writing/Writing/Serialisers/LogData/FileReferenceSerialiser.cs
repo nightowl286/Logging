@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData;
 
@@ -8,7 +9,8 @@ namespace TNO.Logging.Writing.Serialisers.LogData;
 /// A serialiser for <see cref="FileReference"/>.
 /// </summary>
 [Version(0)]
-public class FileReferenceSerialiser : IFileReferenceSerialiser
+[VersionedDataKind(VersionedDataKind.FileReference)]
+public class FileReferenceSerialiser : ISerialiser<FileReference>
 {
    #region Methods
    /// <inheritdoc/>

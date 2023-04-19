@@ -13,12 +13,7 @@ using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
 using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.LogData.Methods;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
 using TNO.Logging.Writing.Entries;
-using TNO.Logging.Writing.Entries.Components;
-using TNO.Logging.Writing.Serialisers.LogData.Methods;
-using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
-using TNO.Logging.Writing.Serialisers.LogData.Tables;
 
 namespace TNO.ReadingWriting.Tests;
 
@@ -28,27 +23,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
    #region Methods
    protected override void Setup(out EntrySerialiser writer, out EntryDeserialiserLatest reader)
    {
-      ParameterInfoSerialiser parameterInfoSerialiser = new ParameterInfoSerialiser();
-
-      ComponentSerialiserDispatcher componentSerialiser =
-         new ComponentSerialiserDispatcher(
-            new MessageComponentSerialiser(),
-            new TagComponentSerialiser(),
-            new ThreadComponentSerialiser(),
-            new EntryLinkComponentSerialiser(),
-            new TableComponentSerialiser(
-               new TableInfoSerialiser()),
-            new AssemblyComponentSerialiser(),
-            new TypeComponentSerialiser(),
-            new StackTraceComponentSerialiser(
-               new StackTraceInfoSerialiser(
-                  new StackFrameInfoSerialiser(
-                     new MethodBaseInfoSerialiserDispatcher(
-                        new MethodInfoSerialiser(parameterInfoSerialiser),
-                        new ConstructorInfoSerialiser(parameterInfoSerialiser))))),
-            Mock.Of<IExceptionComponentSerialiser>());
-
-      writer = new EntrySerialiser(componentSerialiser);
+      writer = new EntrySerialiser(GeneralSerialiser.Instance);
 
       ParameterInfoDeserialiserLatest parameterInfoDeserialiser = new ParameterInfoDeserialiserLatest();
 

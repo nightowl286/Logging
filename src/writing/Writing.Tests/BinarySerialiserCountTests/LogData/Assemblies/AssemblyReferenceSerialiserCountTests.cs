@@ -10,14 +10,6 @@ namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.Assemblies;
 [TestClass]
 public class AssemblyReferenceSerialiserCountTests : BinarySerialiserCountTestBase<AssemblyReferenceSerialiser, AssemblyReference>
 {
-   #region Methods
-   protected override AssemblyReferenceSerialiser Setup()
-   {
-      return new AssemblyReferenceSerialiser(
-         new AssemblyInfoSerialiser());
-   }
-   #endregion
-
    #region Tests
    [TestMethod]
    public void Count_WitMinimalData()

@@ -1,7 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Exceptions;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Entries.Components;
 
@@ -9,18 +9,19 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// A serialiser for <see cref="IExceptionComponent"/>.
 /// </summary>
 [Version(0)]
-public sealed class ExceptionComponentSerialiser : IExceptionComponentSerialiser
+[VersionedDataKind(VersionedDataKind.Exception)]
+public sealed class ExceptionComponentSerialiser : ISerialiser<IExceptionComponent>
 {
    #region Fields
-   private readonly IExceptionInfoSerialiser _exceptionInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ExceptionComponentSerialiser"/>.</summary>
-   /// <param name="exceptionInfoSerialiser">The <see cref="IExceptionInfoSerialiser"/> to use.</param>
-   public ExceptionComponentSerialiser(IExceptionInfoSerialiser exceptionInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public ExceptionComponentSerialiser(ISerialiser serialiser)
    {
-      _exceptionInfoSerialiser = exceptionInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -28,13 +29,13 @@ public sealed class ExceptionComponentSerialiser : IExceptionComponentSerialiser
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IExceptionComponent data)
    {
-      _exceptionInfoSerialiser.Serialise(writer, data.ExceptionInfo);
+      _serialiser.Serialise(writer, data.ExceptionInfo);
    }
 
    /// <inheritdoc/>
    public ulong Count(IExceptionComponent data)
    {
-      return _exceptionInfoSerialiser.Count(data.ExceptionInfo);
+      return _serialiser.Count(data.ExceptionInfo);
    }
    #endregion
 }

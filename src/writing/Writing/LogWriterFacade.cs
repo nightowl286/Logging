@@ -2,7 +2,7 @@
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Writing.Abstractions;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Builders;
 using TNO.Logging.Writing.SerialiserProviders;
 
@@ -38,7 +38,7 @@ public class LogWriterFacade : ILogWriterFacade
 
    #region Methods
    /// <inheritdoc/>
-   public T GetSerialiser<T>() where T : notnull, ISerialiser => _baseProvider.GetSerialiser<T>();
+   public ISerialiser<T> GetSerialiser<T>() where T : notnull => _baseProvider.GetSerialiser<T>();
 
    /// <inheritdoc/>
    public DataVersionMap GetVersionMap() => _baseProvider.GetVersionMap();

@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Entries.Components;
 
@@ -8,7 +9,8 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// A serialiser for <see cref="IEntryLinkComponent"/>.
 /// </summary>
 [Version(0)]
-public sealed class EntryLinkComponentSerialiser : IEntryLinkComponentSerialiser
+[VersionedDataKind(VersionedDataKind.EntryLink)]
+public sealed class EntryLinkComponentSerialiser : ISerialiser<IEntryLinkComponent>
 {
 
    #region Methods

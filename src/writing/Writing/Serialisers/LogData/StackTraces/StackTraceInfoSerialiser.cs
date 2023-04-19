@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 
@@ -8,18 +9,19 @@ namespace TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 /// A serialiser for <see cref="IStackTraceInfo"/>.
 /// </summary>
 [Version(0)]
-public class StackTraceInfoSerialiser : IStackTraceInfoSerialiser
+[VersionedDataKind(VersionedDataKind.StackTraceInfo)]
+public class StackTraceInfoSerialiser : ISerialiser<IStackTraceInfo>
 {
    #region Fields
-   private readonly IStackFrameInfoSerialiser _stackFrameInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="StackTraceInfoSerialiser"/>.</summary>
-   /// <param name="stackFrameInfoSerialiser">The <see cref="IStackFrameInfoSerialiser"/> to use.</param>
-   public StackTraceInfoSerialiser(IStackFrameInfoSerialiser stackFrameInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public StackTraceInfoSerialiser(ISerialiser serialiser)
    {
-      _stackFrameInfoSerialiser = stackFrameInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -34,7 +36,7 @@ public class StackTraceInfoSerialiser : IStackTraceInfoSerialiser
 
       writer.Write7BitEncodedInt(frames.Count);
       foreach (IStackFrameInfo frame in frames)
-         _stackFrameInfoSerialiser.Serialise(writer, frame);
+         _serialiser.Serialise(writer, frame);
    }
 
    /// <inheritdoc/>
@@ -45,7 +47,7 @@ public class StackTraceInfoSerialiser : IStackTraceInfoSerialiser
       int framesCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.Frames.Count);
       ulong framesSize = 0;
       foreach (IStackFrameInfo frame in data.Frames)
-         framesSize += _stackFrameInfoSerialiser.Count(frame);
+         framesSize += _serialiser.Count(frame);
 
       return (ulong)(size + framesCountSize) + framesSize;
    }

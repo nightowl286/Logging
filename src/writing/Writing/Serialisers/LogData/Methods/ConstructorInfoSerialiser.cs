@@ -1,7 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Parameters;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 
@@ -9,22 +9,23 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 /// A serialiser for <see cref="IConstructorInfo"/>.
 /// </summary>
 [Version(0)]
-public class ConstructorInfoSerialiser : IConstructorInfoSerialiser
+[VersionedDataKind(VersionedDataKind.ConstructorInfo)]
+public class ConstructorInfoSerialiser : ISerialiser<IConstructorInfo>
 {
    #region Fields
-   private readonly IParameterInfoSerialiser _parameterInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ConstructorInfoSerialiser"/>.</summary>
-   /// <param name="parameterInfoSerialiser">The <see cref="IParameterInfoSerialiser"/> to use.</param>
-   public ConstructorInfoSerialiser(IParameterInfoSerialiser parameterInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public ConstructorInfoSerialiser(ISerialiser serialiser)
    {
-      _parameterInfoSerialiser = parameterInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
-   #region Constructors
+   #region Methods
    /// <inheritdoc/>
    public void Serialise(BinaryWriter writer, IConstructorInfo data)
    {
@@ -37,7 +38,7 @@ public class ConstructorInfoSerialiser : IConstructorInfoSerialiser
 
       writer.Write7BitEncodedInt(parameterInfos.Count);
       foreach (IParameterInfo parameterInfo in parameterInfos)
-         _parameterInfoSerialiser.Serialise(writer, parameterInfo);
+         _serialiser.Serialise(writer, parameterInfo);
    }
 
    /// <inheritdoc/>
@@ -50,7 +51,7 @@ public class ConstructorInfoSerialiser : IConstructorInfoSerialiser
 
       ulong parameterInfosSize = 0;
       foreach (IParameterInfo parameterInfo in data.ParameterInfos)
-         parameterInfosSize += _parameterInfoSerialiser.Count(parameterInfo);
+         parameterInfosSize += _serialiser.Count(parameterInfo);
 
       return (ulong)(nameSize + size + parameterInfosCountSize) + parameterInfosSize;
    }

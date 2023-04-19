@@ -1,8 +1,8 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Entries.Components;
 
@@ -10,18 +10,19 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// A serialiser for <see cref="IStackTraceComponent"/>.
 /// </summary>
 [Version(0)]
-public sealed class StackTraceComponentSerialiser : IStackTraceComponentSerialiser
+[VersionedDataKind(VersionedDataKind.StackTrace)]
+public sealed class StackTraceComponentSerialiser : ISerialiser<IStackTraceComponent>
 {
    #region Fields
-   private readonly IStackTraceInfoSerialiser _stackTraceInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="StackTraceComponentSerialiser"/>.</summary>
-   /// <param name="stackTraceInfoSerialiser">The <see cref="IStackTraceInfoSerialiser"/> to use.</param>
-   public StackTraceComponentSerialiser(IStackTraceInfoSerialiser stackTraceInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public StackTraceComponentSerialiser(ISerialiser serialiser)
    {
-      _stackTraceInfoSerialiser = stackTraceInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -31,10 +32,10 @@ public sealed class StackTraceComponentSerialiser : IStackTraceComponentSerialis
    {
       IStackTraceInfo info = data.StackTrace;
 
-      _stackTraceInfoSerialiser.Serialise(writer, info);
+      _serialiser.Serialise(writer, info);
    }
 
    /// <inheritdoc/>
-   public ulong Count(IStackTraceComponent data) => _stackTraceInfoSerialiser.Count(data.StackTrace);
+   public ulong Count(IStackTraceComponent data) => _serialiser.Count(data.StackTrace);
    #endregion
 }

@@ -2,7 +2,6 @@
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
-using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 
 namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.StackTraces;
@@ -10,18 +9,6 @@ namespace TNO.Writing.Tests.BinarySerialiserCountTests.LogData.StackTraces;
 [TestClass]
 public class StackFrameInfoSerialiserCountTests : BinarySerialiserCountTestBase<StackFrameInfoSerialiser, IStackFrameInfo>
 {
-   #region Methods
-   protected override StackFrameInfoSerialiser Setup()
-   {
-      ParameterInfoSerialiser parameterInfoSerialiser = new ParameterInfoSerialiser();
-
-      return new StackFrameInfoSerialiser(
-         new MethodBaseInfoSerialiserDispatcher(
-            new MethodInfoSerialiser(parameterInfoSerialiser),
-            new ConstructorInfoSerialiser(parameterInfoSerialiser)));
-   }
-   #endregion
-
    #region Tests
    [TestMethod]
    public void Count_WithMinimalData()

@@ -1,8 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Constructors;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Methods;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 
@@ -10,23 +7,18 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Methods;
 /// Represents a <see cref="ISerialiser{T}"/> dispatcher that will serialise
 /// a given <see cref="IMethodBaseInfo"/> based on its <see cref="MethodKind"/>.
 /// </summary>
-public class MethodBaseInfoSerialiserDispatcher : IMethodBaseInfoSerialiserDispatcher
+public class MethodBaseInfoSerialiserDispatcher : ISerialiser<IMethodBaseInfo>
 {
    #region Fields
-   private readonly IMethodInfoSerialiser _methodInfoSerialiser;
-   private readonly IConstructorInfoSerialiser _constructorInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="MethodBaseInfoSerialiserDispatcher"/>.</summary>
-   /// <param name="methodInfoSerialiser">The method info serialiser to use.</param>
-   /// <param name="constructorInfoSerialiser">The constructor info serialiser to use.</param>
-   public MethodBaseInfoSerialiserDispatcher(
-      IMethodInfoSerialiser methodInfoSerialiser,
-      IConstructorInfoSerialiser constructorInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public MethodBaseInfoSerialiserDispatcher(ISerialiser serialiser)
    {
-      _methodInfoSerialiser = methodInfoSerialiser;
-      _constructorInfoSerialiser = constructorInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -37,12 +29,12 @@ public class MethodBaseInfoSerialiserDispatcher : IMethodBaseInfoSerialiserDispa
       if (data is IMethodInfo methodInfo)
       {
          writer.Write((byte)MethodKind.Method);
-         _methodInfoSerialiser.Serialise(writer, methodInfo);
+         _serialiser.Serialise(writer, methodInfo);
       }
       else if (data is IConstructorInfo constructorInfo)
       {
          writer.Write((byte)MethodKind.Constructor);
-         _constructorInfoSerialiser.Serialise(writer, constructorInfo);
+         _serialiser.Serialise(writer, constructorInfo);
       }
       else
          throw new ArgumentException($"Unknown method type ({data.GetType()}).", nameof(data));
@@ -51,10 +43,10 @@ public class MethodBaseInfoSerialiserDispatcher : IMethodBaseInfoSerialiserDispa
    public ulong Count(IMethodBaseInfo data)
    {
       if (data is IMethodInfo methodInfo)
-         return _methodInfoSerialiser.Count(methodInfo) + sizeof(byte);
+         return _serialiser.Count(methodInfo) + sizeof(byte);
 
       if (data is IConstructorInfo constructorInfo)
-         return _constructorInfoSerialiser.Count(constructorInfo) + sizeof(byte);
+         return _serialiser.Count(constructorInfo) + sizeof(byte);
 
       throw new ArgumentException($"Unknown method type ({data.GetType()}).", nameof(data));
    }

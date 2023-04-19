@@ -1,9 +1,9 @@
 ﻿using TNO.Common.Extensions;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Entries;
 
@@ -11,18 +11,19 @@ namespace TNO.Logging.Writing.Entries;
 /// A serialiser for <see cref="IEntry"/>.
 /// </summary>
 [Version(0)]
-public class EntrySerialiser : IEntrySerialiser
+[VersionedDataKind(VersionedDataKind.Entry)]
+public class EntrySerialiser : ISerialiser<IEntry>
 {
    #region Fields
-   private readonly IComponentSerialiserDispatcher _componentSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="EntrySerialiser"/>.</summary>
-   /// <param name="componentSerialiser">The component serialiser to use.</param>
-   public EntrySerialiser(IComponentSerialiserDispatcher componentSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public EntrySerialiser(ISerialiser serialiser)
    {
-      _componentSerialiser = componentSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -52,7 +53,7 @@ public class EntrySerialiser : IEntrySerialiser
       foreach (ComponentKind possibleKind in EnumExtensions.GetValuesAscending<ComponentKind>())
       {
          if (data.Components.TryGetValue(possibleKind, out IComponent? component))
-            _componentSerialiser.Serialise(writer, component);
+            _serialiser.Serialise(writer, component);
       }
    }
 
@@ -68,7 +69,7 @@ public class EntrySerialiser : IEntrySerialiser
 
       ulong componentSizes = 0;
       foreach (IComponent component in data.Components.Values)
-         componentSizes += _componentSerialiser.Count(component);
+         componentSizes += _serialiser.Count(component);
 
       return componentSizes + (ulong)headerSize;
    }

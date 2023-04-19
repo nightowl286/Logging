@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Types;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Types;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Types;
 
@@ -8,7 +9,8 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Types;
 /// A serialiser for <see cref="ITypeInfo"/>.
 /// </summary>
 [Version(0)]
-public class TypeInfoSerialiser : ITypeInfoSerialiser
+[VersionedDataKind(VersionedDataKind.TypeInfo)]
+public class TypeInfoSerialiser : ISerialiser<ITypeInfo>
 {
    #region Methods
    /// <inheritdoc/>

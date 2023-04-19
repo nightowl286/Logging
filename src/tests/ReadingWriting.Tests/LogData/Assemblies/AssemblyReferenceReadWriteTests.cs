@@ -12,8 +12,7 @@ public class AssemblyReferenceReadWriteTests : ReadWriteTestsBase<AssemblyRefere
    #region Methods
    protected override void Setup(out AssemblyReferenceSerialiser writer, out AssemblyReferenceDeserialiserLatest reader)
    {
-      writer = new AssemblyReferenceSerialiser(
-         new AssemblyInfoSerialiser());
+      writer = new AssemblyReferenceSerialiser(GeneralSerialiser.Instance);
 
       reader = new AssemblyReferenceDeserialiserLatest(
          new AssemblyInfoDeserialiserLatest());

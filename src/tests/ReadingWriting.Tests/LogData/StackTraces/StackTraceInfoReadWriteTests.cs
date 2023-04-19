@@ -3,7 +3,6 @@ using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
 using TNO.Logging.Reading.LogData.Methods;
-using TNO.Logging.Writing.Serialisers.LogData.Methods;
 using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 
 namespace TNO.ReadingWriting.Tests.LogData.StackTraces;
@@ -14,13 +13,7 @@ public class StackTraceInfoReadWriteTests : ReadWriteTestsBase<StackTraceInfoSer
    #region Methods
    protected override void Setup(out StackTraceInfoSerialiser writer, out StackTraceInfoDeserialiserLatest reader)
    {
-      ParameterInfoSerialiser parameterInfoSerialiser = new ParameterInfoSerialiser();
-      writer =
-         new StackTraceInfoSerialiser(
-            new StackFrameInfoSerialiser(
-               new MethodBaseInfoSerialiserDispatcher(
-                  new MethodInfoSerialiser(parameterInfoSerialiser),
-                  new ConstructorInfoSerialiser(parameterInfoSerialiser))));
+      writer = new StackTraceInfoSerialiser(GeneralSerialiser.Instance);
 
       ParameterInfoDeserialiserLatest parameterInfoDeserialiser = new ParameterInfoDeserialiserLatest();
       reader =

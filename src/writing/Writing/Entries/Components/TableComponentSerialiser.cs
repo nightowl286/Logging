@@ -1,7 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Entries.Components;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Entries.Components;
 
@@ -9,26 +9,27 @@ namespace TNO.Logging.Writing.Entries.Components;
 /// A serialiser for <see cref="ITableComponent"/>.
 /// </summary>
 [Version(0)]
-public sealed class TableComponentSerialiser : ITableComponentSerialiser
+[VersionedDataKind(VersionedDataKind.Table)]
+public sealed class TableComponentSerialiser : ISerialiser<ITableComponent>
 {
    #region Fields
-   private readonly ITableInfoSerialiser _tableInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="TableComponentSerialiser"/>.</summary>
-   /// <param name="tableInfoSerialiser">The <see cref="ITableInfoSerialiser"/> to use.</param>
-   public TableComponentSerialiser(ITableInfoSerialiser tableInfoSerialiser)
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
+   public TableComponentSerialiser(ISerialiser serialiser)
    {
-      _tableInfoSerialiser = tableInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
    #region Methods
    /// <inheritdoc/>
-   public void Serialise(BinaryWriter writer, ITableComponent data) => _tableInfoSerialiser.Serialise(writer, data.Table);
+   public void Serialise(BinaryWriter writer, ITableComponent data) => _serialiser.Serialise(writer, data.Table);
 
    /// <inheritdoc/>
-   public ulong Count(ITableComponent data) => _tableInfoSerialiser.Count(data.Table);
+   public ulong Count(ITableComponent data) => _serialiser.Count(data.Table);
    #endregion
 }

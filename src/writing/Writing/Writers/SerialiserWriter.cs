@@ -1,12 +1,12 @@
 ﻿using System.IO.Compression;
-using TNO.Logging.Common;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Writers;
-internal sealed class BinarySerialiserWriter<T> : IDisposable where T : notnull
+
+internal sealed class SerialiserWriter<T> : IDisposable where T : notnull
 {
    #region Fields
-   private readonly IBinarySerialiser<T> _serialiser;
+   private readonly ISerialiser<T> _serialiser;
    private readonly ThreadedQueue<T> _queue;
    private readonly string _directory;
    private readonly long _threshold;
@@ -14,7 +14,7 @@ internal sealed class BinarySerialiserWriter<T> : IDisposable where T : notnull
    private BinaryWriter _writer;
    private uint _currentChunk = 0;
    #endregion
-   public BinarySerialiserWriter(string directory, IBinarySerialiser<T> serialiser, long threshold)
+   public SerialiserWriter(string directory, ISerialiser<T> serialiser, long threshold)
    {
       Directory.CreateDirectory(directory);
       _directory = directory;

@@ -1,6 +1,7 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.Serialisers.LogData.Tables;
 
@@ -8,7 +9,8 @@ namespace TNO.Logging.Writing.Serialisers.LogData.Tables;
 /// A serialiser for <see cref="ITableInfo"/>.
 /// </summary>
 [Version(0)]
-public sealed class TableInfoSerialiser : ITableInfoSerialiser
+[VersionedDataKind(VersionedDataKind.TableInfo)]
+public sealed class TableInfoSerialiser : ISerialiser<ITableInfo>
 {
    #region Fields
    internal static readonly Dictionary<Type, TableDataKind> DataKinds = new Dictionary<Type, TableDataKind>()

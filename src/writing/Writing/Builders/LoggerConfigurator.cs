@@ -16,6 +16,7 @@ using TNO.Logging.Logging;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Collectors;
 using TNO.Logging.Writing.Exceptions;
 
@@ -130,7 +131,7 @@ internal sealed class LoggerConfigurator : ILoggerConfigurator
       _scope.Registrar
          .Instance<IExceptionDataConverter>(exceptionDataHandler)
          .Instance<IExceptionDataSerialiser>(exceptionDataHandler)
-         .Singleton<IExceptionInfoSerialiser, ExceptionInfoSerialiser>()
+         .Singleton<ISerialiser<IExceptionInfo>, ExceptionInfoSerialiser>()
          .Singleton<IExceptionInfoConverter, ExceptionInfoConverter>();
    }
 

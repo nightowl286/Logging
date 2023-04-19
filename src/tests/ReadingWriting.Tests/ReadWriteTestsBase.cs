@@ -1,13 +1,14 @@
 ﻿using System.Text;
+using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.ReadingWriting.Tests;
 
 [TestCategory(Category.Serialisation)]
 public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
-   where TWriter : IBinarySerialiser<TData>
+   where TWriter : ISerialiser<TData>
    where TReader : IBinaryDeserialiser<TData>
 {
    #region Properties
@@ -45,15 +46,21 @@ public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
    #region Methods
    private static void TryCheckVersions(TWriter writer, TReader reader)
    {
-      IVersioned? versionedWriter = writer as IVersioned;
-      IVersioned? versionedReader = reader as IVersioned;
+      Type writerType = writer.GetType();
+      Type readerType = reader.GetType();
 
-      Assert.That.IsInconclusiveIf(versionedWriter is null ^ versionedReader is null, "Mixing versioned and non-versioned readers and writers is not allowed.");
+      bool isVersionedWriter = writerType.IsDefined<VersionAttribute>(false);
+      bool isVersionedReader = readerType.IsDefined<VersionAttribute>(false);
 
-      if (versionedWriter is not null && versionedReader is not null)
+      Assert.That.IsInconclusiveIf(isVersionedWriter ^ isVersionedReader, "Mixing versioned and non-versioned readers and writers is not allowed.");
+
+      if (isVersionedWriter && isVersionedReader)
       {
-         Assert.That.IsInconclusiveIf(versionedWriter.GetVersion() != versionedReader.GetVersion(),
-            $"There is a mismatch between the reader ({versionedReader.GetVersion()}) / writer ({versionedWriter.GetVersion()}) versions.");
+         uint writerVersion = writerType.GetVersion();
+         uint readerVersion = readerType.GetVersion();
+
+         Assert.That.IsInconclusiveIf(writerVersion != readerVersion,
+            $"There is a mismatch between the reader ({readerVersion}) / writer ({writerVersion}) versions.");
       }
    }
 

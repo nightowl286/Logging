@@ -10,8 +10,7 @@ public class TypeReferenceReadWriteTests : ReadWriteTestsBase<TypeReferenceSeria
    #region Methods
    protected override void Setup(out TypeReferenceSerialiser writer, out TypeReferenceDeserialiserLatest reader)
    {
-      writer = new TypeReferenceSerialiser(
-         new TypeInfoSerialiser());
+      writer = new TypeReferenceSerialiser(GeneralSerialiser.Instance);
 
       reader = new TypeReferenceDeserialiserLatest(
          new TypeInfoDeserialiserLatest());

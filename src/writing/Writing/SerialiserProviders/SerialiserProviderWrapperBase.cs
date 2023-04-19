@@ -2,7 +2,7 @@
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Writing.Abstractions;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.SerialiserProviders;
 internal abstract class SerialiserProviderWrapperBase : ISerialiserProvider
@@ -27,12 +27,12 @@ internal abstract class SerialiserProviderWrapperBase : ISerialiserProvider
 
    #region Methods
    /// <inheritdoc/>
-   public T GetSerialiser<T>() where T : notnull, ISerialiser
+   public ISerialiser<T> GetSerialiser<T>() where T : notnull
    {
       if (_innerProvider is null)
-         return _scope.Requester.Get<T>();
+         return _scope.Requester.Get<ISerialiser<T>>();
 
-      if (_scope.Requester.TryGet(out T? instance))
+      if (_scope.Requester.TryGet(out ISerialiser<T>? instance))
          return instance;
 
       return _innerProvider.GetSerialiser<T>();

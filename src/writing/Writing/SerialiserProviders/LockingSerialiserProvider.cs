@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Writing.Abstractions;
-using TNO.Logging.Writing.Abstractions.Serialisers.Bases;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.Logging.Writing.SerialiserProviders;
 
@@ -20,7 +20,7 @@ internal sealed class LockingSerialiserProvider : ISerialiserProvider
 
    #region Methods
    /// <inheritdoc/>
-   public T GetSerialiser<T>() where T : notnull, ISerialiser
+   public ISerialiser<T> GetSerialiser<T>() where T : notnull
    {
       lock (_lock)
       {

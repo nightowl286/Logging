@@ -1,10 +1,10 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Writing.Abstractions.Exceptions;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.StackTraces;
-using TNO.Logging.Writing.Abstractions.Serialisers.LogData.Tables;
+using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Serialisers;
 
 namespace TNO.Logging.Writing.Exceptions;
@@ -13,27 +13,24 @@ namespace TNO.Logging.Writing.Exceptions;
 /// Represents a serialiser for <see cref="IExceptionInfo"/>.
 /// </summary>
 [Version(0)]
-public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
+[VersionedDataKind(VersionedDataKind.ExceptionInfo)]
+public class ExceptionInfoSerialiser : ISerialiser<IExceptionInfo>
 {
    #region Fields
    private readonly IExceptionDataSerialiser _exceptionDataSerialiser;
-   private readonly IStackTraceInfoSerialiser _stackTraceInfoSerialiser;
-   private readonly ITableInfoSerialiser _tableInfoSerialiser;
+   private readonly ISerialiser _serialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ExceptionInfoSerialiser"/>.</summary>
    /// <param name="exceptionDataSerialiser">The <see cref="IExceptionDataSerialiser"/> to use.</param>
-   /// <param name="stackTraceInfoSerialiser">The <see cref="IStackTraceInfoSerialiser"/> to use.</param>
-   /// <param name="tableInfoSerialiser">The <see cref="ITableInfoSerialiser"/> to use.</param>
+   /// <param name="serialiser">The general <see cref="ISerialiser"/> to use.</param>
    public ExceptionInfoSerialiser(
       IExceptionDataSerialiser exceptionDataSerialiser,
-      IStackTraceInfoSerialiser stackTraceInfoSerialiser,
-      ITableInfoSerialiser tableInfoSerialiser)
+      ISerialiser serialiser)
    {
       _exceptionDataSerialiser = exceptionDataSerialiser;
-      _stackTraceInfoSerialiser = stackTraceInfoSerialiser;
-      _tableInfoSerialiser = tableInfoSerialiser;
+      _serialiser = serialiser;
    }
    #endregion
 
@@ -57,8 +54,8 @@ public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
 
       writer.Write(message);
 
-      _stackTraceInfoSerialiser.Serialise(writer, stackTraceInfo);
-      _tableInfoSerialiser.Serialise(writer, additionalData);
+      _serialiser.Serialise(writer, stackTraceInfo);
+      _serialiser.Serialise(writer, additionalData);
 
       _exceptionDataSerialiser.Serialise(writer, exceptionData, data.ExceptionGroupId);
 
@@ -75,8 +72,8 @@ public class ExceptionInfoSerialiser : IExceptionInfoSerialiser
          BinaryWriterSizeHelper.GuidSize;
 
       int messageSize = BinaryWriterSizeHelper.StringSize(data.Message);
-      ulong stackTraceSize = _stackTraceInfoSerialiser.Count(data.StackTrace);
-      ulong tableSize = _tableInfoSerialiser.Count(data.AdditionalData);
+      ulong stackTraceSize = _serialiser.Count(data.StackTrace);
+      ulong tableSize = _serialiser.Count(data.AdditionalData);
       ulong exceptionDataSize = _exceptionDataSerialiser.Count(data.Data, data.ExceptionGroupId);
       ulong innerExceptionSize = data.InnerException is null ? 0 : Count(data.InnerException);
 
