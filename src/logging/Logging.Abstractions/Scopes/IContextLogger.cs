@@ -1,4 +1,4 @@
-﻿namespace TNO.Logging.Writing.Abstractions.Loggers.Scopes;
+﻿namespace TNO.Logging.Abstractions.Scopes;
 
 /// <summary>
 /// Denotes a logger bound to a context.

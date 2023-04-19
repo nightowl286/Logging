@@ -3,12 +3,12 @@ using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.LogData;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
-using TNO.Logging.Writing.Abstractions.Loggers;
 using AssemblyReference = TNO.Logging.Common.Abstractions.LogData.Assemblies.AssemblyReference;
 using TypeInfo = TNO.Logging.Common.LogData.TypeInfo;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging.Helpers;
 
 /// <summary>
 /// Contains useful functions related to the <see cref="ITypeInfo"/>.

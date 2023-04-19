@@ -1,16 +1,25 @@
-﻿namespace TNO.Logging.Writing.IdFactories;
+﻿namespace TNO.Logging.Common.IdFactories;
 
-internal class SafeIdFactory<T> where T : notnull
+/// <summary>
+/// Represents a thread safe id factory where each id is associated with value of the type <typeparamref name="T"/>.
+/// </summary>
+/// <typeparam name="T">The type of the values that the ids will be associated with.</typeparam>
+public class SafeIdFactory<T> where T : notnull
 {
    #region Fields
    private readonly Dictionary<T, ulong> _idCache = new Dictionary<T, ulong>();
    private readonly ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
    private ulong _nextId;
    #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="SafeIdFactory{T}"/>.</summary>
+   /// <param name="startId">The first id that will be given out.</param>
    public SafeIdFactory(ulong startId)
    {
       _nextId = startId;
    }
+   #endregion
 
    #region Methods
    /// <summary>Gets or creates the <paramref name="id"/> for the given <paramref name="data"/>.</summary>

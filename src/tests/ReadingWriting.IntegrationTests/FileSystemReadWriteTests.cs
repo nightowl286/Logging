@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using TNO.Logging.Abstractions;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
@@ -12,7 +13,6 @@ using TNO.Logging.Common.LogData;
 using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
 using TNO.Logging.Writing;
-using TNO.Logging.Writing.Abstractions.Loggers;
 using TNO.Logging.Writing.Abstractions.Writers;
 using TNO.Logging.Writing.Builders;
 using TNO.ReadingWriting.IntegrationTests.TestBases.FileSystem;

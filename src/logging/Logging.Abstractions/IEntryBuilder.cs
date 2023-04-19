@@ -6,7 +6,7 @@ using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 
-namespace TNO.Logging.Writing.Abstractions.Loggers;
+namespace TNO.Logging.Abstractions;
 
 /// <summary>
 /// Denotes a builder for log entries.

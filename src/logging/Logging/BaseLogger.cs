@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using TNO.Logging.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
@@ -11,11 +12,12 @@ using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
+using TNO.Logging.Logging.Helpers;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
-using TNO.Logging.Writing.Abstractions.Loggers;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging;
 
 /// <summary>
 /// Represents the very base logger.
@@ -47,7 +49,7 @@ public class BaseLogger : ILogger
    /// <param name="exceptionInfoConverter">The <see cref="IExceptionInfoConverter"/> to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="scope">The scope (inside the given <paramref name="contextId"/> that this logger belongs to.</param>
-   internal BaseLogger(
+   public BaseLogger(
       ILogDataCollector collector,
       ILogWriteContext writeContext,
       IExceptionInfoConverter exceptionInfoConverter,

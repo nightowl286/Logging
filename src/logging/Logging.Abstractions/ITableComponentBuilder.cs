@@ -1,10 +1,10 @@
 ﻿using System;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 
-namespace TNO.Logging.Writing.Abstractions.Loggers;
+namespace TNO.Logging.Abstractions;
 
 /// <summary>
-/// Denotes a builder for <see cref="ITableComponent"/> data.
+/// Denotes a builder for a <see cref="ITableComponent"/> data.
 /// </summary>
 public interface ITableComponentBuilder<out T>
 {

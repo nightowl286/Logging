@@ -4,11 +4,10 @@ using System.Runtime.CompilerServices;
 using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.LogData.Tables;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
-using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.Serialisers.LogData.Tables;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging.Helpers;
 
 /// <summary>
 /// Contains useful functions related to the <see cref="ITableInfo"/>.
@@ -16,6 +15,32 @@ namespace TNO.Logging.Writing.Loggers;
 public static class TableInfoHelper
 {
    #region Fields
+   // Note(Nightowl): Copied from the TableInfoSerialiser.cs;
+   private static readonly Dictionary<Type, TableDataKind> DataKinds = new Dictionary<Type, TableDataKind>()
+   {
+      { typeof(byte), TableDataKind.Byte },
+      { typeof(sbyte), TableDataKind.SByte },
+      { typeof(ushort), TableDataKind.UShort},
+      { typeof(short), TableDataKind.Short },
+      { typeof(uint), TableDataKind.UInt },
+      { typeof(int), TableDataKind.Int },
+      { typeof(ulong), TableDataKind.ULong },
+      { typeof(long), TableDataKind.Long },
+
+      { typeof(float), TableDataKind.Float },
+      { typeof(double), TableDataKind.Double },
+      { typeof(decimal), TableDataKind.Decimal },
+
+      { typeof(char), TableDataKind.Char },
+      { typeof(string), TableDataKind.String },
+      { typeof(bool), TableDataKind.Bool },
+
+      { typeof(TimeSpan), TableDataKind.TimeSpan },
+      { typeof(DateTime), TableDataKind.DateTime },
+      { typeof(DateTimeOffset), TableDataKind.DateTimeOffset },
+      { typeof(TimeZoneInfo), TableDataKind.TimeZoneInfo },
+   };
+
    private record class KeyValuePairAccessor(Func<object, string> GetKey, Func<object, object?> GetValue);
    private static readonly ReaderWriterLockSlim AccessorsLock = new ReaderWriterLockSlim();
    private static readonly ConditionalWeakTable<Type, KeyValuePairAccessor> KeyValuePairAccessors = new ConditionalWeakTable<Type, KeyValuePairAccessor>();
@@ -168,7 +193,7 @@ public static class TableInfoHelper
          return null;
 
       Type type = value.GetType();
-      if (TableInfoSerialiser.DataKinds.ContainsKey(type))
+      if (DataKinds.ContainsKey(type))
          return value;
 
       if (IsDictionary(type))

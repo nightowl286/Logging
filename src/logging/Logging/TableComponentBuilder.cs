@@ -1,11 +1,12 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Abstractions;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData.Tables;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
-using TNO.Logging.Writing.Abstractions.Loggers;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging;
 
 /// <summary>
 /// Denotes a builder for <see cref="ITableComponent"/> data.

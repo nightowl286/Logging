@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 
-namespace TNO.Logging.Writing.Abstractions.Loggers;
+namespace TNO.Logging.Abstractions;
 
 /// <summary>
 /// Contains useful extension methods related to the <see cref="IEntryBuilder"/>.

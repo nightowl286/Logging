@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\common\Common.Shared\Common.Shared.csproj" />
     <ProjectReference Include="..\..\common\Common\Common.csproj" />
     <ProjectReference Include="..\..\common\exceptions\Common.Exceptions\Common.Exceptions.csproj" />
+    <ProjectReference Include="..\..\logging\Logging\Logging.csproj" />
     <ProjectReference Include="..\Writing.Abstractions\Writing.Abstractions.csproj" />
   </ItemGroup>
 

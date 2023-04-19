@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using TNO.Logging.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -7,10 +8,11 @@ using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
+using TNO.Logging.Logging.Helpers;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
-using TNO.Logging.Writing.Abstractions.Loggers;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging;
 
 /// <summary>
 /// Represents a builder for log entries.

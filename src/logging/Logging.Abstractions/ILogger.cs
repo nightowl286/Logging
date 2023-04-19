@@ -6,7 +6,7 @@ using System.Threading;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 
-namespace TNO.Logging.Writing.Abstractions.Loggers;
+namespace TNO.Logging.Abstractions;
 
 /// <summary>
 /// Denotes a logger.

@@ -2,7 +2,7 @@
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 
-namespace TNO.Logging.Writing.Abstractions.Loggers;
+namespace TNO.Logging.Writing.Abstractions;
 
 /// <summary>
 /// Denotes a context that stores information about the current logging session.

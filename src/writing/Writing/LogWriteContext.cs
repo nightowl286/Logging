@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Types;
-using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.IdFactories;
+using TNO.Logging.Common.IdFactories;
+using TNO.Logging.Writing.Abstractions;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Writing;
 
 /// <summary>
 /// Represents a context that handles information about the current logging session.

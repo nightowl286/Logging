@@ -1,8 +1,9 @@
-﻿using TNO.Logging.Writing.Abstractions.Collectors;
+﻿using TNO.Logging.Abstractions;
+using TNO.Logging.Writing.Abstractions;
+using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
-using TNO.Logging.Writing.Abstractions.Loggers;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging;
 
 /// <summary>
 /// Represents a scoped logger.

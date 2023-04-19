@@ -8,8 +8,8 @@ using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
-using TNO.Logging.Writing.Abstractions.Loggers;
 using BindingFlags = System.Reflection.BindingFlags;
 using MethodBase = System.Reflection.MethodBase;
 using MethodImplAttributes = System.Reflection.MethodImplAttributes;
@@ -17,7 +17,7 @@ using ReflectionConstructorInfo = System.Reflection.ConstructorInfo;
 using ReflectionMethodInfo = System.Reflection.MethodInfo;
 using ReflectionParameterInfo = System.Reflection.ParameterInfo;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging.Helpers;
 
 /// <summary>
 /// Contains useful functions related to the <see cref="IStackTraceInfo"/>.
@@ -52,8 +52,8 @@ public static class StackTraceInfoHelper
          MethodBase? methodBase = frame?.GetMethod();
 
          bool shouldSkip =
-            (methodBase is null) ||
-            ((ShouldShowInStackTrace(methodBase) == false) && (i < frameCount - 1));
+            methodBase is null ||
+            ShouldShowInStackTrace(methodBase) == false && i < frameCount - 1;
 
          if (shouldSkip) continue;
          Debug.Assert(methodBase is not null && frame is not null);
@@ -122,7 +122,7 @@ public static class StackTraceInfoHelper
       mainMethod = null;
 
       Type? declaringType = possibleSecondaryMethod.DeclaringType;
-      if (declaringType is null || (declaringType.IsDefined<CompilerGeneratedAttribute>(false) == false))
+      if (declaringType is null || declaringType.IsDefined<CompilerGeneratedAttribute>(false) == false)
          return false;
 
       bool isTypeStateMachine =

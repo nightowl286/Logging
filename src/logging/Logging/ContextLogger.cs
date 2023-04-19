@@ -1,12 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
+using TNO.Logging.Abstractions;
+using TNO.Logging.Abstractions.Scopes;
 using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.IdFactories;
+using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
-using TNO.Logging.Writing.Abstractions.Loggers;
-using TNO.Logging.Writing.Abstractions.Loggers.Scopes;
-using TNO.Logging.Writing.IdFactories;
 
-namespace TNO.Logging.Writing.Loggers;
+namespace TNO.Logging.Logging;
 
 /// <summary>
 /// Represents a logger bound to a context.
@@ -24,7 +25,7 @@ public class ContextLogger : BasicLogger, IContextLogger
    /// <param name="exceptionInfoConverter">The <see cref="IExceptionInfoConverter"/> to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="internalLogger">The internal logger to use.</param>
-   internal ContextLogger(
+   public ContextLogger(
       ILogDataCollector collector,
       ILogWriteContext writeContext,
       IExceptionInfoConverter exceptionInfoConverter,
