@@ -1,7 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
-using TNO.Logging.Reading.Abstractions.LogData.TypeReferences;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.LogData.TypeReferences.Versions;
 
@@ -9,16 +8,20 @@ namespace TNO.Logging.Reading.LogData.TypeReferences.Versions;
 /// A deserialiser for <see cref="TypeReference"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class TypeReferenceDeserialiser0 : ITypeReferenceDeserialiser
+public sealed class TypeReferenceDeserialiser0 : IDeserialiser<TypeReference>
 {
    #region Fields
-   private readonly ITypeInfoDeserialiser _typeInfoDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="TypeReferenceDeserialiser0"/>.</summary>
-   /// <param name="typeInfoDeserialiser">The <see cref="ITypeInfoDeserialiser"/> to use.</param>
-   public TypeReferenceDeserialiser0(ITypeInfoDeserialiser typeInfoDeserialiser) => _typeInfoDeserialiser = typeInfoDeserialiser;
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+
+   public TypeReferenceDeserialiser0(IDeserialiser deserialiser)
+   {
+      _deserialiser = deserialiser;
+   }
    #endregion
 
    #region Methods
@@ -26,7 +29,7 @@ public sealed class TypeReferenceDeserialiser0 : ITypeReferenceDeserialiser
    public TypeReference Deserialise(BinaryReader reader)
    {
       ulong id = reader.ReadUInt64();
-      ITypeInfo typeInfo = _typeInfoDeserialiser.Deserialise(reader);
+      _deserialiser.Deserialise(reader, out ITypeInfo typeInfo);
 
       return TypeReferenceFactory.Version0(id, typeInfo);
    }

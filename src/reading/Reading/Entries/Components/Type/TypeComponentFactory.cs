@@ -1,11 +1,10 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Type;
 
 namespace TNO.Logging.Reading.Entries.Components.Type;
 
 /// <summary>
-/// A factory class that should be used in instances of the <see cref="ITypeComponentDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="ITypeComponent"/>.
 /// </summary>
 internal static class TypeComponentFactory
 {

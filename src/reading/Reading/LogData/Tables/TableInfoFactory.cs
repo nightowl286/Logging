@@ -1,11 +1,10 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.LogData.Tables;
-using TNO.Logging.Reading.Abstractions.LogData.Tables;
 
 namespace TNO.Logging.Reading.LogData.Tables;
 
 /// <summary>
-/// A factory class that should be used in instances of the <see cref="ITableInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="ITableInfo"/>.
 /// </summary>
 internal static class TableInfoFactory
 {

@@ -3,8 +3,8 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.Entries;
-using TNO.Logging.Reading.Abstractions.Entries.Components;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
+using TNO.Logging.Reading.Entries.Components;
 
 namespace TNO.Logging.Reading.Entries.Versions;
 
@@ -12,18 +12,18 @@ namespace TNO.Logging.Reading.Entries.Versions;
 /// A deserialiser for <see cref="IEntry"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class EntryDeserialiser0 : IEntryDeserialiser
+public sealed class EntryDeserialiser0 : IDeserialiser<IEntry>
 {
    #region Fields
-   private IComponentDeserialiserDispatcher _componentDeserialiser;
+   private readonly ComponentDeserialiserDispatcher _componentDeserialiserDispatcher;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="EntryDeserialiser0"/>.</summary>
-   /// <param name="componentDeserialiser">The component deserialiser to use.</param>
-   public EntryDeserialiser0(IComponentDeserialiserDispatcher componentDeserialiser)
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+   public EntryDeserialiser0(IDeserialiser deserialiser)
    {
-      _componentDeserialiser = componentDeserialiser;
+      _componentDeserialiserDispatcher = new ComponentDeserialiserDispatcher(deserialiser);
    }
    #endregion
 
@@ -48,7 +48,7 @@ public sealed class EntryDeserialiser0 : IEntryDeserialiser
       ComponentKind kinds = (ComponentKind)rawKinds;
       foreach (ComponentKind kind in kinds.SplitValuesAscending())
       {
-         IComponent component = _componentDeserialiser.Deserialise(reader, kind);
+         IComponent component = _componentDeserialiserDispatcher.Deserialise(reader, kind);
          components.Add(kind, component);
       }
 

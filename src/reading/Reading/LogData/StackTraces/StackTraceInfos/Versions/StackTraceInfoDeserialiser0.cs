@@ -1,7 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackFrameInfos;
-using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackTraceInfos;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.LogData.Methods.StackTraceInfos;
 
 namespace TNO.Logging.Reading.LogData.StackTraces.StackTraceInfos.Versions;
@@ -10,18 +9,19 @@ namespace TNO.Logging.Reading.LogData.StackTraces.StackTraceInfos.Versions;
 /// A deserialiser for <see cref="IStackTraceInfo"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class StackTraceInfoDeserialiser0 : IStackTraceInfoDeserialiser
+public sealed class StackTraceInfoDeserialiser0 : IDeserialiser<IStackTraceInfo>
 {
    #region Fields
-   private readonly IStackFrameInfoDeserialiser _stackFrameInfoDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="StackTraceInfoDeserialiser0"/>.</summary>
-   /// <param name="stackFrameInfoDeserialiser">The <see cref="IStackFrameInfoDeserialiser"/> to use.</param>
-   public StackTraceInfoDeserialiser0(IStackFrameInfoDeserialiser stackFrameInfoDeserialiser)
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+
+   public StackTraceInfoDeserialiser0(IDeserialiser deserialiser)
    {
-      _stackFrameInfoDeserialiser = stackFrameInfoDeserialiser;
+      _deserialiser = deserialiser;
    }
    #endregion
 
@@ -35,7 +35,7 @@ public sealed class StackTraceInfoDeserialiser0 : IStackTraceInfoDeserialiser
       IStackFrameInfo[] frames = new IStackFrameInfo[frameCount];
       for (int i = 0; i < frameCount; i++)
       {
-         IStackFrameInfo frame = _stackFrameInfoDeserialiser.Deserialise(reader);
+         _deserialiser.Deserialise(reader, out IStackFrameInfo frame);
          frames[i] = frame;
       }
 

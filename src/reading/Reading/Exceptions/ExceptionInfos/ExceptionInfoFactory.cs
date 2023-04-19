@@ -2,12 +2,11 @@
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Exceptions;
-using TNO.Logging.Reading.Abstractions.Exceptions.ExceptionInfos;
 
 namespace TNO.Logging.Reading.Exceptions.ExceptionInfos;
 
 /// <summary>
-/// A factory that should be used in instances of the <see cref="IExceptionInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="IExceptionInfo"/>.
 /// </summary>
 internal static class ExceptionInfoFactory
 {

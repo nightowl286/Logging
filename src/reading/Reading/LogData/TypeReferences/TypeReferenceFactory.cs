@@ -1,10 +1,9 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
-using TNO.Logging.Reading.Abstractions.LogData.TypeReferences;
 
 namespace TNO.Logging.Reading.LogData.TypeReferences;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="ITypeReferenceDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="TypeReference"/>.
 /// </summary>
 internal static class TypeReferenceFactory
 {

@@ -1,10 +1,9 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
 
 namespace TNO.Logging.Reading.LogData.TagReferences;
 
 /// <summary>
-/// A factory that should be used in instances of the <see cref="ITagReferenceDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="TagReference"/>.
 /// </summary>
 internal static class TagReferenceFactory
 {

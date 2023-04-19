@@ -5,7 +5,7 @@ using TNO.Logging.Reading.Abstractions.Deserialisers;
 namespace TNO.Logging.Reading;
 
 /// <summary>
-/// Represents a provider for instances of <see cref="IDeserialiser"/>.
+/// Represents a provider for instances of <see cref="IDeserialiser{T}"/>.
 /// </summary>
 internal class DeserialiserProvider : IDeserialiserProvider
 {
@@ -16,6 +16,6 @@ internal class DeserialiserProvider : IDeserialiserProvider
 
    #region Methods
    /// <inheritdoc/>
-   public T GetDeserialiser<T>() where T : notnull, IDeserialiser => _requester.Get<T>();
+   public IDeserialiser<T> GetDeserialiser<T>() where T : notnull => _requester.Get<IDeserialiser<T>>();
    #endregion
 }

@@ -11,9 +11,7 @@ public class TypeReferenceReadWriteTests : ReadWriteTestsBase<TypeReferenceSeria
    protected override void Setup(out TypeReferenceSerialiser writer, out TypeReferenceDeserialiserLatest reader)
    {
       writer = new TypeReferenceSerialiser(GeneralSerialiser.Instance);
-
-      reader = new TypeReferenceDeserialiserLatest(
-         new TypeInfoDeserialiserLatest());
+      reader = new TypeReferenceDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
    protected override TypeReference CreateData()

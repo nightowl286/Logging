@@ -1,11 +1,10 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
 
 namespace TNO.Logging.Reading.Entries.Components.Tag;
 
 /// <summary>
-/// A factory class that should be used in instances of the <see cref="ITagComponentDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="ITagComponent"/>.
 /// </summary>
 internal static class TagComponentFactory
 {

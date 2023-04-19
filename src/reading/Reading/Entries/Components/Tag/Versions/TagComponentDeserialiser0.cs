@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.Entries.Components.Tag.Versions;
 
@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.Entries.Components.Tag.Versions;
 /// A deserialiser for <see cref="ITagComponent"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class TagComponentDeserialiser0 : ITagComponentDeserialiser
+public sealed class TagComponentDeserialiser0 : IDeserialiser<ITagComponent>
 {
    #region Methods
    /// <inheritdoc/>

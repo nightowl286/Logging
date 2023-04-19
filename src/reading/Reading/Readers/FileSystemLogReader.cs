@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using TNO.Common.Extensions;
-using TNO.Logging.Common;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
@@ -9,13 +8,7 @@ using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Reading.Abstractions;
-using TNO.Logging.Reading.Abstractions.Entries;
-using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
-using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
-using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
-using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
-using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
-using TNO.Logging.Reading.Abstractions.LogData.TypeReferences;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Readers;
 
 namespace TNO.Logging.Reading.Readers;
@@ -90,41 +83,41 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
-      IDeserialiserProvider deserialiserProvider = _facade.GenerateProvider(map);
+      IDeserialiserProvider provider = _facade.GenerateProvider(map);
 
-      Entries = new BinaryDeserialiserReader<IEntry>(
+      Entries = new DeserialiserReader<IEntry>(
          GetReaderPath(FileSystemConstants.EntryPath),
-         deserialiserProvider.GetDeserialiser<IEntryDeserialiser>());
+         provider.GetDeserialiser<IEntry>());
 
-      FileReferences = new BinaryDeserialiserReader<FileReference>(
+      FileReferences = new DeserialiserReader<FileReference>(
          GetReaderPath(FileSystemConstants.FilePath),
-         deserialiserProvider.GetDeserialiser<IFileReferenceDeserialiser>());
+         provider.GetDeserialiser<FileReference>());
 
-      ContextInfos = new BinaryDeserialiserReader<ContextInfo>(
+      ContextInfos = new DeserialiserReader<ContextInfo>(
          GetReaderPath(FileSystemConstants.ContextInfoPath),
-         deserialiserProvider.GetDeserialiser<IContextInfoDeserialiser>());
+         provider.GetDeserialiser<ContextInfo>());
 
-      TagReferences = new BinaryDeserialiserReader<TagReference>(
+      TagReferences = new DeserialiserReader<TagReference>(
          GetReaderPath(FileSystemConstants.TagPath),
-         deserialiserProvider.GetDeserialiser<ITagReferenceDeserialiser>());
+         provider.GetDeserialiser<TagReference>());
 
-      TableKeyReferences = new BinaryDeserialiserReader<TableKeyReference>(
+      TableKeyReferences = new DeserialiserReader<TableKeyReference>(
          GetReaderPath(FileSystemConstants.TableKeyPath),
-         deserialiserProvider.GetDeserialiser<ITableKeyReferenceDeserialiser>());
+         provider.GetDeserialiser<TableKeyReference>());
 
-      AssemblyReferences = new BinaryDeserialiserReader<AssemblyReference>(
+      AssemblyReferences = new DeserialiserReader<AssemblyReference>(
          GetReaderPath(FileSystemConstants.AssemblyPath),
-         deserialiserProvider.GetDeserialiser<IAssemblyReferenceDeserialiser>());
+         provider.GetDeserialiser<AssemblyReference>());
 
-      TypeReferences = new BinaryDeserialiserReader<TypeReference>(
+      TypeReferences = new DeserialiserReader<TypeReference>(
          GetReaderPath(FileSystemConstants.TypePath),
-         deserialiserProvider.GetDeserialiser<ITypeReferenceDeserialiser>());
+         provider.GetDeserialiser<TypeReference>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
       string path = Path.Combine(directory, FileSystemConstants.VersionPath);
       using BinaryReader reader = OpenReader(path);
-      IDataVersionMapDeserialiser deserialiser = _facade.GetDeserialiser<IDataVersionMapDeserialiser>();
+      IDeserialiser<DataVersionMap> deserialiser = _facade.GetDeserialiser<DataVersionMap>();
       DataVersionMap map = deserialiser.Deserialise(reader);
 
       return map;

@@ -1,10 +1,9 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
-using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
 
 namespace TNO.Logging.Reading.LogData.TableKeyReferences;
 
 /// <summary>
-/// A factory that should be used in instances of the <see cref="ITableKeyReferenceDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="TableKeyReference"/>.
 /// </summary>
 internal static class TableKeyReferenceFactory
 {

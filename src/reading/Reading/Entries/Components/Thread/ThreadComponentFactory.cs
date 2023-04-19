@@ -1,9 +1,8 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
 
 /// <summary>
-/// A factory class that should be used in instances of the <see cref="IThreadComponentDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="IThreadComponent"/>.
 /// </summary>
 internal static class ThreadComponentFactory
 {

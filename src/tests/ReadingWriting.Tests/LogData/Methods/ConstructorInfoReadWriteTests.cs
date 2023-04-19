@@ -11,9 +11,7 @@ public class ConstructorInfoReadWriteTests : ReadWriteTestsBase<ConstructorInfoS
    protected override void Setup(out ConstructorInfoSerialiser writer, out ConstructorInfoDeserialiserLatest reader)
    {
       writer = new ConstructorInfoSerialiser(GeneralSerialiser.Instance);
-
-      reader = new ConstructorInfoDeserialiserLatest(
-         new ParameterInfoDeserialiserLatest());
+      reader = new ConstructorInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
    protected override IConstructorInfo CreateData()
    {
@@ -21,7 +19,6 @@ public class ConstructorInfoReadWriteTests : ReadWriteTestsBase<ConstructorInfoS
          1,
          Array.Empty<IParameterInfo>(),
          "constructor");
-
 
       return constructorInfo;
    }

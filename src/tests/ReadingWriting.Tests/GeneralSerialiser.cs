@@ -14,7 +14,7 @@ internal static class GeneralSerialiser
    #endregion
 
    #region Functions
-   public static ISerialiser GetSerialiser()
+   private static ISerialiser GetSerialiser()
    {
       IServiceScope scope = new ServiceFacade().CreateNew();
       IServiceRegistrar registrar = scope.Registrar;
@@ -32,10 +32,11 @@ internal static class GeneralSerialiser
    {
       Assembly assembly = Assembly.Load("TNO.Logging.Writing");
       Type[] allTypes = assembly.GetTypes();
+
       foreach (Type type in allTypes)
       {
-         IEnumerable<Type> interfaceImplementations = type.GetOpenInterfaceImplementations(typeof(ISerialiser<>));
-         foreach (Type implementation in interfaceImplementations)
+         IEnumerable<Type> implementations = type.GetOpenInterfaceImplementations(typeof(ISerialiser<>));
+         foreach (Type implementation in implementations)
             yield return (implementation, type);
       }
    }

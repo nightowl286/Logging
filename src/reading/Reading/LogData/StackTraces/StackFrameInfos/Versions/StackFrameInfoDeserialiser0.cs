@@ -1,8 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.Methods;
-using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackFrameInfos;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Deserialisers;
 using TNO.Logging.Reading.LogData.Methods.StackFrameInfos;
 
@@ -12,18 +11,19 @@ namespace TNO.Logging.Reading.LogData.StackTraces.StackFrameInfos.Versions;
 /// A deserialiser for <see cref="IStackFrameInfo"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class StackFrameInfoDeserialiser0 : IStackFrameInfoDeserialiser
+public sealed class StackFrameInfoDeserialiser0 : IDeserialiser<IStackFrameInfo>
 {
    #region Fields
-   private readonly IMethodBaseInfoDeserialiserDispatcher _methodBaseInfoDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="StackFrameInfoDeserialiser0"/>.</summary>
-   /// <param name="methodBaseInfoDeserialiser">The <see cref="IMethodBaseInfoDeserialiserDispatcher"/> to use.</param>
-   public StackFrameInfoDeserialiser0(IMethodBaseInfoDeserialiserDispatcher methodBaseInfoDeserialiser)
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+
+   public StackFrameInfoDeserialiser0(IDeserialiser deserialiser)
    {
-      _methodBaseInfoDeserialiser = methodBaseInfoDeserialiser;
+      _deserialiser = deserialiser;
    }
    #endregion
 
@@ -31,7 +31,7 @@ public sealed class StackFrameInfoDeserialiser0 : IStackFrameInfoDeserialiser
    /// <inheritdoc/>
    public IStackFrameInfo Deserialise(BinaryReader reader)
    {
-      IMethodBaseInfo ReadMethodBaseInfo() => _methodBaseInfoDeserialiser.Deserialise(reader);
+      IMethodBaseInfo ReadMethodBaseInfo() => _deserialiser.Deserialise<IMethodBaseInfo>(reader);
 
       ulong fileId = reader.ReadUInt64();
       uint line = reader.ReadUInt32();

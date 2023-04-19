@@ -1,7 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.MethodInfos;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.LogData.Methods.MethodInfos.Versions;
 
@@ -9,18 +8,19 @@ namespace TNO.Logging.Reading.LogData.Methods.MethodInfos.Versions;
 /// A deserialiser for <see cref="IMethodInfo"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class MethodInfoDeserialiser0 : IMethodInfoDeserialiser
+public sealed class MethodInfoDeserialiser0 : IDeserialiser<IMethodInfo>
 {
    #region Fields
-   private readonly IParameterInfoDeserialiser _parameterInfoDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Methods
    /// <summary>Creates a new instance of the <see cref="MethodInfoDeserialiser0"/>.</summary>
-   /// <param name="parameterInfoDeserialiser">The parameter info deserialiser to use.</param>
-   public MethodInfoDeserialiser0(IParameterInfoDeserialiser parameterInfoDeserialiser)
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+
+   public MethodInfoDeserialiser0(IDeserialiser deserialiser)
    {
-      _parameterInfoDeserialiser = parameterInfoDeserialiser;
+      _deserialiser = deserialiser;
    }
    #endregion
 
@@ -44,7 +44,7 @@ public sealed class MethodInfoDeserialiser0 : IMethodInfoDeserialiser
       IParameterInfo[] parameterInfos = new IParameterInfo[parameterInfosCount];
       for (int i = 0; i < parameterInfosCount; i++)
       {
-         IParameterInfo parameterInfo = _parameterInfoDeserialiser.Deserialise(reader);
+         _deserialiser.Deserialise(reader, out IParameterInfo parameterInfo);
          parameterInfos[i] = parameterInfo;
       }
 

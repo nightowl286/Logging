@@ -1,11 +1,10 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.LogData.Methods;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.MethodInfos;
 
 namespace TNO.Logging.Reading.LogData.Methods.MethodInfos;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="IMethodInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="IMethodInfo"/>.
 /// </summary>
 internal static class MethodInfoFactory
 {

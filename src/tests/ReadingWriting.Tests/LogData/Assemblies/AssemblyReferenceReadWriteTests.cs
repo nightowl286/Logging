@@ -13,9 +13,7 @@ public class AssemblyReferenceReadWriteTests : ReadWriteTestsBase<AssemblyRefere
    protected override void Setup(out AssemblyReferenceSerialiser writer, out AssemblyReferenceDeserialiserLatest reader)
    {
       writer = new AssemblyReferenceSerialiser(GeneralSerialiser.Instance);
-
-      reader = new AssemblyReferenceDeserialiserLatest(
-         new AssemblyInfoDeserialiserLatest());
+      reader = new AssemblyReferenceDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
    protected override AssemblyReference CreateData()

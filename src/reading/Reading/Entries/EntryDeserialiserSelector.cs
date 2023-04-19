@@ -1,15 +1,15 @@
 ﻿using TNO.DependencyInjection.Abstractions.Components;
+using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
-using TNO.Logging.Reading.Abstractions.Entries;
 using TNO.Logging.Reading.Deserialisers;
 using TNO.Logging.Reading.Entries.Versions;
 
 namespace TNO.Logging.Reading.Entries;
 
 /// <summary>
-/// An <see cref="IDeserialiserSelector{T}"/> for versions of the <see cref="IEntryDeserialiser"/>.
+/// An <see cref="IDeserialiserSelector{T}"/> for versions of the <see cref="IEntry"/>.
 /// </summary>
-internal class EntryDeserialiserSelector : DeserialiserSelectorBase<IEntryDeserialiser>, IEntryDeserialiserSelector
+internal class EntryDeserialiserSelector : DeserialiserSelectorBase<IEntry>
 {
    public EntryDeserialiserSelector(IServiceBuilder serviceBuilder) : base(serviceBuilder)
    {

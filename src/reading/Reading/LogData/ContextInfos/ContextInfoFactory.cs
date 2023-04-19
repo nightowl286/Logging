@@ -1,10 +1,9 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
 
 namespace TNO.Logging.Reading.LogData.ContextInfos;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="IContextInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="ContextInfo"/>.
 /// </summary>
 internal static class ContextInfoFactory
 {

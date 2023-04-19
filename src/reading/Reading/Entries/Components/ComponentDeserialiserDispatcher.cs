@@ -1,16 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
-using TNO.Logging.Reading.Abstractions.Entries.Components;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Assembly;
-using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
-using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Type;
 
 namespace TNO.Logging.Reading.Entries.Components;
 
@@ -19,69 +9,39 @@ namespace TNO.Logging.Reading.Entries.Components;
 /// will deserialise a <see cref="IComponent"/> based on a 
 /// given <see cref="ComponentKind"/>.
 /// </summary>
-public class ComponentDeserialiserDispatcher : IComponentDeserialiserDispatcher
+public class ComponentDeserialiserDispatcher
 {
    #region Fields
-   private readonly IMessageComponentDeserialiser _messageDeserialiser;
-   private readonly ITagComponentDeserialiser _tagDeserialiser;
-   private readonly IThreadComponentDeserialiser _threadDeserialiser;
-   private readonly IEntryLinkComponentDeserialiser _entryLinkDeserialiser;
-   private readonly ITableComponentDeserialiser _tableDeserialiser;
-   private readonly IAssemblyComponentDeserialiser _assemblyDeserialiser;
-   private readonly IStackTraceComponentDeserialiser _stackTraceDeserialiser;
-   private readonly ITypeComponentDeserialiser _typeDeserialiser;
-   private readonly IExceptionComponentDeserialiser _exceptionDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ComponentDeserialiserDispatcher"/>.</summary>
-   /// <param name="messageDeserialiser">The message deserialiser to use.</param>
-   /// <param name="tagDeserialiser">The tag deserialiser to use.</param>
-   /// <param name="threadDeserialiser">The thread deserialiser to use.</param>
-   /// <param name="entryLinkDeserialiser">The entry link deserialiser to use.</param>
-   /// <param name="tableDeserialiser">The table deserialiser to use.</param>
-   /// <param name="assemblyDeserialiser">The assembly deserialiser to use.</param>
-   /// <param name="typeDeserialiser">The type deserialiser to use.</param>
-   /// <param name="stackTraceDeserialiser">The stack trace deserialiser to use.</param>
-   /// <param name="exceptionDeserialiser">The exception deserialiser to use.</param>
-   public ComponentDeserialiserDispatcher(
-      IMessageComponentDeserialiser messageDeserialiser,
-      ITagComponentDeserialiser tagDeserialiser,
-      IThreadComponentDeserialiser threadDeserialiser,
-      IEntryLinkComponentDeserialiser entryLinkDeserialiser,
-      ITableComponentDeserialiser tableDeserialiser,
-      IAssemblyComponentDeserialiser assemblyDeserialiser,
-      ITypeComponentDeserialiser typeDeserialiser,
-      IStackTraceComponentDeserialiser stackTraceDeserialiser,
-      IExceptionComponentDeserialiser exceptionDeserialiser)
+   public ComponentDeserialiserDispatcher(IDeserialiser deserialiser)
    {
-      _messageDeserialiser = messageDeserialiser;
-      _tagDeserialiser = tagDeserialiser;
-      _threadDeserialiser = threadDeserialiser;
-      _entryLinkDeserialiser = entryLinkDeserialiser;
-      _tableDeserialiser = tableDeserialiser;
-      _assemblyDeserialiser = assemblyDeserialiser;
-      _stackTraceDeserialiser = stackTraceDeserialiser;
-      _typeDeserialiser = typeDeserialiser;
-      _exceptionDeserialiser = exceptionDeserialiser;
+      _deserialiser = deserialiser;
    }
    #endregion
 
    #region Methods
-   /// <inheritdoc/>
+   /// <summary>Deserialises an <see cref="IComponent"/> based on the given <paramref name="componentKind"/>.</summary>
+   /// <param name="reader">The reader to use.</param>
+   /// <param name="componentKind">The kind of the <see cref="IComponent"/> to deserialise.</param>
+   /// <returns>The deserialised <see cref="IComponent"/>.</returns>
+   /// <exception cref="ArgumentException">Throw if an unknown <paramref name="componentKind"/> is given.</exception>
    public IComponent Deserialise(BinaryReader reader, ComponentKind componentKind)
    {
       return componentKind switch
       {
-         ComponentKind.Message => _messageDeserialiser.Deserialise(reader),
-         ComponentKind.Tag => _tagDeserialiser.Deserialise(reader),
-         ComponentKind.Thread => _threadDeserialiser.Deserialise(reader),
-         ComponentKind.EntryLink => _entryLinkDeserialiser.Deserialise(reader),
-         ComponentKind.Table => _tableDeserialiser.Deserialise(reader),
-         ComponentKind.Assembly => _assemblyDeserialiser.Deserialise(reader),
-         ComponentKind.StackTrace => _stackTraceDeserialiser.Deserialise(reader),
-         ComponentKind.Type => _typeDeserialiser.Deserialise(reader),
-         ComponentKind.Exception => _exceptionDeserialiser.Deserialise(reader),
+         ComponentKind.Message => _deserialiser.Deserialise<IMessageComponent>(reader),
+         ComponentKind.Tag => _deserialiser.Deserialise<ITagComponent>(reader),
+         ComponentKind.Thread => _deserialiser.Deserialise<IThreadComponent>(reader),
+         ComponentKind.EntryLink => _deserialiser.Deserialise<IEntryLinkComponent>(reader),
+         ComponentKind.Table => _deserialiser.Deserialise<ITableComponent>(reader),
+         ComponentKind.Assembly => _deserialiser.Deserialise<IAssemblyComponent>(reader),
+         ComponentKind.StackTrace => _deserialiser.Deserialise<IStackTraceComponent>(reader),
+         ComponentKind.Type => _deserialiser.Deserialise<ITypeComponent>(reader),
+         ComponentKind.Exception => _deserialiser.Deserialise<IExceptionComponent>(reader),
 
          _ => throw new ArgumentException($"Unknown component kind ({componentKind}).")
       };

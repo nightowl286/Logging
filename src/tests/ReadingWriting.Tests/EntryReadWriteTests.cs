@@ -1,5 +1,4 @@
-﻿using Moq;
-using TNO.Logging.Common.Abstractions.Entries;
+﻿using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
@@ -10,9 +9,6 @@ using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData.Methods;
 using TNO.Logging.Common.LogData.StackTraces;
 using TNO.Logging.Common.LogData.Tables;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
-using TNO.Logging.Reading.Entries.Components;
-using TNO.Logging.Reading.LogData.Methods;
 using TNO.Logging.Writing.Entries;
 
 namespace TNO.ReadingWriting.Tests;
@@ -25,27 +21,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
    {
       writer = new EntrySerialiser(GeneralSerialiser.Instance);
 
-      ParameterInfoDeserialiserLatest parameterInfoDeserialiser = new ParameterInfoDeserialiserLatest();
-
-      ComponentDeserialiserDispatcher componentDeserialiser =
-         new ComponentDeserialiserDispatcher(
-            new MessageComponentDeserialiserLatest(),
-            new TagComponentDeserialiserLatest(),
-            new ThreadComponentDeserialiserLatest(),
-            new EntryLinkComponentDeserialiserLatest(),
-            new TableComponentDeserialiserLatest(
-               new TableInfoDeserialiserLatest()),
-            new AssemblyComponentDeserialiserLatest(),
-            new TypeComponentDeserialiserLatest(),
-            new StackTraceComponentDeserialiserLatest(
-               new StackTraceInfoDeserialiserLatest(
-                  new StackFrameInfoDeserialiserLatest(
-                     new MethodBaseInfoDeserialiserDispatcher(
-                        new MethodInfoDeserialiserLatest(parameterInfoDeserialiser),
-                        new ConstructorInfoDeserialiserLatest(parameterInfoDeserialiser))))),
-            Mock.Of<IExceptionComponentDeserialiser>());
-
-      reader = new EntryDeserialiserLatest(componentDeserialiser);
+      reader = new EntryDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
    protected override IEntry CreateData()

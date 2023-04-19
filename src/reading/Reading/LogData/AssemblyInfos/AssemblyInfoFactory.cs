@@ -3,12 +3,11 @@ using System.Globalization;
 using System.Reflection;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
 
 namespace TNO.Logging.Reading.LogData.AssemblyInfos;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="IAssemblyInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="IAssemblyInfo"/>.
 /// </summary>
 internal static class AssemblyInfoFactory
 {

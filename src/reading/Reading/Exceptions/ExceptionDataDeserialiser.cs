@@ -12,7 +12,7 @@ public class ExceptionDataDeserialiser : IExceptionDataDeserialiser
 {
    #region Fields
    private readonly IReadOnlyDictionary<Guid, Type> _exceptionDataDeserialiserTypes;
-   private readonly Dictionary<Type, IBinaryDeserialiser<IExceptionData>> _exceptionDataDeserialisersCache = new Dictionary<Type, IBinaryDeserialiser<IExceptionData>>();
+   private readonly Dictionary<Type, IDeserialiser<IExceptionData>> _exceptionDataDeserialisersCache = new Dictionary<Type, IDeserialiser<IExceptionData>>();
    #endregion
 
    #region Constructors
@@ -41,9 +41,9 @@ public class ExceptionDataDeserialiser : IExceptionDataDeserialiser
          return new UnknownExceptionGroupData(exceptionGroupId);
       }
 
-      if (_exceptionDataDeserialisersCache.TryGetValue(deserialiserType, out IBinaryDeserialiser<IExceptionData>? deserialiser) == false)
+      if (_exceptionDataDeserialisersCache.TryGetValue(deserialiserType, out IDeserialiser<IExceptionData>? deserialiser) == false)
       {
-         deserialiser = (IBinaryDeserialiser<IExceptionData>)Activator.CreateInstance(deserialiserType)!;
+         deserialiser = (IDeserialiser<IExceptionData>)Activator.CreateInstance(deserialiserType)!;
          _exceptionDataDeserialisersCache.Add(deserialiserType, deserialiser);
       }
 

@@ -1,11 +1,10 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
 
 namespace TNO.Logging.Reading.LogData.TypeInfos;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="ITypeInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="ITypeInfo"/>.
 /// </summary>
 internal static class TypeInfoFactory
 {

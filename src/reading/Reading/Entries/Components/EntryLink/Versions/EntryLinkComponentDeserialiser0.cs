@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.Entries.Components.EntryLink.Versions;
 
@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.Entries.Components.EntryLink.Versions;
 /// A deserialiser for <see cref="IEntryLinkComponent"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class EntryLinkComponentDeserialiser0 : IEntryLinkComponentDeserialiser
+public sealed class EntryLinkComponentDeserialiser0 : IDeserialiser<IEntryLinkComponent>
 {
    #region Methods
    /// <inheritdoc/>

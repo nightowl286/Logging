@@ -9,7 +9,7 @@ namespace TNO.ReadingWriting.Tests;
 [TestCategory(Category.Serialisation)]
 public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
    where TWriter : ISerialiser<TData>
-   where TReader : IBinaryDeserialiser<TData>
+   where TReader : IDeserialiser<TData>
 {
    #region Properties
    public static Encoding Encoding { get; } = Encoding.UTF8;

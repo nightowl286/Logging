@@ -1,8 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
-using TNO.Logging.Reading.Abstractions.Exceptions.ExceptionInfos;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.Entries.Components.Exception.Versions;
 
@@ -10,18 +9,18 @@ namespace TNO.Logging.Reading.Entries.Components.Exception.Versions;
 /// A deserialiser for <see cref="IExceptionComponent"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class ExceptionComponentDeserialiser0 : IExceptionComponentDeserialiser
+public sealed class ExceptionComponentDeserialiser0 : IDeserialiser<IExceptionComponent>
 {
    #region Fields
-   private readonly IExceptionInfoDeserialiser _exceptionInfoDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ExceptionComponentDeserialiser0"/>.</summary>
-   /// <param name="exceptionInfoDeserialiser">The <see cref="IExceptionInfoDeserialiser"/> to use.</param>
-   public ExceptionComponentDeserialiser0(IExceptionInfoDeserialiser exceptionInfoDeserialiser)
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+   public ExceptionComponentDeserialiser0(IDeserialiser deserialiser)
    {
-      _exceptionInfoDeserialiser = exceptionInfoDeserialiser;
+      _deserialiser = deserialiser;
    }
    #endregion
 
@@ -29,7 +28,7 @@ public sealed class ExceptionComponentDeserialiser0 : IExceptionComponentDeseria
    /// <inheritdoc/>
    public IExceptionComponent Deserialise(BinaryReader reader)
    {
-      IExceptionInfo exceptionInfo = _exceptionInfoDeserialiser.Deserialise(reader);
+      _deserialiser.Deserialise(reader, out IExceptionInfo exceptionInfo);
 
       return ExceptionComponentFactory.Version0(exceptionInfo);
    }

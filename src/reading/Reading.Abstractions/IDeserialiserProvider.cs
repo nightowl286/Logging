@@ -3,7 +3,7 @@
 namespace TNO.Logging.Reading.Abstractions;
 
 /// <summary>
-/// Denotes a provider for instances of <see cref="IDeserialiser"/>.
+/// Denotes a provider for instances of <see cref="IDeserialiser{T}"/>.
 /// </summary>
 public interface IDeserialiserProvider
 {
@@ -11,6 +11,6 @@ public interface IDeserialiserProvider
    /// <summary>Gets a deserialiser of the type <typeparamref name="T"/>.</summary>
    /// <typeparam name="T">The type of the deserialiser.</typeparam>
    /// <returns>A deserialiser of the type <typeparamref name="T"/>.</returns>
-   T GetDeserialiser<T>() where T : notnull, IDeserialiser;
+   IDeserialiser<T> GetDeserialiser<T>() where T : notnull;
    #endregion
 }

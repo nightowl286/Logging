@@ -1,13 +1,13 @@
 ﻿using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
-using TNO.Logging.Reading.Abstractions;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading;
 
 /// <summary>
 /// A deserialiser for <see cref="DataVersionMap"/>.
 /// </summary>
-public class DataVersionMapDeserialiser : IDataVersionMapDeserialiser
+public class DataVersionMapDeserialiser : IDeserialiser<DataVersionMap>
 {
    #region Methods
    /// <inheritdoc/>

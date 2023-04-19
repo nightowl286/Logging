@@ -1,10 +1,9 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Assemblies;
-using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
 
 namespace TNO.Logging.Reading.LogData.AssemblyReferences;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="IAssemblyReferenceDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="AssemblyReference"/>.
 /// </summary>
 internal static class AssemblyReferenceFactory
 {

@@ -1,32 +1,24 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
-using TNO.Logging.Reading.Abstractions.LogData.Methods;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.ConstructorInfos;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.MethodInfos;
 
 namespace TNO.Logging.Reading.LogData.Methods;
 
 /// <summary>
-/// Represents a <see cref="IBinaryDeserialiser{T}"/> dispatcher that will
+/// Represents a <see cref="IDeserialiser{T}"/> dispatcher that will
 /// deserialise a <see cref="IMethodBaseInfo"/> based on its <see cref="MethodKind"/>.
 /// </summary>
-public class MethodBaseInfoDeserialiserDispatcher : IMethodBaseInfoDeserialiserDispatcher
+public class MethodBaseInfoDeserialiserDispatcher : IDeserialiser<IMethodBaseInfo>
 {
    #region Fields
-   private readonly IMethodInfoDeserialiser _methodInfoDeserialiser;
-   private readonly IConstructorInfoDeserialiser _constructorInfoDeserialiser;
+   private readonly IDeserialiser _deserialiser;
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="MethodBaseInfoDeserialiserDispatcher"/>.</summary>
-   /// <param name="methodInfoDeserialiser">The method info deserialiser to use.</param>
-   /// <param name="constructorInfoDeserialiser">The constructor info deserialiser to use.</param>
-   public MethodBaseInfoDeserialiserDispatcher(
-      IMethodInfoDeserialiser methodInfoDeserialiser,
-      IConstructorInfoDeserialiser constructorInfoDeserialiser)
+   /// <param name="deserialiser">The general <see cref="IDeserialiser"/> to use.</param>
+   public MethodBaseInfoDeserialiserDispatcher(IDeserialiser deserialiser)
    {
-      _methodInfoDeserialiser = methodInfoDeserialiser;
-      _constructorInfoDeserialiser = constructorInfoDeserialiser;
+      _deserialiser = deserialiser;
    }
    #endregion
 
@@ -39,8 +31,8 @@ public class MethodBaseInfoDeserialiserDispatcher : IMethodBaseInfoDeserialiserD
 
       return methodKind switch
       {
-         MethodKind.Method => _methodInfoDeserialiser.Deserialise(reader),
-         MethodKind.Constructor => _constructorInfoDeserialiser.Deserialise(reader),
+         MethodKind.Method => _deserialiser.Deserialise<IMethodInfo>(reader),
+         MethodKind.Constructor => _deserialiser.Deserialise<IConstructorInfo>(reader),
 
          _ => throw new InvalidDataException($"Unknown method kind ({methodKind}).")
       };

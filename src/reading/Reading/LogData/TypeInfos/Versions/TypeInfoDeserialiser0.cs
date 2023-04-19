@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.LogData.TypeInfos.Versions;
 
@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.LogData.TypeInfos.Versions;
 /// A deserialiser for <see cref="ITypeInfo"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class TypeInfoDeserialiser0 : ITypeInfoDeserialiser
+public sealed class TypeInfoDeserialiser0 : IDeserialiser<ITypeInfo>
 {
    #region Methods
    /// <inheritdoc/>

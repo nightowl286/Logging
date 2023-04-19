@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.Entries.Components.Thread.Versions;
 
@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.Entries.Components.Thread.Versions;
 /// A deserialiser for <see cref="IThreadComponent"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class ThreadComponentDeserialiser0 : IThreadComponentDeserialiser
+public sealed class ThreadComponentDeserialiser0 : IDeserialiser<IThreadComponent>
 {
    #region Methods
    /// <inheritdoc/>

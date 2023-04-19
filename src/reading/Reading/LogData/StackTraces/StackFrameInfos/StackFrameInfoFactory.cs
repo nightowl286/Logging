@@ -1,12 +1,11 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.LogData.StackTraces;
-using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackFrameInfos;
 
 namespace TNO.Logging.Reading.LogData.Methods.StackFrameInfos;
 
 /// <summary>
-/// A factory that should be used in instances of the see <see cref="IStackFrameInfoDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="IStackFrameInfo"/>.
 /// </summary>
 internal static class StackFrameInfoFactory
 {

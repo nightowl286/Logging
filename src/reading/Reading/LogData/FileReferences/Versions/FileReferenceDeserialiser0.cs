@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.LogData.FileReferences.Versions;
 
@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.LogData.FileReferences.Versions;
 /// A deserialiser for <see cref="FileReference"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class FileReferenceDeserialiser0 : IFileReferenceDeserialiser
+public sealed class FileReferenceDeserialiser0 : IDeserialiser<FileReference>
 {
    #region Methods
    /// <inheritdoc/>

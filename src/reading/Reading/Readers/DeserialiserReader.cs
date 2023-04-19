@@ -3,16 +3,16 @@ using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Readers;
 
 namespace TNO.Logging.Reading.Readers;
-internal class BinaryDeserialiserReader<T> : IReader<T>, IDisposable
+internal class DeserialiserReader<T> : IReader<T>, IDisposable
 {
    #region Fields
-   private readonly IBinaryDeserialiser<T> _deserialiser;
+   private readonly IDeserialiser<T> _deserialiser;
    private readonly string _directory;
 
    private BinaryReader? _reader;
    private uint _currentChunk;
    #endregion
-   public BinaryDeserialiserReader(string directory, IBinaryDeserialiser<T> deserialiser)
+   public DeserialiserReader(string directory, IDeserialiser<T> deserialiser)
    {
       _directory = directory;
       _deserialiser = deserialiser;

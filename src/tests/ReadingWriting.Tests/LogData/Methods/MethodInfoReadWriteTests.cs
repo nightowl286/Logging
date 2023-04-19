@@ -11,9 +11,7 @@ public class MethodInfoReadWriteTests : ReadWriteTestsBase<MethodInfoSerialiser,
    protected override void Setup(out MethodInfoSerialiser writer, out MethodInfoDeserialiserLatest reader)
    {
       writer = new MethodInfoSerialiser(GeneralSerialiser.Instance);
-
-      reader = new MethodInfoDeserialiserLatest(
-         new ParameterInfoDeserialiserLatest());
+      reader = new MethodInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
    protected override IMethodInfo CreateData()
    {

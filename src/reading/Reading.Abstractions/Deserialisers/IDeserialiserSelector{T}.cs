@@ -3,9 +3,10 @@
 namespace TNO.Logging.Reading.Abstractions.Deserialisers;
 
 /// <summary>
-/// Denotes a general deserialiser selector.
+/// Denotes a selector for deserialisers of the type <typeparamref name="T"/>.
 /// </summary>
-public interface IDeserialiserSelector
+/// <typeparam name="T">The type of the <see cref="IDeserialiser{T}"/>.</typeparam>
+public interface IDeserialiserSelector<T> where T : notnull
 {
    #region Methods
    /// <summary>Checks if a deserialiser with the given <paramref name="version"/> can be selected.</summary>
@@ -18,6 +19,6 @@ public interface IDeserialiserSelector
    /// <param name="version">The version of the deserialiser.</param>
    /// <param name="deserialiser">The deserialiser that was selected.</param>
    /// <returns><see langword="true"/> if a <paramref name="deserialiser"/> could be selected, <see langword="false"/> otherwise.</returns>
-   bool TrySelect<T>(uint version, [NotNullWhen(true)] out IDeserialiser<T>? deserialiser);
+   bool TrySelect(uint version, [NotNullWhen(true)] out IDeserialiser<T>? deserialiser);
    #endregion
 }

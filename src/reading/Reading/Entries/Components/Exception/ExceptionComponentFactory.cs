@@ -1,12 +1,11 @@
 ﻿using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Entries.Components;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
 
 namespace TNO.Logging.Reading.Entries.Components.Exception;
 
 /// <summary>
-/// A factory class that should be used in instances of the <see cref="IExceptionComponentDeserialiser"/>.
+/// A factory class that should be used in deserialisers for <see cref="IExceptionComponent"/>.
 /// </summary>
 internal static class ExceptionComponentFactory
 {

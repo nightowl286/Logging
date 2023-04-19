@@ -4,39 +4,21 @@ using TNO.DependencyInjection;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries;
+using TNO.Logging.Common.Abstractions.Entries.Components;
+using TNO.Logging.Common.Abstractions.LogData;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
-using TNO.Logging.Reading.Abstractions.Entries;
-using TNO.Logging.Reading.Abstractions.Entries.Components;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Assembly;
-using TNO.Logging.Reading.Abstractions.Entries.Components.EntryLink;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Exception;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Message;
-using TNO.Logging.Reading.Abstractions.Entries.Components.StackTrace;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Table;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Tag;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Thread;
-using TNO.Logging.Reading.Abstractions.Entries.Components.Type;
 using TNO.Logging.Reading.Abstractions.Exceptions;
-using TNO.Logging.Reading.Abstractions.Exceptions.ExceptionInfos;
-using TNO.Logging.Reading.Abstractions.LogData.AssemblyInfos;
-using TNO.Logging.Reading.Abstractions.LogData.AssemblyReferences;
-using TNO.Logging.Reading.Abstractions.LogData.ContextInfos;
-using TNO.Logging.Reading.Abstractions.LogData.FileReferences;
-using TNO.Logging.Reading.Abstractions.LogData.Methods;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.ConstructorInfos;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.MethodInfos;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
-using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackFrameInfos;
-using TNO.Logging.Reading.Abstractions.LogData.StackTraces.StackTraceInfos;
-using TNO.Logging.Reading.Abstractions.LogData.TableKeyReferences;
-using TNO.Logging.Reading.Abstractions.LogData.Tables;
-using TNO.Logging.Reading.Abstractions.LogData.TagReferences;
-using TNO.Logging.Reading.Abstractions.LogData.TypeInfos;
-using TNO.Logging.Reading.Abstractions.LogData.TypeReferences;
 using TNO.Logging.Reading.Abstractions.Readers;
+using TNO.Logging.Reading.Deserialisers;
 using TNO.Logging.Reading.Entries;
-using TNO.Logging.Reading.Entries.Components;
 using TNO.Logging.Reading.Entries.Components.Assembly;
 using TNO.Logging.Reading.Entries.Components.EntryLink;
 using TNO.Logging.Reading.Entries.Components.Exception;
@@ -90,12 +72,14 @@ public class LogReaderFacade : ILogReaderFacade
       IServiceScope scope = new ServiceFacade().CreateNew();
 
       IServiceRegistrar registrar = scope.Registrar;
+      Deserialiser deserialiser = new Deserialiser(scope.Requester);
+      registrar.Instance<IDeserialiser>(deserialiser);
+
       registrar.RegisterComponents();
+
       RegisterSelectors(registrar);
 
-      registrar
-         .Singleton<IMethodBaseInfoDeserialiserDispatcher, MethodBaseInfoDeserialiserDispatcher>()
-         .Singleton<IComponentDeserialiserDispatcher, ComponentDeserialiserDispatcher>();
+      Deserialiser<IMethodBaseInfo, MethodBaseInfoDeserialiserDispatcher>(registrar);
 
       RegisterExceptions(registrar);
 
@@ -156,7 +140,7 @@ public class LogReaderFacade : ILogReaderFacade
    }
 
    /// <inheritdoc/>
-   public T GetDeserialiser<T>() where T : notnull, IDeserialiser => _serviceScope.Requester.Get<T>();
+   public IDeserialiser<T> GetDeserialiser<T>() where T : notnull => _serviceScope.Requester.Get<IDeserialiser<T>>();
 
    /// <inheritdoc/>
    public IFileSystemLogReader ReadFromFileSystem(string path)
@@ -175,106 +159,81 @@ public class LogReaderFacade : ILogReaderFacade
    }
    private static void RegisterLogDataSelectors(IServiceRegistrar registrar)
    {
-      registrar
-         .Singleton<IEntryDeserialiserSelector, EntryDeserialiserSelector>()
-         .Singleton<IFileReferenceDeserialiserSelector, FileReferenceDeserialiserSelector>()
-         .Singleton<IContextInfoDeserialiserSelector, ContextInfoDeserialiserSelector>()
-         .Singleton<ITagReferenceDeserialiserSelector, TagReferenceDeserialiserSelector>()
-         .Singleton<ITableKeyReferenceDeserialiserSelector, TableKeyReferenceDeserialiserSelector>()
-         .Singleton<IAssemblyInfoDeserialiserSelector, AssemblyInfoDeserialiserSelector>()
-         .Singleton<ITypeInfoDeserialiserSelector, TypeInfoDeserialiserSelector>()
-         .Singleton<IAssemblyReferenceDeserialiserSelector, AssemblyReferenceDeserialiserSelector>()
-         .Singleton<ITypeReferenceDeserialiserSelector, TypeReferenceDeserialiserSelector>()
-         .Singleton<IParameterInfoDeserialiserSelector, ParameterInfoDeserialiserSelector>()
-         .Singleton<IMethodInfoDeserialiserSelector, MethodInfoDeserialiserSelector>()
-         .Singleton<IConstructorInfoDeserialiserSelector, ConstructorInfoDeserialiserSelector>()
-         .Singleton<IStackFrameInfoDeserialiserSelector, StackFrameInfoDeserialiserSelector>()
-         .Singleton<IStackTraceInfoDeserialiserSelector, StackTraceInfoDeserialiserSelector>()
-         .Singleton<ITableInfoDeserialiserSelector, TableInfoDeserialiserSelector>()
-         .Singleton<IExceptionInfoDeserialiserSelector, ExceptionInfoDeserialiserSelector>();
+      Selector<IEntry, EntryDeserialiserSelector>(registrar);
+      Selector<FileReference, FileReferenceDeserialiserSelector>(registrar);
+      Selector<ContextInfo, ContextInfoDeserialiserSelector>(registrar);
+      Selector<TagReference, TagReferenceDeserialiserSelector>(registrar);
+      Selector<TableKeyReference, TableKeyReferenceDeserialiserSelector>(registrar);
+      Selector<IAssemblyInfo, AssemblyInfoDeserialiserSelector>(registrar);
+      Selector<ITypeInfo, TypeInfoDeserialiserSelector>(registrar);
+      Selector<AssemblyReference, AssemblyReferenceDeserialiserSelector>(registrar);
+      Selector<TypeReference, TypeReferenceDeserialiserSelector>(registrar);
+      Selector<IParameterInfo, ParameterInfoDeserialiserSelector>(registrar);
+      Selector<IMethodInfo, MethodInfoDeserialiserSelector>(registrar);
+      Selector<IConstructorInfo, ConstructorInfoDeserialiserSelector>(registrar);
+      Selector<IStackFrameInfo, StackFrameInfoDeserialiserSelector>(registrar);
+      Selector<IStackTraceInfo, StackTraceInfoDeserialiserSelector>(registrar);
+      Selector<ITableInfo, TableInfoDeserialiserSelector>(registrar);
+      Selector<IExceptionInfo, ExceptionInfoDeserialiserSelector>(registrar);
    }
    private static void RegisterComponentSelectors(IServiceRegistrar registrar)
    {
-      registrar
-         .Singleton<IMessageComponentDeserialiserSelector, MessageComponentDeserialiserSelector>()
-         .Singleton<ITagComponentDeserialiserSelector, TagComponentDeserialiserSelector>()
-         .Singleton<IThreadComponentDeserialiserSelector, ThreadComponentDeserialiserSelector>()
-         .Singleton<IEntryLinkComponentDeserialiserSelector, EntryLinkComponentDeserialiserSelector>()
-         .Singleton<ITableComponentDeserialiserSelector, TableComponentDeserialiserSelector>()
-         .Singleton<IAssemblyComponentDeserialiserSelector, AssemblyComponentDeserialiserSelector>()
-         .Singleton<IStackTraceComponentDeserialiserSelector, StackTraceComponentDeserialiserSelector>()
-         .Singleton<ITypeComponentDeserialiserSelector, TypeComponentDeserialiserSelector>()
-         .Singleton<IExceptionComponentDeserialiserSelector, ExceptionComponentDeserialiserSelector>();
+      Selector<IMessageComponent, MessageComponentDeserialiserSelector>(registrar);
+      Selector<ITagComponent, TagComponentDeserialiserSelector>(registrar);
+      Selector<IThreadComponent, ThreadComponentDeserialiserSelector>(registrar);
+      Selector<IEntryLinkComponent, EntryLinkComponentDeserialiserSelector>(registrar);
+      Selector<ITableComponent, TableComponentDeserialiserSelector>(registrar);
+      Selector<IAssemblyComponent, AssemblyComponentDeserialiserSelector>(registrar);
+      Selector<IStackTraceComponent, StackTraceComponentDeserialiserSelector>(registrar);
+      Selector<ITypeComponent, TypeComponentDeserialiserSelector>(registrar);
+      Selector<IExceptionComponent, ExceptionComponentDeserialiserSelector>(registrar);
    }
    private static void RegisterFromKind(IServiceScope scope, VersionedDataKind kind, uint version)
    {
-      if (kind is VersionedDataKind.Entry)
-         RegisterWithProvider<IEntryDeserialiserSelector, IEntryDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Message)
-         RegisterWithProvider<IMessageComponentDeserialiserSelector, IMessageComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Tag)
-         RegisterWithProvider<ITagComponentDeserialiserSelector, ITagComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Thread)
-         RegisterWithProvider<IThreadComponentDeserialiserSelector, IThreadComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.EntryLink)
-         RegisterWithProvider<IEntryLinkComponentDeserialiserSelector, IEntryLinkComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.TableInfo)
-         RegisterWithProvider<ITableInfoDeserialiserSelector, ITableInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Assembly)
-         RegisterWithProvider<IAssemblyComponentDeserialiserSelector, IAssemblyComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.StackTrace)
-         RegisterWithProvider<IStackTraceComponentDeserialiserSelector, IStackTraceComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Exception)
-         RegisterWithProvider<IExceptionComponentDeserialiserSelector, IExceptionComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.FileReference)
-         RegisterWithProvider<IFileReferenceDeserialiserSelector, IFileReferenceDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.ContextInfo)
-         RegisterWithProvider<IContextInfoDeserialiserSelector, IContextInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.TagReference)
-         RegisterWithProvider<ITagReferenceDeserialiserSelector, ITagReferenceDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.TableKeyReference)
-         RegisterWithProvider<ITableKeyReferenceDeserialiserSelector, ITableKeyReferenceDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.AssemblyInfo)
-         RegisterWithProvider<IAssemblyInfoDeserialiserSelector, IAssemblyInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.AssemblyReference)
-         RegisterWithProvider<IAssemblyReferenceDeserialiserSelector, IAssemblyReferenceDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.TypeInfo)
-         RegisterWithProvider<ITypeInfoDeserialiserSelector, ITypeInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.TypeReference)
-         RegisterWithProvider<ITypeReferenceDeserialiserSelector, ITypeReferenceDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.ParameterInfo)
-         RegisterWithProvider<IParameterInfoDeserialiserSelector, IParameterInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.MethodInfo)
-         RegisterWithProvider<IMethodInfoDeserialiserSelector, IMethodInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.ConstructorInfo)
-         RegisterWithProvider<IConstructorInfoDeserialiserSelector, IConstructorInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.StackFrameInfo)
-         RegisterWithProvider<IStackFrameInfoDeserialiserSelector, IStackFrameInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.StackTraceInfo)
-         RegisterWithProvider<IStackTraceInfoDeserialiserSelector, IStackTraceInfoDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Type)
-         RegisterWithProvider<ITypeComponentDeserialiserSelector, ITypeComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.Table)
-         RegisterWithProvider<ITableComponentDeserialiserSelector, ITableComponentDeserialiser>(scope, version);
-      else if (kind is VersionedDataKind.ExceptionInfo)
-         RegisterWithProvider<IExceptionInfoDeserialiserSelector, IExceptionInfoDeserialiser>(scope, version);
+      // components
+      if (kind is VersionedDataKind.Entry) Deserialiser<IEntry>(scope, version);
+      else if (kind is VersionedDataKind.Message) Deserialiser<IMessageComponent>(scope, version);
+      else if (kind is VersionedDataKind.Tag) Deserialiser<ITagComponent>(scope, version);
+      else if (kind is VersionedDataKind.Thread) Deserialiser<IThreadComponent>(scope, version);
+      else if (kind is VersionedDataKind.EntryLink) Deserialiser<IEntryLinkComponent>(scope, version);
+      else if (kind is VersionedDataKind.TableInfo) Deserialiser<ITableInfo>(scope, version);
+      else if (kind is VersionedDataKind.Assembly) Deserialiser<IAssemblyComponent>(scope, version);
+      else if (kind is VersionedDataKind.StackTrace) Deserialiser<IStackTraceComponent>(scope, version);
+      else if (kind is VersionedDataKind.Exception) Deserialiser<IExceptionComponent>(scope, version);
+      else if (kind is VersionedDataKind.Type) Deserialiser<ITypeComponent>(scope, version);
+      else if (kind is VersionedDataKind.Table) Deserialiser<ITableComponent>(scope, version);
+      else if (kind is VersionedDataKind.ExceptionInfo) Deserialiser<IExceptionComponent>(scope, version);
+
+      // log data
+      else if (kind is VersionedDataKind.FileReference) Deserialiser<FileReference>(scope, version);
+      else if (kind is VersionedDataKind.ContextInfo) Deserialiser<ContextInfo>(scope, version);
+      else if (kind is VersionedDataKind.TagReference) Deserialiser<TagReference>(scope, version);
+      else if (kind is VersionedDataKind.TableKeyReference) Deserialiser<TableKeyReference>(scope, version);
+      else if (kind is VersionedDataKind.AssemblyInfo) Deserialiser<IAssemblyInfo>(scope, version);
+      else if (kind is VersionedDataKind.AssemblyReference) Deserialiser<AssemblyReference>(scope, version);
+      else if (kind is VersionedDataKind.TypeReference) Deserialiser<TypeReference>(scope, version);
+
+      // log infos
+      else if (kind is VersionedDataKind.TypeInfo) Deserialiser<ITypeInfo>(scope, version);
+      else if (kind is VersionedDataKind.ParameterInfo) Deserialiser<IParameterInfo>(scope, version);
+      else if (kind is VersionedDataKind.MethodInfo) Deserialiser<IMethodInfo>(scope, version);
+      else if (kind is VersionedDataKind.ConstructorInfo) Deserialiser<IConstructorInfo>(scope, version);
+      else if (kind is VersionedDataKind.StackFrameInfo) Deserialiser<IStackFrameInfo>(scope, version);
+      else if (kind is VersionedDataKind.StackTraceInfo) Deserialiser<IStackTraceInfo>(scope, version);
       else
          throw new ArgumentException($"Unknown kind ({kind}).", nameof(kind));
    }
-   private static void RegisterWithProvider<TSelector, TDeserialiser>(IServiceScope scope, uint version)
-      where TSelector : notnull, IDeserialiserSelector<TDeserialiser>
-      where TDeserialiser : notnull, IDeserialiser
+   private static void Deserialiser<TType>(IServiceScope scope, uint version) where TType : notnull
    {
-      TSelector selector = scope.Requester.Get<TSelector>();
-      if (selector.TrySelect(version, out TDeserialiser? deserialiser))
+      IDeserialiserSelector<TType> selector = scope.Requester.Get<IDeserialiserSelector<TType>>();
+      if (selector.TrySelect(version, out IDeserialiser<TType>? deserialiser))
          scope.Registrar.Instance(deserialiser);
       else
-         throw new ArgumentException($"No deserialiser of the required type ({typeof(TDeserialiser)}) could be selected for the version #{version:n0}.", nameof(version));
+         throw new ArgumentException($"No deserialiser for the required type ({typeof(TType)}) could be selected for the version #{version:n0}.", nameof(version));
    }
    private static void RegisterNonVersioned(IServiceRegistrar registrar)
    {
-      registrar
-         .Singleton<IDataVersionMapDeserialiser, DataVersionMapDeserialiser>();
+      Deserialiser<DataVersionMap, DataVersionMapDeserialiser>(registrar);
    }
    private static void RegisterExceptions(IServiceRegistrar registrar)
    {
@@ -300,6 +259,18 @@ public class LogReaderFacade : ILogReaderFacade
       ExceptionDataDeserialiser exceptionDataDeserialiser = new ExceptionDataDeserialiser(deserialiserTypes);
 
       registrar.Instance<IExceptionDataDeserialiser>(exceptionDataDeserialiser);
+   }
+
+   private static void Deserialiser<TType, TDeserialiser>(IServiceRegistrar registrar)
+      where TDeserialiser : IDeserialiser<TType>
+   {
+      registrar.Singleton<IDeserialiser<TType>, TDeserialiser>();
+   }
+   private static void Selector<TType, TSelector>(IServiceRegistrar registrar)
+      where TType : notnull
+      where TSelector : IDeserialiserSelector<TType>
+   {
+      registrar.Singleton<IDeserialiserSelector<TType>, TSelector>();
    }
    #endregion
 }

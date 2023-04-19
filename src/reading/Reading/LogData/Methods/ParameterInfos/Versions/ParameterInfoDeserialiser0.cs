@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Reading.Abstractions.LogData.Methods.ParameterInfos;
+using TNO.Logging.Reading.Abstractions.Deserialisers;
 
 namespace TNO.Logging.Reading.LogData.Methods.ParameterInfos.Versions;
 
@@ -8,7 +8,7 @@ namespace TNO.Logging.Reading.LogData.Methods.ParameterInfos.Versions;
 /// A deserialiser for <see cref="IParameterInfo"/>, version #0.
 /// </summary>
 [Version(0)]
-public sealed class ParameterInfoDeserialiser0 : IParameterInfoDeserialiser
+public sealed class ParameterInfoDeserialiser0 : IDeserialiser<IParameterInfo>
 {
    #region Methods
    /// <inheritdoc/>
