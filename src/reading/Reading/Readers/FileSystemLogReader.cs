@@ -1,15 +1,17 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using TNO.Common.Extensions;
+using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.LogData.Types;
-using TNO.Logging.Reading.Abstractions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Readers;
+using TNO.Logging.Reading.Deserialisers;
+using TNO.Logging.Reading.Deserialisers.Registrants;
 
 namespace TNO.Logging.Reading.Readers;
 
@@ -19,8 +21,8 @@ namespace TNO.Logging.Reading.Readers;
 public sealed class FileSystemLogReader : IFileSystemLogReader
 {
    #region Fields
+   private readonly IServiceScope _scope;
    private readonly string? _tempPath;
-   private readonly ILogReaderFacade _facade;
    #endregion
 
    #region Properties
@@ -55,10 +57,10 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="FileSystemLogReader"/>.</summary>
    /// <param name="path">The path to the log file.</param>
-   /// <param name="facade">The log reader facade.</param>
-   public FileSystemLogReader(string path, ILogReaderFacade facade)
+   /// <param name="scope">The <see cref="IServiceScope"/> to use.</param>
+   public FileSystemLogReader(string path, IServiceScope scope)
    {
-      _facade = facade;
+      _scope = scope;
       LogPath = path;
 
       if (TryGetZipPath(path, out string? zipPath))
@@ -82,42 +84,47 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(TypeReferences))]
    private void FromDirectory(string directory)
    {
+      IDeserialiser deserialiser = new Deserialiser(_scope.Requester);
+      _scope.Registrar.Instance(deserialiser);
+
       DataVersionMap map = ReadVersionsMap(directory);
-      IDeserialiserProvider provider = _facade.GenerateProvider(map);
+
+      new BuiltInVersionMapDeserialiserRegistrant(map).Register(_scope);
+
 
       Entries = new DeserialiserReader<IEntry>(
          GetReaderPath(FileSystemConstants.EntryPath),
-         provider.GetDeserialiser<IEntry>());
+         deserialiser.Get<IEntry>());
 
       FileReferences = new DeserialiserReader<FileReference>(
          GetReaderPath(FileSystemConstants.FilePath),
-         provider.GetDeserialiser<FileReference>());
+         deserialiser.Get<FileReference>());
 
       ContextInfos = new DeserialiserReader<ContextInfo>(
          GetReaderPath(FileSystemConstants.ContextInfoPath),
-         provider.GetDeserialiser<ContextInfo>());
+         deserialiser.Get<ContextInfo>());
 
       TagReferences = new DeserialiserReader<TagReference>(
          GetReaderPath(FileSystemConstants.TagPath),
-         provider.GetDeserialiser<TagReference>());
+         deserialiser.Get<TagReference>());
 
       TableKeyReferences = new DeserialiserReader<TableKeyReference>(
          GetReaderPath(FileSystemConstants.TableKeyPath),
-         provider.GetDeserialiser<TableKeyReference>());
+         deserialiser.Get<TableKeyReference>());
 
       AssemblyReferences = new DeserialiserReader<AssemblyReference>(
          GetReaderPath(FileSystemConstants.AssemblyPath),
-         provider.GetDeserialiser<AssemblyReference>());
+         deserialiser.Get<AssemblyReference>());
 
       TypeReferences = new DeserialiserReader<TypeReference>(
          GetReaderPath(FileSystemConstants.TypePath),
-         provider.GetDeserialiser<TypeReference>());
+         deserialiser.Get<TypeReference>());
    }
    private DataVersionMap ReadVersionsMap(string directory)
    {
       string path = Path.Combine(directory, FileSystemConstants.VersionPath);
       using BinaryReader reader = OpenReader(path);
-      IDeserialiser<DataVersionMap> deserialiser = _facade.GetDeserialiser<DataVersionMap>();
+      IDeserialiser<DataVersionMap> deserialiser = _scope.Requester.Get<IDeserialiser<DataVersionMap>>();
       DataVersionMap map = deserialiser.Deserialise(reader);
 
       return map;

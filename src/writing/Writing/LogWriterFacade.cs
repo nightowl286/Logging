@@ -1,10 +1,5 @@
-﻿using TNO.DependencyInjection;
-using TNO.DependencyInjection.Abstractions.Components;
-using TNO.Logging.Common.Abstractions;
-using TNO.Logging.Writing.Abstractions;
-using TNO.Logging.Writing.Abstractions.Serialisers;
+﻿using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Builders;
-using TNO.Logging.Writing.SerialiserProviders;
 
 namespace TNO.Logging.Writing;
 
@@ -13,34 +8,13 @@ namespace TNO.Logging.Writing;
 /// </summary>
 public class LogWriterFacade : ILogWriterFacade
 {
-   #region Fields
-   private readonly IServiceScope _scope = new ServiceFacade().CreateNew();
-   private readonly ISerialiserProvider _baseProvider;
-   #endregion
-
-   #region Constructors
-   /// <summary>Creates a new instance of the <see cref="LogWriterFacade"/>.</summary>
-   public LogWriterFacade()
-   {
-      _baseProvider = new LockingSerialiserProvider(
-         new VersionedSerialiserProvider(_scope,
-            new NonVersionedSerialiserProvider(_scope)));
-   }
-
+   #region Methods
    /// <inheritdoc/>
    public ILoggerConfigurator CreateConfigurator()
    {
-      LoggerConfigurator builder = new LoggerConfigurator(this, _scope);
+      LoggerConfigurator builder = new LoggerConfigurator();
 
       return builder;
    }
-   #endregion
-
-   #region Methods
-   /// <inheritdoc/>
-   public ISerialiser<T> GetSerialiser<T>() where T : notnull => _baseProvider.GetSerialiser<T>();
-
-   /// <inheritdoc/>
-   public DataVersionMap GetVersionMap() => _baseProvider.GetVersionMap();
    #endregion
 }

@@ -14,7 +14,7 @@ internal sealed class SerialiserWriter<T> : IDisposable where T : notnull
    private BinaryWriter _writer;
    private uint _currentChunk = 0;
    #endregion
-   public SerialiserWriter(string directory, ISerialiser<T> serialiser, long threshold)
+   public SerialiserWriter(string directory, ISerialiser<T> serialiser, long threshold, ThreadPriority priority = ThreadPriority.Lowest)
    {
       Directory.CreateDirectory(directory);
       _directory = directory;
@@ -26,7 +26,7 @@ internal sealed class SerialiserWriter<T> : IDisposable where T : notnull
       _queue = new ThreadedQueue<T>(
          $"{nameof(FileSystemLogWriter)}.{nameof(T)}",
          WriteData,
-         ThreadPriority.Lowest);
+         priority);
    }
 
    #region Methods

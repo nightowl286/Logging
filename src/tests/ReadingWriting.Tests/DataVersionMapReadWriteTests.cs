@@ -13,7 +13,7 @@ public class DataVersionMapReadWriteTests : ReadWriteTestsBase<DataVersionMapSer
    {
       DataVersionMap map = new DataVersionMap
       {
-         { VersionedDataKind.Entry, 1 }
+         new DataKindVersion(VersionedDataKind.Entry, 1)
       };
 
       return map;
@@ -22,12 +22,12 @@ public class DataVersionMapReadWriteTests : ReadWriteTestsBase<DataVersionMapSer
    {
       Assert.That.AreEqual(expected.Count, result.Count, "The result contains a different amount of versions.");
 
-      foreach (KeyValuePair<VersionedDataKind, uint> pair in expected)
+      foreach (DataKindVersion dataKindVersion in expected)
       {
-         bool contains = result.TryGetValue(pair.Key, out uint resultValue);
-         Assert.IsTrue(contains, $"Result does not contain the kind ({pair.Key}).");
+         bool contains = result.TryGetVersion(dataKindVersion.DataKind, out uint resultVersion);
+         Assert.IsTrue(contains, $"Result does not contain the kind ({dataKindVersion.DataKind}).");
 
-         Assert.That.AreEqual(pair.Value, resultValue, $"The version for the kind ({pair.Key}) does not match.");
+         Assert.That.AreEqual(resultVersion, resultVersion, $"The version for the kind ({dataKindVersion.DataKind}) does not match.");
       }
    }
    #endregion

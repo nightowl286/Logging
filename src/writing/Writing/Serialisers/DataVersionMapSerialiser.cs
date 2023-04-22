@@ -7,7 +7,7 @@ namespace TNO.Logging.Writing.Serialisers;
 /// <summary>
 /// A serialiser for <see cref="DataVersionMap"/>.
 /// </summary>
-public class DataVersionMapSerialiser : ISerialiser<DataVersionMap>
+public class DataVersionMapSerialiser : ISerialiser<DataVersionMap>, ISerialiser<DataKindVersion>
 {
    #region Methods
    /// <inheritdoc/>
@@ -16,25 +16,33 @@ public class DataVersionMapSerialiser : ISerialiser<DataVersionMap>
       int count = data.Count;
       writer.Write(count);
 
-      foreach (KeyValuePair<VersionedDataKind, uint> pair in data)
-      {
-         ushort rawKind = (ushort)pair.Key;
+      foreach (DataKindVersion dataKindVersion in data)
+         Serialise(writer, dataKindVersion);
+   }
 
-         writer.Write(rawKind);
-         writer.Write(pair.Value);
-      }
+   /// <inheritdoc/>
+   public void Serialise(BinaryWriter writer, DataKindVersion data)
+   {
+      VersionedDataKind dataKind = data.DataKind;
+
+      ushort rawKind = (ushort)dataKind;
+      uint version = data.Version;
+
+      writer.Write(rawKind);
+      writer.Write(version);
    }
 
    /// <inheritdoc/>
    public ulong Count(DataVersionMap data)
    {
-      int count = data.Count;
-      int size =
-         sizeof(int) +
-         (sizeof(ushort) * count) +
-         (sizeof(int) * count);
+      ulong total = sizeof(int);
+      foreach (DataKindVersion dataKindVersion in data)
+         total += Count(dataKindVersion);
 
-      return (ulong)size;
+      return total;
    }
+
+   /// <inheritdoc/>
+   public ulong Count(DataKindVersion data) => sizeof(ushort) + sizeof(uint);
    #endregion
 }

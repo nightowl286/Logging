@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 
@@ -8,6 +9,7 @@ namespace TNO.Logging.Reading.LogData.TableKeyReferences.Versions;
 /// A deserialiser for <see cref="TableKeyReference"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.TableKeyReference)]
 public sealed class TableKeyReferenceDeserialiser0 : IDeserialiser<TableKeyReference>
 {
    #region Methods

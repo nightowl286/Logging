@@ -1,9 +1,8 @@
-﻿using System.Reflection;
-using TNO.Common.Extensions;
-using TNO.DependencyInjection;
+﻿using TNO.DependencyInjection;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers;
 using TNO.Logging.Writing.Serialisers;
+using TNO.Logging.Writing.Serialisers.Registrants;
 
 namespace TNO.ReadingWriting.Tests;
 
@@ -14,7 +13,7 @@ internal static class GeneralSerialiser
    #endregion
 
    #region Functions
-   private static ISerialiser GetSerialiser()
+   public static ISerialiser GetSerialiser()
    {
       IServiceScope scope = new ServiceFacade().CreateNew();
       IServiceRegistrar registrar = scope.Registrar;
@@ -23,22 +22,9 @@ internal static class GeneralSerialiser
 
       registrar.Instance<ISerialiser>(serialiser);
 
-      foreach ((Type service, Type concrete) in GetSerialisersTypes())
-         registrar.Singleton(service, concrete);
+      new BuiltinSerialiserRegistrant().Register(scope);
 
       return serialiser;
-   }
-   private static IEnumerable<(Type, Type)> GetSerialisersTypes()
-   {
-      Assembly assembly = Assembly.Load("TNO.Logging.Writing");
-      Type[] allTypes = assembly.GetTypes();
-
-      foreach (Type type in allTypes)
-      {
-         IEnumerable<Type> implementations = type.GetOpenInterfaceImplementations(typeof(ISerialiser<>));
-         foreach (Type implementation in implementations)
-            yield return (implementation, type);
-      }
    }
    #endregion
 }

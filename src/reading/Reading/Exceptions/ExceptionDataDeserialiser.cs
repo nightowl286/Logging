@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+﻿using TNO.DependencyInjection.Abstractions.Components;
+using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Exceptions;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Exceptions;
@@ -11,25 +12,29 @@ namespace TNO.Logging.Reading.Exceptions;
 public class ExceptionDataDeserialiser : IExceptionDataDeserialiser
 {
    #region Fields
-   private readonly IReadOnlyDictionary<Guid, Type> _exceptionDataDeserialiserTypes;
-   private readonly Dictionary<Type, IDeserialiser<IExceptionData>> _exceptionDataDeserialisersCache = new Dictionary<Type, IDeserialiser<IExceptionData>>();
+   private readonly IExceptionDataDeserialiserRequester _requester;
+   private readonly IServiceBuilder _builder;
+
+   private readonly Dictionary<Type, IDeserialiser<IExceptionData>> _deserialiserCache = new Dictionary<Type, IDeserialiser<IExceptionData>>();
    #endregion
 
    #region Constructors
    /// <summary>Creates a new instance of the <see cref="ExceptionDataDeserialiser"/>.</summary>
-   /// <param name="exceptionDataDeserialiserTypes">The </param>
-   public ExceptionDataDeserialiser(IReadOnlyDictionary<Guid, Type> exceptionDataDeserialiserTypes)
+   /// <param name="requester">The <see cref="IExceptionDataDeserialiserRequester"/> to use.</param>
+   /// <param name="builder">The <see cref="IServiceBuilder"/> to use.</param>
+   public ExceptionDataDeserialiser(IExceptionDataDeserialiserRequester requester, IServiceBuilder builder)
    {
-      _exceptionDataDeserialiserTypes = exceptionDataDeserialiserTypes;
+      _requester = requester;
+      _builder = builder;
    }
    #endregion
 
    #region Methods
    /// <inheritdoc/>
-   public IExceptionData Deserialise(BinaryReader reader, Guid exceptionGroupId)
+   public IExceptionData Deserialise(BinaryReader reader, Guid id)
    {
       ulong dataCount = reader.ReadUInt64();
-      if (_exceptionDataDeserialiserTypes.TryGetValue(exceptionGroupId, out Type? deserialiserType) == false)
+      if (_requester.ById(id, out IExceptionDataDeserialiserInfo? info) == false)
       {
          // Note(Nightowl): Unsure if it is safe to trust whether seeking is allowed or not;
          if (reader.BaseStream.CanSeek)
@@ -38,13 +43,13 @@ public class ExceptionDataDeserialiser : IExceptionDataDeserialiser
             _ = reader.ReadBytes((int)dataCount);
 
          // Note(Nightowl): Could always cache this value but not sure if that is important enough;
-         return new UnknownExceptionGroupData(exceptionGroupId);
+         return new UnknownExceptionGroupData(id);
       }
 
-      if (_exceptionDataDeserialisersCache.TryGetValue(deserialiserType, out IDeserialiser<IExceptionData>? deserialiser) == false)
+      if (_deserialiserCache.TryGetValue(info.DeserialiserType, out IDeserialiser<IExceptionData>? deserialiser) == false)
       {
-         deserialiser = (IDeserialiser<IExceptionData>)Activator.CreateInstance(deserialiserType)!;
-         _exceptionDataDeserialisersCache.Add(deserialiserType, deserialiser);
+         deserialiser = (IDeserialiser<IExceptionData>)_builder.Build(info.DeserialiserType);
+         _deserialiserCache.Add(info.DeserialiserType, deserialiser);
       }
 
       IExceptionData data = deserialiser.Deserialise(reader);

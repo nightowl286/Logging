@@ -1,4 +1,5 @@
 ﻿using TNO.Common.Extensions;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
@@ -12,6 +13,7 @@ namespace TNO.Logging.Reading.Entries.Versions;
 /// A deserialiser for <see cref="IEntry"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.Entry)]
 public sealed class EntryDeserialiser0 : IDeserialiser<IEntry>
 {
    #region Fields

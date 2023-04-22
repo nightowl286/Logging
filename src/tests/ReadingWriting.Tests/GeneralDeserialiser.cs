@@ -2,9 +2,12 @@
 using TNO.Common.Extensions;
 using TNO.DependencyInjection;
 using TNO.DependencyInjection.Abstractions.Components;
+using TNO.Logging.Common.Abstractions;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Deserialisers;
+using TNO.Logging.Reading.Deserialisers.Registrants;
 
 namespace TNO.ReadingWriting.Tests;
 internal static class GeneralDeserialiser
@@ -23,44 +26,48 @@ internal static class GeneralDeserialiser
 
       registrar.Instance<IDeserialiser>(deserialiser);
 
-      foreach ((Type service, Type latest) in GetLatestDeserialisers())
-         registrar.Singleton(service, latest);
+      DataVersionMap latestMap = GetLatestVersionMap();
+
+      new BuiltinDeserialiserRegistrant().Register(scope);
+      new BuiltInVersionMapDeserialiserRegistrant(latestMap).Register(scope);
 
       return deserialiser;
    }
 
-   private static IEnumerable<(Type, Type)> GetLatestDeserialisers()
+   private static DataVersionMap GetLatestVersionMap()
    {
-      Dictionary<Type, List<Type>> deserialiserVersions = new Dictionary<Type, List<Type>>();
+      Dictionary<VersionedDataKind, uint> versions = new Dictionary<VersionedDataKind, uint>();
 
       Assembly assembly = Assembly.Load("TNO.Logging.Reading");
       Type[] allTypes = assembly.GetTypes();
 
       foreach (Type type in allTypes)
       {
-         IEnumerable<Type> implementations = type.GetOpenInterfaceImplementations(typeof(IDeserialiser<>));
-         foreach (Type implementation in implementations)
-         {
-            if (deserialiserVersions.TryGetValue(implementation, out List<Type>? versions) == false)
-            {
-               versions = new List<Type>();
-               deserialiserVersions.Add(implementation, versions);
-            }
+         if (type.ImplementsOpenInterface(typeof(IDeserialiser<>)) == false)
+            continue;
 
-            versions.Add(type);
-         }
+         if (type.TryGetVersion(out uint version) == false)
+            continue;
+
+         VersionedDataKindAttribute? dataKindAttribute = type.GetCustomAttribute<VersionedDataKindAttribute>();
+
+         if (dataKindAttribute is null)
+            continue;
+
+         VersionedDataKind dataKind = dataKindAttribute.Kind;
+
+         if (versions.TryGetValue(dataKind, out uint currentVersion) == false || currentVersion < version)
+            versions[dataKind] = version;
       }
 
-
-      foreach (KeyValuePair<Type, List<Type>> pair in deserialiserVersions)
+      DataVersionMap map = new DataVersionMap();
+      foreach (KeyValuePair<VersionedDataKind, uint> pair in versions)
       {
-         Type latestVersion = pair
-            .Value
-            .OrderByDescending(m => m.GetCustomAttribute<VersionAttribute>(false)?.Version)
-            .First();
-
-         yield return (pair.Key, latestVersion);
+         DataKindVersion dataKindVersion = new DataKindVersion(pair.Key, pair.Value);
+         map.Add(dataKindVersion);
       }
+
+      return map;
    }
    #endregion
 }

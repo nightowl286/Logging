@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
@@ -9,6 +10,7 @@ namespace TNO.Logging.Reading.Entries.Components.Table.Versions;
 /// A deserialiser for <see cref="ITableComponent"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.Table)]
 public sealed class TableComponentDeserialiser0 : IDeserialiser<ITableComponent>
 {
    #region Fields

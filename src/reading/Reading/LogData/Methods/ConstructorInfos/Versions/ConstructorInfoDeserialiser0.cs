@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 
@@ -8,6 +9,7 @@ namespace TNO.Logging.Reading.LogData.Methods.ConstructorInfos.Versions;
 /// A deserialiser for <see cref="IConstructorInfo"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.ConstructorInfo)]
 public sealed class ConstructorInfoDeserialiser0 : IDeserialiser<IConstructorInfo>
 {
    #region Fields

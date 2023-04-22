@@ -20,19 +20,22 @@ public class Serialiser : ISerialiser
 
    #region Methods
    /// <inheritdoc/>
-   public void Serialise<T>(BinaryWriter writer, T data)
+   public void Serialise<T>(BinaryWriter writer, T data) where T : notnull
    {
-      ISerialiser<T> serialiser = _requester.Get<ISerialiser<T>>();
+      ISerialiser<T> serialiser = Get<T>();
 
       serialiser.Serialise(writer, data);
    }
 
    /// <inheritdoc/>
-   public ulong Count<T>(T data)
+   public ulong Count<T>(T data) where T : notnull
    {
-      ISerialiser<T> serialiser = _requester.Get<ISerialiser<T>>();
+      ISerialiser<T> serialiser = Get<T>();
 
       return serialiser.Count(data);
    }
+
+   /// <inheritdoc/>
+   public ISerialiser<T> Get<T>() where T : notnull => _requester.Get<ISerialiser<T>>();
    #endregion
 }

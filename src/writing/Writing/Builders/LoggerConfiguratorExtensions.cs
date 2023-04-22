@@ -30,7 +30,7 @@ public static class LoggerConfiguratorExtensions
    {
       Directory.CreateDirectory(settings.LogPath);
 
-      writer = new FileSystemLogWriter(configurator.Facade, settings);
+      writer = new FileSystemLogWriter(configurator.Serialiser, settings);
 
       configurator.With(writer);
 

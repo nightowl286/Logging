@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Methods;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Methods;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
@@ -11,6 +12,7 @@ namespace TNO.Logging.Reading.LogData.StackTraces.StackFrameInfos.Versions;
 /// A deserialiser for <see cref="IStackFrameInfo"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.StackFrameInfo)]
 public sealed class StackFrameInfoDeserialiser0 : IDeserialiser<IStackFrameInfo>
 {
    #region Fields

@@ -12,6 +12,7 @@ using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Reading;
 using TNO.Logging.Reading.Abstractions.Readers;
+using TNO.Logging.Reading.Builders;
 using TNO.Logging.Writing;
 using TNO.Logging.Writing.Abstractions.Writers;
 using TNO.Logging.Writing.Builders;
@@ -64,8 +65,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          LogWriterFacade facade = new LogWriterFacade();
 
          ILogger logger = facade.CreateConfigurator()
-            .DisableInternalLogger()
-            .WithExceptions()
+            .WithInternalLogger(false)
             .WithFileSystem(logPath, out IFileSystemLogWriter writer)
             .Create()
             .CreateContext(expectedContext, expectedFile, expectedLine)
@@ -103,8 +103,9 @@ public class FileSystemReadWriteTests : FileSystemIntegration
 
       // Read
       {
-         LogReaderFacade facade = new LogReaderFacade();
-         using IFileSystemLogReader reader = facade.ReadFromFileSystem(logPath);
+         using IFileSystemLogReader reader = new LogReaderFacade()
+            .CreateConfigurator()
+            .FromFileSystem(logPath);
 
          fileReference = AssertReadSingle(reader.FileReferences);
          entry = AssertReadSingle(reader.Entries);
@@ -191,8 +192,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       {
          LogWriterFacade facade = new LogWriterFacade();
          ILogger logger = facade.CreateConfigurator()
-            .DisableInternalLogger()
-            .WithExceptions()
+            .WithInternalLogger(false)
             .WithFileSystem(writerSettings, out IFileSystemLogWriter writer)
             .Create();
 
@@ -209,8 +209,9 @@ public class FileSystemReadWriteTests : FileSystemIntegration
 
       // Read & Assert
       {
-         LogReaderFacade facade = new LogReaderFacade();
-         using IFileSystemLogReader reader = facade.ReadFromFileSystem(logPath);
+         using IFileSystemLogReader reader = new LogReaderFacade()
+            .CreateConfigurator()
+            .FromFileSystem(logPath);
 
          entry1 = AssertRead(reader.Entries);
          entry2 = AssertReadSingle(reader.Entries);
@@ -232,13 +233,13 @@ public class FileSystemReadWriteTests : FileSystemIntegration
 
       ILogger logger = new LogWriterFacade()
          .CreateConfigurator()
-         .DisableInternalLogger()
-         .WithExceptions()
+         .WithInternalLogger(false)
          .WithFileSystem(writerSettings, out IFileSystemLogWriter writer)
          .Create();
 
       IFileSystemLogReader reader = new LogReaderFacade()
-         .ReadFromFileSystem(logPath);
+         .CreateConfigurator()
+         .FromFileSystem(logPath);
 
       // Act & Assert
       using (writer)

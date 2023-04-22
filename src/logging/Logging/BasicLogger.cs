@@ -18,7 +18,7 @@ public class BasicLogger : BaseLogger
    internal BasicLogger(
       ILogDataCollector collector,
       ILogWriteContext writeContext,
-      IExceptionInfoConverter exceptionInfoConverter,
+      IExceptionInfoHandler exceptionInfoConverter,
       ulong contextId,
       ulong scope,
       ILogger internalLogger)

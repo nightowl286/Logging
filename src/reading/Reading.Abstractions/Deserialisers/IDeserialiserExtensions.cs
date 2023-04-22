@@ -16,7 +16,7 @@ public static class IDeserialiserExtensions
    /// <param name="deserialiser">The deserialiser to use.</param>
    /// <param name="reader">The reader to use.</param>
    /// <param name="data">The deserialised data of the type <typeparamref name="T"/>.</param>
-   public static void Deserialise<T>(this IDeserialiser deserialiser, BinaryReader reader, out T data)
+   public static void Deserialise<T>(this IDeserialiser deserialiser, BinaryReader reader, out T data) where T : notnull
    {
       data = deserialiser.Deserialise<T>(reader);
    }

@@ -35,8 +35,8 @@ public class BaseLogger : ILogger
    /// <summary>The write context used by this logger.</summary>
    protected ILogWriteContext WriteContext { get; }
 
-   /// <summary>The exception info converter used by this logger.</summary>
-   protected IExceptionInfoConverter ExceptionInfoConverter { get; }
+   /// <summary>The exception info handler used by this logger.</summary>
+   protected IExceptionInfoHandler ExceptionInfoHandler { get; }
 
    /// <summary>The id of the context that this logger belongs to.</summary>
    protected ulong ContextId { get; }
@@ -46,19 +46,19 @@ public class BaseLogger : ILogger
    /// <summary>Creates an instance of a new <see cref="BaseLogger"/>.</summary>
    /// <param name="collector">The <see cref="ILogDataCollector"/> to use.</param>
    /// <param name="writeContext">The <see cref="ILogWriteContext"/> to use.</param>
-   /// <param name="exceptionInfoConverter">The <see cref="IExceptionInfoConverter"/> to use.</param>
+   /// <param name="exceptionInfoHandler">The <see cref="IExceptionInfoHandler"/> to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="scope">The scope (inside the given <paramref name="contextId"/> that this logger belongs to.</param>
    public BaseLogger(
       ILogDataCollector collector,
       ILogWriteContext writeContext,
-      IExceptionInfoConverter exceptionInfoConverter,
+      IExceptionInfoHandler exceptionInfoHandler,
       ulong contextId,
       ulong scope)
    {
       Collector = collector;
       WriteContext = writeContext;
-      ExceptionInfoConverter = exceptionInfoConverter;
+      ExceptionInfoHandler = exceptionInfoHandler;
 
       ContextId = contextId;
       _scope = scope;
@@ -164,7 +164,7 @@ public class BaseLogger : ILogger
       TimeSpan timestamp = WriteContext.GetTimestamp();
       ulong fileId = GetFileId(file);
 
-      IExceptionInfo exceptionInfo = ExceptionInfoConverter.Convert(exception, threadId);
+      IExceptionInfo exceptionInfo = ExceptionInfoHandler.Convert(exception, threadId);
 
       ExceptionComponent component = new ExceptionComponent(exceptionInfo);
 

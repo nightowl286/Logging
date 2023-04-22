@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
@@ -12,6 +13,7 @@ namespace TNO.Logging.Reading.LogData.AssemblyInfos.Versions;
 /// A deserialiser for <see cref="IAssemblyInfo"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.AssemblyInfo)]
 public sealed class AssemblyInfoDeserialiser0 : IDeserialiser<IAssemblyInfo>
 {
    #region Methods

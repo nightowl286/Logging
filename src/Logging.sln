@@ -51,9 +51,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Exceptions", "common
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logging", "logging", "{02AE6640-E9E0-4FF7-9BAD-DD09740BFC8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging.Abstractions", "logging\Logging.Abstractions\Logging.Abstractions.csproj", "{3FD04873-B14D-4C42-82D0-717083EE23A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Abstractions", "logging\Logging.Abstractions\Logging.Abstractions.csproj", "{3FD04873-B14D-4C42-82D0-717083EE23A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "logging\Logging\Logging.csproj", "{20A937B4-4962-4317-A1F8-536FF6E60C16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "logging\Logging\Logging.csproj", "{20A937B4-4962-4317-A1F8-536FF6E60C16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

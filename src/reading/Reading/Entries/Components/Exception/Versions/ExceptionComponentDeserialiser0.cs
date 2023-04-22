@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.Entries.Components;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
@@ -9,6 +10,7 @@ namespace TNO.Logging.Reading.Entries.Components.Exception.Versions;
 /// A deserialiser for <see cref="IExceptionComponent"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.Exception)]
 public sealed class ExceptionComponentDeserialiser0 : IDeserialiser<IExceptionComponent>
 {
    #region Fields

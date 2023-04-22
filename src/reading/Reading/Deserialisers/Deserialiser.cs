@@ -20,11 +20,14 @@ public class Deserialiser : IDeserialiser
 
    #region Methods
    /// <inheritdoc/>
-   public T Deserialise<T>(BinaryReader reader)
+   public T Deserialise<T>(BinaryReader reader) where T : notnull
    {
-      IDeserialiser<T> deserialiser = _requester.Get<IDeserialiser<T>>();
+      IDeserialiser<T> deserialiser = Get<T>();
 
       return deserialiser.Deserialise(reader);
    }
+
+   /// <inheritdoc/>
+   public IDeserialiser<T> Get<T>() where T : notnull => _requester.Get<IDeserialiser<T>>();
    #endregion
 }

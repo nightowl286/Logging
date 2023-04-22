@@ -12,8 +12,8 @@ public interface IExceptionDataDeserialiser
    #region Methods
    /// <summary>Deserialises an instance of <see cref="IExceptionData"/> using the given <paramref name="reader"/>.</summary>
    /// <param name="reader">The reader to use.</param>
-   /// <param name="exceptionGroupId">The id of the exception group to use the <see cref="IExceptionDataDeserialiser{TExceptionData}"/> from.</param>
-   /// <returns></returns>
-   IExceptionData Deserialise(BinaryReader reader, Guid exceptionGroupId);
+   /// <param name="id">The id of the <see cref="IExceptionDataDeserialiser{TExceptionData}"/> to use.</param>
+   /// <returns>The deserialised <see cref="IExceptionData"/>.</returns>
+   IExceptionData Deserialise(BinaryReader reader, Guid id);
    #endregion
 }

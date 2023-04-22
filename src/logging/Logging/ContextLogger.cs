@@ -22,16 +22,16 @@ public class ContextLogger : BasicLogger, IContextLogger
    /// <summary>Creates a new logger that belongs to a specific context.</summary>
    /// <param name="collector">The <see cref="ILogDataCollector"/> that this logger should deposit data in.</param>
    /// <param name="writeContext">The <see cref="ILogWriteContext"/> to use.</param>
-   /// <param name="exceptionInfoConverter">The <see cref="IExceptionInfoConverter"/> to use.</param>
+   /// <param name="exceptionInfoHandler">The <see cref="IExceptionInfoHandler"/> to use.</param>
    /// <param name="contextId">The id of the context that this logger belongs to.</param>
    /// <param name="internalLogger">The internal logger to use.</param>
    public ContextLogger(
       ILogDataCollector collector,
       ILogWriteContext writeContext,
-      IExceptionInfoConverter exceptionInfoConverter,
+      IExceptionInfoHandler exceptionInfoHandler,
       ulong contextId,
       ILogger internalLogger)
-      : base(collector, writeContext, exceptionInfoConverter, contextId, 0, internalLogger)
+      : base(collector, writeContext, exceptionInfoHandler, contextId, 0, internalLogger)
    {
    }
    #endregion
@@ -46,7 +46,7 @@ public class ContextLogger : BasicLogger, IContextLogger
       ContextInfo contextInfo = new ContextInfo(name, id, ContextId, fileId, line);
       Collector.Deposit(contextInfo);
 
-      return new ContextLogger(Collector, WriteContext, ExceptionInfoConverter, id, InternalLogger);
+      return new ContextLogger(Collector, WriteContext, ExceptionInfoHandler, id, InternalLogger);
    }
 
    /// <inheritdoc/>
@@ -54,7 +54,7 @@ public class ContextLogger : BasicLogger, IContextLogger
    {
       ulong scope = _scopeFactory.GetNext();
 
-      return new BasicLogger(Collector, WriteContext, ExceptionInfoConverter, ContextId, scope, InternalLogger);
+      return new BasicLogger(Collector, WriteContext, ExceptionInfoHandler, ContextId, scope, InternalLogger);
    }
    #endregion
 }

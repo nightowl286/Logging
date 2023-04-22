@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.StackTraces;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.LogData.Methods.StackTraceInfos;
@@ -9,6 +10,7 @@ namespace TNO.Logging.Reading.LogData.StackTraces.StackTraceInfos.Versions;
 /// A deserialiser for <see cref="IStackTraceInfo"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.StackTraceInfo)]
 public sealed class StackTraceInfoDeserialiser0 : IDeserialiser<IStackTraceInfo>
 {
    #region Fields

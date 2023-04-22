@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData.Assemblies;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 
@@ -8,6 +9,7 @@ namespace TNO.Logging.Reading.LogData.AssemblyReferences.Versions;
 /// A deserialiser for <see cref="AssemblyReference"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.AssemblyReference)]
 public sealed class AssemblyReferenceDeserialiser0 : IDeserialiser<AssemblyReference>
 {
    #region Fields

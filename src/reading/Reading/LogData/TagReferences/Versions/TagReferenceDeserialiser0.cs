@@ -1,4 +1,5 @@
-﻿using TNO.Logging.Common.Abstractions.LogData;
+﻿using TNO.Logging.Common.Abstractions.DataKinds;
+using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 
@@ -8,6 +9,7 @@ namespace TNO.Logging.Reading.LogData.TagReferences.Versions;
 /// A deserialiser for <see cref="TagReference"/>, version #0.
 /// </summary>
 [Version(0)]
+[VersionedDataKind(VersionedDataKind.TagReference)]
 public sealed class TagReferenceDeserialiser0 : IDeserialiser<TagReference>
 {
    #region Methods
