@@ -20,8 +20,9 @@ public interface ILogReaderConfigurator
    /// <returns>The current log reader configurator.</returns>
    ILogReaderConfigurator WithRegistrant(IExceptionDataDeserialiserRegistrant registrant);
 
-   /// <summary>Gets an <see cref="IServiceScope"/> that can be passed into different log readers.</summary>
+   /// <summary>Gets an <see cref="IServiceScope"/> that can be passed into a log reader.</summary>
    /// <returns>The created <see cref="IServiceScope"/>.</returns>
+   /// <remarks>This scope should not be reused between different log readers.</remarks>
    IServiceScope GetScope();
    #endregion
 }

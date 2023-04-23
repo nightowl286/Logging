@@ -10,7 +10,6 @@ using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Readers;
-using TNO.Logging.Reading.Deserialisers;
 using TNO.Logging.Reading.Deserialisers.Registrants;
 
 namespace TNO.Logging.Reading.Readers;
@@ -84,13 +83,10 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(TypeReferences))]
    private void FromDirectory(string directory)
    {
-      IDeserialiser deserialiser = new Deserialiser(_scope.Requester);
-      _scope.Registrar.Instance(deserialiser);
-
       DataVersionMap map = ReadVersionsMap(directory);
 
       new BuiltInVersionMapDeserialiserRegistrant(map).Register(_scope);
-
+      IDeserialiser deserialiser = _scope.Requester.Get<IDeserialiser>();
 
       Entries = new DeserialiserReader<IEntry>(
          GetReaderPath(FileSystemConstants.EntryPath),

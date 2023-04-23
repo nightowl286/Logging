@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Common.Exceptions;
 using TNO.Logging.Logging.Helpers;
 using TNO.Logging.Writing.Abstractions;
@@ -15,6 +17,8 @@ namespace TNO.Logging.Writing.Exceptions;
 /// <summary>
 /// Represents a converter between different <see cref="Exception"/> types into their corresponding <see cref="IExceptionInfo"/>.
 /// </summary>
+[Version(0)]
+[VersionedDataKind(VersionedDataKind.ExceptionInfo)]
 public class ExceptionInfoHandler : IExceptionInfoHandler
 {
    #region Fields
