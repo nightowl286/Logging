@@ -9,7 +9,7 @@ public static class BinaryWriterSizeHelper
 {
    #region Constants
    /// <summary>The size (in bytes) of a <see cref="Guid"/>.</summary>
-   public const ulong GuidSize = 16;
+   public const int GuidSize = 16;
    #endregion
 
    #region Fields

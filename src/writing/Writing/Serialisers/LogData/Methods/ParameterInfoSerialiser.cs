@@ -29,7 +29,7 @@ public class ParameterInfoSerialiser : ISerialiser<IParameterInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IParameterInfo data)
+   public int Count(IParameterInfo data)
    {
       int size =
          sizeof(byte) +
@@ -38,7 +38,7 @@ public class ParameterInfoSerialiser : ISerialiser<IParameterInfo>
 
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
 
-      return (ulong)(size + nameSize);
+      return size + nameSize;
    }
    #endregion
 }

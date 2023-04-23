@@ -27,6 +27,6 @@ public interface IExceptionDataHandler
    /// <param name="data">The data to calculate the serialised size for.</param>
    /// <param name="handlerId">The id of the exception data handler that was used to convert the <paramref name="data"/>.</param>
    /// <returns>The amount of bytes the given <paramref name="data"/> requires.</returns>
-   ulong Count(IExceptionData data, Guid handlerId);
+   int Count(IExceptionData data, Guid handlerId);
    #endregion
 }

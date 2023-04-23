@@ -22,10 +22,10 @@ public sealed class MessageComponentSerialiser : ISerialiser<IMessageComponent>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IMessageComponent data)
+   public int Count(IMessageComponent data)
    {
       string message = data.Message;
-      return (ulong)BinaryWriterSizeHelper.StringSize(message);
+      return BinaryWriterSizeHelper.StringSize(message);
    }
    #endregion
 }

@@ -30,7 +30,7 @@ public class ContextInfoSerialiser : ISerialiser<ContextInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(ContextInfo data)
+   public int Count(ContextInfo data)
    {
       string name = data.Name;
 
@@ -41,7 +41,7 @@ public class ContextInfoSerialiser : ISerialiser<ContextInfo>
          (sizeof(ulong) * 3) +
          sizeof(uint);
 
-      return (ulong)size;
+      return size;
    }
    #endregion
 }

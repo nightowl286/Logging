@@ -40,16 +40,16 @@ public class StackTraceInfoSerialiser : ISerialiser<IStackTraceInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IStackTraceInfo data)
+   public int Count(IStackTraceInfo data)
    {
       int size = sizeof(int);
 
       int framesCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.Frames.Count);
-      ulong framesSize = 0;
+      int framesSize = 0;
       foreach (IStackFrameInfo frame in data.Frames)
          framesSize += _serialiser.Count(frame);
 
-      return (ulong)(size + framesCountSize) + framesSize;
+      return size + framesCountSize + framesSize;
    }
    #endregion
 }

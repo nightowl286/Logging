@@ -37,9 +37,9 @@ public class AssemblyReferenceSerialiser : ISerialiser<AssemblyReference>
    }
 
    /// <inheritdoc/>
-   public ulong Count(AssemblyReference data)
+   public int Count(AssemblyReference data)
    {
-      ulong infoSize = _serialiser.Count(data.AssemblyInfo);
+      int infoSize = _serialiser.Count(data.AssemblyInfo);
 
       return sizeof(ulong) + infoSize;
    }

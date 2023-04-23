@@ -33,7 +33,7 @@ public sealed class ExceptionComponentSerialiser : ISerialiser<IExceptionCompone
    }
 
    /// <inheritdoc/>
-   public ulong Count(IExceptionComponent data)
+   public int Count(IExceptionComponent data)
    {
       return _serialiser.Count(data.ExceptionInfo);
    }

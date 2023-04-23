@@ -80,7 +80,7 @@ public class ComponentSerialiserDispatcher : ISerialiser<IComponent>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IComponent data)
+   public int Count(IComponent data)
    {
       return data switch
       {

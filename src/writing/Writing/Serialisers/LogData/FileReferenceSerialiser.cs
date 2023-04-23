@@ -24,13 +24,13 @@ public class FileReferenceSerialiser : ISerialiser<FileReference>
    }
 
    /// <inheritdoc/>
-   public ulong Count(FileReference data)
+   public int Count(FileReference data)
    {
       string file = data.File;
 
       int fileSize = BinaryWriterSizeHelper.StringSize(file);
 
-      return (ulong)(fileSize + sizeof(ulong));
+      return fileSize + sizeof(ulong);
    }
    #endregion
 }

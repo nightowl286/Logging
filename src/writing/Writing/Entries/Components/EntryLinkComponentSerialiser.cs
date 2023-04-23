@@ -23,6 +23,6 @@ public sealed class EntryLinkComponentSerialiser : ISerialiser<IEntryLinkCompone
    }
 
    /// <inheritdoc/>
-   public ulong Count(IEntryLinkComponent data) => sizeof(ulong);
+   public int Count(IEntryLinkComponent data) => sizeof(ulong);
    #endregion
 }

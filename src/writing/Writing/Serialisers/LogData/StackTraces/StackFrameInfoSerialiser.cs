@@ -47,17 +47,17 @@ public class StackFrameInfoSerialiser : ISerialiser<IStackFrameInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IStackFrameInfo data)
+   public int Count(IStackFrameInfo data)
    {
       int size =
          sizeof(bool) +
          (sizeof(uint) * 2) +
          sizeof(ulong);
 
-      ulong mainMethodSize = data.MainMethod is null ? 0 : _serialiser.Count(data.MainMethod);
-      ulong secondaryMethodSize = data.SecondaryMethod is null ? 0 : _serialiser.Count(data.SecondaryMethod);
+      int mainMethodSize = data.MainMethod is null ? 0 : _serialiser.Count(data.MainMethod);
+      int secondaryMethodSize = data.SecondaryMethod is null ? 0 : _serialiser.Count(data.SecondaryMethod);
 
-      return mainMethodSize + secondaryMethodSize + (ulong)size;
+      return mainMethodSize + secondaryMethodSize + size;
    }
    #endregion
 }

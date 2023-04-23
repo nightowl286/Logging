@@ -36,6 +36,6 @@ public sealed class StackTraceComponentSerialiser : ISerialiser<IStackTraceCompo
    }
 
    /// <inheritdoc/>
-   public ulong Count(IStackTraceComponent data) => _serialiser.Count(data.StackTrace);
+   public int Count(IStackTraceComponent data) => _serialiser.Count(data.StackTrace);
    #endregion
 }

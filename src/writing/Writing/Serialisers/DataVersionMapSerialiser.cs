@@ -33,9 +33,9 @@ public class DataVersionMapSerialiser : ISerialiser<DataVersionMap>, ISerialiser
    }
 
    /// <inheritdoc/>
-   public ulong Count(DataVersionMap data)
+   public int Count(DataVersionMap data)
    {
-      ulong total = sizeof(int);
+      int total = sizeof(int);
       foreach (DataKindVersion dataKindVersion in data)
          total += Count(dataKindVersion);
 
@@ -43,6 +43,6 @@ public class DataVersionMapSerialiser : ISerialiser<DataVersionMap>, ISerialiser
    }
 
    /// <inheritdoc/>
-   public ulong Count(DataKindVersion data) => sizeof(ushort) + sizeof(uint);
+   public int Count(DataKindVersion data) => sizeof(ushort) + sizeof(uint);
    #endregion
 }

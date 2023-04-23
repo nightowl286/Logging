@@ -37,9 +37,9 @@ public class TypeReferenceSerialiser : ISerialiser<TypeReference>
    }
 
    /// <inheritdoc/>
-   public ulong Count(TypeReference data)
+   public int Count(TypeReference data)
    {
-      ulong infoSize = _serialiser.Count(data.TypeInfo);
+      int infoSize = _serialiser.Count(data.TypeInfo);
 
       return sizeof(ulong) + infoSize;
    }

@@ -18,7 +18,7 @@ public interface ISerialiser
    /// <typeparam name="T">The type of the <paramref name="data"/> to count the size of.</typeparam>
    /// <param name="data">The data to calculate the serialised size for.</param>
    /// <returns>The amount of bytes the given <paramref name="data"/> requires.</returns>
-   ulong Count<T>(T data) where T : notnull;
+   int Count<T>(T data) where T : notnull;
 
    /// <summary>Gets an <see cref="ISerialiser{T}"/> for the given type <typeparamref name="T"/>.</summary>
    /// <typeparam name="T">The type to get the <see cref="ISerialiser{T}"/> for.</typeparam>

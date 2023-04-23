@@ -49,7 +49,7 @@ public class MethodInfoSerialiser : ISerialiser<IMethodInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IMethodInfo data)
+   public int Count(IMethodInfo data)
    {
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
       int size =
@@ -59,11 +59,11 @@ public class MethodInfoSerialiser : ISerialiser<IMethodInfo>
       int genericTypeIdsCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.GenericTypeIds.Count);
       int parameterInfosCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.ParameterInfos.Count);
 
-      ulong parameterInfosSize = 0;
+      int parameterInfosSize = 0;
       foreach (IParameterInfo parameterInfo in data.ParameterInfos)
          parameterInfosSize += _serialiser.Count(parameterInfo);
 
-      return (ulong)(nameSize + size + genericTypeIdsCountSize + parameterInfosCountSize) + parameterInfosSize;
+      return nameSize + size + genericTypeIdsCountSize + parameterInfosCountSize + parameterInfosSize;
    }
    #endregion
 }

@@ -24,13 +24,13 @@ public class TagReferenceSerialiser : ISerialiser<TagReference>
    }
 
    /// <inheritdoc/>
-   public ulong Count(TagReference data)
+   public int Count(TagReference data)
    {
       string tag = data.Tag;
 
       int tagSize = BinaryWriterSizeHelper.StringSize(tag);
 
-      return (ulong)(tagSize + sizeof(ulong));
+      return tagSize + sizeof(ulong);
    }
    #endregion
 }

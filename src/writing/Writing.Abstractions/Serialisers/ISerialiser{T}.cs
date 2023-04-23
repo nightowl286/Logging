@@ -17,6 +17,6 @@ public interface ISerialiser<in T>
    /// <summary>Calculates the amount of bytes the given <paramref name="data"/> requires.</summary>
    /// <param name="data">The data to calculate the serialised size for.</param>
    /// <returns>The amount of bytes the given <paramref name="data"/> requires.</returns>
-   ulong Count(T data);
+   int Count(T data);
    #endregion
 }

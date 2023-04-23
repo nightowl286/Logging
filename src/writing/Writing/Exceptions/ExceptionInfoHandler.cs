@@ -105,20 +105,20 @@ public class ExceptionInfoHandler : IExceptionInfoHandler
    }
 
    /// <inheritdoc/>
-   public ulong Count(IExceptionInfo data)
+   public int Count(IExceptionInfo data)
    {
-      ulong size =
+      int size =
          (sizeof(ulong) * 2) +
          sizeof(bool) +
          BinaryWriterSizeHelper.GuidSize;
 
       int messageSize = BinaryWriterSizeHelper.StringSize(data.Message);
-      ulong stackTraceSize = _serialiser.Count(data.StackTrace);
-      ulong tableSize = _serialiser.Count(data.AdditionalData);
-      ulong exceptionDataSize = _exceptionDataHandler.Count(data.Data, data.ExceptionGroupId);
-      ulong innerExceptionSize = data.InnerException is null ? 0 : Count(data.InnerException);
+      int stackTraceSize = _serialiser.Count(data.StackTrace);
+      int tableSize = _serialiser.Count(data.AdditionalData);
+      int exceptionDataSize = _exceptionDataHandler.Count(data.Data, data.ExceptionGroupId);
+      int innerExceptionSize = data.InnerException is null ? 0 : Count(data.InnerException);
 
-      return size + (ulong)messageSize + stackTraceSize + tableSize + exceptionDataSize + innerExceptionSize;
+      return size + messageSize + stackTraceSize + tableSize + exceptionDataSize + innerExceptionSize;
    }
    #endregion
 }

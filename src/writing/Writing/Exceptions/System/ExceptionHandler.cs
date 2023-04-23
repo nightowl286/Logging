@@ -20,6 +20,6 @@ public sealed class ExceptionHandler : IExceptionDataHandler<Exception, IExcepti
    public void Serialise(BinaryWriter writer, IExceptionData data) { }
 
    /// <inheritdoc/>
-   public ulong Count(IExceptionData data) => 0;
+   public int Count(IExceptionData data) => 0;
    #endregion
 }

@@ -19,7 +19,7 @@ public class ExceptionDataHandler : IExceptionDataHandler
 {
    #region Delegates
    private delegate IExceptionData ConversionDelegate(object handler, Exception exception);
-   private delegate ulong CountDelegate(object handler, IExceptionData exceptionData);
+   private delegate int CountDelegate(object handler, IExceptionData exceptionData);
    private delegate void SerialiseDelegate(object handler, BinaryWriter writer, IExceptionData exceptionData);
    #endregion
 
@@ -89,7 +89,7 @@ public class ExceptionDataHandler : IExceptionDataHandler
       CountDelegate countDelegate = GetCountDelegate(info.HandlerType, info.ExceptionDataType);
       object handler = _handlerCache[info.HandlerType];
 
-      ulong count = countDelegate.Invoke(handler, data);
+      int count = countDelegate.Invoke(handler, data);
       writer.Write(count);
 
       SerialiseDelegate serialiseDelegate = GetSerialiseDelegate(info.HandlerType, info.ExceptionDataType);
@@ -97,7 +97,7 @@ public class ExceptionDataHandler : IExceptionDataHandler
    }
 
    /// <inheritdoc/>
-   public ulong Count(IExceptionData data, Guid exceptionGroupId)
+   public int Count(IExceptionData data, Guid exceptionGroupId)
    {
       bool hasInfo = _requester.ById(exceptionGroupId, out IExceptionDataHandlerInfo? info);
       Debug.Assert(hasInfo && info is not null);

@@ -60,7 +60,7 @@ public class AssemblyInfoSerialiser : ISerialiser<IAssemblyInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IAssemblyInfo data)
+   public int Count(IAssemblyInfo data)
    {
       int size =
          (sizeof(int) * 2) +
@@ -77,7 +77,7 @@ public class AssemblyInfoSerialiser : ISerialiser<IAssemblyInfo>
       int cultureSize = BinaryWriterSizeHelper.StringSize(data.Culture?.Name);
       int configurationSize = BinaryWriterSizeHelper.StringSize(data.Configuration);
 
-      return (ulong)(size + locationSize + nameSize + cultureSize + configurationSize);
+      return size + locationSize + nameSize + cultureSize + configurationSize;
    }
    #endregion
 }

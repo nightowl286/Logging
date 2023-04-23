@@ -30,6 +30,6 @@ public sealed class TableComponentSerialiser : ISerialiser<ITableComponent>
    public void Serialise(BinaryWriter writer, ITableComponent data) => _serialiser.Serialise(writer, data.Table);
 
    /// <inheritdoc/>
-   public ulong Count(ITableComponent data) => _serialiser.Count(data.Table);
+   public int Count(ITableComponent data) => _serialiser.Count(data.Table);
    #endregion
 }

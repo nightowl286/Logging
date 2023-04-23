@@ -24,13 +24,13 @@ public class TableKeyReferenceSerialiser : ISerialiser<TableKeyReference>
    }
 
    /// <inheritdoc/>
-   public ulong Count(TableKeyReference data)
+   public int Count(TableKeyReference data)
    {
       string key = data.Key;
 
       int keySize = BinaryWriterSizeHelper.StringSize(key);
 
-      return (ulong)(keySize + sizeof(uint));
+      return keySize + sizeof(uint);
    }
    #endregion
 }

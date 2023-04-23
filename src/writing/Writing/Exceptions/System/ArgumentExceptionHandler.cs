@@ -27,9 +27,9 @@ public sealed class ArgumentExceptionHandler : IExceptionDataHandler<ArgumentExc
    }
 
    /// <inheritdoc/>
-   public ulong Count(IArgumentExceptionData data)
+   public int Count(IArgumentExceptionData data)
    {
-      return (ulong)(BinaryWriterSizeHelper.StringSize(data.ParameterName) + sizeof(bool));
+      return BinaryWriterSizeHelper.StringSize(data.ParameterName) + sizeof(bool);
    }
    #endregion
 }

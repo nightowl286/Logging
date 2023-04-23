@@ -12,7 +12,7 @@ internal static class Category
    public const string Versioning = nameof(Versioning);
 }
 
-public static class TestAssemblies
+internal static class TestAssemblies
 {
    public static Assembly[] GetAssemblies()
    {

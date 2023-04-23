@@ -21,6 +21,6 @@ public sealed class AssemblyComponentSerialiser : ISerialiser<IAssemblyComponent
    }
 
    /// <inheritdoc/>
-   public ulong Count(IAssemblyComponent data) => sizeof(ulong);
+   public int Count(IAssemblyComponent data) => sizeof(ulong);
    #endregion
 }

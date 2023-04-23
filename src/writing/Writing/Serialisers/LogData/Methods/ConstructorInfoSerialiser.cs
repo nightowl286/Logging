@@ -42,18 +42,18 @@ public class ConstructorInfoSerialiser : ISerialiser<IConstructorInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IConstructorInfo data)
+   public int Count(IConstructorInfo data)
    {
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
       int size = sizeof(ulong);
 
       int parameterInfosCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.ParameterInfos.Count);
 
-      ulong parameterInfosSize = 0;
+      int parameterInfosSize = 0;
       foreach (IParameterInfo parameterInfo in data.ParameterInfos)
          parameterInfosSize += _serialiser.Count(parameterInfo);
 
-      return (ulong)(nameSize + size + parameterInfosCountSize) + parameterInfosSize;
+      return nameSize + size + parameterInfosCountSize + parameterInfosSize;
    }
    #endregion
 }

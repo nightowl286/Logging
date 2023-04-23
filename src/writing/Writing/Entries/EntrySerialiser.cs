@@ -58,7 +58,7 @@ public class EntrySerialiser : ISerialiser<IEntry>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IEntry data)
+   public int Count(IEntry data)
    {
       int headerSize =
          (sizeof(ulong) * 4) +
@@ -67,11 +67,11 @@ public class EntrySerialiser : ISerialiser<IEntry>
          sizeof(ushort) +
          sizeof(byte);
 
-      ulong componentSizes = 0;
+      int componentSizes = 0;
       foreach (IComponent component in data.Components.Values)
          componentSizes += _serialiser.Count(component);
 
-      return componentSizes + (ulong)headerSize;
+      return componentSizes + headerSize;
    }
    #endregion
 }

@@ -34,7 +34,7 @@ public sealed class ThreadComponentSerialiser : ISerialiser<IThreadComponent>
    }
 
    /// <inheritdoc/>
-   public ulong Count(IThreadComponent data)
+   public int Count(IThreadComponent data)
    {
       int nameSize = BinaryWriterSizeHelper.StringSize(data.Name);
 
@@ -45,7 +45,7 @@ public sealed class ThreadComponentSerialiser : ISerialiser<IThreadComponent>
          sizeof(bool) +
          (sizeof(byte) * 2);
 
-      return (ulong)size;
+      return size;
    }
    #endregion
 }

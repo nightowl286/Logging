@@ -28,7 +28,7 @@ public class Serialiser : ISerialiser
    }
 
    /// <inheritdoc/>
-   public ulong Count<T>(T data) where T : notnull
+   public int Count<T>(T data) where T : notnull
    {
       ISerialiser<T> serialiser = Get<T>();
 

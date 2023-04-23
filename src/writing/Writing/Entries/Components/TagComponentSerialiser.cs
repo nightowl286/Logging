@@ -21,6 +21,6 @@ public sealed class TagComponentSerialiser : ISerialiser<ITagComponent>
    }
 
    /// <inheritdoc/>
-   public ulong Count(ITagComponent data) => sizeof(ulong);
+   public int Count(ITagComponent data) => sizeof(ulong);
    #endregion
 }

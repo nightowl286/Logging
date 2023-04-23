@@ -21,6 +21,6 @@ public sealed class TypeComponentSerialiser : ISerialiser<ITypeComponent>
    }
 
    /// <inheritdoc/>
-   public ulong Count(ITypeComponent data) => sizeof(ulong);
+   public int Count(ITypeComponent data) => sizeof(ulong);
    #endregion
 }

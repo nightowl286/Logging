@@ -40,7 +40,7 @@ public class MethodBaseInfoSerialiserDispatcher : ISerialiser<IMethodBaseInfo>
          throw new ArgumentException($"Unknown method type ({data.GetType()}).", nameof(data));
    }
    /// <inheritdoc/>
-   public ulong Count(IMethodBaseInfo data)
+   public int Count(IMethodBaseInfo data)
    {
       if (data is IMethodInfo methodInfo)
          return _serialiser.Count(methodInfo) + sizeof(byte);

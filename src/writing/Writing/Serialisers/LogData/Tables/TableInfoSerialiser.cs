@@ -37,7 +37,7 @@ public sealed class TableInfoSerialiser : ISerialiser<ITableInfo>
       { typeof(DateTimeOffset), TableDataKind.DateTimeOffset },
       { typeof(TimeZoneInfo), TableDataKind.TimeZoneInfo },
    };
-   private static readonly Dictionary<TableDataKind, ulong> DataKindSizes = new Dictionary<TableDataKind, ulong>()
+   private static readonly Dictionary<TableDataKind, int> DataKindSizes = new Dictionary<TableDataKind, int>()
    {
       { TableDataKind.Byte, sizeof(byte) },
       { TableDataKind.SByte, sizeof(sbyte) },
@@ -144,33 +144,33 @@ public sealed class TableInfoSerialiser : ISerialiser<ITableInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(ITableInfo data)
+   public int Count(ITableInfo data)
    {
       int tableSize = data.Table.Count;
       int tableSizeSize = BinaryWriterSizeHelper.Encoded7BitIntSize(tableSize);
       int keysSize = tableSize * sizeof(uint);
 
-      ulong total = (ulong)(tableSizeSize + keysSize);
+      int total = tableSizeSize + keysSize;
       foreach (object? value in data.Table.Values)
          total += CountValue(value);
 
       return total;
    }
-   private ulong Count(ICollectionInfo data)
+   private int Count(ICollectionInfo data)
    {
       IReadOnlyCollection<object?> collection = data.Collection;
       int countSize = BinaryWriterSizeHelper.Encoded7BitIntSize(collection.Count);
 
-      ulong total = 0;
+      int total = 0;
       foreach (object? value in collection)
          total += CountValue(value);
 
-      return total + (ulong)countSize;
+      return total + countSize;
    }
-   private ulong CountValue(object? value)
+   private int CountValue(object? value)
    {
-      ulong kindSize = sizeof(byte);
-      ulong valueSize;
+      int kindSize = sizeof(byte);
+      int valueSize;
 
       if (value is null)
          valueSize = 0;
@@ -183,14 +183,14 @@ public sealed class TableInfoSerialiser : ISerialiser<ITableInfo>
 
       return kindSize + valueSize;
    }
-   private static ulong CountPrimitive(object value)
+   private static int CountPrimitive(object value)
    {
       if (value is string @string)
-         return (ulong)BinaryWriterSizeHelper.StringSize(@string);
+         return BinaryWriterSizeHelper.StringSize(@string);
       else if (value is char @char)
-         return (ulong)BinaryWriterSizeHelper.CharSize(@char);
+         return BinaryWriterSizeHelper.CharSize(@char);
       else if (value is TimeZoneInfo @timeZoneInfo)
-         return (ulong)BinaryWriterSizeHelper.StringSize(timeZoneInfo.Id);
+         return BinaryWriterSizeHelper.StringSize(timeZoneInfo.Id);
       else
       {
          Type valueType = value.GetType();

@@ -44,7 +44,7 @@ public class TypeInfoSerialiser : ISerialiser<ITypeInfo>
    }
 
    /// <inheritdoc/>
-   public ulong Count(ITypeInfo data)
+   public int Count(ITypeInfo data)
    {
       int size =
          sizeof(ulong) * 5;
@@ -55,7 +55,7 @@ public class TypeInfoSerialiser : ISerialiser<ITypeInfo>
       int genericTypeIdsCountSize = BinaryWriterSizeHelper.Encoded7BitIntSize(data.GenericTypeIds.Count);
       int genericTypeIdsCount = sizeof(ulong) * data.GenericTypeIds.Count;
 
-      return (ulong)(size + nameSize + fullNameSize + namespaceSize + genericTypeIdsCountSize + genericTypeIdsCount);
+      return size + nameSize + fullNameSize + namespaceSize + genericTypeIdsCountSize + genericTypeIdsCount;
    }
    #endregion
 }

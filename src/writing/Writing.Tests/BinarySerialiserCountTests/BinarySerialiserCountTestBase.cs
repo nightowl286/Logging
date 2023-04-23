@@ -18,23 +18,23 @@ public abstract class BinarySerialiserCountTestBase<TWriter, TData>
    {
       // Arrange
       TWriter writer = Setup();
-      ulong expectedResult = GetActualSize(writer, data);
+      int expectedResult = GetActualSize(writer, data);
 
       // Act
-      ulong result = writer.Count(data);
+      int result = writer.Count(data);
 
       // Assert
       Assert.That.AreEqual(expectedResult, result);
    }
 
-   private static ulong GetActualSize(TWriter writer, TData data)
+   private static int GetActualSize(TWriter writer, TData data)
    {
       using (MemoryStream memoryStream = new MemoryStream())
       {
          using (BinaryWriter bw = new BinaryWriter(memoryStream, Encoding, true))
             writer.Serialise(bw, data);
 
-         return (ulong)memoryStream.Length;
+         return (int)memoryStream.Length;
       }
    }
    #endregion
