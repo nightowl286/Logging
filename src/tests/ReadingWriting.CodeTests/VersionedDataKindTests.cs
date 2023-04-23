@@ -3,7 +3,6 @@ using System.Text;
 using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.Versioning;
-using TNO.Logging.Writing.Abstractions.Serialisers;
 
 namespace TNO.ReadingWriting.CodeTests;
 
@@ -11,32 +10,22 @@ namespace TNO.ReadingWriting.CodeTests;
 [TestCategory(Category.Versioning)]
 public class VersionedDataKindTests
 {
-   #region Methods
+   #region Tests
    [TestMethod]
-   public void EnsureVersionedSerialisersHaveDataKindAttribute()
+   public void VersionedDataKindHandlersHaveVersionAndDataKindAttribute()
    {
       // Arrange
       Assembly[] assemblies = TestAssemblies.GetAssemblies();
-      HashSet<Type> missing = new HashSet<Type>();
+      HashSet<TypeInfo> missing = new HashSet<TypeInfo>();
 
       // Act
-      foreach (Type type in assemblies.SelectMany(a => a.DefinedTypes))
+      foreach (TypeInfo typeInfo in assemblies.SelectMany(a => a.DefinedTypes))
       {
-         if (type.IsInterface == false)
-            continue;
-         bool isSerialiser = type.ImplementsOpenInterface(typeof(ISerialiser<>));
-         bool isVersioned = type.GetInterfaces().Contains(typeof(IVersioned));
+         bool hasVersion = typeInfo.IsDefined<VersionAttribute>();
+         bool hasDataKind = typeInfo.IsDefined<VersionedDataKindAttribute>();
 
-         if (isSerialiser && isVersioned)
-         {
-            bool hasKinds =
-               type
-               .GetDataKinds()
-               .Any();
-
-            if (hasKinds == false)
-               missing.Add(type);
-         }
+         if (hasVersion != hasDataKind)
+            missing.Add(typeInfo);
       }
 
       // Assert
@@ -44,14 +33,16 @@ public class VersionedDataKindTests
       {
          StringBuilder messageBuilder = new StringBuilder();
          messageBuilder
-            .AppendLine($"Some versioned serialisers were missing the {nameof(VersionedDataKindAttribute)}.")
+            .AppendLine($"The {nameof(VersionAttribute)} should always be used with the {nameof(VersionedDataKindAttribute)}.")
             .AppendLine()
-            .AppendLine($"Interfaces without an {nameof(VersionedDataKindAttribute)}:");
+            .AppendLine($"The types that had mixed attributes were:");
 
-         foreach (Type type in missing)
-            messageBuilder.AppendLine($"- {type.FullName}");
+         foreach (TypeInfo type in missing)
+            messageBuilder.AppendLine(type.FullName);
 
-         Assert.Fail(messageBuilder.ToString());
+         string message = messageBuilder.ToString();
+         messageBuilder.Clear();
+         Assert.Fail(message);
       }
    }
    #endregion

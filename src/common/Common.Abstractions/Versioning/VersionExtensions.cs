@@ -4,8 +4,7 @@ using System.Reflection;
 namespace TNO.Logging.Common.Abstractions.Versioning;
 
 /// <summary>
-/// Contains useful extension methods related to the <see cref="IVersioned"/>
-/// interface, and the <see cref="VersionAttribute"/>.
+/// Contains useful extension methods related to the <see cref="VersionAttribute"/>.
 /// </summary>
 public static class VersionExtensions
 {
@@ -47,14 +46,5 @@ public static class VersionExtensions
 
       throw new ArgumentException($"The given type ({type}) did not have the {typeof(VersionAttribute)}.");
    }
-
-   /// <summary>
-   /// Extracts the version specified in a <see cref="VersionAttribute"/>,
-   /// on the type of the given <paramref name="instance"/>.
-   /// </summary>
-   /// <param name="instance">The versioned instance to get the type version of.</param>
-   /// <returns>The extracted version.</returns>
-   /// <exception cref="ArgumentException">Thrown if the type of the <paramref name="instance"/> does not have the <see cref="VersionAttribute"/>.</exception>
-   public static uint GetVersion(this IVersioned instance) => GetVersion(instance.GetType());
    #endregion
 }
