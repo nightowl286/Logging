@@ -3,15 +3,11 @@ using TNO.DependencyInjection;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Abstractions;
 using TNO.Logging.Abstractions.Scopes;
-using TNO.Logging.Common.Abstractions.DataKinds;
-using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData;
-using TNO.Logging.Common.Abstractions.LogData.Assemblies;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
-using TNO.Logging.Common.Abstractions.LogData.Types;
 using TNO.Logging.Common.Contexts;
 using TNO.Logging.Logging;
+using TNO.Logging.Logging.Void;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
@@ -119,12 +115,7 @@ internal sealed class LoggerConfigurator : ILoggerConfigurator
          return new BaseLogger(Distributor, _context, exceptionInfoConverter, internalContextId, 0);
       }
       else
-      {
-         VoidCollector collector = new VoidCollector();
-         VoidWriteContext context = new VoidWriteContext();
-
-         return new BaseLogger(collector, context, exceptionInfoConverter, 0, 0);
-      }
+         return VoidLogger.Instance;
    }
    private static void LogInitialInformation(ILogger logger)
    {
@@ -161,57 +152,6 @@ internal sealed class LoggerConfigurator : ILoggerConfigurator
          entryAssemblyBuilder.With(entryAssembly);
 
       entryAssemblyBuilder.FinishEntry();
-   }
-   #endregion
-
-   #region Stub classes
-   private class VoidCollector : ILogDataCollector
-   {
-      #region Methods
-      public void Deposit(IEntry entry) { }
-      public void Deposit(FileReference fileReference) { }
-      public void Deposit(ContextInfo contextInfo) { }
-      public void Deposit(TagReference tagReference) { }
-      public void Deposit(TableKeyReference tableKeyReference) { }
-      public void Deposit(AssemblyReference assemblyReference) { }
-      public void Deposit(TypeReference typeReference) { }
-      public void Deposit(DataKindVersion dataKindVersion) { }
-      #endregion
-   }
-   private class VoidWriteContext : ILogWriteContext
-   {
-      #region Methods
-      public ulong CreateContextId() => default;
-      public bool GetOrCreateAssemblyId(AssemblyIdentity assemblyIdentity, out ulong assemblyId)
-      {
-         assemblyId = default;
-         return default;
-      }
-      public bool GetOrCreateFileId(string file, out ulong fileId)
-      {
-         fileId = default;
-         return default;
-      }
-      public bool GetOrCreateTableKeyId(string key, out uint tableKeyId)
-      {
-         tableKeyId = default;
-         return default;
-      }
-      public bool GetOrCreateTagId(string tag, out ulong tagId)
-      {
-         tagId = default;
-         return default;
-      }
-      public bool GetOrCreateTypeId(TypeIdentity typeIdentity, out ulong typeId)
-      {
-         typeId = default;
-         return default;
-      }
-      public TimeSpan GetTimestamp() => default;
-      public ulong NewEntryId() => default;
-      public bool ShouldLogUnknownException(Type exceptionType) => default;
-      public bool ShouldLogVersionForDataKind(VersionedDataKind dataKind) => default;
-      #endregion
    }
    #endregion
 }
