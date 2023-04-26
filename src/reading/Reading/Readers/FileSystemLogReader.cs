@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using TNO.Common.Extensions;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Common.Abstractions;
@@ -70,10 +72,20 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
 
       ReadDirectory = path;
       FromDirectory(path);
+#if !NET6_0_OR_GREATER
+      Debug.Assert(Entries is not null);
+      Debug.Assert(FileReferences is not null);
+      Debug.Assert(ContextInfos is not null);
+      Debug.Assert(TagReferences is not null);
+      Debug.Assert(TableKeyReferences is not null);
+      Debug.Assert(AssemblyReferences is not null);
+      Debug.Assert(TypeReferences is not null);
+#endif
    }
    #endregion
 
    #region Methods
+#if NET6_0_OR_GREATER
    [MemberNotNull(nameof(Entries))]
    [MemberNotNull(nameof(FileReferences))]
    [MemberNotNull(nameof(ContextInfos))]
@@ -81,6 +93,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
    [MemberNotNull(nameof(TableKeyReferences))]
    [MemberNotNull(nameof(AssemblyReferences))]
    [MemberNotNull(nameof(TypeReferences))]
+#endif
    private void FromDirectory(string directory)
    {
       DataVersionMap map = ReadVersionsMap(directory);
@@ -172,7 +185,7 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       }
 
       string possiblePath = path + FileSystemConstants.DotArchiveExtension;
-      if (Path.Exists(possiblePath))
+      if (PathExists(possiblePath))
       {
          zipPath = possiblePath;
          return true;
@@ -199,6 +212,22 @@ public sealed class FileSystemLogReader : IFileSystemLogReader
       BinaryReader reader = new BinaryReader(fs);
 
       return reader;
+   }
+
+   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+   private static bool PathExists(string path)
+   {
+#if NET7_0_OR_GREATER
+      return Path.Exists(path);
+#else
+      if (File.Exists(path))
+         return true;
+
+      if (Directory.Exists(path))
+         return true;
+
+      return false;
+#endif
    }
    #endregion
 }

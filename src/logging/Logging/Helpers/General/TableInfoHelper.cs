@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,21 @@ public static class TableInfoHelper
    #endregion
 
    #region Fields
-   private record class KeyValuePairAccessor(GetKeyDelegate GetKey, GetValueDelegate GetValue);
+   private sealed class KeyValuePairAccessor
+   {
+      #region Properties
+      public GetKeyDelegate GetKey { get; }
+      public GetValueDelegate GetValue { get; }
+      #endregion
+
+      #region Constructors
+      public KeyValuePairAccessor(GetKeyDelegate getKey, GetValueDelegate getValue)
+      {
+         GetKey = getKey;
+         GetValue = getValue;
+      }
+      #endregion
+   }
    private static readonly ReaderWriterLockSlim AccessorsLock = new ReaderWriterLockSlim();
    private static readonly ConditionalWeakTable<Type, KeyValuePairAccessor> KeyValuePairAccessors = new ConditionalWeakTable<Type, KeyValuePairAccessor>();
    #endregion
@@ -54,8 +69,10 @@ public static class TableInfoHelper
    private static ITableInfo Convert(ILogWriteContext writeContext, ILogDataCollector dataCollector, IEnumerable enumerable)
    {
       Dictionary<uint, object?> table = new Dictionary<uint, object?>();
-      foreach (object pair in enumerable)
+      foreach (object? pair in enumerable)
       {
+         Debug.Assert(pair is not null);
+
          string key;
          object? value;
          if (pair is DictionaryEntry entry)

@@ -30,4 +30,39 @@ public static class BinaryReaderExtensions
 
       return new Guid(bytes);
    }
+
+#if !NET6_0_OR_GREATER
+   /// <summary>Reads in a 32-bit integer in a compressed format.</summary>
+   /// <param name="reader">The reader to use.</param>
+   /// <returns>A 32-bit integer in a compressed format.</returns>
+   public static int Read7BitEncodedInt(this BinaryReader reader)
+   {
+      // Implementation copied from; BinaryReader.Read7BitEncodedInt;
+      // Was only made public in NET6
+
+      uint result = 0;
+      byte byteReadJustNow;
+
+      const int MaxBytesWithoutOverflow = 4;
+      for (int shift = 0; shift < MaxBytesWithoutOverflow * 7; shift += 7)
+      {
+         byteReadJustNow = reader.ReadByte();
+         result |= (byteReadJustNow & 0x7Fu) << shift;
+
+         if (byteReadJustNow <= 0x7Fu)
+         {
+            return (int)result;
+         }
+      }
+
+      byteReadJustNow = reader.ReadByte();
+      if (byteReadJustNow > 0b_1111u)
+      {
+         throw new FormatException($"Too many bytes in what should have been a 7 bit encoded Int32.");
+      }
+
+      result |= (uint)byteReadJustNow << (MaxBytesWithoutOverflow * 7);
+      return (int)result;
+   }
+#endif
 }

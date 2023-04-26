@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿#if !NETCOREAPP3_1_OR_GREATER && !NET6_0_OR_GREATER
+using System.Runtime.InteropServices;
+#endif
+using System.Text;
 
 namespace TNO.Logging.Writing.Serialisers;
 
@@ -14,7 +17,18 @@ public static class BinaryWriterSizeHelper
 
    #region Fields
    /// <summary>The assumed encoding.</summary>
-   public static readonly Encoding Encoding = Encoding.UTF8;
+   public static readonly Encoding Encoding;
+
+   /// <summary>The encoder obtained from the <see cref="Encoding"/>.</summary>
+   public static readonly Encoder Encoder;
+   #endregion
+
+   #region Constructors
+   static BinaryWriterSizeHelper()
+   {
+      Encoding = Encoding.UTF8;
+      Encoder = Encoding.GetEncoder();
+   }
    #endregion
 
    #region Functions
@@ -38,6 +52,7 @@ public static class BinaryWriterSizeHelper
    /// <param name="value">The <see cref="char"/> value to check.</param>
    public static int CharSize(char value)
    {
+#if NETCOREAPP3_1_OR_GREATER || NET6_0_OR_GREATER
       // Based on the internal implementations of:
       // BinaryWriter.Write(char);
       // Rune.TryEncodeToUtf8;
@@ -49,6 +64,15 @@ public static class BinaryWriterSizeHelper
       if (rune.Value <= 0x7FFu) return 2;
       if (rune.Value <= 0xFFFFu) return 3;
       return 4; // should not be possible as the BinaryWriter cannot handle it.
+#else
+      // Based on the internal implementations of:
+      // BinaryWriter.Write(char); // in .NET Framework
+      // Adapted to not require the unsafe context
+
+      Span<char> chars = MemoryMarshal.CreateSpan(ref value, 1);
+
+      return Encoder.GetByteCount(chars, true);
+#endif
    }
 
    /// <summary>Calculates the length that the given <paramref name="value"/> will take encoded as a 7-bit integer.</summary>

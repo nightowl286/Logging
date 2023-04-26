@@ -7,23 +7,65 @@ namespace TNO.Logging.Common.Entries;
 /// <summary>
 /// Represents a log entry.
 /// </summary>
-/// <param name="Id">The id of this entry.</param>
-/// <param name="ContextId">The id of the context that this entry belongs to.</param>
-/// <param name="Scope">The scope (in the current context) that this entry belongs to.</param>
-/// <param name="Importance">The severity, and purpose, of this entry.</param>
-/// <param name="Timestamp">The timestamp of when this entry was created (since the log was created).</param>
-/// <param name="FileId">The id of the file where this entry has been logged.</param>
-/// <param name="LineInFile">
-/// The line number in the file (specified by the <see cref="FileId"/>)
-/// where this entry has been logged.
-/// </param>
-/// <param name="Components">The components that this entry contains.</param>
-public record class Entry(
-   ulong Id,
-   ulong ContextId,
-   ulong Scope,
-   ImportanceCombination Importance,
-   TimeSpan Timestamp,
-   ulong FileId,
-   uint LineInFile,
-   IReadOnlyDictionary<ComponentKind, IComponent> Components) : IEntry;
+public class Entry : IEntry
+{
+   #region Properties
+   /// <inheritdoc/>
+   public ulong Id { get; }
+
+   /// <inheritdoc/>
+   public ulong ContextId { get; }
+
+   /// <inheritdoc/>
+   public ulong Scope { get; }
+
+   /// <inheritdoc/>
+   public ImportanceCombination Importance { get; }
+
+   /// <inheritdoc/>
+   public TimeSpan Timestamp { get; }
+
+   /// <inheritdoc/>
+   public ulong FileId { get; }
+
+   /// <inheritdoc/>
+   public uint LineInFile { get; }
+
+   /// <inheritdoc/>
+   public IReadOnlyDictionary<ComponentKind, IComponent> Components { get; }
+   #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="Entry"/>.</summary>
+   /// <param name="id">The id of this entry.</param>
+   /// <param name="contextId">The id of the context that this entry belongs to.</param>
+   /// <param name="scope">The scope (in the current context) that this entry belongs to.</param>
+   /// <param name="importance">The severity, and purpose, of this entry.</param>
+   /// <param name="timestamp">The timestamp of when this entry was created (since the log was created).</param>
+   /// <param name="fileId">The id of the file where this entry has been logged.</param>
+   /// <param name="lineInFile">
+   /// The line number in the file (specified by the <paramref name="fileId"/>)
+   /// where this entry has been logged.
+   /// </param>
+   /// <param name="components">The components that this entry contains.</param>
+   public Entry(
+      ulong id,
+      ulong contextId,
+      ulong scope,
+      ImportanceCombination importance,
+      TimeSpan timestamp,
+      ulong fileId,
+      uint lineInFile,
+      IReadOnlyDictionary<ComponentKind, IComponent> components)
+   {
+      Id = id;
+      ContextId = contextId;
+      Scope = scope;
+      Importance = importance;
+      Timestamp = timestamp;
+      FileId = fileId;
+      LineInFile = lineInFile;
+      Components = components;
+   }
+   #endregion
+}

@@ -57,7 +57,7 @@ public class LogWriteContext : ILogWriteContext
    /// <inheritdoc/>
    public bool ShouldLogUnknownException(Type exceptionType)
    {
-      if (exceptionType.IsAssignableTo(typeof(Exception)))
+      if (typeof(Exception).IsAssignableFrom(exceptionType))
       {
          TypeIdentity identity = new TypeIdentity(exceptionType);
          return _reportedUnknownExceptions.Add(identity);

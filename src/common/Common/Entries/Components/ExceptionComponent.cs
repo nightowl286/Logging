@@ -7,11 +7,22 @@ namespace TNO.Logging.Common.Entries.Components;
 /// <summary>
 /// Represents a <see cref="ComponentKind.Exception"/> component.
 /// </summary>
-/// <param name="ExceptionInfo">The information about an <see cref="Exception"/>.</param>
-public record class ExceptionComponent(IExceptionInfo ExceptionInfo) : IExceptionComponent
+public class ExceptionComponent : IExceptionComponent
 {
    #region Properties
    /// <inheritdoc/>
+   public IExceptionInfo ExceptionInfo { get; }
+
+   /// <inheritdoc/>
    public ComponentKind Kind => ComponentKind.Exception;
+   #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="ExceptionComponent"/>.</summary>
+   /// <param name="exceptionInfo">The information about an <see cref="Exception"/>.</param>
+   public ExceptionComponent(IExceptionInfo exceptionInfo)
+   {
+      ExceptionInfo = exceptionInfo;
+   }
    #endregion
 }

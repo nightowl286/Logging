@@ -8,7 +8,20 @@ namespace Common.Abstractions.Tests.LogData.Assemblies;
 [TestClass]
 public class AssemblyIdentityTests
 {
-   public record class AnnotatedIdentity(AssemblyIdentity Identity, string Annotation);
+   #region Subclass
+   public sealed class AnnotatedIdentity
+   {
+      #region Properties
+      public AssemblyIdentity Identity { get; }
+      public string Annotation { get; }
+      #endregion
+      public AnnotatedIdentity(AssemblyIdentity identity, string annotation)
+      {
+         Identity = identity;
+         Annotation = annotation;
+      }
+   }
+   #endregion
 
    #region Tests
    [DynamicData(nameof(GetEqualValuesData), DynamicDataSourceType.Method,

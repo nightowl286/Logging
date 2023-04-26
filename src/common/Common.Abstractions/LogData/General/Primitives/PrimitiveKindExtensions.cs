@@ -34,13 +34,16 @@ public static class PrimitiveKindExtensions
          return false;
       }
 
-      if (AttributeCache.TryGetValue(kind, out attribute) == false)
+      lock (AttributeCache)
       {
-         attribute = typeof(PrimitiveKind)
-            .GetField(kind.ToString())
-            ?.GetCustomAttribute<PrimitiveAttribute>();
+         if (AttributeCache.TryGetValue(kind, out attribute) == false)
+         {
+            attribute = typeof(PrimitiveKind)
+               .GetField(kind.ToString())
+               ?.GetCustomAttribute<PrimitiveAttribute>();
 
-         AttributeCache.Add(kind, attribute);
+            AttributeCache.Add(kind, attribute);
+         }
       }
 
       return attribute is not null;

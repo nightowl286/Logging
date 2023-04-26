@@ -3,6 +3,9 @@ using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.LogData.Methods.StackTraceInfos;
+#if !NET6_0_OR_GREATER
+using TNO.Logging.Reading.Deserialisers;
+#endif
 
 namespace TNO.Logging.Reading.LogData.StackTraces.StackTraceInfos.Versions;
 

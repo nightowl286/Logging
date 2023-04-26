@@ -6,23 +6,54 @@ namespace TNO.Logging.Common.Entries.Components;
 /// <summary>
 /// Represents a <see cref="ComponentKind.Thread"/> component.
 /// </summary>
-/// <param name="ManagedId">The managed id of the thread.</param>
-/// <param name="Name">The optional name of the thread.</param>
-/// <param name="State">The current state of the thread.</param>
-/// <param name="IsThreadPoolThread">Whether the thread belongs to a thread pool.</param>
-/// <param name="Priority">The priority of the thread.</param>
-/// <param name="ApartmentState">The apartment state of the thread.</param>
-public record class ThreadComponent(
-   int ManagedId,
-   string Name,
-   ThreadState State,
-   bool IsThreadPoolThread,
-   ThreadPriority Priority,
-   ApartmentState ApartmentState) : IThreadComponent
+public class ThreadComponent : IThreadComponent
 {
    #region Properties
    /// <inheritdoc/>
+   public int ManagedId { get; }
+
+   /// <inheritdoc/>
+   public string Name { get; }
+
+   /// <inheritdoc/>
+   public ThreadState State { get; }
+
+   /// <inheritdoc/>
+   public bool IsThreadPoolThread { get; }
+
+   /// <inheritdoc/>
+   public ThreadPriority Priority { get; }
+
+   /// <inheritdoc/>
+   public ApartmentState ApartmentState { get; }
+
+   /// <inheritdoc/>
    public ComponentKind Kind => ComponentKind.Thread;
+   #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="ThreadComponent"/>.</summary>
+   /// <param name="managedId">The managed id of the thread.</param>
+   /// <param name="name">The optional name of the thread.</param>
+   /// <param name="state">The current state of the thread.</param>
+   /// <param name="isThreadPoolThread">Whether the thread belongs to a thread pool.</param>
+   /// <param name="priority">The priority of the thread.</param>
+   /// <param name="apartmentState">The apartment state of the thread.</param>
+   public ThreadComponent(
+      int managedId,
+      string name,
+      ThreadState state,
+      bool isThreadPoolThread,
+      ThreadPriority priority,
+      ApartmentState apartmentState)
+   {
+      ManagedId = managedId;
+      Name = name;
+      State = state;
+      IsThreadPoolThread = isThreadPoolThread;
+      Priority = priority;
+      ApartmentState = apartmentState;
+   }
    #endregion
 
    #region Functions

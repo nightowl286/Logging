@@ -160,7 +160,13 @@ public sealed class FileSystemLogWriter : IFileSystemLogWriter
       string directory = Path.GetDirectoryName(logDirectory)!;
       string path = Path.Combine(directory, name + FileSystemConstants.DotArchiveExtension);
 
-      ZipFile.CreateFromDirectory(logDirectory, path, CompressionLevel.SmallestSize, false);
+#if NET6_0_OR_GREATER
+      CompressionLevel level = CompressionLevel.SmallestSize;
+#else
+      CompressionLevel level = CompressionLevel.Optimal;
+#endif
+
+      ZipFile.CreateFromDirectory(logDirectory, path, level, false);
       Directory.Delete(logDirectory, true);
    }
    #endregion

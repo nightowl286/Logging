@@ -6,16 +6,41 @@ namespace TNO.Logging.Common.LogData.Methods;
 /// <summary>
 /// Represents info about a <see cref="ReflectionParameterInfo"/>.
 /// </summary>
-/// <param name="TypeId">The id of the <see cref="ReflectionParameterInfo.ParameterType"/>.</param>
-/// <param name="Modifier">The modifier of this parameter.</param>
-/// <param name="HasDefaultValue">Whether this parameter has a default value.</param>
-/// <param name="Name">The name of this parameter.</param>
-public record class ParameterInfo(
-   ulong TypeId,
-   ParameterModifier Modifier,
-   bool HasDefaultValue,
-   string Name) : IParameterInfo
+public class ParameterInfo : IParameterInfo
 {
+   #region Properties
+   /// <inheritdoc/>
+   public ulong TypeId { get; }
+
+   /// <inheritdoc/>
+   public ParameterModifier Modifier { get; }
+
+   /// <inheritdoc/>
+   public bool HasDefaultValue { get; }
+
+   /// <inheritdoc/>
+   public string Name { get; }
+   #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="ParameterInfo"/>.</summary>
+   /// <param name="typeId">The id of the <see cref="ReflectionParameterInfo.ParameterType"/>.</param>
+   /// <param name="modifier">The modifier of this parameter.</param>
+   /// <param name="hasDefaultValue">Whether this parameter has a default value.</param>
+   /// <param name="name">The name of this parameter.</param>
+   public ParameterInfo(
+      ulong typeId,
+      ParameterModifier modifier,
+      bool hasDefaultValue,
+      string name)
+   {
+      TypeId = typeId;
+      Modifier = modifier;
+      HasDefaultValue = hasDefaultValue;
+      Name = name;
+   }
+   #endregion
+
    #region Functions
    /// <summary>
    /// Creates a <see cref="ParameterInfo"/> for the given <paramref name="reflectionParameterInfo"/>.

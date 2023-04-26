@@ -7,11 +7,22 @@ namespace TNO.Logging.Common.Entries.Components;
 /// <summary>
 /// Represents a <see cref="ComponentKind.Type"/> component.
 /// </summary>
-/// <param name="TypeId">The id of the referenced <see cref="ITypeInfo"/>.</param>
-public record class TypeComponent(ulong TypeId) : ITypeComponent
+public class TypeComponent : ITypeComponent
 {
    #region Properties
    /// <inheritdoc/>
+   public ulong TypeId { get; }
+
+   /// <inheritdoc/>
    public ComponentKind Kind => ComponentKind.Type;
+   #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="TypeComponent"/>.</summary>
+   /// <param name="typeId">The id of the referenced <see cref="ITypeInfo"/>.</param>
+   public TypeComponent(ulong typeId)
+   {
+      TypeId = typeId;
+   }
    #endregion
 }

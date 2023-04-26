@@ -37,8 +37,10 @@ public static class FileSystemUtility
    public static string GetTestFolder(string testClassFolder)
    {
       StackTrace trace = new StackTrace();
-      foreach (StackFrame frame in trace.GetFrames().Reverse())
+      foreach (StackFrame? frame in trace.GetFrames().Reverse())
       {
+         Debug.Assert(frame is not null);
+
          MethodBase? method = frame.GetMethod();
          if (method is null)
             continue;
@@ -77,9 +79,12 @@ public static class FileSystemUtility
    private static Type? GetTestClass()
    {
       StackTrace trace = new StackTrace(1, false);
-      StackFrame[] frames = trace.GetFrames();
-      foreach (StackFrame frame in frames)
+
+      StackFrame?[] frames = trace.GetFrames();
+      foreach (StackFrame? frame in frames)
       {
+         Debug.Assert(frame is not null);
+
          MethodBase? method = frame.GetMethod();
          Type? declaringType = method?.DeclaringType;
 

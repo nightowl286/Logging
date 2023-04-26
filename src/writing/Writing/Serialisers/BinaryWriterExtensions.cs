@@ -39,5 +39,26 @@ public static class BinaryWriterExtensions
       byte[] guidBytes = guid.ToByteArray();
       writer.Write(guidBytes);
    }
+
+#if !NET6_0_OR_GREATER
+   /// <summary>Writes a 32-bit integer in a compressed format.</summary>
+   /// <param name="writer">The writer to use.</param>
+   /// <param name="value">The 32-bit integer to be written.</param>
+   public static void Write7BitEncodedInt(this BinaryWriter writer, int value)
+   {
+      // Implementation copied from; BinaryWriter.Write7BitEncodedInt;
+      // Was only made public in NET6
+
+      uint uValue = (uint)value;
+
+      while (uValue > 0x7Fu)
+      {
+         writer.Write((byte)(uValue | ~0x7Fu));
+         uValue >>= 7;
+      }
+
+      writer.Write((byte)uValue);
+   }
+#endif
    #endregion
 }

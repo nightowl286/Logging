@@ -5,7 +5,7 @@ namespace TNO.Logging.Common.Exceptions.System;
 /// <summary>
 /// Represents the custom data related to an <see cref="Exception"/>.
 /// </summary>
-public record class ExceptionData : IExceptionData
+public class ExceptionData : IExceptionData
 {
    #region Properties
    /// <summary>The reusable, empty instance of <see cref="ExceptionData"/>.</summary>

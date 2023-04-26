@@ -53,7 +53,7 @@ public static class StackTraceInfoHelper
 
          bool shouldSkip =
             methodBase is null ||
-            ShouldShowInStackTrace(methodBase) == false && i < frameCount - 1;
+            (ShouldShowInStackTrace(methodBase) == false && i < frameCount - 1);
 
          if (shouldSkip) continue;
          Debug.Assert(methodBase is not null && frame is not null);
@@ -126,8 +126,8 @@ public static class StackTraceInfoHelper
          return false;
 
       bool isTypeStateMachine =
-         declaringType.IsAssignableTo(typeof(IAsyncStateMachine)) ||
-         declaringType.IsAssignableTo(typeof(IEnumerator));
+         typeof(IAsyncStateMachine).IsAssignableFrom(declaringType) ||
+         typeof(IEnumerator).IsAssignableFrom(declaringType);
 
       if (isTypeStateMachine == false) return false;
 
@@ -256,17 +256,19 @@ public static class StackTraceInfoHelper
       if (methodBase.MethodImplementationFlags.HasFlag(MethodImplAttributes.AggressiveInlining))
          return false;
 
+      Type? declaringType = methodBase.DeclaringType;
+
+#if NET6_0_OR_GREATER
       try
       {
          if (methodBase.IsDefined<StackTraceHiddenAttribute>(false))
             return false;
 
-         Type? declaringType = methodBase.DeclaringType;
-
          if (declaringType?.IsDefined<StackTraceHiddenAttribute>(false) == true)
             return false;
       }
       catch { }
+#endif
 
       return true;
    }

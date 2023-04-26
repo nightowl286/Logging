@@ -1,6 +1,9 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
+#if !NET6_0_OR_GREATER
+using TNO.Logging.Reading.Deserialisers;
+#endif
 
 namespace TNO.Logging.Reading.LogData.General;
 

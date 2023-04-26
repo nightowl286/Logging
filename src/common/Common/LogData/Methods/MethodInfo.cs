@@ -7,18 +7,36 @@ namespace TNO.Logging.Common.LogData.Methods;
 /// <summary>
 /// Represents info about a <see cref="ReflectionMethodInfo"/>.
 /// </summary>
-/// <param name="DeclaringTypeId">The id of the <see cref="MemberInfo.DeclaringType"/>.</param>
-/// <param name="ParameterInfos">The list of infos about the <see cref="MethodBase.GetParameters"/>.</param>
-/// <param name="Name">The name of the method.</param>
-/// <param name="ReturnTypeId">The id of the <see cref="ReflectionMethodInfo.ReturnType"/>.</param>
-/// <param name="GenericTypeIds">The ids of the <see cref="ReflectionMethodInfo.GetGenericArguments"/>.</param>
-public record class MethodInfo(
-   ulong DeclaringTypeId,
-   IReadOnlyList<IParameterInfo> ParameterInfos,
-   string Name,
-   ulong ReturnTypeId,
-   IReadOnlyList<ulong> GenericTypeIds) : MethodBaseInfo(DeclaringTypeId, ParameterInfos, Name), IMethodInfo
+public class MethodInfo : MethodBaseInfo, IMethodInfo
 {
+   #region Properties
+   /// <inheritdoc/>
+   public ulong ReturnTypeId { get; }
+
+   /// <inheritdoc/>
+   public IReadOnlyList<ulong> GenericTypeIds { get; }
+   #endregion
+
+   #region Constructors
+   /// <summary>Creates a new instance of the <see cref="MethodInfo"/>.</summary>
+   /// <param name="declaringTypeId">The id of the <see cref="MemberInfo.DeclaringType"/>.</param>
+   /// <param name="parameterInfos">The list of infos about the <see cref="MethodBase.GetParameters"/>.</param>
+   /// <param name="name">The name of the method.</param>
+   /// <param name="returnTypeId">The id of the <see cref="ReflectionMethodInfo.ReturnType"/>.</param>
+   /// <param name="genericTypeIds">The ids of the <see cref="ReflectionMethodInfo.GetGenericArguments"/>.</param>
+   public MethodInfo(
+      ulong declaringTypeId,
+      IReadOnlyList<IParameterInfo> parameterInfos,
+      string name,
+      ulong returnTypeId,
+      IReadOnlyList<ulong> genericTypeIds)
+      : base(declaringTypeId, parameterInfos, name)
+   {
+      ReturnTypeId = returnTypeId;
+      GenericTypeIds = genericTypeIds;
+   }
+   #endregion
+
    #region Functions
    /// <summary>
    /// Creates a <see cref="MethodInfo"/> for the given <paramref name="reflectionMethodInfo"/>.
