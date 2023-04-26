@@ -2,6 +2,7 @@
 using TNO.Common.Extensions;
 using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Writing.Abstractions.Serialisers;
+using TNO.Logging.Writing.Serialisers.LogData.General;
 
 namespace TNO.Logging.Writing.Serialisers.Registrants;
 
@@ -12,7 +13,11 @@ public sealed class BuiltinSerialiserRegistrant : ISerialiserRegistrant
 {
    #region Methods
    /// <inheritdoc/>
-   public void Register(IServiceScope scope) => RegisterFromAssembly(scope);
+   public void Register(IServiceScope scope)
+   {
+      RegisterFromAssembly(scope);
+      scope.Registrar.Singleton<IPrimitiveSerialiser, PrimitiveSerialiser>();
+   }
 
    private static void RegisterFromAssembly(IServiceScope scope)
    {

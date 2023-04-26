@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Exceptions;
 
 namespace TNO.Logging.Reading.Exceptions.ExceptionInfos;
@@ -17,7 +17,7 @@ internal static class ExceptionInfoFactory
       Guid exceptionGroupId,
       string message,
       IStackTraceInfo stackTrace,
-      ITableInfo additionalData,
+      ITableInfo? additionalData,
       IExceptionData data,
       IExceptionInfo? innerException)
    {

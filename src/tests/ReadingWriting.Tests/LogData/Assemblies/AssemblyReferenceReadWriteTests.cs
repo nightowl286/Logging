@@ -7,7 +7,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 namespace TNO.ReadingWriting.Tests.LogData.Assemblies;
 
 [TestClass]
-public class AssemblyReferenceReadWriteTests : ReadWriteTestsBase<AssemblyReferenceSerialiser, AssemblyReferenceDeserialiserLatest, AssemblyReference>
+public class AssemblyReferenceReadWriteTests : BinaryReadWriteTestsBase<AssemblyReferenceSerialiser, AssemblyReferenceDeserialiserLatest, AssemblyReference>
 {
    #region Methods
    protected override void Setup(out AssemblyReferenceSerialiser writer, out AssemblyReferenceDeserialiserLatest reader)
@@ -16,7 +16,7 @@ public class AssemblyReferenceReadWriteTests : ReadWriteTestsBase<AssemblyRefere
       reader = new AssemblyReferenceDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override AssemblyReference CreateData()
+   protected override IEnumerable<AssemblyReference> CreateData()
    {
       AssemblyInfo assemblyInfo = new AssemblyInfo(
          "name",
@@ -31,7 +31,7 @@ public class AssemblyReferenceReadWriteTests : ReadWriteTestsBase<AssemblyRefere
 
       AssemblyReference assemblyReference = new AssemblyReference(assemblyInfo, 1);
 
-      return assemblyReference;
+      yield return assemblyReference;
    }
 
    protected override void Verify(AssemblyReference expected, AssemblyReference result)

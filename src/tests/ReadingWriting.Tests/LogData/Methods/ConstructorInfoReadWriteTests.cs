@@ -5,7 +5,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Methods;
 namespace TNO.ReadingWriting.Tests.LogData.Methods;
 
 [TestClass]
-public class ConstructorInfoReadWriteTests : ReadWriteTestsBase<ConstructorInfoSerialiser, ConstructorInfoDeserialiserLatest, IConstructorInfo>
+public class ConstructorInfoReadWriteTests : BinaryReadWriteTestsBase<ConstructorInfoSerialiser, ConstructorInfoDeserialiserLatest, IConstructorInfo>
 {
    #region Methods
    protected override void Setup(out ConstructorInfoSerialiser writer, out ConstructorInfoDeserialiserLatest reader)
@@ -13,14 +13,14 @@ public class ConstructorInfoReadWriteTests : ReadWriteTestsBase<ConstructorInfoS
       writer = new ConstructorInfoSerialiser(GeneralSerialiser.Instance);
       reader = new ConstructorInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
-   protected override IConstructorInfo CreateData()
+   protected override IEnumerable<IConstructorInfo> CreateData()
    {
       ConstructorInfo constructorInfo = new ConstructorInfo(
          1,
          Array.Empty<IParameterInfo>(),
          "constructor");
 
-      return constructorInfo;
+      yield return constructorInfo;
    }
 
    protected override void Verify(IConstructorInfo expected, IConstructorInfo result)

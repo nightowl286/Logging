@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
 
 namespace TNO.Logging.Common.Exceptions;
 
@@ -21,6 +21,6 @@ public record class ExceptionInfo(
    Guid ExceptionGroupId,
    string Message,
    IStackTraceInfo StackTrace,
-   ITableInfo AdditionalData,
+   ITableInfo? AdditionalData,
    IExceptionData Data,
    IExceptionInfo? InnerException) : IExceptionInfo;

@@ -1,6 +1,6 @@
 ﻿using System;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
 
 namespace TNO.Logging.Common.Abstractions.LogData.Exceptions;
 
@@ -26,7 +26,7 @@ public interface IExceptionInfo
    IStackTraceInfo StackTrace { get; }
 
    /// <summary>The additional data contained in the <see cref="Exception.Data"/>.</summary>
-   ITableInfo AdditionalData { get; }
+   ITableInfo? AdditionalData { get; }
 
    /// <summary>The custom data related to the <see cref="Exception"/>.</summary>
    IExceptionData Data { get; }

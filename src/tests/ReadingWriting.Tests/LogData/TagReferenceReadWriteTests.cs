@@ -4,12 +4,12 @@ using TNO.Logging.Writing.Serialisers.LogData;
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class TagReferenceReadWriteTests : ReadWriteTestsBase<TagReferenceSerialiser, TagReferenceDeserialiserLatest, TagReference>
+public class TagReferenceReadWriteTests : BinaryReadWriteTestsBase<TagReferenceSerialiser, TagReferenceDeserialiserLatest, TagReference>
 {
    #region Methods
-   protected override TagReference CreateData()
+   protected override IEnumerable<TagReference> CreateData()
    {
-      return new TagReference("tag", 5);
+      yield return new TagReference("tag", 5);
    }
 
    protected override void Verify(TagReference expected, TagReference result)

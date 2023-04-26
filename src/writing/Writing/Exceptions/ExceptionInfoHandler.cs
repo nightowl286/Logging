@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Common.Exceptions;
 using TNO.Logging.Logging.Helpers;
+using TNO.Logging.Logging.Helpers.General;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
@@ -57,7 +58,8 @@ public class ExceptionInfoHandler : IExceptionInfoHandler
       StackTrace stackTrace = new StackTrace(exception, true);
       IStackTraceInfo stackTraceInfo = StackTraceInfoHelper.GetStackTraceInfo(_writeContext, _dataCollector, stackTrace, threadId ?? -1);
 
-      ITableInfo additionalData = TableInfoHelper.Convert(_writeContext, _dataCollector, exception.Data);
+      TableInfoHelper.TryConvert(_writeContext, _dataCollector, exception.Data, out ITableInfo? additionalData);
+
       IExceptionData exceptionData = _exceptionDataHandler.Convert(exception, out ulong exceptionDataTypeId, out Guid exceptionGroupId);
 
       IExceptionInfo? innerExceptionInfo =
@@ -85,7 +87,7 @@ public class ExceptionInfoHandler : IExceptionInfoHandler
 
       string message = data.Message;
       IStackTraceInfo stackTraceInfo = data.StackTrace;
-      ITableInfo additionalData = data.AdditionalData;
+      ITableInfo? additionalData = data.AdditionalData;
       IExceptionData exceptionData = data.Data;
       IExceptionInfo? innerException = data.InnerException;
 
@@ -96,7 +98,9 @@ public class ExceptionInfoHandler : IExceptionInfoHandler
       writer.Write(message);
 
       _serialiser.Serialise(writer, stackTraceInfo);
-      _serialiser.Serialise(writer, additionalData);
+
+      if (writer.TryWriteNullable(additionalData))
+         _serialiser.Serialise(writer, additionalData);
 
       _exceptionDataHandler.Serialise(writer, exceptionData, data.ExceptionGroupId);
 
@@ -109,12 +113,12 @@ public class ExceptionInfoHandler : IExceptionInfoHandler
    {
       int size =
          (sizeof(ulong) * 2) +
-         sizeof(bool) +
+         (sizeof(bool) * 2) +
          BinaryWriterSizeHelper.GuidSize;
 
       int messageSize = BinaryWriterSizeHelper.StringSize(data.Message);
       int stackTraceSize = _serialiser.Count(data.StackTrace);
-      int tableSize = _serialiser.Count(data.AdditionalData);
+      int tableSize = data.AdditionalData is null ? 0 : _serialiser.Count(data.AdditionalData);
       int exceptionDataSize = _exceptionDataHandler.Count(data.Data, data.ExceptionGroupId);
       int innerExceptionSize = data.InnerException is null ? 0 : Count(data.InnerException);
 

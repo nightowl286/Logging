@@ -1,15 +1,15 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+﻿using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Writing.Serialisers.LogData;
 
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class TableKeyReferenceReadWriteTests : ReadWriteTestsBase<TableKeyReferenceSerialiser, TableKeyReferenceDeserialiserLatest, TableKeyReference>
+public class TableKeyReferenceReadWriteTests : BinaryReadWriteTestsBase<TableKeyReferenceSerialiser, TableKeyReferenceDeserialiserLatest, TableKeyReference>
 {
    #region Methods
-   protected override TableKeyReference CreateData()
+   protected override IEnumerable<TableKeyReference> CreateData()
    {
-      return new TableKeyReference("key", 5);
+      yield return new TableKeyReference("key", 5);
    }
 
    protected override void Verify(TableKeyReference expected, TableKeyReference result)

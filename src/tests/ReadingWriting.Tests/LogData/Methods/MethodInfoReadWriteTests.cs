@@ -5,7 +5,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Methods;
 namespace TNO.ReadingWriting.Tests.LogData.Methods;
 
 [TestClass]
-public class MethodInfoReadWriteTests : ReadWriteTestsBase<MethodInfoSerialiser, MethodInfoDeserialiserLatest, IMethodInfo>
+public class MethodInfoReadWriteTests : BinaryReadWriteTestsBase<MethodInfoSerialiser, MethodInfoDeserialiserLatest, IMethodInfo>
 {
    #region Methods
    protected override void Setup(out MethodInfoSerialiser writer, out MethodInfoDeserialiserLatest reader)
@@ -13,7 +13,7 @@ public class MethodInfoReadWriteTests : ReadWriteTestsBase<MethodInfoSerialiser,
       writer = new MethodInfoSerialiser(GeneralSerialiser.Instance);
       reader = new MethodInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
-   protected override IMethodInfo CreateData()
+   protected override IEnumerable<IMethodInfo> CreateData()
    {
       MethodInfo constructorInfo = new MethodInfo(
          1,
@@ -23,7 +23,7 @@ public class MethodInfoReadWriteTests : ReadWriteTestsBase<MethodInfoSerialiser,
          new ulong[] { 1, 2, 3 });
 
 
-      return constructorInfo;
+      yield return constructorInfo;
    }
 
    protected override void Verify(IMethodInfo expected, IMethodInfo result)

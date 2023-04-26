@@ -10,7 +10,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class StackTraceComponentReadWriteTests : ReadWriteTestsBase<StackTraceComponentSerialiser, StackTraceComponentDeserialiserLatest, IStackTraceComponent>
+public class StackTraceComponentReadWriteTests : BinaryReadWriteTestsBase<StackTraceComponentSerialiser, StackTraceComponentDeserialiserLatest, IStackTraceComponent>
 {
    #region Methods
    protected override void Setup(out StackTraceComponentSerialiser writer, out StackTraceComponentDeserialiserLatest reader)
@@ -19,7 +19,7 @@ public class StackTraceComponentReadWriteTests : ReadWriteTestsBase<StackTraceCo
       reader = new StackTraceComponentDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IStackTraceComponent CreateData()
+   protected override IEnumerable<IStackTraceComponent> CreateData()
    {
       MethodInfo mainMethod = new MethodInfo(
          1,
@@ -46,7 +46,7 @@ public class StackTraceComponentReadWriteTests : ReadWriteTestsBase<StackTraceCo
 
       StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
 
-      return component;
+      yield return component;
    }
 
    protected override void Verify(IStackTraceComponent expected, IStackTraceComponent result)

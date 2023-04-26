@@ -6,15 +6,15 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class AssemblyComponentReadWriteTests : ReadWriteTestsBase<AssemblyComponentSerialiser, AssemblyComponentDeserialiserLatest, IAssemblyComponent>
+public class AssemblyComponentReadWriteTests : BinaryReadWriteTestsBase<AssemblyComponentSerialiser, AssemblyComponentDeserialiserLatest, IAssemblyComponent>
 {
    #region Methods
-   protected override IAssemblyComponent CreateData()
+   protected override IEnumerable<IAssemblyComponent> CreateData()
    {
       ulong assemblyId = 5;
       AssemblyComponent component = new AssemblyComponent(assemblyId);
 
-      return component;
+      yield return component;
    }
    protected override void Verify(IAssemblyComponent expected, IAssemblyComponent result)
    {

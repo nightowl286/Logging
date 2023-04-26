@@ -6,17 +6,17 @@ using TNO.Logging.Writing.Serialisers;
 namespace TNO.ReadingWriting.Tests;
 
 [TestClass]
-public class DataVersionMapReadWriteTests : ReadWriteTestsBase<DataVersionMapSerialiser, DataVersionMapDeserialiser, DataVersionMap>
+public class DataVersionMapReadWriteTests : BinaryReadWriteTestsBase<DataVersionMapSerialiser, DataVersionMapDeserialiser, DataVersionMap>
 {
    #region Methods
-   protected override DataVersionMap CreateData()
+   protected override IEnumerable<DataVersionMap> CreateData()
    {
       DataVersionMap map = new DataVersionMap
       {
          new DataKindVersion(VersionedDataKind.Entry, 1)
       };
 
-      return map;
+      yield return map;
    }
    protected override void Verify(DataVersionMap expected, DataVersionMap result)
    {

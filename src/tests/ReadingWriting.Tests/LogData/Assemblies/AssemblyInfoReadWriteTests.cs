@@ -7,10 +7,10 @@ using TNO.Logging.Writing.Serialisers.LogData.Assemblies;
 namespace TNO.ReadingWriting.Tests.LogData.Assemblies;
 
 [TestClass]
-public class AssemblyInfoReadWriteTests : ReadWriteTestsBase<AssemblyInfoSerialiser, AssemblyInfoDeserialiserLatest, IAssemblyInfo>
+public class AssemblyInfoReadWriteTests : BinaryReadWriteTestsBase<AssemblyInfoSerialiser, AssemblyInfoDeserialiserLatest, IAssemblyInfo>
 {
    #region Methods
-   protected override IAssemblyInfo CreateData()
+   protected override IEnumerable<IAssemblyInfo> CreateData()
    {
       AssemblyInfo assemblyInfo = new AssemblyInfo(
          "name",
@@ -23,7 +23,7 @@ public class AssemblyInfoReadWriteTests : ReadWriteTestsBase<AssemblyInfoSeriali
          PortableExecutableKinds.Preferred32Bit,
          ImageFileMachine.AMD64);
 
-      return assemblyInfo;
+      yield return assemblyInfo;
    }
 
    protected override void Verify(IAssemblyInfo expected, IAssemblyInfo result)

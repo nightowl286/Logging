@@ -4,12 +4,12 @@ using TNO.Logging.Writing.Serialisers.LogData;
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class FileReferenceReadWriteTests : ReadWriteTestsBase<FileReferenceSerialiser, FileReferenceDeserialiserLatest, FileReference>
+public class FileReferenceReadWriteTests : BinaryReadWriteTestsBase<FileReferenceSerialiser, FileReferenceDeserialiserLatest, FileReference>
 {
    #region Methods
-   protected override FileReference CreateData()
+   protected override IEnumerable<FileReference> CreateData()
    {
-      return new FileReference("file", 5);
+      yield return new FileReference("file", 5);
    }
 
    protected override void Verify(FileReference expected, FileReference result)

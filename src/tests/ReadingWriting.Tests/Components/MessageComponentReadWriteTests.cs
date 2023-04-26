@@ -6,15 +6,15 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class MessageComponentReadWriteTests : ReadWriteTestsBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
+public class MessageComponentReadWriteTests : BinaryReadWriteTestsBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
 {
    #region Methods
-   protected override IMessageComponent CreateData()
+   protected override IEnumerable<IMessageComponent> CreateData()
    {
       string message = "message";
       MessageComponent component = new MessageComponent(message);
 
-      return component;
+      yield return component;
    }
    protected override void Verify(IMessageComponent expected, IMessageComponent result)
    {

@@ -2,7 +2,9 @@
 using TNO.Logging.Common.Abstractions;
 using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
+using TNO.Logging.Reading.LogData.General;
 using TNO.Logging.Reading.LogData.Methods;
 
 namespace TNO.Logging.Reading.Deserialisers.Registrants;
@@ -19,7 +21,10 @@ public sealed class BuiltinDeserialiserRegistrant : IDeserialiserRegistrant
       scope.Registrar
          .Singleton<IDeserialiser<DataVersionMap>, DataVersionMapDeserialiser>()
          .Singleton<IDeserialiser<DataKindVersion>, DataVersionMapDeserialiser>()
-         .Singleton<IDeserialiser<IMethodBaseInfo>, MethodBaseInfoDeserialiserDispatcher>();
+         .Singleton<IDeserialiser<IMethodBaseInfo>, MethodBaseInfoDeserialiserDispatcher>()
+         .Singleton<IDeserialiser<ITableInfo>, TableInfoDeserialiser>()
+         .Singleton<IDeserialiser<ICollectionInfo>, CollectionInfoDeserialiser>()
+         .Singleton<IPrimitiveDeserialiser, PrimitiveDeserialiser>();
    }
    #endregion
 }

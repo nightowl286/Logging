@@ -33,7 +33,7 @@ public class ExceptionDataDeserialiser : IExceptionDataDeserialiser
    /// <inheritdoc/>
    public IExceptionData Deserialise(BinaryReader reader, Guid id)
    {
-      ulong dataCount = reader.ReadUInt64();
+      ulong dataCount = reader.ReadUInt32();
       if (_requester.ById(id, out IExceptionDataDeserialiserInfo? info) == false)
       {
          // Note(Nightowl): Unsure if it is safe to trust whether seeking is allowed or not;

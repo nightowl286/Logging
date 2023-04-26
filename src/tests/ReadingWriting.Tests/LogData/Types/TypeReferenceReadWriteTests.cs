@@ -5,7 +5,7 @@ using TNO.Logging.Writing.Serialisers.LogData.Types;
 namespace TNO.ReadingWriting.Tests.LogData.Types;
 
 [TestClass]
-public class TypeReferenceReadWriteTests : ReadWriteTestsBase<TypeReferenceSerialiser, TypeReferenceDeserialiserLatest, TypeReference>
+public class TypeReferenceReadWriteTests : BinaryReadWriteTestsBase<TypeReferenceSerialiser, TypeReferenceDeserialiserLatest, TypeReference>
 {
    #region Methods
    protected override void Setup(out TypeReferenceSerialiser writer, out TypeReferenceDeserialiserLatest reader)
@@ -14,7 +14,7 @@ public class TypeReferenceReadWriteTests : ReadWriteTestsBase<TypeReferenceSeria
       reader = new TypeReferenceDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override TypeReference CreateData()
+   protected override IEnumerable<TypeReference> CreateData()
    {
       TypeInfo typeInfo = new TypeInfo(
          2,
@@ -29,7 +29,7 @@ public class TypeReferenceReadWriteTests : ReadWriteTestsBase<TypeReferenceSeria
 
       TypeReference typeReference = new TypeReference(typeInfo, 1);
 
-      return typeReference;
+      yield return typeReference;
    }
 
    protected override void Verify(TypeReference expected, TypeReference result)

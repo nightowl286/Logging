@@ -1,4 +1,4 @@
-﻿using TNO.Logging.Common.Abstractions.LogData.Tables;
+﻿using TNO.Logging.Common.Abstractions.LogData.Primitives;
 
 namespace TNO.Logging.Common.Abstractions.Entries.Components;
 

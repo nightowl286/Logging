@@ -1,7 +1,7 @@
 ﻿using TNO.Logging.Common.Abstractions.DataKinds;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Abstractions.Versioning;
 using TNO.Logging.Reading.Abstractions.Deserialisers;
 using TNO.Logging.Reading.Abstractions.Exceptions;
@@ -45,7 +45,9 @@ public sealed class ExceptionInfoDeserialiser0 : IDeserialiser<IExceptionInfo>
       string message = reader.ReadString();
 
       _deserialiser.Deserialise(reader, out IStackTraceInfo stackTrace);
-      _deserialiser.Deserialise(reader, out ITableInfo additionalData);
+
+      bool hasAdditionalData = reader.ReadBoolean();
+      ITableInfo? additionalData = hasAdditionalData ? _deserialiser.Deserialise<ITableInfo>(reader) : null;
 
       IExceptionData data = _exceptionDataDeserialiser.Deserialise(reader, exceptionGroupId);
 

@@ -2,8 +2,8 @@
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData.Methods;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData.Methods;
@@ -14,7 +14,7 @@ using TNO.Logging.Writing.Entries;
 namespace TNO.ReadingWriting.Tests;
 
 [TestClass]
-public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDeserialiserLatest, IEntry>
+public class EntryReadWriteTests : BinaryReadWriteTestsBase<EntrySerialiser, EntryDeserialiserLatest, IEntry>
 {
    #region Methods
    protected override void Setup(out EntrySerialiser writer, out EntryDeserialiserLatest reader)
@@ -24,7 +24,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
       reader = new EntryDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IEntry CreateData()
+   protected override IEnumerable<IEntry> CreateData()
    {
       MessageComponent messageComponent = new MessageComponent("some message");
       TagComponent tagComponent = new TagComponent(7);
@@ -78,7 +78,7 @@ public class EntryReadWriteTests : ReadWriteTestsBase<EntrySerialiser, EntryDese
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
 
-      return entry;
+      yield return entry;
    }
    protected override void Verify(IEntry expected, IEntry result)
    {

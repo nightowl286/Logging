@@ -5,10 +5,10 @@ using TNO.Logging.Writing.Serialisers.LogData.Methods;
 namespace TNO.ReadingWriting.Tests.LogData.Methods;
 
 [TestClass]
-public class ParameterInfoReadWriteTests : ReadWriteTestsBase<ParameterInfoSerialiser, ParameterInfoDeserialiserLatest, IParameterInfo>
+public class ParameterInfoReadWriteTests : BinaryReadWriteTestsBase<ParameterInfoSerialiser, ParameterInfoDeserialiserLatest, IParameterInfo>
 {
    #region Methods
-   protected override IParameterInfo CreateData()
+   protected override IEnumerable<IParameterInfo> CreateData()
    {
       ParameterInfo parameterInfo = new ParameterInfo(
         1,
@@ -17,7 +17,7 @@ public class ParameterInfoReadWriteTests : ReadWriteTestsBase<ParameterInfoSeria
         "parameter");
 
 
-      return parameterInfo;
+      yield return parameterInfo;
    }
 
    protected override void Verify(IParameterInfo expected, IParameterInfo result)

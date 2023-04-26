@@ -6,15 +6,15 @@ namespace TNO.ReadingWriting.Tests.Components;
 
 [TestClass]
 [TestCategory(Category.Components)]
-public class EntryLinkComponentReadWriteTests : ReadWriteTestsBase<EntryLinkComponentSerialiser, EntryLinkComponentDeserialiserLatest, IEntryLinkComponent>
+public class EntryLinkComponentReadWriteTests : BinaryReadWriteTestsBase<EntryLinkComponentSerialiser, EntryLinkComponentDeserialiserLatest, IEntryLinkComponent>
 {
    #region Methods
-   protected override IEntryLinkComponent CreateData()
+   protected override IEnumerable<IEntryLinkComponent> CreateData()
    {
       ulong EntryLinkId = 5;
       EntryLinkComponent component = new EntryLinkComponent(EntryLinkId);
 
-      return component;
+      yield return component;
    }
    protected override void Verify(IEntryLinkComponent expected, IEntryLinkComponent result)
    {

@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries.Components;
-using TNO.Logging.Common.Abstractions.LogData.Tables;
+using TNO.Logging.Common.Abstractions.LogData.Primitives;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Writing.Abstractions;

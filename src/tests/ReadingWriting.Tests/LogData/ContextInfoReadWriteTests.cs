@@ -4,12 +4,12 @@ using TNO.Logging.Writing.Serialisers.LogData;
 namespace TNO.ReadingWriting.Tests.LogData;
 
 [TestClass]
-public class ContextInfoReadWriteTests : ReadWriteTestsBase<ContextInfoSerialiser, ContextInfoDeserialiserLatest, ContextInfo>
+public class ContextInfoReadWriteTests : BinaryReadWriteTestsBase<ContextInfoSerialiser, ContextInfoDeserialiserLatest, ContextInfo>
 {
    #region Methods
-   protected override ContextInfo CreateData()
+   protected override IEnumerable<ContextInfo> CreateData()
    {
-      return new ContextInfo("context", 1, 2, 3, 4);
+      yield return new ContextInfo("context", 1, 2, 3, 4);
    }
 
    protected override void Verify(ContextInfo expected, ContextInfo result)

@@ -7,7 +7,7 @@ using TNO.Logging.Writing.Serialisers.LogData.StackTraces;
 namespace TNO.ReadingWriting.Tests.LogData.StackTraces;
 
 [TestClass]
-public class StackTraceInfoReadWriteTests : ReadWriteTestsBase<StackTraceInfoSerialiser, StackTraceInfoDeserialiserLatest, IStackTraceInfo>
+public class StackTraceInfoReadWriteTests : BinaryReadWriteTestsBase<StackTraceInfoSerialiser, StackTraceInfoDeserialiserLatest, IStackTraceInfo>
 {
    #region Methods
    protected override void Setup(out StackTraceInfoSerialiser writer, out StackTraceInfoDeserialiserLatest reader)
@@ -16,7 +16,7 @@ public class StackTraceInfoReadWriteTests : ReadWriteTestsBase<StackTraceInfoSer
       reader = new StackTraceInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IStackTraceInfo CreateData()
+   protected override IEnumerable<IStackTraceInfo> CreateData()
    {
       MethodInfo mainMethod = new MethodInfo(
          1,
@@ -41,7 +41,7 @@ public class StackTraceInfoReadWriteTests : ReadWriteTestsBase<StackTraceInfoSer
          1,
          new[] { stackFrameInfo });
 
-      return stackTraceInfo;
+      yield return stackTraceInfo;
    }
 
    protected override void Verify(IStackTraceInfo expected, IStackTraceInfo result)

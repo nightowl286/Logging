@@ -5,10 +5,10 @@ using TNO.Logging.Writing.Serialisers.LogData.Types;
 namespace TNO.ReadingWriting.Tests.LogData.Types;
 
 [TestClass]
-public class TypeInfoReadWriteTests : ReadWriteTestsBase<TypeInfoSerialiser, TypeInfoDeserialiserLatest, ITypeInfo>
+public class TypeInfoReadWriteTests : BinaryReadWriteTestsBase<TypeInfoSerialiser, TypeInfoDeserialiserLatest, ITypeInfo>
 {
    #region Methods
-   protected override ITypeInfo CreateData()
+   protected override IEnumerable<ITypeInfo> CreateData()
    {
       TypeInfo typeInfo = new TypeInfo(
          2,
@@ -21,7 +21,7 @@ public class TypeInfoReadWriteTests : ReadWriteTestsBase<TypeInfoSerialiser, Typ
          "name space",
          new List<ulong> { 1, 2, 3 });
 
-      return typeInfo;
+      yield return typeInfo;
    }
 
    protected override void Verify(ITypeInfo expected, ITypeInfo result)
