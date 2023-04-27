@@ -60,7 +60,11 @@ public class LogWriteContext : ILogWriteContext
       if (typeof(Exception).IsAssignableFrom(exceptionType))
       {
          TypeIdentity identity = new TypeIdentity(exceptionType);
-         return _reportedUnknownExceptions.Add(identity);
+
+         lock (_reportedUnknownExceptions)
+         {
+            return _reportedUnknownExceptions.Add(identity);
+         }
       }
 
       return false;

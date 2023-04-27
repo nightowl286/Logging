@@ -6,7 +6,7 @@
 public class SafeIdFactory
 {
    #region Fields
-   private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+   private readonly object _lock = new object();
    private ulong _nextId;
    #endregion
 
@@ -24,17 +24,12 @@ public class SafeIdFactory
    /// <returns>The next id.</returns>
    public ulong GetNext()
    {
-      _semaphore.Wait();
-      try
+      lock (_lock)
       {
          ulong id = _nextId;
          _nextId++;
 
          return id;
-      }
-      finally
-      {
-         _semaphore.Release();
       }
    }
    #endregion

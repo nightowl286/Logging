@@ -8,7 +8,6 @@ public class SafeIdFactory<T> where T : notnull
 {
    #region Fields
    private readonly Dictionary<T, ulong> _idCache = new Dictionary<T, ulong>();
-   private readonly ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
    private ulong _nextId;
    #endregion
 
@@ -31,30 +30,17 @@ public class SafeIdFactory<T> where T : notnull
    /// </returns>
    public bool GetOrCreate(T data, out ulong id)
    {
-      _cacheLock.EnterUpgradeableReadLock();
-      try
+      lock (_idCache)
       {
          if (_idCache.TryGetValue(data, out id))
             return false;
 
-         _cacheLock.EnterWriteLock();
-         try
-         {
-            id = _nextId;
-            _nextId++;
+         id = _nextId;
+         _nextId++;
 
-            _idCache.Add(data, id);
+         _idCache.Add(data, id);
 
-            return true;
-         }
-         finally
-         {
-            _cacheLock.ExitWriteLock();
-         }
-      }
-      finally
-      {
-         _cacheLock.ExitUpgradeableReadLock();
+         return true;
       }
    }
    #endregion
