@@ -7,9 +7,10 @@ namespace TNO.ReadingWriting.Tests.LogData;
 public class TagReferenceReadWriteTests : BinaryReadWriteTestsBase<TagReferenceSerialiser, TagReferenceDeserialiserLatest, TagReference>
 {
    #region Methods
-   protected override IEnumerable<TagReference> CreateData()
+   protected override IEnumerable<Annotated<TagReference>> CreateData()
    {
-      yield return new TagReference("tag", 5);
+      TagReference tagReference = new TagReference("tag", 5);
+      yield return new(tagReference);
    }
 
    protected override void Verify(TagReference expected, TagReference result)

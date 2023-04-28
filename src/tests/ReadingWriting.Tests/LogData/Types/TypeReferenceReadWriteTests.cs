@@ -14,7 +14,7 @@ public class TypeReferenceReadWriteTests : BinaryReadWriteTestsBase<TypeReferenc
       reader = new TypeReferenceDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IEnumerable<TypeReference> CreateData()
+   protected override IEnumerable<Annotated<TypeReference>> CreateData()
    {
       TypeInfo typeInfo = new TypeInfo(
          2,
@@ -29,7 +29,7 @@ public class TypeReferenceReadWriteTests : BinaryReadWriteTestsBase<TypeReferenc
 
       TypeReference typeReference = new TypeReference(typeInfo, 1);
 
-      yield return typeReference;
+      yield return new(typeReference);
    }
 
    protected override void Verify(TypeReference expected, TypeReference result)

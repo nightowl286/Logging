@@ -8,7 +8,7 @@ namespace TNO.ReadingWriting.Tests.LogData.Types;
 public class TypeInfoReadWriteTests : BinaryReadWriteTestsBase<TypeInfoSerialiser, TypeInfoDeserialiserLatest, ITypeInfo>
 {
    #region Methods
-   protected override IEnumerable<ITypeInfo> CreateData()
+   protected override IEnumerable<Annotated<ITypeInfo>> CreateData()
    {
       TypeInfo typeInfo = new TypeInfo(
          2,
@@ -21,7 +21,7 @@ public class TypeInfoReadWriteTests : BinaryReadWriteTestsBase<TypeInfoSerialise
          "name space",
          new List<ulong> { 1, 2, 3 });
 
-      yield return typeInfo;
+      yield return new(typeInfo);
    }
 
    protected override void Verify(ITypeInfo expected, ITypeInfo result)

@@ -6,12 +6,8 @@ namespace TNO.ReadingWriting.Tests.LogData.General;
 [TestClass]
 public class PrimitiveReadWriteTests : ReadWriteTestsBase<PrimitiveSerialiser, PrimitiveDeserialiser, object?>
 {
-   #region Properties
-   protected override bool IncludeType => true;
-   #endregion
-
    #region Methods
-   protected override IEnumerable<object?> CreateData() => ValidPrimitiveValues.Values;
+   protected override IEnumerable<Annotated<object?>> CreateData() => ValidPrimitiveValues.Values;
    protected override object? Deserialise(PrimitiveDeserialiser reader, BinaryReader binaryReader) => reader.Deserialise(binaryReader);
    protected override void Serialise(PrimitiveSerialiser writer, BinaryWriter binaryWriter, object? data) => writer.Serialise(binaryWriter, data);
    protected override void Verify(object? expected, object? result) => Assert.That.AreEqual(expected, result);

@@ -16,22 +16,41 @@ public class AssemblyReferenceReadWriteTests : BinaryReadWriteTestsBase<Assembly
       reader = new AssemblyReferenceDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IEnumerable<AssemblyReference> CreateData()
+   protected override IEnumerable<Annotated<AssemblyReference>> CreateData()
    {
-      AssemblyInfo assemblyInfo = new AssemblyInfo(
-         "name",
-         new Version(1, 2, 3, 4),
-         CultureInfo.InvariantCulture,
-         AssemblyLocationKind.External,
-         "location",
-         System.Diagnostics.DebuggableAttribute.DebuggingModes.DisableOptimizations,
-         "configuration",
-         PortableExecutableKinds.Preferred32Bit,
-         ImageFileMachine.AMD64);
+      {
+         AssemblyInfo assemblyInfo = new AssemblyInfo(
+            "name",
+            new Version(1, 2, 3, 4),
+            CultureInfo.InvariantCulture,
+            AssemblyLocationKind.External,
+            "location",
+            System.Diagnostics.DebuggableAttribute.DebuggingModes.DisableOptimizations,
+            "configuration",
+            PortableExecutableKinds.Preferred32Bit,
+            ImageFileMachine.AMD64);
 
-      AssemblyReference assemblyReference = new AssemblyReference(assemblyInfo, 1);
+         AssemblyReference assemblyReference = new AssemblyReference(assemblyInfo, 1);
 
-      yield return assemblyReference;
+         yield return new(assemblyReference, "Full data");
+      }
+
+      {
+         AssemblyInfo assemblyInfo = new AssemblyInfo(
+            null,
+            null,
+            null,
+            AssemblyLocationKind.External,
+            "location",
+            null,
+            "configuration",
+            PortableExecutableKinds.Preferred32Bit,
+            ImageFileMachine.AMD64);
+
+         AssemblyReference assemblyReference = new AssemblyReference(assemblyInfo, 1);
+
+         yield return new(assemblyReference, "Minimal data");
+      }
    }
 
    protected override void Verify(AssemblyReference expected, AssemblyReference result)

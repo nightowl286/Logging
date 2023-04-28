@@ -11,14 +11,19 @@ public class TableInfoSerialiserCountTests : BinarySerialiserCountTestBase<Table
    #region Methods
    protected override TableInfoSerialiser Setup() => (TableInfoSerialiser)GeneralSerialiser.Instance.Get<ITableInfo>();
 
-   [DynamicData(nameof(ValidPrimitiveValues.AsArguments), typeof(ValidPrimitiveValues), DynamicDataSourceType.Method)]
+   [DynamicData(
+      nameof(ValidPrimitiveValues.AsArguments),
+      typeof(ValidPrimitiveValues),
+      DynamicDataSourceType.Method,
+      DynamicDataDisplayName = nameof(ValidPrimitiveValues.GetDisplayName),
+      DynamicDataDisplayNameDeclaringType = typeof(ValidPrimitiveValues))]
    [TestMethod]
-   public void Count_WithOne(object? value)
+   public void Count_WithOne(Annotated annotated)
    {
       // Arrange
       Dictionary<uint, object?> table = new Dictionary<uint, object?>()
       {
-         {1, value }
+         {1, annotated.Data }
       };
 
       TableInfo tableInfo = new TableInfo(table);
@@ -33,9 +38,9 @@ public class TableInfoSerialiserCountTests : BinarySerialiserCountTestBase<Table
       // Arrange
       Dictionary<uint, object?> table = new Dictionary<uint, object?>();
 
-      object?[] values = ValidPrimitiveValues.Values;
+      Annotated[] values = ValidPrimitiveValues.Values;
       for (int i = 0; i < values.Length; i++)
-         table.Add((uint)i, values[i]);
+         table.Add((uint)i, values[i].Data);
 
       TableInfo tableInfo = new TableInfo(table);
 

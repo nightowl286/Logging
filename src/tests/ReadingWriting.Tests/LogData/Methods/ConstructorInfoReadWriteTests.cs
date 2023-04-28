@@ -13,14 +13,14 @@ public class ConstructorInfoReadWriteTests : BinaryReadWriteTestsBase<Constructo
       writer = new ConstructorInfoSerialiser(GeneralSerialiser.Instance);
       reader = new ConstructorInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
-   protected override IEnumerable<IConstructorInfo> CreateData()
+   protected override IEnumerable<Annotated<IConstructorInfo>> CreateData()
    {
       ConstructorInfo constructorInfo = new ConstructorInfo(
          1,
          Array.Empty<IParameterInfo>(),
          "constructor");
 
-      yield return constructorInfo;
+      yield return new(constructorInfo);
    }
 
    protected override void Verify(IConstructorInfo expected, IConstructorInfo result)

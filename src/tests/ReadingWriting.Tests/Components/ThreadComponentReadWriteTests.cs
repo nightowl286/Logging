@@ -9,7 +9,7 @@ namespace TNO.ReadingWriting.Tests.Components;
 public class ThreadComponentReadWriteTests : BinaryReadWriteTestsBase<ThreadComponentSerialiser, ThreadComponentDeserialiserLatest, IThreadComponent>
 {
    #region Methods
-   protected override IEnumerable<IThreadComponent> CreateData()
+   protected override IEnumerable<Annotated<IThreadComponent>> CreateData()
    {
       ThreadComponent component = new ThreadComponent(
          1,
@@ -19,7 +19,7 @@ public class ThreadComponentReadWriteTests : BinaryReadWriteTestsBase<ThreadComp
          ThreadPriority.Highest,
          ApartmentState.MTA);
 
-      yield return component;
+      yield return new(component);
    }
    protected override void Verify(IThreadComponent expected, IThreadComponent result)
    {

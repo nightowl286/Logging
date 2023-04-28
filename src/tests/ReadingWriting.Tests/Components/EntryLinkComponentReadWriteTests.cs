@@ -9,12 +9,12 @@ namespace TNO.ReadingWriting.Tests.Components;
 public class EntryLinkComponentReadWriteTests : BinaryReadWriteTestsBase<EntryLinkComponentSerialiser, EntryLinkComponentDeserialiserLatest, IEntryLinkComponent>
 {
    #region Methods
-   protected override IEnumerable<IEntryLinkComponent> CreateData()
+   protected override IEnumerable<Annotated<IEntryLinkComponent>> CreateData()
    {
       ulong EntryLinkId = 5;
       EntryLinkComponent component = new EntryLinkComponent(EntryLinkId);
 
-      yield return component;
+      yield return new(component);
    }
    protected override void Verify(IEntryLinkComponent expected, IEntryLinkComponent result)
    {

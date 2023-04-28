@@ -7,9 +7,14 @@ namespace TNO.Writing.Tests.CountTests.General;
 public class PrimitiveSerialiserCountTests : SerialiserCountTestBase<PrimitiveSerialiser, object?>
 {
    #region Methods
-   [DynamicData(nameof(ValidPrimitiveValues.AsArguments), typeof(ValidPrimitiveValues), DynamicDataSourceType.Method)]
+   [DynamicData(
+      nameof(ValidPrimitiveValues.AsArguments),
+      typeof(ValidPrimitiveValues),
+      DynamicDataSourceType.Method,
+      DynamicDataDisplayName = nameof(ValidPrimitiveValues.GetDisplayName),
+      DynamicDataDisplayNameDeclaringType = typeof(ValidPrimitiveValues))]
    [TestMethod]
-   public void Count(object? value) => CountTestBase(value);
+   public void Count(Annotated annotated) => CountTestBase(annotated.Data);
 
    protected override int Count(PrimitiveSerialiser writer, object? data) => writer.Count(data);
    protected override void Serialise(PrimitiveSerialiser writer, BinaryWriter binaryWriter, object? data) => writer.Serialise(binaryWriter, data);

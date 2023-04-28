@@ -10,12 +10,21 @@ public static class BinaryReaderExtensions
    /// <param name="reader">The <see cref="BinaryReader"/> to use.</param>
    /// <param name="readFunction">The function that will read a non-null version of the <typeparamref name="T"/>.</param>
    /// <returns>The value read by the given <paramref name="readFunction"/>, or <see langword="null"/>.</returns>
-   public static T? TryReadNullable<T>(this BinaryReader reader, Func<T> readFunction)
+   public static T? TryReadNullable<T>(this BinaryReader reader, Func<T> readFunction) where T : class
    {
       if (reader.ReadBoolean())
          return readFunction.Invoke();
 
       return default;
+   }
+
+   /// <inheritdoc cref="TryReadNullable{T}(BinaryReader, Func{T})"/>
+   public static T? TryReadNullableStruct<T>(this BinaryReader reader, Func<T> readFunction) where T : struct
+   {
+      if (reader.ReadBoolean())
+         return readFunction.Invoke();
+
+      return null;
    }
 
    /// <summary>Reads a <see cref="Guid"/> from the underlying stream.</summary>

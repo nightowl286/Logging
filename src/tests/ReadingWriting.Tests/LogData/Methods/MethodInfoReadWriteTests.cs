@@ -13,7 +13,7 @@ public class MethodInfoReadWriteTests : BinaryReadWriteTestsBase<MethodInfoSeria
       writer = new MethodInfoSerialiser(GeneralSerialiser.Instance);
       reader = new MethodInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
-   protected override IEnumerable<IMethodInfo> CreateData()
+   protected override IEnumerable<Annotated<IMethodInfo>> CreateData()
    {
       MethodInfo constructorInfo = new MethodInfo(
          1,
@@ -23,7 +23,7 @@ public class MethodInfoReadWriteTests : BinaryReadWriteTestsBase<MethodInfoSeria
          new ulong[] { 1, 2, 3 });
 
 
-      yield return constructorInfo;
+      yield return new(constructorInfo);
    }
 
    protected override void Verify(IMethodInfo expected, IMethodInfo result)

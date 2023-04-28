@@ -10,20 +10,37 @@ namespace TNO.ReadingWriting.Tests.LogData.Assemblies;
 public class AssemblyInfoReadWriteTests : BinaryReadWriteTestsBase<AssemblyInfoSerialiser, AssemblyInfoDeserialiserLatest, IAssemblyInfo>
 {
    #region Methods
-   protected override IEnumerable<IAssemblyInfo> CreateData()
+   protected override IEnumerable<Annotated<IAssemblyInfo>> CreateData()
    {
-      AssemblyInfo assemblyInfo = new AssemblyInfo(
-         "name",
-         new Version(1, 2, 3, 4),
-         CultureInfo.InvariantCulture,
-         AssemblyLocationKind.External,
-         "location",
-         System.Diagnostics.DebuggableAttribute.DebuggingModes.DisableOptimizations,
-         "configuration",
-         PortableExecutableKinds.Preferred32Bit,
-         ImageFileMachine.AMD64);
+      {
+         AssemblyInfo assemblyInfo = new AssemblyInfo(
+            "name",
+            new Version(1, 2, 3, 4),
+            CultureInfo.InvariantCulture,
+            AssemblyLocationKind.External,
+            "location",
+            System.Diagnostics.DebuggableAttribute.DebuggingModes.DisableOptimizations,
+            "configuration",
+            PortableExecutableKinds.Preferred32Bit,
+            ImageFileMachine.AMD64);
 
-      yield return assemblyInfo;
+         yield return new(assemblyInfo, "Full data");
+      }
+
+      {
+         AssemblyInfo assemblyInfo = new AssemblyInfo(
+            null,
+            null,
+            null,
+            AssemblyLocationKind.External,
+            "location",
+            null,
+            "configuration",
+            PortableExecutableKinds.Preferred32Bit,
+            ImageFileMachine.AMD64);
+
+         yield return new(assemblyInfo, "Minimal data");
+      }
    }
 
    protected override void Verify(IAssemblyInfo expected, IAssemblyInfo result)

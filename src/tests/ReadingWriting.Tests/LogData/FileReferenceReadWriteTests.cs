@@ -7,9 +7,11 @@ namespace TNO.ReadingWriting.Tests.LogData;
 public class FileReferenceReadWriteTests : BinaryReadWriteTestsBase<FileReferenceSerialiser, FileReferenceDeserialiserLatest, FileReference>
 {
    #region Methods
-   protected override IEnumerable<FileReference> CreateData()
+   protected override IEnumerable<Annotated<FileReference>> CreateData()
    {
-      yield return new FileReference("file", 5);
+      FileReference fileReference = new FileReference("file", 5);
+
+      yield return new(fileReference);
    }
 
    protected override void Verify(FileReference expected, FileReference result)

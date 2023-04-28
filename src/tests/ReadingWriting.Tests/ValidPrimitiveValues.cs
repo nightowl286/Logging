@@ -1,23 +1,61 @@
-﻿namespace TNO.ReadingWriting.Tests;
+﻿using System.Reflection;
+using TNO.Logging.Common.LogData.Tables;
+
+namespace TNO.ReadingWriting.Tests;
 
 public static class ValidPrimitiveValues
 {
-   public static object?[] Values { get; } = new object?[]
+   public static Annotated<object?>[] Values { get; } = new Annotated<object?>[]
    {
-      (byte)1, (sbyte)2, (ushort)3, (short)4, 5u, 6, 7uL, 8L, // integer
-      8.0f, 9.0d, 10.0m, // floating
-      't', (char)0x7FFu, (char)0xFFFFu, // chars
-      "test",
-      true, false, // bool
-      TimeSpan.FromHours(3), DateTime.Now, DateTimeOffset.Now, // time
-      TimeZoneInfo.Utc, TimeZoneInfo.Local, // time zone
-      //null,
-      //new UnknownPrimitive(1),
+      // integers
+      new((byte)1),
+      new((sbyte)2),
+      new((ushort)3),
+      new((short)4),
+      new(5u),
+      new(6),
+      new(7uL),
+      new(8L),
+
+      // floating
+      new(8.0f),
+      new(9.0d),
+      new(10.0m),
+
+      // chars
+      new('t'),
+      new((char)0x7FFu),
+      new((char)0xFFFFu),
+
+      // boolean
+      new(true),
+      new(false),
+
+      // time
+      new(TimeSpan.FromHours(3)),
+      new(DateTime.Now),
+      new(DateTimeOffset.Now),
+
+      // time zone
+      new(TimeZoneInfo.Utc),
+      new(TimeZoneInfo.Local),
+
+      // other
+      new("test"),
+      new(null),
+      new(new UnknownPrimitive(1)),
    };
 
-   public static IEnumerable<object?[]> AsArguments()
+   public static IEnumerable<object[]> AsArguments()
    {
-      foreach (object? value in Values)
-         yield return new[] { value };
+      foreach (Annotated value in Values)
+         yield return new object[] { value };
+   }
+
+   public static string GetDisplayName(MethodInfo _, object?[] values)
+   {
+      string annotation = ((Annotated?)values[0])?.Annotation ?? "<null>";
+
+      return annotation;
    }
 }

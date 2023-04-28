@@ -9,12 +9,12 @@ namespace TNO.ReadingWriting.Tests.Components;
 public class MessageComponentReadWriteTests : BinaryReadWriteTestsBase<MessageComponentSerialiser, MessageComponentDeserialiserLatest, IMessageComponent>
 {
    #region Methods
-   protected override IEnumerable<IMessageComponent> CreateData()
+   protected override IEnumerable<Annotated<IMessageComponent>> CreateData()
    {
       string message = "message";
       MessageComponent component = new MessageComponent(message);
 
-      yield return component;
+      yield return new(component);
    }
    protected override void Verify(IMessageComponent expected, IMessageComponent result)
    {

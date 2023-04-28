@@ -9,12 +9,12 @@ namespace TNO.ReadingWriting.Tests.Components;
 public class TagComponentReadWriteTests : BinaryReadWriteTestsBase<TagComponentSerialiser, TagComponentDeserialiserLatest, ITagComponent>
 {
    #region Methods
-   protected override IEnumerable<ITagComponent> CreateData()
+   protected override IEnumerable<Annotated<ITagComponent>> CreateData()
    {
       ulong tagId = 5;
       TagComponent component = new TagComponent(tagId);
 
-      yield return component;
+      yield return new(component);
    }
    protected override void Verify(ITagComponent expected, ITagComponent result)
    {

@@ -7,9 +7,10 @@ namespace TNO.ReadingWriting.Tests.LogData;
 public class ContextInfoReadWriteTests : BinaryReadWriteTestsBase<ContextInfoSerialiser, ContextInfoDeserialiserLatest, ContextInfo>
 {
    #region Methods
-   protected override IEnumerable<ContextInfo> CreateData()
+   protected override IEnumerable<Annotated<ContextInfo>> CreateData()
    {
-      yield return new ContextInfo("context", 1, 2, 3, 4);
+      ContextInfo contextInfo = new ContextInfo("context", 1, 2, 3, 4);
+      yield return new(contextInfo);
    }
 
    protected override void Verify(ContextInfo expected, ContextInfo result)

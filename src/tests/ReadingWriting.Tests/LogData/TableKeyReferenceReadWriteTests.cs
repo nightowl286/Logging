@@ -7,9 +7,10 @@ namespace TNO.ReadingWriting.Tests.LogData;
 public class TableKeyReferenceReadWriteTests : BinaryReadWriteTestsBase<TableKeyReferenceSerialiser, TableKeyReferenceDeserialiserLatest, TableKeyReference>
 {
    #region Methods
-   protected override IEnumerable<TableKeyReference> CreateData()
+   protected override IEnumerable<Annotated<TableKeyReference>> CreateData()
    {
-      yield return new TableKeyReference("key", 5);
+      TableKeyReference tableKeyReference = new TableKeyReference("key", 5);
+      yield return new(tableKeyReference);
    }
 
    protected override void Verify(TableKeyReference expected, TableKeyReference result)

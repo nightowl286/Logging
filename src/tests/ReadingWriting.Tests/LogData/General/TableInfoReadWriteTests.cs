@@ -15,12 +15,12 @@ public class TableInfoReadWriteTests : BinaryReadWriteTestsBase<TableInfoSeriali
       reader = (TableInfoDeserialiser)GeneralDeserialiser.Instance.Get<ITableInfo>();
    }
 
-   protected override IEnumerable<ITableInfo> CreateData()
+   protected override IEnumerable<Annotated<ITableInfo>> CreateData()
    {
-      foreach (object? value in ValidPrimitiveValues.Values)
-         yield return CreateTable(value);
+      foreach (Annotated value in ValidPrimitiveValues.Values)
+         yield return new(CreateTable(value.Data), value.Annotation);
 
-      yield return CreateTable(ValidPrimitiveValues.Values);
+      yield return new(CreateTable(ValidPrimitiveValues.Values.Select(d => d.Data).ToArray()), "all primitives");
    }
    protected override void Verify(ITableInfo expected, ITableInfo result)
    {

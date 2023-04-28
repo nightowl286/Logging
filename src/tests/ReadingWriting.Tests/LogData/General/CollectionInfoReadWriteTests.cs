@@ -15,12 +15,12 @@ public class CollectionInfoReadWriteTests : BinaryReadWriteTestsBase<CollectionI
       reader = (CollectionInfoDeserialiser)GeneralDeserialiser.Instance.Get<ICollectionInfo>();
    }
 
-   protected override IEnumerable<ICollectionInfo> CreateData()
+   protected override IEnumerable<Annotated<ICollectionInfo>> CreateData()
    {
-      foreach (object? value in ValidPrimitiveValues.Values)
-         yield return CreateCollection(value);
+      foreach (Annotated value in ValidPrimitiveValues.Values)
+         yield return new(CreateCollection(value.Data), value.Annotation);
 
-      yield return CreateCollection(ValidPrimitiveValues.Values);
+      yield return new(CreateCollection(ValidPrimitiveValues.Values.Select(m => m.Data).ToArray()), "all primitives");
    }
    protected override void Verify(ICollectionInfo expected, ICollectionInfo result)
    {

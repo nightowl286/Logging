@@ -19,7 +19,7 @@ public class StackTraceComponentReadWriteTests : BinaryReadWriteTestsBase<StackT
       reader = new StackTraceComponentDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IEnumerable<IStackTraceComponent> CreateData()
+   protected override IEnumerable<Annotated<IStackTraceComponent>> CreateData()
    {
       MethodInfo mainMethod = new MethodInfo(
          1,
@@ -33,20 +33,39 @@ public class StackTraceComponentReadWriteTests : BinaryReadWriteTestsBase<StackT
          Array.Empty<IParameterInfo>(),
          "secondary method");
 
-      StackFrameInfo stackFrameInfo = new StackFrameInfo(
-         1,
-         2,
-         3,
-         mainMethod,
-         secondaryMethod);
+      {
+         StackFrameInfo stackFrameInfo = new StackFrameInfo(
+            1,
+            2,
+            3,
+            mainMethod,
+            secondaryMethod);
 
-      StackTraceInfo stackTraceInfo = new StackTraceInfo(
-         1,
-         new[] { stackFrameInfo });
+         StackTraceInfo stackTraceInfo = new StackTraceInfo(
+            1,
+            new[] { stackFrameInfo });
 
-      StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
+         StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
 
-      yield return component;
+         yield return new(component);
+      }
+
+      {
+         StackFrameInfo stackFrameInfo = new StackFrameInfo(
+            1,
+            2,
+            3,
+            mainMethod,
+            null);
+
+         StackTraceInfo stackTraceInfo = new StackTraceInfo(
+            1,
+            new[] { stackFrameInfo });
+
+         StackTraceComponent component = new StackTraceComponent(stackTraceInfo);
+
+         yield return new(component, "No secondary method");
+      }
    }
 
    protected override void Verify(IStackTraceComponent expected, IStackTraceComponent result)

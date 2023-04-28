@@ -11,12 +11,17 @@ public class CollectionInfoSerialiserCountTests : BinarySerialiserCountTestBase<
    #region Methods
    protected override CollectionInfoSerialiser Setup() => (CollectionInfoSerialiser)GeneralSerialiser.Instance.Get<ICollectionInfo>();
 
-   [DynamicData(nameof(ValidPrimitiveValues.AsArguments), typeof(ValidPrimitiveValues), DynamicDataSourceType.Method)]
+   [DynamicData(
+      nameof(ValidPrimitiveValues.AsArguments),
+      typeof(ValidPrimitiveValues),
+      DynamicDataSourceType.Method,
+      DynamicDataDisplayName = nameof(ValidPrimitiveValues.GetDisplayName),
+      DynamicDataDisplayNameDeclaringType = typeof(ValidPrimitiveValues))]
    [TestMethod]
-   public void Count_WithOne(object? value)
+   public void Count_WithOne(Annotated annotated)
    {
       // Arrange
-      List<object?> collection = new List<object?>() { value };
+      List<object?> collection = new List<object?>() { annotated.Data };
 
       CollectionInfo collectionInfo = new CollectionInfo(collection);
 
@@ -28,7 +33,7 @@ public class CollectionInfoSerialiserCountTests : BinarySerialiserCountTestBase<
    public void Count_WithAll()
    {
       // Arrange
-      List<object?> collection = ValidPrimitiveValues.Values.ToList();
+      List<object?> collection = ValidPrimitiveValues.Values.Select(a => a.Data).ToList();
 
       CollectionInfo collectionInfo = new CollectionInfo(collection);
 

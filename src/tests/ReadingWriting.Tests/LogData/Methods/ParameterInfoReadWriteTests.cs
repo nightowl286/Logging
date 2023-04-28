@@ -8,7 +8,7 @@ namespace TNO.ReadingWriting.Tests.LogData.Methods;
 public class ParameterInfoReadWriteTests : BinaryReadWriteTestsBase<ParameterInfoSerialiser, ParameterInfoDeserialiserLatest, IParameterInfo>
 {
    #region Methods
-   protected override IEnumerable<IParameterInfo> CreateData()
+   protected override IEnumerable<Annotated<IParameterInfo>> CreateData()
    {
       ParameterInfo parameterInfo = new ParameterInfo(
         1,
@@ -17,7 +17,7 @@ public class ParameterInfoReadWriteTests : BinaryReadWriteTestsBase<ParameterInf
         "parameter");
 
 
-      yield return parameterInfo;
+      yield return new(parameterInfo);
    }
 
    protected override void Verify(IParameterInfo expected, IParameterInfo result)

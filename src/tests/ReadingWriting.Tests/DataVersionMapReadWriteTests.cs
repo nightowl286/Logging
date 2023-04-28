@@ -9,14 +9,14 @@ namespace TNO.ReadingWriting.Tests;
 public class DataVersionMapReadWriteTests : BinaryReadWriteTestsBase<DataVersionMapSerialiser, DataVersionMapDeserialiser, DataVersionMap>
 {
    #region Methods
-   protected override IEnumerable<DataVersionMap> CreateData()
+   protected override IEnumerable<Annotated<DataVersionMap>> CreateData()
    {
       DataVersionMap map = new DataVersionMap
       {
          new DataKindVersion(VersionedDataKind.Entry, 1)
       };
 
-      yield return map;
+      yield return new(map);
    }
    protected override void Verify(DataVersionMap expected, DataVersionMap result)
    {

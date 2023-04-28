@@ -130,7 +130,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          Assert.That.AreEqual(fileReference.Id, entry.FileId);
          Assert.That.AreEqual(expectedLine, entry.LineInFile);
          Assert.That.AreEqual(expectedImportance, entry.Importance);
-         Assert.That.AreEqual(expectedContextId, entry.Id);
+         Assert.That.AreEqual(entryId, entry.Id);
          Assert.That.AreEqual(expectedScope, entry.Scope);
 
          Assert.That.AreEqual(contextInfo.Name, expectedContext);

@@ -24,7 +24,7 @@ public class EntryReadWriteTests : BinaryReadWriteTestsBase<EntrySerialiser, Ent
       reader = new EntryDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IEnumerable<IEntry> CreateData()
+   protected override IEnumerable<Annotated<IEntry>> CreateData()
    {
       MessageComponent messageComponent = new MessageComponent("some message");
       TagComponent tagComponent = new TagComponent(7);
@@ -77,8 +77,7 @@ public class EntryReadWriteTests : BinaryReadWriteTestsBase<EntrySerialiser, Ent
       };
 
       Entry entry = new Entry(id, contextId, scope, Importance, timestamp, fileId, line, components);
-
-      yield return entry;
+      yield return new(entry, "Multiple components");
    }
    protected override void Verify(IEntry expected, IEntry result)
    {

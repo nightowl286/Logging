@@ -38,7 +38,7 @@ public sealed class AssemblyInfoDeserialiser0 : IDeserialiser<IAssemblyInfo>
       byte rawLocationKind = reader.ReadByte();
       string location = reader.ReadString();
 
-      int? rawDebuggingFlags = reader.TryReadNullable(reader.ReadInt32);
+      int? rawDebuggingFlags = reader.TryReadNullableStruct(reader.ReadInt32);
       string configuration = reader.ReadString();
       int rawPeKinds = reader.ReadInt32();
       int rawTargetPlatform = reader.ReadInt32();

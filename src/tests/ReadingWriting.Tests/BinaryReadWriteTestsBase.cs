@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using TNO.Common.Extensions;
 using TNO.Logging.Common.Abstractions.Versioning;
@@ -25,40 +24,41 @@ public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
 {
    #region Properties
    public static Encoding Encoding { get; } = Encoding.UTF8;
-   protected virtual bool IncludeType { get; } = false;
    #endregion
 
    #region Test Methods
    [TestMethod]
    public void Write_Read_Successful()
    {
-      foreach (TData expected in CreateData())
+      foreach (Annotated<TData> annotatedExpected in CreateData())
       {
-         if (IncludeType)
-            Debug.WriteLine($"Trying data: [{expected?.GetType().Name}] <{(expected is null ? "null" : expected)}>");
-         else
-            Debug.WriteLine($"Trying data: <{(expected is null ? "null" : expected)}>");
+         try
+         {
+            // Arrange
+            Setup(out TWriter writer, out TReader reader);
+            using MemoryStream memoryStream = new MemoryStream();
 
-         // Arrange
-         Setup(out TWriter writer, out TReader reader);
-         using MemoryStream memoryStream = new MemoryStream();
+            // Arrange Assert
+            TryCheckVersions(writer, reader);
 
-         // Arrange Assert
-         TryCheckVersions(writer, reader);
+            // Act
+            using (BinaryWriter bw = new BinaryWriter(memoryStream, Encoding, true))
+               Serialise(writer, bw, annotatedExpected.Data);
 
-         // Act
-         using (BinaryWriter bw = new BinaryWriter(memoryStream, Encoding, true))
-            Serialise(writer, bw, expected);
+            memoryStream.Position = 0;
 
-         memoryStream.Position = 0;
+            TData result;
+            using (BinaryReader br = new BinaryReader(memoryStream, Encoding, true))
+               result = Deserialise(reader, br);
 
-         TData result;
-         using (BinaryReader br = new BinaryReader(memoryStream, Encoding, true))
-            result = Deserialise(reader, br);
-
-         // Assert
-         Assert.AreEqual(memoryStream.Length, memoryStream.Position, "Not all written data was read.");
-         Verify(expected, result);
+            // Assert
+            Assert.AreEqual(memoryStream.Length, memoryStream.Position, "Not all written data was read.");
+            Verify(annotatedExpected.Data, result);
+         }
+         catch (Exception ex)
+         {
+            throw new Exception($"Test failed on data ({annotatedExpected.Annotation}){Environment.NewLine}", ex);
+         }
       }
    }
    #endregion
@@ -66,7 +66,7 @@ public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
    #region Methods
    protected abstract void Serialise(TWriter writer, BinaryWriter binaryWriter, TData data);
    protected abstract TData Deserialise(TReader reader, BinaryReader binaryReader);
-   protected abstract IEnumerable<TData> CreateData();
+   protected abstract IEnumerable<Annotated<TData>> CreateData();
    private static void TryCheckVersions(TWriter writer, TReader reader)
    {
       Type writerType = writer.GetType();
@@ -75,7 +75,7 @@ public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
       bool isVersionedWriter = writerType.IsDefined<VersionAttribute>(false);
       bool isVersionedReader = readerType.IsDefined<VersionAttribute>(false);
 
-      Assert.That.IsInconclusiveIf(isVersionedWriter ^ isVersionedReader, "Mixing versioned and non-versioned readers and writers is not allowed.");
+      Assert.That.IsInconclusiveIf(isVersionedWriter ^ isVersionedReader, "Mixing versioned and non - versioned readers and writers is not allowed.");
 
       if (isVersionedWriter && isVersionedReader)
       {
@@ -87,7 +87,6 @@ public abstract class ReadWriteTestsBase<TWriter, TReader, TData>
       }
    }
 
-   [TestInitialize]
    protected virtual void Setup(out TWriter writer, out TReader reader)
    {
       writer = SetupInstance<TWriter, ISerialiser>(GeneralSerialiser.Instance);

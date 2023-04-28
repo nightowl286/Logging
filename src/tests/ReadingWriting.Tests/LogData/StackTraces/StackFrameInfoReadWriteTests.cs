@@ -16,7 +16,7 @@ public class StackFrameInfoReadWriteTests : BinaryReadWriteTestsBase<StackFrameI
       reader = new StackFrameInfoDeserialiserLatest(GeneralDeserialiser.Instance);
    }
 
-   protected override IEnumerable<IStackFrameInfo> CreateData()
+   protected override IEnumerable<Annotated<IStackFrameInfo>> CreateData()
    {
       MethodInfo mainMethod = new MethodInfo(
          1,
@@ -30,14 +30,27 @@ public class StackFrameInfoReadWriteTests : BinaryReadWriteTestsBase<StackFrameI
          Array.Empty<IParameterInfo>(),
          "secondary method");
 
-      StackFrameInfo stackFrameInfo = new StackFrameInfo(
-         1,
-         2,
-         3,
-         mainMethod,
-         secondaryMethod);
+      {
+         StackFrameInfo stackFrameInfo = new StackFrameInfo(
+            1,
+            2,
+            3,
+            mainMethod,
+            secondaryMethod);
 
-      yield return stackFrameInfo;
+         yield return new(stackFrameInfo);
+      }
+
+      {
+         StackFrameInfo stackFrameInfo = new StackFrameInfo(
+            1,
+            2,
+            3,
+            mainMethod,
+            null);
+
+         yield return new(stackFrameInfo, "No secondary method");
+      }
    }
 
    protected override void Verify(IStackFrameInfo expected, IStackFrameInfo result)

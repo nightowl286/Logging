@@ -5,7 +5,7 @@ namespace TNO.Logging.Common.LogData.Tables;
 /// <summary>
 /// Represents info about an unknown primitive value.
 /// </summary>
-public class UnknownPrimitive : IUnknownPrimitive
+public class UnknownPrimitive : IUnknownPrimitive, IEquatable<UnknownPrimitive>
 {
    #region Properties
    /// <inheritdoc/>
@@ -19,5 +19,28 @@ public class UnknownPrimitive : IUnknownPrimitive
    {
       TypeId = typeId;
    }
+
+   #endregion
+
+   #region Methods
+   /// <inheritdoc/>
+   public bool Equals(UnknownPrimitive? other)
+   {
+      if (other is null) return false;
+
+      return TypeId == other.TypeId;
+   }
+
+   /// <inheritdoc/>
+   public override bool Equals(object? obj)
+   {
+      if (obj is UnknownPrimitive other)
+         return Equals(other);
+
+      return false;
+   }
+
+   /// <inheritdoc/>
+   public override int GetHashCode() => TypeId.GetHashCode();
    #endregion
 }

@@ -9,12 +9,12 @@ namespace TNO.ReadingWriting.Tests.Components;
 public class AssemblyComponentReadWriteTests : BinaryReadWriteTestsBase<AssemblyComponentSerialiser, AssemblyComponentDeserialiserLatest, IAssemblyComponent>
 {
    #region Methods
-   protected override IEnumerable<IAssemblyComponent> CreateData()
+   protected override IEnumerable<Annotated<IAssemblyComponent>> CreateData()
    {
       ulong assemblyId = 5;
       AssemblyComponent component = new AssemblyComponent(assemblyId);
 
-      yield return component;
+      yield return new(component);
    }
    protected override void Verify(IAssemblyComponent expected, IAssemblyComponent result)
    {
