@@ -5,7 +5,7 @@ using TNO.Logging.Abstractions;
 using TNO.Logging.Abstractions.Scopes;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 
-namespace TNO.Logging.Logging.Void;
+namespace TNO.Logging.Void;
 
 /// <summary>
 /// Represents a <see cref="IContextLogger"/> that will void any data it gets.

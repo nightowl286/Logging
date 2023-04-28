@@ -9,7 +9,7 @@ using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 
-namespace TNO.Logging.Logging.Helpers.General;
+namespace TNO.Logging.Helpers.General;
 
 /// <summary>
 /// Contains useful functions related to the <see cref="ITableInfo"/>.

@@ -1,5 +1,5 @@
 ﻿using TNO.Logging.Common.Abstractions.LogData.Types;
-using TNO.Logging.Logging.Helpers;
+using TNO.Logging.Helpers;
 using TNO.Logging.Writing;
 using TNO.Logging.Writing.Abstractions.Collectors;
 

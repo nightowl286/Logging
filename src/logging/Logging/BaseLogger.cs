@@ -12,12 +12,12 @@ using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
-using TNO.Logging.Logging.Helpers;
+using TNO.Logging.Helpers;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
 
-namespace TNO.Logging.Logging;
+namespace TNO.Logging;
 
 /// <summary>
 /// Represents the very base logger.

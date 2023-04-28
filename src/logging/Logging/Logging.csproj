@@ -5,8 +5,8 @@
     <TargetFrameworks>netstandard2.1;netcoreapp3.1;net6.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>TNO.Logging.$(MSBuildProjectName)</AssemblyName>
-    <RootNamespace>TNO.Logging.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>TNO.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>TNO.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Logging</Title>
     <Company>TNO</Company>

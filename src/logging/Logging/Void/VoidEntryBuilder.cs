@@ -2,7 +2,7 @@
 using System.Reflection;
 using TNO.Logging.Abstractions;
 
-namespace TNO.Logging.Logging.Void;
+namespace TNO.Logging.Void;
 
 /// <summary>
 /// Represents an <see cref="IEntryBuilder"/> that will void any data it gets.

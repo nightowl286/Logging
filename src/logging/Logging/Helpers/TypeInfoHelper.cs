@@ -8,7 +8,7 @@ using TNO.Logging.Writing.Abstractions.Collectors;
 using AssemblyReference = TNO.Logging.Common.Abstractions.LogData.Assemblies.AssemblyReference;
 using TypeInfo = TNO.Logging.Common.LogData.TypeInfo;
 
-namespace TNO.Logging.Logging.Helpers;
+namespace TNO.Logging.Helpers;
 
 /// <summary>
 /// Contains useful functions related to the <see cref="ITypeInfo"/>.

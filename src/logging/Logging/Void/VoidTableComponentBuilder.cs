@@ -1,6 +1,6 @@
 ﻿using TNO.Logging.Abstractions;
 
-namespace TNO.Logging.Logging.Void;
+namespace TNO.Logging.Void;
 
 /// <summary>
 /// Represents an <see cref="ITableComponentBuilder{T}"/> that will void any data it gets.

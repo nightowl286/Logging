@@ -7,7 +7,7 @@ using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
 
-namespace TNO.Logging.Logging;
+namespace TNO.Logging;
 
 /// <summary>
 /// Represents a logger bound to a context.

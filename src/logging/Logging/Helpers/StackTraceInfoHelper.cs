@@ -17,7 +17,7 @@ using ReflectionConstructorInfo = System.Reflection.ConstructorInfo;
 using ReflectionMethodInfo = System.Reflection.MethodInfo;
 using ReflectionParameterInfo = System.Reflection.ParameterInfo;
 
-namespace TNO.Logging.Logging.Helpers;
+namespace TNO.Logging.Helpers;
 
 /// <summary>
 /// Contains useful functions related to the <see cref="IStackTraceInfo"/>.

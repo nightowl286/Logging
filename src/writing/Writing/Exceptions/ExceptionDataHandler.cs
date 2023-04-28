@@ -4,7 +4,7 @@ using TNO.DependencyInjection.Abstractions.Components;
 using TNO.Logging.Abstractions;
 using TNO.Logging.Common.Abstractions.Entries.Importance;
 using TNO.Logging.Common.Abstractions.LogData.Exceptions;
-using TNO.Logging.Logging.Helpers;
+using TNO.Logging.Helpers;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;

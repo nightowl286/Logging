@@ -6,7 +6,7 @@ using TNO.Logging.Common.LogData.Tables;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 
-namespace TNO.Logging.Logging;
+namespace TNO.Logging;
 
 /// <summary>
 /// Denotes a builder for <see cref="ITableComponent"/> data.

@@ -2,7 +2,7 @@
 using TNO.Logging.Common.Exceptions.Abstractions;
 using TNO.Logging.Common.Exceptions.Abstractions.System;
 using TNO.Logging.Common.Exceptions.System;
-using TNO.Logging.Logging.Helpers.General;
+using TNO.Logging.Helpers.General;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
 using TNO.Logging.Writing.Abstractions.Exceptions;
