@@ -5,7 +5,7 @@ namespace TNO.Logging.Common.Exceptions.System;
 /// <summary>
 /// Represents the custom data related to an <see cref="ArgumentException"/>.
 /// </summary>
-public class ArgumentExceptionData : ExceptionData, IArgumentExceptionData
+public class ArgumentExceptionData : IArgumentExceptionData
 {
    #region Properties
    /// <inheritdoc/>

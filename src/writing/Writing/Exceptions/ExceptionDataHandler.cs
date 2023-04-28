@@ -118,7 +118,8 @@ public class ExceptionDataHandler : IExceptionDataHandler
    {
       if (_conversionCache.TryGetValue(handlerType, out ConversionDelegate? conversionDelegate) == false)
       {
-         CacheHandlerInstance(handlerType);
+         if (_handlerCache.ContainsKey(handlerType) == false)
+            CacheHandlerInstance(handlerType);
 
          conversionDelegate = GenerateConversionDelegate(handlerType, dataExceptionType);
       }
