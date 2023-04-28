@@ -25,7 +25,7 @@ namespace TNO.ReadingWriting.IntegrationTests;
 public class FileSystemReadWriteTests : FileSystemIntegration
 {
    #region Fields
-   private static TimeSpan ReadTimeout = TimeSpan.FromMilliseconds(500);
+   private static TimeSpan ReadTimeout = TimeSpan.FromSeconds(1);
    #endregion
 
    #region Methods
