@@ -51,6 +51,9 @@ public sealed class VoidEntryBuilder : IEntryBuilder
    public IEntryBuilder WithTag(string tag) => this;
 
    /// <inheritdoc/>
+   public IEntryBuilder With(Exception exception, int? threadId = null) => this;
+
+   /// <inheritdoc/>
    public ITableComponentBuilder<IEntryBuilder> WithTable() => TableBuilder;
 
    /// <inheritdoc/>

@@ -189,7 +189,7 @@ public class BaseLogger : ILogger
          Collector.Deposit(entry);
       }
 
-      EntryBuilder builder = new EntryBuilder(this, Collector, WriteContext, SaveEntry);
+      EntryBuilder builder = new EntryBuilder(this, Collector, WriteContext, ExceptionInfoHandler, SaveEntry);
 
       return builder;
    }

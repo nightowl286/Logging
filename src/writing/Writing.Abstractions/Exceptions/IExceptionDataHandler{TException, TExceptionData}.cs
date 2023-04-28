@@ -11,8 +11,8 @@ namespace TNO.Logging.Writing.Abstractions.Exceptions;
 /// <typeparam name="TException">The type of the <see cref="Exception"/>.</typeparam>
 /// <typeparam name="TExceptionData">The type of the <see cref="IExceptionData"/>.</typeparam>
 public interface IExceptionDataHandler<in TException, TExceptionData> : ISerialiser<TExceptionData>
-   where TException : Exception
-   where TExceptionData : IExceptionData
+   where TException : notnull, Exception
+   where TExceptionData : notnull, IExceptionData
 {
    #region Methods
    /// <summary>Converts the given <paramref name="exception"/> to the corresponding <typeparamref name="TExceptionData"/>.</summary>

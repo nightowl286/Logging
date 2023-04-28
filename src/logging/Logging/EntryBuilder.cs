@@ -5,12 +5,14 @@ using TNO.Logging.Common.Abstractions.Entries;
 using TNO.Logging.Common.Abstractions.Entries.Components;
 using TNO.Logging.Common.Abstractions.LogData;
 using TNO.Logging.Common.Abstractions.LogData.Assemblies;
+using TNO.Logging.Common.Abstractions.LogData.Exceptions;
 using TNO.Logging.Common.Abstractions.LogData.StackTraces;
 using TNO.Logging.Common.Entries.Components;
 using TNO.Logging.Common.LogData;
 using TNO.Logging.Logging.Helpers;
 using TNO.Logging.Writing.Abstractions;
 using TNO.Logging.Writing.Abstractions.Collectors;
+using TNO.Logging.Writing.Abstractions.Exceptions;
 
 namespace TNO.Logging.Logging;
 
@@ -23,6 +25,7 @@ internal class EntryBuilder : IEntryBuilder
    private readonly ILogger _logger;
    private readonly ILogDataCollector _collector;
    private readonly ILogWriteContext _writeContext;
+   private readonly IExceptionInfoHandler _exceptionInfoHandler;
    private readonly Action<IReadOnlyDictionary<ComponentKind, IComponent>> _callback;
 
    private readonly Dictionary<ComponentKind, IComponent> _components = new Dictionary<ComponentKind, IComponent>();
@@ -33,11 +36,13 @@ internal class EntryBuilder : IEntryBuilder
       ILogger logger,
       ILogDataCollector collector,
       ILogWriteContext writeContext,
+      IExceptionInfoHandler exceptionInfoHandler,
       Action<IReadOnlyDictionary<ComponentKind, IComponent>> callback)
    {
       _logger = logger;
       _collector = collector;
       _writeContext = writeContext;
+      _exceptionInfoHandler = exceptionInfoHandler;
 
       _callback = callback;
    }
@@ -126,6 +131,18 @@ internal class EntryBuilder : IEntryBuilder
 
       ulong typeId = TypeInfoHelper.EnsureIdsForAssociatedTypes(_writeContext, _collector, type);
       TypeComponent component = new TypeComponent(typeId);
+      return AddComponent(component);
+   }
+
+   /// <inheritdoc/>
+   public IEntryBuilder With(Exception exception, int? threadId = null)
+   {
+      ThrowIfHasComponent(ComponentKind.Exception);
+
+      threadId ??= -1;
+
+      IExceptionInfo exceptionInfo = _exceptionInfoHandler.Convert(exception, threadId);
+      ExceptionComponent component = new ExceptionComponent(exceptionInfo);
       return AddComponent(component);
    }
 

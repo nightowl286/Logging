@@ -5,6 +5,6 @@ namespace TNO.Logging.Reading.Abstractions.Exceptions;
 
 /// <inheritdoc/>
 public interface IExceptionDataDeserialiser<TExceptionData> : IDeserialiser<TExceptionData>
-   where TExceptionData : IExceptionData
+   where TExceptionData : notnull, IExceptionData
 {
 }

@@ -56,6 +56,25 @@ public interface IEntryBuilder
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
    IEntryBuilder With(Type type);
 
+   /// <summary>
+   /// Adds the given <paramref name="exception"/> and the <paramref name="threadId"/>
+   /// as an <see cref="IExceptionComponent"/>.
+   /// </summary>
+   /// <param name="exception">The exception to add.</param>
+   /// <param name="threadId">
+   /// <para>
+   ///   The <see cref="Thread.ManagedThreadId"/> of the thread
+   ///   that the <paramref name="exception"/> is from.
+   /// </para>
+   /// <para>
+   ///   If <see langword="null"/> is used, then a negative
+   ///   id will be used to indicate that it is unknown.
+   /// </para>
+   /// </param>
+   /// <returns>The builder that was used.</returns>
+   /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>
+   IEntryBuilder With(Exception exception, int? threadId = null);
+
    /// <summary>Starts creating a table that will be added as an <see cref="ITableComponent"/>.</summary>
    /// <returns>The table component builder that can be used to customise the table.</returns>
    ITableComponentBuilder<IEntryBuilder> WithTable();
@@ -66,10 +85,14 @@ public interface IEntryBuilder
    /// </summary>
    /// <param name="stackTrace">The stack trace to add.</param>
    /// <param name="threadId">
-   /// The <see cref="Thread.ManagedThreadId"/> of the thread 
-   /// that the <paramref name="stackTrace"/> is from.
-   /// If <see langword="null"/> is used, then a negative
-   /// id will be used to indicate that it is unknown.
+   /// <para>
+   ///   The <see cref="Thread.ManagedThreadId"/> of the thread
+   ///   that the <paramref name="stackTrace"/> is from.
+   /// </para>
+   /// <para>
+   ///   If <see langword="null"/> is used, then a negative
+   ///   id will be used to indicate that it is unknown.
+   /// </para>
    /// </param>
    /// <returns>The builder that was used.</returns>
    /// <remarks><see cref="FinishEntry"/> must be called in order to actually save the entry.</remarks>

@@ -53,12 +53,16 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       uint expectedTableKeyId = 1;
       string expectedTableValue = "test";
 
+      string expectedExceptionMessage = "Exception message";
+      Exception exception = new Exception(expectedExceptionMessage);
+
       Assembly assembly = Assembly.GetExecutingAssembly();
       ulong expectedAssemblyId = 1;
       AssemblyInfo expectedAssemblyInfo = AssemblyInfo.FromAssembly(assembly);
       AssemblyReference expectedAssemblyReference = new AssemblyReference(expectedAssemblyInfo, expectedAssemblyId);
 
       string logPath = GetSubFolder("Log");
+
 
       // Write
       {
@@ -83,6 +87,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
                      .With(expectedTableKey, expectedTableValue)
                      .BuildTable()
                   .With(assembly)
+                  .With(exception)
                .FinishEntry();
          }
       }
@@ -100,6 +105,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
       IEntryLinkComponent entryLink;
       ITableComponent table;
       IAssemblyComponent assemblyComponent;
+      IExceptionComponent exceptionComponent;
 
       // Read
       {
@@ -112,7 +118,8 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          contextInfo = AssertReadSingle(reader.ContextInfos);
          tagReference = AssertReadSingle(reader.TagReferences);
          tableKeyReference = AssertReadSingle(reader.TableKeyReferences);
-         assemblyReference = AssertReadSingle(reader.AssemblyReferences);
+         assemblyReference = AssertRead(reader.AssemblyReferences);
+         _ = AssertReadSingle(reader.AssemblyReferences); // exception type assembly
 
          message = AssertGetComponent<IMessageComponent>(entry, ComponentKind.Message);
          tag = AssertGetComponent<ITagComponent>(entry, ComponentKind.Tag);
@@ -120,6 +127,7 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          entryLink = AssertGetComponent<IEntryLinkComponent>(entry, ComponentKind.EntryLink);
          table = AssertGetComponent<ITableComponent>(entry, ComponentKind.Table);
          assemblyComponent = AssertGetComponent<IAssemblyComponent>(entry, ComponentKind.Assembly);
+         exceptionComponent = AssertGetComponent<IExceptionComponent>(entry, ComponentKind.Exception);
       }
 
       // Assert
@@ -175,6 +183,8 @@ public class FileSystemReadWriteTests : FileSystemIntegration
          Assert.That.AreEqual(expectedAssemblyInfo.Configuration, assemblyInfo.Configuration);
          Assert.That.AreEqual(expectedAssemblyInfo.PeKinds, assemblyInfo.PeKinds);
          Assert.That.AreEqual(expectedAssemblyInfo.TargetPlatform, assemblyInfo.TargetPlatform);
+
+         Assert.That.AreEqual(expectedExceptionMessage, exceptionComponent.ExceptionInfo.Message);
       }
    }
 
